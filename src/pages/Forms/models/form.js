@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { fakeSubmitForm } from '@/services/api';
+import { fakeSubmitForm, createInterview } from '@/services/api';
 
 export default {
   namespace: 'form',
@@ -16,16 +16,18 @@ export default {
 
   effects: {
     *submitRegularForm({ payload }, { call }) {
-      yield call(fakeSubmit, payload);
+      yield call(fakeSubmitForm, payload);
       message.success('提交成功');
     },
     *submitStepForm({ payload }, { call, put }) {
-      yield call(fakeSubmitForm, payload);
+      const response = yield call(createInterview, payload);
       yield put({
         type: 'saveStepFormData',
         payload,
       });
+      yield console.log(payload);
       yield put(routerRedux.push('/form/create-interview/result'));
+      yield console.log(response);
     },
     *submitAdvancedForm({ payload }, { call }) {
       yield call(fakeSubmitForm, payload);

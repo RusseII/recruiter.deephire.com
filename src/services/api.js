@@ -50,6 +50,17 @@ export async function fakeSubmitForm(params) {
   });
 }
 
+// export async function createInterview(params) {
+//   return request('/v1.0/create_interview', {
+//     method: 'POST',
+//     body: params,
+//   });
+// }
+
+export async function createInterview(params) {
+  return request('https://dev-api.deephire.io/ping');
+}
+
 export async function fakeChartData() {
   return request('/api/fake_chart_data');
 }
