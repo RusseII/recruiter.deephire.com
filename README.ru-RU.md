@@ -1,6 +1,6 @@
 [English](./README.md) | [简体中文](./README.zh-CN.md) | Русский
 
-<h1 align="center">Ant Design Pro</h1>
+<h1 align="center">DeepHire</h1>
 
 <div align="center">
 
@@ -97,6 +97,6 @@ $ npm start         # visit http://localhost:8000
 
 Любые варианты распространения приветствуются! Вот несколько примероы того, как вы можете помочь распространению проекта:
 
-- Использовать Ant Design Pro в ежедневной работе.
+- Использовать DeepHire в ежедневной работе.
 - Создавать [задачи](http://github.com/ant-design/ant-design-pro/issues) заводить баги или отвечать на вопросы.
 - Делать [pull-реквесты](http://github.com/ant-design/ant-design-pro/pulls) для совершенствования нашего кода.

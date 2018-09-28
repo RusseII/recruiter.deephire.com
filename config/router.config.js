@@ -47,36 +47,36 @@ export default [
         icon: 'form',
         name: 'form',
         routes: [
+          // {
+          //   path: '/form/basic-form',
+          //   name: 'basicform',
+          //   component: './Forms/BasicForm',
+          // },
           {
-            path: '/form/basic-form',
-            name: 'basicform',
-            component: './Forms/BasicForm',
-          },
-          {
-            path: '/form/step-form',
-            name: 'stepform',
-            component: './Forms/StepForm',
+            path: '/form/create-interview',
+            name: 'createinterview',
+            component: './Forms/CreateInterviewForm',
             hideChildrenInMenu: true,
             routes: [
               {
-                path: '/form/step-form',
-                name: 'stepform',
-                redirect: '/form/step-form/info',
+                path: '/form/create-interview',
+                name: 'createinterview',
+                redirect: '/form/create-interview/info',
               },
               {
-                path: '/form/step-form/info',
+                path: '/form/create-interview/info',
                 name: 'info',
-                component: './Forms/StepForm/Step1',
+                component: './Forms/CreateInterviewForm/Step1',
               },
               {
-                path: '/form/step-form/confirm',
+                path: '/form/create-interview/confirm',
                 name: 'confirm',
-                component: './Forms/StepForm/Step2',
+                component: './Forms/CreateInterviewForm/Step2',
               },
               {
-                path: '/form/step-form/result',
+                path: '/form/create-interview/result',
                 name: 'result',
-                component: './Forms/StepForm/Step3',
+                component: './Forms/CreateInterviewForm/Step3',
               },
             ],
           },

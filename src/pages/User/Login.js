@@ -75,7 +75,7 @@ class LoginPage extends Component {
             this.loginForm = form;
           }}
         >
-          <Tab key="account" tab="账户密码登录">
+          <Tab key="account" tab="Email">
             {login.status === 'error' &&
               login.type === 'account' &&
               !submitting &&
@@ -97,20 +97,20 @@ class LoginPage extends Component {
           </Tab>
           <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
-              自动登录
+              Remember me
             </Checkbox>
             <a style={{ float: 'right' }} href="">
-              忘记密码
+              Forgot password
             </a>
           </div>
           <Submit loading={submitting}>登录</Submit>
           <div className={styles.other}>
-            其他登录方式
+            Or Login With
             <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
             <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
             <Icon type="weibo-circle" className={styles.icon} theme="outlined" />
             <Link className={styles.register} to="/User/Register">
-              注册账户
+              Signup
             </Link>
           </div>
         </Login>
