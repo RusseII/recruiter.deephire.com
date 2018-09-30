@@ -19,9 +19,9 @@ const AvatarView = ({ avatar }) => (
     </div>
     <Upload fileList={[]}>
       <div className={styles.button_view}>
-        <Button icon="upload">
+        {/* <Button icon="upload">
           <FormattedMessage id="app.settings.basic.avatar" defaultMessage="Change avatar" />
-        </Button>
+        </Button> */}
       </div>
     </Upload>
   </Fragment>
@@ -108,7 +108,7 @@ class BaseView extends Component {
                 ],
               })(<Input />)}
             </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.profile' })}>
+            {/* <FormItem label={formatMessage({ id: 'app.settings.basic.profile' })}>
               {getFieldDecorator('profile', {
                 rules: [
                   {
@@ -170,13 +170,13 @@ class BaseView extends Component {
                   { validator: validatorPhone },
                 ],
               })(<PhoneView />)}
-            </FormItem>
-            <Button type="primary">
+            </FormItem> */}
+            {/* <Button type="primary">
               <FormattedMessage
                 id="app.settings.basic.update"
                 defaultMessage="Update Information"
               />
-            </Button>
+            </Button> */}
           </Form>
         </div>
         <div className={styles.right}>

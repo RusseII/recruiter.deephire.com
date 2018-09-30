@@ -5,12 +5,15 @@ import router from 'umi/router';
 import Result from '@/components/Result';
 import styles from './style.less';
 
-@connect(({ form }) => ({
+@connect(({ form, user }) => ({
+  currentUser: user.currentUser,
+
   data: form.step,
 }))
 class Step3 extends React.PureComponent {
   render() {
-    const { data } = this.props;
+    console.log(this.props);
+    const { data, currentUser } = this.props;
     const onFinish = () => {
       router.push('/form/create-interview/info');
     };
@@ -18,31 +21,31 @@ class Step3 extends React.PureComponent {
       <div className={styles.information}>
         <Row>
           <Col xs={24} sm={8} className={styles.label}>
-            Interview Link:
+            Link:
           </Col>
           <Col xs={24} sm={16}>
-            {'https://deephire.io'}
+            {data.interviewLink}
           </Col>
         </Row>
         <Row>
           <Col xs={24} sm={8} className={styles.label}>
-            收款账户：
+            Name：
           </Col>
           <Col xs={24} sm={16}>
-            {data.receiverAccount}
+            {data.interviewName}
           </Col>
         </Row>
         <Row>
           <Col xs={24} sm={8} className={styles.label}>
-            收款人姓名：
+            email：
           </Col>
           <Col xs={24} sm={16}>
-            {data.receiverName}
+            {currentUser.email}
           </Col>
         </Row>
         <Row>
           <Col xs={24} sm={8} className={styles.label}>
-            Interview Link:
+            Link:
           </Col>
           <Col xs={24} sm={16}>
             <span className={styles.money}>{data.amount}</span> 元
@@ -53,9 +56,9 @@ class Step3 extends React.PureComponent {
     const actions = (
       <Fragment>
         <Button type="primary" onClick={onFinish}>
-          再转一笔
+          Create another
         </Button>
-        <Button>Create another</Button>
+        <Button>Do Nothing</Button>
       </Fragment>
     );
     return (

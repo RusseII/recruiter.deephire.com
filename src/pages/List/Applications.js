@@ -52,7 +52,7 @@ class FilterCardList extends PureComponent {
     const CardInfo = ({ activeUser, newUser }) => (
       <div className={styles.cardInfo}>
         <div>
-          <p>活跃用户</p>
+          <p>Name</p>
           <p>{activeUser}</p>
         </div>
         <div>

@@ -36,7 +36,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+const status = ['default', 'processing', 'success', 'error'];
 
 const CreateForm = Form.create()(props => {
   const { modalVisible, form, handleAdd, handleModalVisible } = props;
@@ -50,7 +50,7 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新建规则"
+      title="A Modal in code"
       visible={modalVisible}
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
@@ -71,7 +71,7 @@ class UpdateForm extends PureComponent {
 
     this.state = {
       formVals: {
-        name: props.values.name,
+        user_name: props.values.user_name,
         desc: props.values.desc,
         key: props.values.key,
         target: '0',
@@ -187,10 +187,10 @@ class UpdateForm extends PureComponent {
       ];
     }
     return [
-      <FormItem key="name" {...this.formLayout} label="row 1">
-        {form.getFieldDecorator('name', {
-          rules: [{ required: true, message: '请输入row 1！' }],
-          initialValue: formVals.name,
+      <FormItem key="user_name" {...this.formLayout} label="Interview user_name">
+        {form.getFieldDecorator('user_name', {
+          rules: [{ required: true, message: '请输入Interview name！' }],
+          initialValue: formVals.user_name,
         })(<Input placeholder="请输入" />)}
       </FormItem>,
       <FormItem key="desc" {...this.formLayout} label="规则描述">
@@ -266,7 +266,8 @@ class UpdateForm extends PureComponent {
 }
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ rule, loading }) => ({
+@connect(({ rule, loading, user }) => ({
+  currentUser: user.currentUser,
   rule,
   loading: loading.models.rule,
 }))
@@ -283,69 +284,70 @@ class TableList extends PureComponent {
 
   columns = [
     {
-      title: 'row 1',
-      dataIndex: 'name',
+      title: 'Interview Name',
+      dataIndex: 'interview_name',
     },
     {
-      title: '描述',
-      dataIndex: 'desc',
+      title: 'Name',
+      dataIndex: 'user_name',
+      // },
+      // {
+      //   title: '服务调用次数',
+      //   dataIndex: 'callNo',
+      //   sorter: true,
+      //   align: 'right',
+      //   render: val => `${val} 万`,
+      //   // mark to display a total number
+      //   needTotal: true,
+      // },
+      // {
+      //   title: 'Status',
+      //   dataIndex: 'status',
+      //   filters: [
+      //     {
+      //       text: status[0],
+      //       value: 0,
+      //     },
+      //     {
+      //       text: status[1],
+      //       value: 1,
+      //     },
+      //     {
+      //       text: status[2],
+      //       value: 2,
+      //     },
+      //     {
+      //       text: status[3],
+      //       value: 3,
+      //     },
+      //   ],
+      // render(val) {
+      //   return <Badge status={statusMap[val]} text={status[val]} />;
+      // },
     },
     {
-      title: '服务调用次数',
-      dataIndex: 'callNo',
-      sorter: true,
-      align: 'right',
-      render: val => `${val} 万`,
-      // mark to display a total number
-      needTotal: true,
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      filters: [
-        {
-          text: status[0],
-          value: 0,
-        },
-        {
-          text: status[1],
-          value: 1,
-        },
-        {
-          text: status[2],
-          value: 2,
-        },
-        {
-          text: status[3],
-          value: 3,
-        },
-      ],
-      render(val) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
-      },
-    },
-    {
-      title: '上次调度时间',
-      dataIndex: 'updatedAt',
+      title: 'Time',
+      dataIndex: 'python_datetime',
       sorter: true,
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
-      title: '操作',
-      render: (text, record) => (
+      title: 'View',
+      render: (text, data) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a>
+          <a onClick={() => this.openInterview(true, data)}>View</a>
+          {/* <a href="">订阅警报</a> */}
         </Fragment>
       ),
     },
   ];
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, currentUser } = this.props;
+    const { email } = currentUser;
     dispatch({
       type: 'rule/fetch',
+      payload: email,
     });
   }
 
@@ -454,6 +456,15 @@ class TableList extends PureComponent {
     });
   };
 
+  openInterview = (flag, data) => {
+    const { company_id, user_id } = data;
+    // const {$oid} = _id
+    // console.log($oid)
+    console.log('id here', data);
+    const url = `https://candidates.deephire.io/?id=${company_id}&candidate=${user_id}`;
+    window.open(url, '_blank');
+  };
+
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -479,7 +490,7 @@ class TableList extends PureComponent {
     dispatch({
       type: 'rule/update',
       payload: {
-        name: fields.name,
+        user_name: fields.user_name,
         desc: fields.desc,
         key: fields.key,
       },
@@ -497,16 +508,18 @@ class TableList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="row 1">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            <FormItem label="Interview Name">
+              {getFieldDecorator('interview_name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
+            <FormItem label="Status">
               {getFieldDecorator('status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">关闭</Option>
                   <Option value="1">运行中</Option>
+                  <Option value="2">Completed</Option>
+                  <Option value="3">Started</Option>
                 </Select>
               )}
             </FormItem>
@@ -514,13 +527,13 @@ class TableList extends PureComponent {
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
-                查询
+                Search
               </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
+                Reset
               </Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                展开 <Icon type="down" />
+                Expand <Icon type="down" />
               </a>
             </span>
           </Col>
@@ -537,8 +550,8 @@ class TableList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="row 1">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            <FormItem label="Interview user_name">
+              {getFieldDecorator('user_name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -612,7 +625,9 @@ class TableList extends PureComponent {
     const {
       rule: { data },
       loading,
+      currentUser,
     } = this.props;
+    console.log('Currentuser', currentUser);
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>

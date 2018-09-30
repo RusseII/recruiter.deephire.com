@@ -5,22 +5,22 @@ export default {
     name: 'Russell Ratcliffe',
     avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
     userid: '00000001',
-    email: 'antdesign@alipay.com',
+    email: 'russell@deephire.io',
     signature: '海纳百川，有容乃大',
     title: '交互专家',
     group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
     tags: [
       {
         key: '0',
-        label: '很有想法的',
+        label: 'key0',
       },
       {
         key: '1',
-        label: '专注设计',
+        label: 'key1',
       },
       {
         key: '2',
-        label: '辣~',
+        label: 'jey2~',
       },
       {
         key: '3',
@@ -35,7 +35,7 @@ export default {
         label: '海纳百川',
       },
     ],
-    notifyCount: 1,
+    notifyCount: 12,
     country: 'China',
     geographic: {
       province: {

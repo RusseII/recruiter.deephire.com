@@ -6,12 +6,7 @@ export default {
   namespace: 'form',
 
   state: {
-    step: {
-      payAccount: 'ant-design@alipay.com',
-      receiverAccount: 'test@example.com',
-      receiverName: 'Alex',
-      amount: '500',
-    },
+    step: {},
   },
 
   effects: {
@@ -20,12 +15,16 @@ export default {
       message.success('提交成功');
     },
     *submitStepForm({ payload }, { call, put }) {
-      const response = yield call(createInterview, payload);
+      // createInterview("test").then(x => console.log(x))
+      let response = yield call(createInterview, payload);
+      console.log(response);
+      response = `https://interview.deephire.io/pickInterview/${encodeURIComponent(response)}`;
+
       yield put({
         type: 'saveStepFormData',
-        payload,
+        interviewLink: response,
       });
-      yield console.log(payload);
+
       yield put(routerRedux.push('/form/create-interview/result'));
       yield console.log(response);
     },
@@ -36,7 +35,7 @@ export default {
   },
 
   reducers: {
-    saveStepFormData(state, { payload }) {
+    saveStepFormData(state, payload) {
       return {
         ...state,
         step: {

@@ -35,7 +35,7 @@ class Center extends PureComponent {
     const CardInfo = ({ activeUser, newUser }) => (
       <div className={stylesApplications.cardInfo}>
         <div>
-          <p>活跃用户</p>
+          <p>Name</p>
           <p>{activeUser}</p>
         </div>
         <div>

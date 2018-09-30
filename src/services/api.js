@@ -10,7 +10,17 @@ export async function queryActivities() {
 }
 
 export async function queryRule(params) {
+  console.log(params);
   return request(`/api/rule?${stringify(params)}`);
+}
+export async function queryRule2(params) {
+  console.log(params);
+  console.log(stringify(params));
+  if (params == null) {
+    params = 'test@gmail.com';
+    console.log(JSON.stringify(params));
+  }
+  return request(`http://localhost:3001/v1.0/get_candidates/${params}`);
 }
 
 export async function removeRule(params) {
@@ -50,16 +60,26 @@ export async function fakeSubmitForm(params) {
   });
 }
 
-// export async function createInterview(params) {
-//   return request('/v1.0/create_interview', {
-//     method: 'POST',
-//     body: params,
-//   });
-// }
-
 export async function createInterview(params) {
-  return request('https://dev-api.deephire.io/ping');
+  let { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions, email } = params;
+  interviewQuestions = interviewQuestions.map(a => ({
+    question: a,
+  }));
+
+  const data = {
+    interviewName,
+    email,
+    interview_questions: interviewQuestions,
+    interview_config: { retakesAllowed, prepTime, answerTime },
+  };
+
+  return request('http://localhost:3001/v1.0/create_interview', { method: 'POST', body: data });
 }
+
+// export  function createInterview(params) {
+//   console.log(params)
+//   return request('http://localhost:3001/v1.0/companies');
+// }
 
 export async function fakeChartData() {
   return request('/api/fake_chart_data');

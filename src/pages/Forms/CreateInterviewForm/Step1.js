@@ -24,9 +24,9 @@ const formItemLayoutWithOutLabel = {
 };
 let uuid = 1;
 
-@connect(({ form, loading }) => ({
+@connect(({ form, loading, user }) => ({
+  currentUser: user.currentUser,
   submitting: loading.effects['form/submitStepForm'],
-
   data: form.step,
 }))
 @Form.create()
@@ -118,8 +118,9 @@ class Step1 extends React.PureComponent {
   // };
 
   render() {
-    const { form, dispatch, data } = this.props;
+    const { form, dispatch, data, currentUser } = this.props;
     const { getFieldDecorator, validateFields, getFieldValue } = form;
+    const { email } = currentUser;
 
     const onValidateForm = e => {
       e.preventDefault();
@@ -130,10 +131,12 @@ class Step1 extends React.PureComponent {
             payload: {
               ...data,
               ...values,
+              email,
             },
           });
         }
       });
+      console.log(this.props);
     };
 
     getFieldDecorator('keys', { initialValue: [0] });
