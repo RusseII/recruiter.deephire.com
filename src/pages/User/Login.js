@@ -4,6 +4,7 @@ import Link from 'umi/link';
 import { Checkbox, Alert, Icon } from 'antd';
 import Login from '@/components/Login';
 import styles from './Login.less';
+import Auth from '../../Auth/Auth';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
@@ -39,17 +40,40 @@ class LoginPage extends Component {
     });
 
   handleSubmit = (err, values) => {
+    const auth = new Auth(this.props);
+    // auth.loginWithGoogle();
+    // console.log(values)
+    // auth.login(values.userName, values.password);
     const { type } = this.state;
-    if (!err) {
-      const { dispatch } = this.props;
-      dispatch({
-        type: 'login/login',
-        payload: {
-          ...values,
-          type,
-        },
-      });
-    }
+    // if (!err) {
+    //   const { dispatch } = this.props;
+    //   dispatch({
+    //     type: 'login/login',
+    //     payload: {
+    //       ...values,
+    //       type,
+    //     },
+    //   });
+    // }
+  };
+
+  handleSignUp = (err, values) => {
+    const auth = new Auth(this.props);
+    // auth.loginWithGoogle();
+    // console.log(values)
+    console.log(values);
+    auth.signup(values.userName, values.password);
+    const { type } = this.state;
+    // if (!err) {
+    //   const { dispatch } = this.props;
+    //   dispatch({
+    //     type: 'login/login',
+    //     payload: {
+    //       ...values,
+    //       type,
+    //     },
+    //   });
+    // }
   };
 
   changeAutoLogin = e => {
@@ -70,30 +94,34 @@ class LoginPage extends Component {
         <Login
           defaultActiveKey={type}
           onTabChange={this.onTabChange}
-          onSubmit={this.handleSubmit}
+          onSubmit={this.handleSignUp}
           ref={form => {
             this.loginForm = form;
           }}
         >
-          <Tab key="account" tab="Email">
+          <Tab key="account" tab="Log In">
             {login.status === 'error' &&
               login.type === 'account' &&
               !submitting &&
               this.renderMessage('账户或密码错误（admin/888888）')}
-            <UserName name="userName" placeholder="admin/user" />
+            <UserName name="userName" placeholder="username" />
             <Password
               name="password"
-              placeholder="888888/123456"
+              placeholder="password"
               onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
             />
           </Tab>
-          <Tab key="mobile" tab="手机号登录">
+          <Tab key="signUp" tab="Sign Up">
             {login.status === 'error' &&
-              login.type === 'mobile' &&
+              login.type === 'account' &&
               !submitting &&
-              this.renderMessage('验证码错误')}
-            <Mobile name="mobile" />
-            <Captcha name="captcha" countDown={120} onGetCaptcha={this.onGetCaptcha} />
+              this.renderMessage('账户或密码错误（admin/888888）')}
+            <UserName name="userName" placeholder="username" />
+            <Password
+              name="password"
+              placeholder="password"
+              onPressEnter={() => this.loginForm.validateFields(this.handleSignUp)}
+            />
           </Tab>
           <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>

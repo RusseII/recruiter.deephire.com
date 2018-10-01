@@ -11,11 +11,11 @@ const FormItem = Form.Item;
 const { Option } = Select;
 
 // 头像组件 方便以后独立，增加裁剪之类的功能
-const AvatarView = ({ avatar }) => (
+const AvatarView = ({ picture }) => (
   <Fragment>
     <div className={styles.avatar_title}>Avatar</div>
     <div className={styles.avatar}>
-      <img src={avatar} alt="avatar" />
+      <img src={picture} alt="avatar" />
     </div>
     <Upload fileList={[]}>
       <div className={styles.button_view}>
@@ -69,8 +69,8 @@ class BaseView extends Component {
 
   getAvatarURL() {
     const { currentUser } = this.props;
-    if (currentUser.avatar) {
-      return currentUser.avatar;
+    if (currentUser.picture) {
+      return currentUser.picture;
     }
     const url = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
     return url;
@@ -96,7 +96,7 @@ class BaseView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.email-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input disabled />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.nickname' })}>
               {getFieldDecorator('name', {
@@ -106,7 +106,7 @@ class BaseView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.nickname-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input disabled />)}
             </FormItem>
             {/* <FormItem label={formatMessage({ id: 'app.settings.basic.profile' })}>
               {getFieldDecorator('profile', {
@@ -180,7 +180,7 @@ class BaseView extends Component {
           </Form>
         </div>
         <div className={styles.right}>
-          <AvatarView avatar={this.getAvatarURL()} />
+          <AvatarView picture={this.getAvatarURL()} />
         </div>
       </div>
     );

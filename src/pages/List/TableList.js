@@ -648,12 +648,12 @@ class TableList extends PureComponent {
       <PageHeaderWrapper title="Candidates">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+            {/* <div className={styles.tableListForm}>{this.renderForm()}</div> */}
+            {/* <div className={styles.tableListOperator}> */}
+            {/* <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
-              </Button>
-              {selectedRows.length > 0 && (
+              </Button> */}
+            {/* {selectedRows.length > 0 && (
                 <span>
                   <Button>批量操作</Button>
                   <Dropdown overlay={menu}>
@@ -663,7 +663,7 @@ class TableList extends PureComponent {
                   </Dropdown>
                 </span>
               )}
-            </div>
+            </div> */}
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

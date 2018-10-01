@@ -95,8 +95,8 @@ class Info extends Component {
 
   render() {
     const { children, currentUser } = this.props;
-    if (!currentUser.userid) {
-      return '';
+    if (!currentUser.sub) {
+      return 'name not found';
     }
     const { mode, selectKey } = this.state;
     return (

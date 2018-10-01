@@ -17,6 +17,12 @@ export function getAuthority(str) {
 }
 
 export function setAuthority(authority) {
+  if (authority === 'guest') {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('profile');
+    localStorage.removeItem('expires_at');
+  }
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
   return localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority));
 }

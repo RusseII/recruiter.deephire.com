@@ -1,6 +1,11 @@
 import auth0 from 'auth0-js';
+import { routerRedux } from 'dva/router';
+import { setAuthority } from '../utils/authority';
+import { reloadAuthorized } from '../utils/Authorized';
+
 import { AUTH_CONFIG } from './auth0-variables';
-import history from '../history';
+
+// import history from '../history';
 
 export default class Auth {
   auth0 = new auth0.WebAuth({
@@ -8,9 +13,15 @@ export default class Auth {
     clientID: AUTH_CONFIG.clientId,
     redirectUri: AUTH_CONFIG.callbackUrl,
     responseType: 'token id_token',
+    scope: 'openid profile email',
   });
 
-  constructor() {
+  userProfile;
+
+  constructor(props = null) {
+    if (props) {
+      this.dispatch = props.dispatch;
+    }
     this.login = this.login.bind(this);
     this.signup = this.signup.bind(this);
     this.loginWithGoogle = this.loginWithGoogle.bind(this);
@@ -32,6 +43,20 @@ export default class Auth {
     );
   }
 
+  getAccessToken = () => {
+    const accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
+    return accessToken;
+  };
+
+  getProfile = cb => {
+    const accessToken = this.getAccessToken();
+
+    return this.auth0.client.userInfo(accessToken, cb);
+  };
+
   signup(email, password) {
     this.auth0.signup({ connection: AUTH_CONFIG.dbConnectionName, email, password }, err => {
       if (err) {
@@ -42,7 +67,11 @@ export default class Auth {
       }
 
       this.auth0.login(
-        { realm: AUTH_CONFIG.dbConnectionName, username: email, password },
+        {
+          realm: AUTH_CONFIG.dbConnectionName,
+          username: email,
+          password,
+        },
         (err, authResult) => {
           if (err) {
             console.log(err);
@@ -62,9 +91,13 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        history.replace('/home');
+        this.dispatch(routerRedux.push('/'));
+
+        // history.replace('/home');
       } else if (err) {
-        history.replace('/home');
+        this.dispatch(routerRedux.push('/'));
+
+        // history.replace('/home');
         console.log(err);
         alert(`Error: ${err.error}. Check the console for further details.`);
       }
@@ -77,8 +110,22 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+
     // navigate to the home route
-    history.replace('/home');
+    // history.replace('/home');
+    this.getProfile((err, profile) => {
+      if (!err) {
+        localStorage.setItem('profile', JSON.stringify(profile));
+      } else {
+        return this.logout();
+      }
+
+      setAuthority('user');
+      reloadAuthorized();
+      // navigate to the home route
+      this.dispatch(routerRedux.push('/'));
+      // navigate to the home route
+    });
   }
 
   logout() {
@@ -86,8 +133,10 @@ export default class Auth {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
-    // navigate to the home route
-    history.replace('/home');
+    localStorage.removeItem('profile');
+
+    this.userProfile = null;
+    reloadAuthorized();
   }
 
   isAuthenticated() {

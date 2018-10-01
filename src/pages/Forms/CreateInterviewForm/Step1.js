@@ -174,8 +174,7 @@ class Step1 extends React.PureComponent {
         <Form
           layout="horizontal"
           className={styles.stepForm}
-          hideRequiredMark
-          // onSubmit={this.handleSubmit}
+          hideRequiredMark // onSubmit={this.handleSubmit}
           onSubmit={onValidateForm}
         >
           <FormItem {...formItemLayout} label="Name">
@@ -227,12 +226,13 @@ class Step1 extends React.PureComponent {
           <h3>Other Info</h3>
           <h4>The Process</h4>
           <p>
-            First, create an interview. Next you will send out this interview to job seekers. Good
-            luck.
+            Use this page to create an interview. After you submit, you will recieve an interview
+            link.
           </p>
-          <h4>转账到银行卡</h4>
+          <h4>Next</h4>
           <p>
-            如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
+            Send the link out to candidates, once they complete their interview, you will recieve an
+            email with their videos.
           </p>
         </div>
       </Fragment>

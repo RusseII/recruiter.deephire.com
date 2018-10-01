@@ -8,9 +8,10 @@ export default [
       { path: '/user/login', component: './User/Login' },
       { path: '/user/register', component: './User/Register' },
       { path: '/user/register-result', component: './User/RegisterResult' },
+      { path: '/user/callback', component: './User/Callback' },
     ],
   },
-  // app
+  // appxp
   {
     path: '/',
     component: '../layouts/BasicLayout',
@@ -240,10 +241,10 @@ export default [
                 path: '/account/settings/base',
                 component: './Account/Settings/BaseView',
               },
-              // {
-              //   path: '/account/settings/security',
-              //   component: './Account/Settings/SecurityView',
-              // },
+              {
+                path: '/account/settings/security',
+                component: './Forms/CreateInterviewForm/Step1',
+              },
               // {
               //   path: '/account/settings/binding',
               //   component: './Account/Settings/BindingView',
