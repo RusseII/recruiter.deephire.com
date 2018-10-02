@@ -31,16 +31,19 @@ export default class Auth {
   }
 
   login(username, password) {
-    this.auth0.login(
+     this.auth0.login(
       { realm: AUTH_CONFIG.dbConnectionName, username, password },
       (err, authResult) => {
         if (err) {
           console.log(err);
-          alert(`Error: ${err.description}. Check the console for further details.`);
-          return;
+          // alert(`Error: ${err.description}. Check the c÷nsole for further details.`);
+          
         }
       }
-    );
+      
+    )
+ 
+    // this.auth0.
   }
 
   getAccessToken = () => {
@@ -76,7 +79,7 @@ export default class Auth {
           if (err) {
             console.log(err);
             alert(`Error: ${err.description}. Check the console for further details.`);
-            return;
+            
           }
         }
       );
@@ -85,6 +88,14 @@ export default class Auth {
 
   loginWithGoogle() {
     this.auth0.authorize({ connection: 'google-oauth2' });
+  }
+
+  loginWithLinkedin() {
+    this.auth0.authorize({ connection: 'linkedin' });
+  }
+
+  loginWithFacebook() {
+    this.auth0.authorize({ connection: 'facebook' });
   }
 
   handleAuthentication() {
@@ -106,7 +117,7 @@ export default class Auth {
 
   setSession(authResult) {
     // Set the time that the access token will expire at
-    let expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime());
+    const expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
@@ -142,7 +153,7 @@ export default class Auth {
   isAuthenticated() {
     // Check whether the current time is past the
     // access token's expiry time
-    let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     return new Date().getTime() < expiresAt;
   }
 }
