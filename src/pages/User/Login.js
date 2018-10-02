@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import Link from 'umi/link';
 import { Checkbox, Alert, Icon, Button } from 'antd';
 import Login from '@/components/Login';
-import GoogleButton from 'react-google-button';
+
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import styles from './Login.less';
 import Auth from '../../Auth/Auth';
@@ -40,13 +40,6 @@ class LoginPage extends Component {
         }
       });
     });
-
-  invalidLogin(status) {
-    console.log(status);
-    if (status == 'Invalid') {
-      this.renderMessage('Invalid Email or Password');
-    }
-  }
 
   loginWithGoogle() {
     const auth = new Auth();
@@ -103,7 +96,7 @@ class LoginPage extends Component {
   render() {
     const { login, submitting } = this.props;
     const { type, autoLogin } = this.state;
-    console.log(this.type);
+
     return (
       <div className={styles.main}>
         <Login
