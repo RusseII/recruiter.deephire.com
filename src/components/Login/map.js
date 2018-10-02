@@ -11,6 +11,7 @@ export default {
       placeholder: 'admin',
     },
     rules: [
+      { type: 'email', message: 'The input is not valid E-mail!' },
       {
         required: true,
         message: 'Please enter username!',

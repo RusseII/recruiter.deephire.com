@@ -20,7 +20,7 @@ export async function queryRule2(params) {
     params = 'test@gmail.com';
     console.log(JSON.stringify(params));
   }
-  return request(`http://localhost:3001/v1.0/get_candidates/${params}`);
+  return request(`https://api.deephire.io/v1.0/get_candidates/${params}`);
 }
 
 export async function removeRule(params) {
@@ -73,7 +73,7 @@ export async function createInterview(params) {
     interview_config: { retakesAllowed, prepTime, answerTime },
   };
 
-  return request('http://localhost:3001/v1.0/create_interview', { method: 'POST', body: data });
+  return request('https://api.deephire.io/v1.0/create_interview', { method: 'POST', body: data });
 }
 
 // export  function createInterview(params) {

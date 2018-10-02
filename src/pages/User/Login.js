@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
-import { Checkbox, Alert, Icon } from 'antd';
+import { Checkbox, Alert, Icon, Button } from 'antd';
 import Login from '@/components/Login';
+import GoogleButton from 'react-google-button';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import styles from './Login.less';
 import Auth from '../../Auth/Auth';
 
@@ -39,42 +41,54 @@ class LoginPage extends Component {
       });
     });
 
+  invalidLogin(status) {
+    console.log(status);
+    if (status == 'Invalid') {
+      this.renderMessage('Invalid Email or Password');
+    }
+  }
+
+  loginWithGoogle() {
+    const auth = new Auth();
+    auth.loginWithGoogle();
+    console.log('liwg');
+  }
+
+  loginWithLinkedin() {
+    const auth = new Auth();
+    auth.loginWithLinkedin();
+    console.log('liwg');
+  }
+
+  loginWithFacebook() {
+    const auth = new Auth();
+    auth.loginWithFacebook();
+    console.log('liwg');
+  }
+
   handleSubmit = (err, values) => {
-    const auth = new Auth(this.props);
-    // auth.loginWithGoogle();
-    // console.log(values)
-    // auth.login(values.userName, values.password);
-    const { type } = this.state;
-    // if (!err) {
-    //   const { dispatch } = this.props;
-    //   dispatch({
-    //     type: 'login/login',
-    //     payload: {
-    //       ...values,
-    //       type,
-    //     },
-    //   });
-    // }
+    this.loginForm.validateFields((err, values) => {
+      if (!err) {
+        this.renderMessage('Invalid Email or Password');
+
+        console.log('submitted');
+        const auth = new Auth(this.props);
+
+        const { type } = this.state;
+
+        if (type === 'account') {
+          const status = auth.login(values.email, values.password);
+        } else {
+          auth.signup(values.email, values.password);
+        }
+        this.setState({ status: 'error' });
+      }
+    });
   };
 
-  handleSignUp = (err, values) => {
-    const auth = new Auth(this.props);
-    // auth.loginWithGoogle();
-    // console.log(values)
-    console.log(values);
-    auth.signup(values.userName, values.password);
-    const { type } = this.state;
-    // if (!err) {
-    //   const { dispatch } = this.props;
-    //   dispatch({
-    //     type: 'login/login',
-    //     payload: {
-    //       ...values,
-    //       type,
-    //     },
-    //   });
-    // }
-  };
+  //   console.log(type)
+
+  // };
 
   changeAutoLogin = e => {
     this.setState({
@@ -89,22 +103,20 @@ class LoginPage extends Component {
   render() {
     const { login, submitting } = this.props;
     const { type, autoLogin } = this.state;
+    console.log(this.type);
     return (
       <div className={styles.main}>
         <Login
           defaultActiveKey={type}
           onTabChange={this.onTabChange}
-          onSubmit={this.handleSignUp}
+          onSubmit={this.handleSubmit}
           ref={form => {
             this.loginForm = form;
           }}
         >
+          {this.state.status === 'error' && this.renderMessage('Invalid Email or Password')}
           <Tab key="account" tab="Log In">
-            {login.status === 'error' &&
-              login.type === 'account' &&
-              !submitting &&
-              this.renderMessage('账户或密码错误（admin/888888）')}
-            <UserName name="userName" placeholder="username" />
+            <UserName name="email" placeholder="username" />
             <Password
               name="password"
               placeholder="password"
@@ -112,15 +124,11 @@ class LoginPage extends Component {
             />
           </Tab>
           <Tab key="signUp" tab="Sign Up">
-            {login.status === 'error' &&
-              login.type === 'account' &&
-              !submitting &&
-              this.renderMessage('账户或密码错误（admin/888888）')}
-            <UserName name="userName" placeholder="username" />
+            <UserName name="email" placeholder="username" />
             <Password
               name="password"
               placeholder="password"
-              onPressEnter={() => this.loginForm.validateFields(this.handleSignUp)}
+              onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
             />
           </Tab>
           <div>
@@ -131,15 +139,33 @@ class LoginPage extends Component {
               Forgot password
             </a>
           </div>
-          <Submit loading={submitting}>登录</Submit>
+
+          <Submit loading={submitting}>
+            {this.state.type === 'account' ? 'Log in' : 'Sign up'}
+          </Submit>
           <div className={styles.other}>
-            Or Login With
-            <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
-            <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
-            <Icon type="weibo-circle" className={styles.icon} theme="outlined" />
-            <Link className={styles.register} to="/User/Register">
-              Signup
-            </Link>
+            {this.state.type === 'account' ? 'Or Login With' : 'Or Signup With'}
+            <Button
+              onClick={this.loginWithGoogle}
+              shape="circle"
+              size="large"
+              icon="google"
+              style={{ marginLeft: 16 }}
+            />
+            <Button
+              onClick={this.loginWithLinkedin}
+              shape="circle"
+              size="large"
+              icon="linkedin"
+              style={{ marginLeft: 16 }}
+            />
+            <Button
+              onClick={this.loginWithFacebook}
+              shape="circle"
+              size="large"
+              icon="facebook"
+              style={{ marginLeft: 16 }}
+            />
           </div>
         </Login>
       </div>
