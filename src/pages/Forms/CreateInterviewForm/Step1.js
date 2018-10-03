@@ -10,11 +10,11 @@ const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 7 },
+    sm: { span: 8 },
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 12 },
+    sm: { span: 14 },
     md: { span: 10 },
   },
 };
@@ -22,7 +22,8 @@ const formItemLayout = {
 const formItemLayoutWithOutLabel = {
   wrapperCol: {
     xs: { span: 24, offset: 0 },
-    sm: { span: 20, offset: 5 },
+    sm: { span: 14, offset: 8 },
+    md: { span: 10, offset: 8 },
   },
 };
 let uuid = 1;
@@ -146,6 +147,7 @@ class Step1 extends React.PureComponent {
     const keys = getFieldValue('keys');
     const formItems = keys.map((k, index) => (
       <FormItem
+        style={{ width: '100%' }}
         {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
         label={index === 0 ? 'Questions' : ''}
         required={false}
@@ -179,7 +181,7 @@ class Step1 extends React.PureComponent {
           // className={styles.stepForm}
           hideRequiredMark // onSubmit={this.handleSubmit}
           onSubmit={onValidateForm}
-          style={{ marginTop: 8 }}
+          style={{ marginTop: 20 }}
         >
           <FormItem {...formItemLayout} label="Name">
             {getFieldDecorator('interviewName', {
