@@ -22,7 +22,7 @@ export default {
   'menu.form': 'Create Interview',
   'menu.form.basicform': 'Basic Form',
   'menu.form.createinterview': 'Configure Interview',
-  'menu.form.createinterview.info': 'Configure Interview',
+  'menu.form.createinterview.info': 'Create',
   'menu.form.createinterview.confirm': 'Step Form(confirm transfer information)',
   'menu.form.createinterview.result': 'Step Form(finished)',
   'menu.form.advancedform': 'Advanced Form',
