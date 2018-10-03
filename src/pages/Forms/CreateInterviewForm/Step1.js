@@ -9,10 +9,13 @@ const FormItem = Form.Item;
 
 const formItemLayout = {
   labelCol: {
-    span: 5,
+    xs: { span: 24 },
+    sm: { span: 7 },
   },
   wrapperCol: {
-    span: 19,
+    xs: { span: 24 },
+    sm: { span: 12 },
+    md: { span: 10 },
   },
 };
 
@@ -173,9 +176,10 @@ class Step1 extends React.PureComponent {
       <Fragment>
         <Form
           layout="horizontal"
-          className={styles.stepForm}
+          // className={styles.stepForm}
           hideRequiredMark // onSubmit={this.handleSubmit}
           onSubmit={onValidateForm}
+          style={{ marginTop: 8 }}
         >
           <FormItem {...formItemLayout} label="Name">
             {getFieldDecorator('interviewName', {
@@ -226,12 +230,12 @@ class Step1 extends React.PureComponent {
           <h3>Other Info</h3>
           <h4>The Process</h4>
           <p>
-            Use this page to create an interview. After you submit, you will recieve an interview
+            Use this page to create an interview. After you submit, you will receive an interview
             link.
           </p>
           <h4>Next</h4>
           <p>
-            Send the link out to candidates, once they complete their interview, you will recieve an
+            Send the link out to candidates, once they complete their interview, you will receive an
             email with their videos.
           </p>
         </div>

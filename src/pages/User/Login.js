@@ -109,7 +109,7 @@ class LoginPage extends Component {
         >
           {this.state.status === 'error' && this.renderMessage('Invalid Email or Password')}
           <Tab key="account" tab="Log In">
-            <UserName name="email" placeholder="username" />
+            <UserName name="email" placeholder="email" />
             <Password
               name="password"
               placeholder="password"
@@ -117,7 +117,7 @@ class LoginPage extends Component {
             />
           </Tab>
           <Tab key="signUp" tab="Sign Up">
-            <UserName name="email" placeholder="username" />
+            <UserName name="email" placeholder="email" />
             <Password
               name="password"
               placeholder="password"

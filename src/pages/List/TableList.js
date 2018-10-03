@@ -352,8 +352,10 @@ class TableList extends PureComponent {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
+    const { dispatch, currentUser } = this.props;
     const { formValues } = this.state;
+    const { email } = currentUser;
+
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
@@ -373,7 +375,7 @@ class TableList extends PureComponent {
 
     dispatch({
       type: 'rule/fetch',
-      payload: params,
+      payload: email,
     });
   };
 
@@ -383,10 +385,10 @@ class TableList extends PureComponent {
     this.setState({
       formValues: {},
     });
-    dispatch({
-      type: 'rule/fetch',
-      payload: {},
-    });
+    // dispatch({
+    //   type: 'rule/fetch',
+    //   payload: {},
+    // });
   };
 
   toggleForm = () => {
@@ -400,24 +402,24 @@ class TableList extends PureComponent {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
 
-    if (!selectedRows) return;
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: 'rule/remove',
-          payload: {
-            key: selectedRows.map(row => row.key),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
+    // if (!selectedRows) return;
+    // switch (e.key) {
+    //   case 'remove':
+    //     dispatch({
+    //       type: 'rule/remove',
+    //       payload: {
+    //         key: selectedRows.map(row => row.key),
+    //       },
+    //       callback: () => {
+    //         this.setState({
+    //           selectedRows: [],
+    //         });
+    //       },
+    //     });
+    //     break;
+    //   default:
+    //     break;
+    // }
   };
 
   handleSelectRows = rows => {
@@ -443,10 +445,10 @@ class TableList extends PureComponent {
         formValues: values,
       });
 
-      dispatch({
-        type: 'rule/fetch',
-        payload: values,
-      });
+      // dispatch({
+      //   type: 'rule/fetch',
+      //   payload: values,
+      // });
     });
   };
 
@@ -505,7 +507,7 @@ class TableList extends PureComponent {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="Interview Name">
@@ -529,10 +531,10 @@ class TableList extends PureComponent {
               <Button type="primary" htmlType="submit">
                 Search
               </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+              <Button style={{ marginLeft: 8 }}>
                 Reset
               </Button>
-              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+              <a style={{ marginLeft: 8 }}>
                 Expand <Icon type="down" />
               </a>
             </span>
@@ -547,7 +549,7 @@ class TableList extends PureComponent {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="Interview user_name">

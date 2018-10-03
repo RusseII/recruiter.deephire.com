@@ -21,7 +21,7 @@ class Step3 extends React.PureComponent {
       <div className={styles.information}>
         <Row>
           <Col xs={24} sm={8} className={styles.label}>
-            Link:
+           Interview Link：
           </Col>
           <Col xs={24} sm={16}>
             {data.interviewLink}
@@ -29,28 +29,14 @@ class Step3 extends React.PureComponent {
         </Row>
         <Row>
           <Col xs={24} sm={8} className={styles.label}>
-            Name：
-          </Col>
-          <Col xs={24} sm={16}>
-            {data.interviewName}
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={24} sm={8} className={styles.label}>
-            email：
+          Email：
           </Col>
           <Col xs={24} sm={16}>
             {currentUser.email}
           </Col>
         </Row>
-        <Row>
-          <Col xs={24} sm={8} className={styles.label}>
-            Link:
-          </Col>
-          <Col xs={24} sm={16}>
-            <span className={styles.money}>{data.amount}</span> 元
-          </Col>
-        </Row>
+        
+       
       </div>
     );
     const actions = (
@@ -58,7 +44,7 @@ class Step3 extends React.PureComponent {
         <Button type="primary" onClick={onFinish}>
           Create another
         </Button>
-        <Button>Do Nothing</Button>
+        {/* <Button>Do Nothing</Button> */}
       </Fragment>
     );
     return (
