@@ -17,8 +17,9 @@ export async function queryRule2(params) {
   console.log(params);
   console.log(stringify(params));
   if (params == null) {
-    params = 'test@gmail.com';
-    console.log(JSON.stringify(params));
+    // params = 'test@gmail.com';
+    // console.log(JSON.stringify(params));
+    return null
   }
   return request(`https://api.deephire.io/v1.0/get_candidates/${params}`);
 }

@@ -345,11 +345,22 @@ class TableList extends PureComponent {
   componentDidMount() {
     const { dispatch, currentUser } = this.props;
     const { email } = currentUser;
+
+    if (email) {
     dispatch({
       type: 'rule/fetch',
       payload: email,
     });
   }
+  else{
+        setTimeout(() => { 
+          dispatch({ type: 'rule/fetch', payload: email })}, 1000);
+      }
+  }
+
+
+ 
+
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch, currentUser } = this.props;
