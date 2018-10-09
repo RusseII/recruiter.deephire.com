@@ -52,7 +52,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               CI=false rm -rf node_modules && yarn && yarn build
-              aws s3 sync build/ s3://recruiter.deephire.io
+              aws s3 sync dist/ s3://recruiter.deephire.io
             fi
       - deploy:
           name: Push to s3 DEVELOP
