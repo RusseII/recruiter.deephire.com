@@ -22,11 +22,8 @@ jobs:
       - run:
           name: Install aws cli
           command: sudo apt-get -y -qq install awscli
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       apk add --no-cache \
-      #         s3cmd
+          aws configure set preview.cloudfront true
+
 
       # Download and cache dependencies
       - restore_cache:
