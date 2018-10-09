@@ -9,6 +9,15 @@ import { AUTH_CONFIG } from './auth0-variables';
 
 export default class Auth {
   auth0 = new auth0.WebAuth({
+    domain: "login.deephire.io",
+    clientID: AUTH_CONFIG.clientId,
+    redirectUri: AUTH_CONFIG.callbackUrl,
+    responseType: 'token id_token',
+    scope: 'openid profile email',
+  });
+
+
+   auth0Social = new auth0.WebAuth({
     domain: AUTH_CONFIG.domain,
     clientID: AUTH_CONFIG.clientId,
     redirectUri: AUTH_CONFIG.callbackUrl,
@@ -94,15 +103,15 @@ export default class Auth {
   }
 
   loginWithGoogle() {
-    this.auth0.authorize({ connection: 'google-oauth2' });
+    this.auth0Social.authorize({ connection: 'google-oauth2' });
   }
 
   loginWithLinkedin() {
-    this.auth0.authorize({ connection: 'linkedin' });
+    this.auth0Social.authorize({ connection: 'linkedin' });
   }
 
   loginWithFacebook() {
-    this.auth0.authorize({ connection: 'facebook' });
+    this.auth0Social.authorize({ connection: 'facebook' });
   }
 
   handleAuthentication() {
