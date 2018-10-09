@@ -21,7 +21,10 @@ jobs:
       - checkout
       - run:
           name: Install aws cli
-          command: sudo apt-get -y -qq install awscli
+          command: |
+            sudo apt-get install python-dev python-pip
+            sudo pip install awscli
+          
       - run:
           name: AWS cloudfront
           command: aws configure set preview.cloudfront true
