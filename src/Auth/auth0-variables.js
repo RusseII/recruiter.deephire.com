@@ -1,5 +1,5 @@
 export const AUTH_CONFIG = {
-  domain: 'deephire2.auth0.com',
+  domain: 'login.deephire.io',
   clientId: 'jhzGFZHTv8ehpGskVKxZr_jXOAvKg7DU',
   // callbackUrl: 'http://localhost:8000/user/callback',
   callbackUrl: 'https://recruiter.deephire.io/user/callback',

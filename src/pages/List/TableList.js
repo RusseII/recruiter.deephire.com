@@ -326,6 +326,10 @@ class TableList extends PureComponent {
       // },
     },
     {
+      title: 'Email',
+      dataIndex: 'candidate_email',
+    },
+    {
       title: 'Time',
       dataIndex: 'python_datetime',
       sorter: true,
@@ -343,30 +347,29 @@ class TableList extends PureComponent {
   ];
 
   componentDidMount() {
-    const { dispatch, currentUser } = this.props;
-    const { email } = currentUser;
+    const profile = JSON.parse(localStorage.getItem('profile'));
+    const { email } = profile;
+    console.log(email, profile);
+
+    const { dispatch } = this.props;
+    // const { email } = currentUser;
 
     if (email) {
-    dispatch({
-      type: 'rule/fetch',
-      payload: email,
-    });
+      dispatch({
+        type: 'rule/fetch',
+        payload: email,
+      });
+    }
+    // else{
+    //       setTimeout(() => {
+    //         dispatch({ type: 'rule/fetch', payload: email })}, 1000);
+    //     }
   }
-  else{
-        setTimeout(() => { 
-          dispatch({ type: 'rule/fetch', payload: email })}, 1000);
-      }
-  }
-
-
- 
-
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch, currentUser } = this.props;
     const { formValues } = this.state;
     const { email } = currentUser;
-
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
@@ -542,9 +545,7 @@ class TableList extends PureComponent {
               <Button type="primary" htmlType="submit">
                 Search
               </Button>
-              <Button style={{ marginLeft: 8 }}>
-                Reset
-              </Button>
+              <Button style={{ marginLeft: 8 }}>Reset</Button>
               <a style={{ marginLeft: 8 }}>
                 Expand <Icon type="down" />
               </a>
@@ -681,6 +682,7 @@ class TableList extends PureComponent {
               selectedRows={selectedRows}
               loading={loading}
               data={data}
+              size="small"
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}

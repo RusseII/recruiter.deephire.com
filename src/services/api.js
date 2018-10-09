@@ -19,7 +19,7 @@ export async function queryRule2(params) {
   if (params == null) {
     // params = 'test@gmail.com';
     // console.log(JSON.stringify(params));
-    return null
+    return null;
   }
   return request(`https://api.deephire.io/v1.0/get_candidates/${params}`);
 }
@@ -79,7 +79,7 @@ export async function createInterview(params) {
 
 // export  function createInterview(params) {
 //   console.log(params)
-//   return request('http://localhost:3001/v1.0/companies');
+//   return request('https://api.deephire.io/v1.0/companies');
 // }
 
 export async function fakeChartData() {

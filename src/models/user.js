@@ -1,4 +1,8 @@
 import { query as queryUsers, queryCurrent } from '@/services/user';
+import { setAuthority } from '../utils/authority';
+import { reloadAuthorized } from '../utils/Authorized';
+// import { routerRedux } from 'dva/router';
+// import { push } from "dva/router"
 
 export default {
   namespace: 'user',
@@ -17,12 +21,24 @@ export default {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
-      console.log(response);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
+      try {
+        const response = yield call(queryCurrent);
+        yield put({
+          type: 'saveCurrentUser',
+          payload: response,
+        });
+      } catch {
+        console.log('UH OH ERROR');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('id_token');
+        localStorage.removeItem('expires_at');
+        localStorage.removeItem('profile');
+
+        setAuthority('guest');
+        reloadAuthorized();
+        // TODO could do this better
+        window.location.reload(true);
+      }
     },
   },
 

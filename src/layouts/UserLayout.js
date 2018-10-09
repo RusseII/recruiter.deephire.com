@@ -6,21 +6,21 @@ import styles from './UserLayout.less';
 import logo from '../assets/logo.svg';
 
 const links = [
-  {
-    key: 'help',
-    title: '帮助',
-    href: '',
-  },
-  {
-    key: 'privacy',
-    title: '隐私',
-    href: '',
-  },
-  {
-    key: 'terms',
-    title: '条款',
-    href: '',
-  },
+  // {
+  //   key: 'help',
+  //   title: '帮助',
+  //   href: '',
+  // },
+  // {
+  //   key: 'privacy',
+  //   title: '隐私',
+  //   href: '',
+  // },
+  // {
+  //   key: 'terms',
+  //   title: '条款',
+  //   href: '',
+  // },
 ];
 
 const copyright = (

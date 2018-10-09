@@ -44,10 +44,19 @@ export default class Auth {
     // this.auth0.
   }
 
+  renewToken() {
+    webAuth.checkSession({}, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        setSession(result);
+      }
+    });
+  }
+
   getAccessToken = () => {
     const accessToken = localStorage.getItem('access_token');
     if (!accessToken) {
-      this.logout();
       throw new Error('No access token found');
     }
     return accessToken;
