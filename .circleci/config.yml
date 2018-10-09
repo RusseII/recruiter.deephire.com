@@ -22,7 +22,9 @@ jobs:
       - run:
           name: Install aws cli
           command: sudo apt-get -y -qq install awscli
-          aws configure set preview.cloudfront true
+      - run:
+          name: AWS cloudfront
+          command: aws configure set preview.cloudfront true
 
 
       # Download and cache dependencies
