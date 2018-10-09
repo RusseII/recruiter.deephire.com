@@ -55,7 +55,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               CI=false rm -rf node_modules && yarn && yarn build
               aws s3 sync dist/ s3://recruiter.deephire.io
-              aws cloudfront create-invalidation --distribution-id EAMXVGB9DJU8U  --paths /*
+              aws cloudfront create-invalidation --distribution-id EAMXVGB9DJU8U  --paths "/*"
             fi
       - deploy:
           name: Push to s3 DEVELOP
