@@ -265,12 +265,16 @@ class UpdateForm extends PureComponent {
   }
 }
 
+
+
+
 /* eslint react/no-multi-comp:0 */
 @connect(({ rule, loading, user }) => ({
   currentUser: user.currentUser,
   rule,
   loading: loading.models.rule,
 }))
+
 @Form.create()
 class TableList extends PureComponent {
   state = {
@@ -282,64 +286,69 @@ class TableList extends PureComponent {
     stepFormValues: {},
   };
 
+
+ 
   columns = [
     {
       title: 'Interview Name',
-      dataIndex: 'interview_name',
+      dataIndex: 'interviewName',
     },
     {
-      title: 'Name',
-      dataIndex: 'user_name',
-      // },
-      // {
-      //   title: '服务调用次数',
-      //   dataIndex: 'callNo',
-      //   sorter: true,
-      //   align: 'right',
-      //   render: val => `${val} 万`,
-      //   // mark to display a total number
-      //   needTotal: true,
-      // },
-      // {
-      //   title: 'Status',
-      //   dataIndex: 'status',
-      //   filters: [
-      //     {
-      //       text: status[0],
-      //       value: 0,
-      //     },
-      //     {
-      //       text: status[1],
-      //       value: 1,
-      //     },
-      //     {
-      //       text: status[2],
-      //       value: 2,
-      //     },
-      //     {
-      //       text: status[3],
-      //       value: 3,
-      //     },
-      //   ],
-      // render(val) {
-      //   return <Badge status={statusMap[val]} text={status[val]} />;
-      // },
+      title: 'Interview Questions',
+        render: (text, data) => (
+          <div>Coming Soon!</div>
+        ),
     },
+    // {
+    //   title: 'Retakes Allowed',
+    //   dataIndex: 'interview_config.retakesAllowed',
+    // },
+    // },
+    // {
+    //   title: '服务调用次数',
+    //   dataIndex: 'callNo',
+    //   sorter: true,
+    //   align: 'right',
+    //   render: val => `${val} 万`,
+    //   // mark to display a total number
+    //   needTotal: true,
+    // },
+    // {
+    //   title: 'Status',
+    //   dataIndex: 'status',
+    //   filters: [
+    //     {
+    //       text: status[0],
+    //       value: 0,
+    //     },
+    //     {
+    //       text: status[1],
+    //       value: 1,
+    //     },
+    //     {
+    //       text: status[2],
+    //       value: 2,
+    //     },
+    //     {
+    //       text: status[3],
+    //       value: 3,
+    //     },
+    //   ],
+    // render(val) {
+    //   return <Badge status={statusMap[val]} text={status[val]} />;
+    // },
+
     {
-      title: 'Email',
-      dataIndex: 'candidate_email',
-    },
-    {
-      title: 'Time',
+      title: 'Created',
       dataIndex: 'python_datetime',
       sorter: true,
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
-      title: 'View',
+      title: 'Interview Link',
       render: (text, data) => (
         <Fragment>
-          <a onClick={() => this.openInterview(true, data)}>View</a>
+          <a onClick={() => this.openInterview(true, data)}>{data.short_url}</a>
           {/* <a href="">订阅警报</a> */}
         </Fragment>
       ),
@@ -356,13 +365,13 @@ class TableList extends PureComponent {
 
     if (email) {
       dispatch({
-        type: 'rule/fetch',
+        type: 'rule/view_interviews',
         payload: email,
       });
     }
     // else{
     //       setTimeout(() => {
-    //         dispatch({ type: 'rule/fetch', payload: email })}, 1000);
+    //         dispatch({ type: 'rule/view_interviews', payload: email })}, 1000);
     //     }
   }
 
@@ -388,7 +397,7 @@ class TableList extends PureComponent {
     }
 
     dispatch({
-      type: 'rule/fetch',
+      type: 'rule/view_interviews',
       payload: email,
     });
   };
@@ -400,7 +409,7 @@ class TableList extends PureComponent {
       formValues: {},
     });
     // dispatch({
-    //   type: 'rule/fetch',
+    //   type: 'rule/view_interviews',
     //   payload: {},
     // });
   };
@@ -460,7 +469,7 @@ class TableList extends PureComponent {
       });
 
       // dispatch({
-      //   type: 'rule/fetch',
+      //   type: 'rule/view_interviews',
       //   payload: values,
       // });
     });
@@ -473,12 +482,11 @@ class TableList extends PureComponent {
   };
 
   openInterview = (flag, data) => {
-    const { company_id, user_id } = data;
+    const { short_url } = data;
     // const {$oid} = _id
     // console.log($oid)
     console.log('id here', data);
-    const url = `https://candidates.deephire.io/?id=${company_id}&candidate=${user_id}`;
-    window.open(url, '_blank');
+    window.open(short_url, '_blank');
   };
 
   handleUpdateModalVisible = (flag, record) => {
@@ -641,6 +649,8 @@ class TableList extends PureComponent {
       loading,
       currentUser,
     } = this.props;
+
+
     console.log('Currentuser', currentUser);
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
@@ -659,7 +669,7 @@ class TableList extends PureComponent {
       handleUpdate: this.handleUpdate,
     };
     return (
-      <PageHeaderWrapper title="Candidates">
+      <PageHeaderWrapper title="Interviews">
         <Card bordered={false}>
           <div className={styles.tableList}>
             {/* <div className={styles.tableListForm}>{this.renderForm()}</div> */}

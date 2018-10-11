@@ -1,6 +1,8 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
 
+const hostedURL = "https://api.deephire.io"
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
@@ -21,8 +23,20 @@ export async function queryRule2(params) {
     // console.log(JSON.stringify(params));
     return null;
   }
-  return request(`https://api.deephire.io/v1.0/get_candidates/${params}`);
+  return request(`${hostedURL}/v1.0/get_candidates/${params}`);
 }
+
+
+export async function getInterviews(params) {
+         console.log(params);
+         console.log(stringify(params));
+         if (params == null) {
+           // params = 'test@gmail.com';
+           // console.log(JSON.stringify(params));
+           return null;
+         }
+         return request(`${hostedURL}/v1.0/get_interviews/${params}`);
+       }
 
 export async function removeRule(params) {
   return request('/api/rule', {
@@ -74,12 +88,12 @@ export async function createInterview(params) {
     interview_config: { retakesAllowed, prepTime, answerTime },
   };
 
-  return request('https://api.deephire.io/v1.0/create_interview', { method: 'POST', body: data });
+  return request(`${hostedURL}/v1.0/create_interview`, { method: 'POST', body: data });
 }
 
 // export  function createInterview(params) {
 //   console.log(params)
-//   return request('https://api.deephire.io/v1.0/companies');
+//   return request(hostedURL + '/v1.0/companies');
 // }
 
 export async function fakeChartData() {

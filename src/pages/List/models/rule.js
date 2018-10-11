@@ -1,4 +1,4 @@
-import { queryRule, queryRule2, removeRule, addRule, updateRule } from '@/services/api';
+import { getInterviews, queryRule2, removeRule, addRule, updateRule } from '@/services/api';
 
 export default {
   namespace: 'rule',
@@ -15,6 +15,20 @@ export default {
       console.log('payload', payload);
 
       let response = yield call(queryRule2, payload);
+      console.log(response);
+      response = { list: response };
+      console.log(response);
+
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+    },
+
+    *view_interviews({ payload }, { call, put }) {
+      console.log('payload', payload);
+
+      let response = yield call(getInterviews, payload);
       console.log(response);
       response = { list: response };
       console.log(response);

@@ -15,7 +15,7 @@ class Step3 extends React.PureComponent {
     console.log(this.props);
     const { data, currentUser } = this.props;
     const onFinish = () => {
-      router.push('/form/create-interview/info');
+      router.push('/interview/create-interview/info');
     };
     const information = (
       <div className={styles.information}>

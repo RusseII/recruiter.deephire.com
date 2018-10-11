@@ -25,10 +25,10 @@ export default {
         interviewLink: response,
       });
 
-      yield put(routerRedux.push('/form/create-interview/result'));
+      yield put(routerRedux.push('/interview/create-interview/result'));
       yield console.log(response);
     },
-    *submitAdvancedForm({ payload }, { call }) {
+    *submitviewInterview({ payload }, { call }) {
       yield call(fakeSubmitForm, payload);
       message.success('提交成功');
     },

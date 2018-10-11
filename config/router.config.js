@@ -19,7 +19,7 @@ export default [
     authority: ['user'],
     routes: [
       // dashboard
-      { path: '/', redirect: 'form/create-interview/info' },
+      { path: '/', redirect: 'interview/create-interview/info' },
       // {
       //   path: '/dashboard',
       //   name: 'dashboard',
@@ -44,7 +44,7 @@ export default [
       // },
       // forms
       {
-        path: '/form',
+        path: '/interview',
         icon: 'form',
         name: 'form',
         routes: [
@@ -54,39 +54,39 @@ export default [
           //   component: './Forms/BasicForm',
           // },
           {
-            path: '/form/create-interview',
+            path: '/interview/create-interview',
             name: 'createinterview',
             component: './Forms/CreateInterviewForm',
             hideChildrenInMenu: true,
             routes: [
               {
-                path: '/form/create-interview',
+                path: '/interview/create-interview',
                 name: 'createinterview',
-                redirect: '/form/create-interview/info',
+                redirect: '/interview/create-interview/info',
               },
               {
-                path: '/form/create-interview/info',
+                path: '/interview/create-interview/info',
                 name: 'info',
                 component: './Forms/CreateInterviewForm/Step1',
               },
               {
-                path: '/form/create-interview/confirm',
+                path: '/interview/create-interview/confirm',
                 name: 'confirm',
                 component: './Forms/CreateInterviewForm/Step2',
               },
               {
-                path: '/form/create-interview/result',
+                path: '/interview/create-interview/result',
                 name: 'result',
                 component: './Forms/CreateInterviewForm/Step3',
               },
             ],
           },
-          // {
-          //   path: '/form/advanced-form',
-          //   name: 'advancedform',
-          //   authority: ['admin'],
-          //   component: './Forms/AdvancedForm',
-          // },
+          {
+            path: '/interview/view-interviews',
+            name: 'viewInterview',
+            authority: ['user'],
+            component: './List/ViewInterviews',
+          },
         ],
       },
       // list

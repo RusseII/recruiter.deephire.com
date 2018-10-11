@@ -27,7 +27,7 @@ export default {
   'menu.form.createinterview.info': '分步表单（填写转账信息）',
   'menu.form.createinterview.confirm': '分步表单（确认转账信息）',
   'menu.form.createinterview.result': '分步表单（完成）',
-  'menu.form.advancedform': '高级表单',
+  'menu.form.viewInterview': '高级表单',
   'menu.list': '列表页',
   'menu.list.searchtable': '查询表格',
   'menu.list.basiclist': '标准列表',

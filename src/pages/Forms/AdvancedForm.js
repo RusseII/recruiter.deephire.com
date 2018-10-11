@@ -58,10 +58,10 @@ const tableData = [
 ];
 
 @connect(({ loading }) => ({
-  submitting: loading.effects['form/submitAdvancedForm'],
+  submitting: loading.effects['form/submitviewInterview'],
 }))
 @Form.create()
-class AdvancedForm extends PureComponent {
+class viewInterview extends PureComponent {
   state = {
     width: '100%',
   };
@@ -139,7 +139,7 @@ class AdvancedForm extends PureComponent {
       if (!error) {
         // submit the values
         dispatch({
-          type: 'form/submitAdvancedForm',
+          type: 'form/submitviewInterview',
           payload: values,
         });
       }
@@ -157,7 +157,7 @@ class AdvancedForm extends PureComponent {
       <PageHeaderWrapper
         title="高级表单"
         content="高级表单常见于一次性输入和提交大批量数据的场景。"
-        wrapperClassName={styles.advancedForm}
+        wrapperClassName={styles.viewInterview}
       >
         <Card title="仓库管理" className={styles.card} bordered={false}>
           <Form layout="vertical" hideRequiredMark>
@@ -320,4 +320,4 @@ class AdvancedForm extends PureComponent {
   }
 }
 
-export default AdvancedForm;
+export default viewInterview;
