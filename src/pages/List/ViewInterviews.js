@@ -26,17 +26,26 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './TableList.less';
 
+const readableTime = require('readable-timestamp');
+
+
 const FormItem = Form.Item;
 const { Step } = Steps;
 const { TextArea } = Input;
 const { Option } = Select;
 const RadioGroup = Radio.Group;
+
+// const readableTime = require('readable-timestamp');
+
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['default', 'processing', 'success', 'error'];
+
+
+
 
 const CreateForm = Form.create()(props => {
   const { modalVisible, form, handleAdd, handleModalVisible } = props;
@@ -295,9 +304,26 @@ class TableList extends PureComponent {
     },
     {
       title: 'Interview Questions',
-        render: (text, data) => (
-          <div>Coming Soon!</div>
-        ),
+      // dataIndex: "interview_quesions",
+        render(x, data) {
+          console.log(data.interview_questions)
+          
+          // const data =[{"name":"test1"},{"name":"test2"}];
+          try { 
+          const listItems = data.interview_questions.map((d) => <div><li key={d.question}>{d.question}</li><br /></div>);
+          return (
+            <div>{listItems} </div>
+          ) 
+        }
+          catch {return null}
+         
+        
+        
+        
+         
+         
+        }
+      
     },
     // {
     //   title: 'Retakes Allowed',
@@ -340,9 +366,18 @@ class TableList extends PureComponent {
 
     {
       title: 'Created',
-      dataIndex: 'python_datetime',
+      // dataIndex: 'python_datetime',
       sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      render(test, data) {
+        try {
+          console.log("QQQQQ", data)
+        console.log(data.python_datetime)
+        const dateObj = new Date(data.python_datetime)
+        const displayTime = (readableTime(dateObj))
+        return <div>{displayTime}</div>
+      } 
+      catch {return null}
+    }
     },
     {
       title: 'Interview Link',

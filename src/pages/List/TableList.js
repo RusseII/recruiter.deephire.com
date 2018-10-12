@@ -26,6 +26,8 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './TableList.less';
 
+const readableTime = require('readable-timestamp');
+
 const FormItem = Form.Item;
 const { Step } = Steps;
 const { TextArea } = Input;
@@ -329,11 +331,19 @@ class TableList extends PureComponent {
       title: 'Email',
       dataIndex: 'candidate_email',
     },
-    {
+     {
       title: 'Time',
-      dataIndex: 'python_datetime',
+      // dataIndex: 'python_datetime',
       sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      render(test, data) {
+        try {
+        
+        const dateObj = new Date(data.python_datetime)
+        const displayTime = readableTime(dateObj)
+        return <div>{displayTime}</div>
+      } 
+      catch {return null}
+    }
     },
     {
       title: 'View',
