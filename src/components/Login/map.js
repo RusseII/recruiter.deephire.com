@@ -8,14 +8,13 @@ export default {
       size: 'large',
       type: 'email',
       prefix: <Icon type="user" className={styles.prefixIcon} />,
-      placeholder: 'admin',
     },
     rules: [
-      { type: 'email', message: 'The input is not valid E-mail!' },
       {
         required: true,
-        message: 'Please enter username!',
+        message: 'Please enter email!',
       },
+      // { type: 'email', message: 'The input is not valid E-mail!' },
     ],
   },
   Password: {
@@ -23,7 +22,6 @@ export default {
       size: 'large',
       prefix: <Icon type="lock" className={styles.prefixIcon} />,
       type: 'password',
-      placeholder: '888888',
     },
     rules: [
       {

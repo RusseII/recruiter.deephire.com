@@ -35,6 +35,20 @@ let uuid = 1;
 }))
 @Form.create()
 class Step1 extends React.PureComponent {
+  state = { loading: false };
+
+  componentDidMount() {
+    const { currentUser } = this.props;
+
+    const { email, sub, name } = currentUser;
+    window.setEmail(email);
+    window.setFullstoryIdentity(sub, name, email);
+  }
+
+  enterLoading = () => {
+    this.setState({ loading: true });
+  };
+
   remove = k => {
     const { form } = this.props;
     // can use data-binding to get
@@ -66,61 +80,6 @@ class Step1 extends React.PureComponent {
     });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        let { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions } = values;
-        interviewQuestions = interviewQuestions.map(a => ({
-          question: a,
-        }));
-        console.log('Received values of form: ', values);
-
-        const dateTime = Date.now();
-        const timestamp = Math.floor(dateTime / 1000);
-        // const { email } = JSON.parse(localStorage.getItem('user_profile'));
-        // console.log('email is', email);
-
-        const data = {
-          interviewName,
-          email: 'test',
-          interview_questions: interviewQuestions,
-          interview_config: { retakesAllowed, prepTime, answerTime },
-          timestamp,
-        };
-
-        fetch(`${ApiHostedURL}/v1.0/create_interview`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        })
-          .then(response => response.json())
-          .then(data => history.push(`/showInterviewLink/${encodeURIComponent(data)}`))
-
-          .catch(err => console.log('err', err));
-      }
-    });
-  };
-
-  login() {
-    this.props.auth.login();
-  }
-  // handleSubmit = e => {
-  //   const { dispatch, form } = this.props;
-  //   e.preventDefault();
-  //   form.validateFieldsAndScroll((err, values) => {
-  //     if (!err) {
-  //       dispatch({
-  //         type: 'form/submitRegularForm',
-  //         payload: values,
-  //       });
-  //     }
-  //   });
-  // };
-
   render() {
     const { form, dispatch, data, currentUser } = this.props;
     const { getFieldDecorator, validateFields, getFieldValue } = form;
@@ -130,6 +89,7 @@ class Step1 extends React.PureComponent {
       e.preventDefault();
       validateFields((err, values) => {
         if (!err) {
+          this.enterLoading();
           dispatch({
             type: 'form/submitStepForm',
             payload: {
@@ -162,7 +122,12 @@ class Step1 extends React.PureComponent {
               message: 'Please input interview question or delete this field.',
             },
           ],
-        })(<Input placeholder={`Interview Question ${index + 1}`} />)}
+        })(
+          <Input
+            style={{ width: '90%', marginRight: 8 }}
+            placeholder={`Interview Question ${index + 1}`}
+          />
+        )}
         {keys.length > 1 ? (
           <Icon
             className="dynamic-delete-button"
@@ -178,9 +143,10 @@ class Step1 extends React.PureComponent {
       <Fragment>
         <Form
           layout="horizontal"
-          // className={styles.stepForm}
-          hideRequiredMark // onSubmit={this.handleSubmit}
-          onSubmit={onValidateForm}
+          hideRequiredMark
+          onSubmit={
+            onValidateForm // className={styles.stepForm} // onSubmit={this.handleSubmit}
+          }
           style={{ marginTop: 20 }}
         >
           <FormItem {...formItemLayout} label="Name">
@@ -192,7 +158,7 @@ class Step1 extends React.PureComponent {
                   whitespace: true,
                 },
               ],
-            })(<Input />)}
+            })(<Input style={{ width: '90%', marginRight: 8 }} />)}
           </FormItem>
           <FormItem {...formItemLayout} label="Retakes">
             {getFieldDecorator('retakesAllowed', {
@@ -221,7 +187,7 @@ class Step1 extends React.PureComponent {
             </Button>
           </FormItem>
           <FormItem {...formItemLayoutWithOutLabel}>
-            <Button type="primary" htmlType="submit">
+            <Button loading={this.state.loading} type="primary" htmlType="submit">
               Create Interview
             </Button>
           </FormItem>

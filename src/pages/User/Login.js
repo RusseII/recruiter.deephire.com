@@ -24,39 +24,19 @@ class LoginPage extends Component {
     this.setState({ type });
   };
 
-  onGetCaptcha = () =>
-    new Promise((resolve, reject) => {
-      this.loginForm.validateFields(['mobile'], {}, (err, values) => {
-        if (err) {
-          reject(err);
-        } else {
-          const { dispatch } = this.props;
-          dispatch({
-            type: 'login/getCaptcha',
-            payload: values.mobile,
-          })
-            .then(resolve)
-            .catch(reject);
-        }
-      });
-    });
-
   loginWithGoogle() {
     const auth = new Auth();
     auth.loginWithGoogle();
-    console.log('liwg');
   }
 
   loginWithLinkedin() {
     const auth = new Auth();
     auth.loginWithLinkedin();
-    console.log('liwg');
   }
 
   loginWithFacebook() {
     const auth = new Auth();
     auth.loginWithFacebook();
-    console.log('liwg');
   }
 
   handleSubmit = (err, values) => {

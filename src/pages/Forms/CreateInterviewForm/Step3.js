@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Button, Row, Col } from 'antd';
+import { Button, Row, Col, Icon } from 'antd';
 import router from 'umi/router';
 import Result from '@/components/Result';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styles from './style.less';
 
 @connect(({ form, user }) => ({
@@ -21,22 +22,26 @@ class Step3 extends React.PureComponent {
       <div className={styles.information}>
         <Row>
           <Col xs={24} sm={8} className={styles.label}>
-           Interview Link：
+            Interview Link：
           </Col>
           <Col xs={24} sm={16}>
-            {data.interviewLink}
+            {`${data.interviewLink}  `}
+            <CopyToClipboard text={data.interviewLink}>
+              <Button size="small" icon="copy" />
+            </CopyToClipboard>
           </Col>
+          {/* <Col xs={4} sm={8}> */}
+
+          {/* </Col> */}
         </Row>
         <Row>
           <Col xs={24} sm={8} className={styles.label}>
-          Email：
+            Email：
           </Col>
           <Col xs={24} sm={16}>
             {currentUser.email}
           </Col>
         </Row>
-        
-       
       </div>
     );
     const actions = (

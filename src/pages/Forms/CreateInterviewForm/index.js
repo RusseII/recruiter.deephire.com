@@ -16,10 +16,8 @@ export default class CreateInterviewForm extends PureComponent {
     switch (pathList[pathList.length - 1]) {
       case 'info':
         return 0;
-      case 'confirm':
-        return 1;
       case 'result':
-        return 2;
+        return 1;
       default:
         return 0;
     }
@@ -37,7 +35,6 @@ export default class CreateInterviewForm extends PureComponent {
           <Fragment>
             <Steps current={this.getCurrentStep()} className={styles.steps}>
               <Step title="Create the Interview" />
-              {/* <Step title="Confirm" /> */}
               <Step title="Complete" />
             </Steps>
             {children}
