@@ -16,14 +16,13 @@ export default class Auth {
     scope: 'openid profile email',
   });
 
-
-//    auth0Social = new auth0.WebAuth({
-//     domain: AUTH_CONFIG.domain,
-//     clientID: AUTH_CONFIG.clientId,
-//     redirectUri: AUTH_CONFIG.callbackUrl,
-//     responseType: 'token id_token',
-//     scope: 'openid profile email',
-//   });
+  //    auth0Social = new auth0.WebAuth({
+  //     domain: AUTH_CONFIG.domain,
+  //     clientID: AUTH_CONFIG.clientId,
+  //     redirectUri: AUTH_CONFIG.callbackUrl,
+  //     responseType: 'token id_token',
+  //     scope: 'openid profile email',
+  //   });
 
   userProfile;
 
@@ -142,6 +141,11 @@ export default class Auth {
     // history.replace('/home');
     this.getProfile((err, profile) => {
       if (!err) {
+        const { sub, name, email } = profile;
+        window.setFullstoryIdentity(sub, name, email);
+        console.log('CALLING FS', sub, name, email);
+        window.setEmail(email);
+
         localStorage.setItem('profile', JSON.stringify(profile));
       } else {
         return this.logout();

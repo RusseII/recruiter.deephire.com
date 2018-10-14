@@ -37,14 +37,6 @@ let uuid = 1;
 class Step1 extends React.PureComponent {
   state = { loading: false };
 
-  componentDidMount() {
-    const { currentUser } = this.props;
-
-    const { email, sub, name } = currentUser;
-    window.setEmail(email);
-    window.setFullstoryIdentity(sub, name, email);
-  }
-
   enterLoading = () => {
     this.setState({ loading: true });
   };
