@@ -18,7 +18,7 @@ export default {
       // createInterview("test").then(x => console.log(x))
       const response = yield call(createInterview, payload);
       console.log(response);
-      // response = `https://interview.deephire.io/pickInterview/${encodeURIComponent(response)}`;
+      // response = `https://interview.deephire.com/pickInterview/${encodeURIComponent(response)}`;
 
       yield put({
         type: 'saveStepFormData',

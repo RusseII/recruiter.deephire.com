@@ -487,7 +487,7 @@ class TableList extends PureComponent {
     // const {$oid} = _id
     // console.log($oid)
     console.log('id here', data);
-    const url = `https://candidates.deephire.io/?id=${company_id}&candidate=${user_id}`;
+    const url = `https://candidates.deephire.com/?id=${company_id}&candidate=${user_id}`;
     window.open(url, '_blank');
   };
 

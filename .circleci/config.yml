@@ -38,7 +38,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               CI=false yarn && yarn build
-              aws s3 sync dist/ s3://recruiter.deephire.io
+              aws s3 sync dist/ s3://recruiter.deephire.com
               aws cloudfront create-invalidation --distribution-id EAMXVGB9DJU8U  --paths "/*"
             fi
       - deploy:
@@ -46,5 +46,5 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               CI=false npm run build
-              aws s3 sync build/ s3://dev-recruiter.deephire.io
+              aws s3 sync build/ s3://dev-recruiter.deephire.com
             fi
