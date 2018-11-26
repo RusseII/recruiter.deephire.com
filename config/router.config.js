@@ -87,6 +87,12 @@ export default [
             authority: ['user'],
             component: './List/ViewInterviews',
           },
+          {
+            path: '/interview/view-interviews2',
+            name: 'viewInterview2',
+            authority: ['user'],
+            component: './List/viewCandidate',
+          },
         ],
       },
       // list
