@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-// import logo from './img/logos/horizontalresize.png';
 import { render } from 'react-dom';
-import PropTypes from 'prop-types';
 import ReactPlayer from 'react-player';
 
 import { Card, Col, Row, Icon } from 'antd';
 
 import styles from './ViewCandidates.less';
-
-// import QuestionList from './QuestionList';
-// import "video-react/dist/video-react.css"; // import css for video player
 
 class App extends Component {
   constructor(props) {
@@ -17,8 +12,6 @@ class App extends Component {
 
     this.state = {
       activeQuestion: null,
-      modal: false,
-      comments: [],
     };
   }
 
@@ -47,19 +40,9 @@ class App extends Component {
   }
 
   getName() {
-    console.log('getName all data', this.state.candidateData);
-
     return this.state.candidateData[0].user_name;
   }
 
-  // toggle signup email modal
-  toggle() {
-    this.setState({
-      modal: !this.state.modal,
-    });
-  }
-
-  // pull URL GET parameters
   GetURLParameter(sParam) {
     const sPageURL = window.location.search.substring(1);
     const sURLVariables = sPageURL.split('&');
@@ -83,38 +66,36 @@ class App extends Component {
 
   render() {
     const { candidateData, comments, activeQuestion, requestFailed } = this.state;
+    const { responseUrl } = candidateData[activeQuestion];
     if (!candidateData) return <p>Loading...</p>;
     if (comments === null) return <p> Loading! </p>;
     if (activeQuestion === null) return <p> Loading questions... </p>;
     if (requestFailed) return <p>Failed!</p>;
 
     return (
-      <div>
-        <Row gutter={24}>
-          <Col span={8}>
-            {' '}
-            <Card hoverable title="Questions" />
-          </Col>
-          <Col span={16}>
-            <Card
-              actions={[<Icon type="setting" />, <Icon type="edit" />, <Icon type="share-alt" />]}
-              title="Card title"
-            >
-              <div className={styles.playerWrapper}>
-                <ReactPlayer
-                  onError={() => this.setState({ errorModal: true })}
-                  preload
-                  controls
-                  className={styles.reactPlayer}
-                  height="100%"
-                  width="100%"
-                  url={this.state.candidateData[this.state.activeQuestion].response_url}
-                />
-              </div>
-            </Card>
-          </Col>
-        </Row>
-      </div>
+      <Row gutter={24}>
+        <Col span={8}>
+          {' '}
+          <Card hoverable title="Questions" />
+        </Col>
+        <Col span={16}>
+          <Card
+            actions={[<Icon type="setting" />, <Icon type="edit" />, <Icon type="share-alt" />]}
+            title="Card title"
+          >
+            <div className={styles.playerWrapper}>
+              <ReactPlayer // onError={() => this.setState({ errorModal: true })}
+                preload
+                controls
+                className={styles.reactPlayer}
+                height="100%"
+                width="100%"
+                url={responseUrl}
+              />
+            </div>
+          </Card>
+        </Col>
+      </Row>
     );
   }
 }
