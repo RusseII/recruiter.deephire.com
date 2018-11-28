@@ -24,7 +24,7 @@ import {
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
-import styles from './TableList.less';
+import styles from './Candidates.less';
 
 const readableTime = require('readable-timestamp');
 
@@ -308,7 +308,6 @@ class TableList extends PureComponent {
         render(x, data) {
           console.log(data.interview_questions)
           
-          // const data =[{"name":"test1"},{"name":"test2"}];
           try { 
           const listItems = data.interview_questions.map((d) => <div><li key={d.question}>{d.question}</li><br /></div>);
           return (
@@ -325,44 +324,7 @@ class TableList extends PureComponent {
         }
       
     },
-    // {
-    //   title: 'Retakes Allowed',
-    //   dataIndex: 'interview_config.retakesAllowed',
-    // },
-    // },
-    // {
-    //   title: '服务调用次数',
-    //   dataIndex: 'callNo',
-    //   sorter: true,
-    //   align: 'right',
-    //   render: val => `${val} 万`,
-    //   // mark to display a total number
-    //   needTotal: true,
-    // },
-    // {
-    //   title: 'Status',
-    //   dataIndex: 'status',
-    //   filters: [
-    //     {
-    //       text: status[0],
-    //       value: 0,
-    //     },
-    //     {
-    //       text: status[1],
-    //       value: 1,
-    //     },
-    //     {
-    //       text: status[2],
-    //       value: 2,
-    //     },
-    //     {
-    //       text: status[3],
-    //       value: 3,
-    //     },
-    //   ],
-    // render(val) {
-    //   return <Badge status={statusMap[val]} text={status[val]} />;
-    // },
+    
 
     {
       title: 'Created',
@@ -707,22 +669,7 @@ class TableList extends PureComponent {
       <PageHeaderWrapper title="Interviews">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            {/* <div className={styles.tableListForm}>{this.renderForm()}</div> */}
-            {/* <div className={styles.tableListOperator}> */}
-            {/* <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                新建
-              </Button> */}
-            {/* {selectedRows.length > 0 && (
-                <span>
-                  <Button>批量操作</Button>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                      更多操作 <Icon type="down" />
-                    </Button>
-                  </Dropdown>
-                </span>
-              )}
-            </div> */}
+          
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
