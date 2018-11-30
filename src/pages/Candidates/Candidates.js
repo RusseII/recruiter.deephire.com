@@ -21,7 +21,6 @@ import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import router from 'umi/router';
 
-
 import styles from './Candidates.less';
 
 const readableTime = require('readable-timestamp');
@@ -35,7 +34,6 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-
 
 const CreateForm = Form.create()(props => {
   const { modalVisible, form, handleAdd, handleModalVisible } = props;
@@ -328,19 +326,19 @@ class Candidates extends PureComponent {
       title: 'Email',
       dataIndex: 'candidate_email',
     },
-     {
+    {
       title: 'Time',
       // dataIndex: 'python_datetime',
       sorter: true,
       render(test, data) {
         try {
-        
-        const dateObj = new Date(data.python_datetime)
-        const displayTime = readableTime(dateObj)
-        return <div>{displayTime}</div>
-      } 
-      catch {return null}
-    }
+          const dateObj = new Date(data.python_datetime);
+          const displayTime = readableTime(dateObj);
+          return <div>{displayTime}</div>;
+        } catch {
+          return null;
+        }
+      },
     },
     {
       title: 'View',
@@ -487,7 +485,7 @@ class Candidates extends PureComponent {
     // const url = `http://localhost:8000/interview/view-interviews2/?id=${company_id}&candidate=${user_id}`;
     router.push(`/candidates/view-candidate/?id=${company_id}&candidate=${user_id}`);
 
-    // window.open(url, "_self");
+    // window.open(url, "_blank");
   };
 
   handleUpdateModalVisible = (flag, record) => {
