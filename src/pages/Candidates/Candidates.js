@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
 import {
   Row,
   Col,
@@ -10,21 +9,20 @@ import {
   Select,
   Icon,
   Button,
-  Dropdown,
   Menu,
   InputNumber,
   DatePicker,
   Modal,
   message,
-  Badge,
-  Divider,
   Steps,
   Radio,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import router from 'umi/router';
 
-import styles from './TableList.less';
+
+import styles from './Candidates.less';
 
 const readableTime = require('readable-timestamp');
 
@@ -37,8 +35,7 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['default', 'processing', 'success', 'error'];
+
 
 const CreateForm = Form.create()(props => {
   const { modalVisible, form, handleAdd, handleModalVisible } = props;
@@ -274,7 +271,7 @@ class UpdateForm extends PureComponent {
   loading: loading.models.rule,
 }))
 @Form.create()
-class TableList extends PureComponent {
+class Candidates extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -487,8 +484,10 @@ class TableList extends PureComponent {
     // const {$oid} = _id
     // console.log($oid)
     console.log('id here', data);
-    const url = `https://candidates.deephire.com/?id=${company_id}&candidate=${user_id}`;
-    window.open(url, '_blank');
+    // const url = `http://localhost:8000/interview/view-interviews2/?id=${company_id}&candidate=${user_id}`;
+    router.push(`/candidates/view-candidate/?id=${company_id}&candidate=${user_id}`);
+
+    // window.open(url, "_self");
   };
 
   handleUpdateModalVisible = (flag, record) => {
@@ -712,4 +711,4 @@ class TableList extends PureComponent {
   }
 }
 
-export default TableList;
+export default Candidates;

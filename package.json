@@ -25,6 +25,7 @@
   "dependencies": {
     "@antv/data-set": "^0.9.6",
     "@babel/runtime": "^7.0.0",
+    "add": "2.0.6",
     "antd": "^3.9.2",
     "auth0-js": "9.8.0",
     "bizcharts": "^3.2.2",
@@ -51,8 +52,12 @@
     "react-dom": "^16.5.1",
     "react-fittext": "^1.0.0",
     "react-google-button": "^0.5.3",
+    "react-player": "1.7.0",
     "react-router-dom": "^4.3.1",
-    "readable-timestamp": "^0.2.0"
+    "reactstrap": "6.5.0",
+    "readable-timestamp": "^0.2.0",
+    "semantic-ui-css": "2.4.1",
+    "semantic-ui-react": "0.83.0"
   },
   "devDependencies": {
     "@types/react": "^16.4.11",

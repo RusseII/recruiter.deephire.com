@@ -1,0 +1,83 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+
+.App {
+  text-align: center;
+  background-color: green;
+  /* font-family: "Source Sans Pro", sans-serif; */
+}
+body > #root > div {
+  height: 100vh;
+  /* font-family: "Source Sans Pro", sans-serif; */
+}
+
+.cardContainer {
+  border: 1px solid white;
+
+  background-color: red;
+  display: block;
+  border-radius: 5px;
+  text-align: left;
+
+  margin-block-start: 10px;
+}
+
+.cardContent {
+  padding-left: 3%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+
+* {
+  /* font-family: "Source Sans Pro", sans-serif; */
+}
+
+.Collapsible {
+  background-color: white;
+  width: 100%;
+  /* padding-right: 20px; */
+  /* padding-left: 20px; */
+
+  /* padding-block-end: 20px; */
+  padding-block-start: 20px;
+
+  background-color: #f6f7f8;
+}
+
+/* .Collapsible__contentInner{
+  background-color: black
+} */
+
+.Collapsible__contentInner:target {
+  background-color: black;
+}
+
+.Collapsible__contentInner {
+  padding: 10px;
+  border: 1px solid white;
+  border-top: 0;
+  background-color: white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  color: #59687c;
+}
+
+.playerWrapper {
+  position: relative;
+  padding-top: 56.25%; /* Player ratio: 100 / (1280 / 720) */
+  // margin-left: 13%;
+  // margin-right: 13%;
+}
+
+.reactPlayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+.selected {
+
+
+  background-color: #f1f7fe
+}
