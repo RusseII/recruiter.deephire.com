@@ -57,12 +57,7 @@ export default [
             authority: ['user'],
             component: './Candidates/ViewInterviews',
           },
-          {
-            path: '/interview/view-interviews2',
-            name: 'viewInterview2',
-            authority: ['user'],
-            component: './Candidates/ViewCandidate',
-          },
+        
         ],
       },
       {
@@ -71,11 +66,18 @@ export default [
         name: 'list',
         routes: [
           {
-            path: '/list/table-list',
+            path: '/candidates/candidates',
             name: 'searchtable',
             component: './Candidates/Candidates',
           },
-        ],
+        
+          {path: '/candidates/view-candidate',
+          name: 'viewCandidate',
+          authority: ['user'],
+          component: './Candidates/ViewCandidate',
+          hideInMenu: true,
+
+        }],
       },
 
       {

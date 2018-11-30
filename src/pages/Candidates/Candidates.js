@@ -19,6 +19,8 @@ import {
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import router from 'umi/router';
+
 
 import styles from './Candidates.less';
 
@@ -482,8 +484,10 @@ class Candidates extends PureComponent {
     // const {$oid} = _id
     // console.log($oid)
     console.log('id here', data);
-    const url = `https://candidates.deephire.com/?id=${company_id}&candidate=${user_id}`;
-    window.open(url, '_blank');
+    // const url = `http://localhost:8000/interview/view-interviews2/?id=${company_id}&candidate=${user_id}`;
+    router.push(`/candidates/view-candidate/?id=${company_id}&candidate=${user_id}`);
+
+    // window.open(url, "_self");
   };
 
   handleUpdateModalVisible = (flag, record) => {
