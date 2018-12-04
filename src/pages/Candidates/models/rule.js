@@ -1,4 +1,11 @@
-import { getInterviews, queryRule2, removeRule, addRule, updateRule } from '@/services/api';
+import {
+  getInterviews,
+  queryRule2,
+  removeRule,
+  addRule,
+  updateRule,
+  shareRule,
+} from '@/services/api';
 
 export default {
   namespace: 'rule',
@@ -48,6 +55,7 @@ export default {
       });
       if (callback) callback();
     },
+
     *remove({ payload, callback }, { call, put }) {
       console.log('remove rule.js');
 

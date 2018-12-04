@@ -101,6 +101,19 @@ class App extends Component {
     return (
       <Row gutter={24}>
         <Col span={8}>
+          <Card
+            style={{marginBottom: "20px"}}
+            hoverable
+            title="Russell Ratcliffe"
+            actions={[
+              <Button shape="circle" icon="setting" />,
+              <Button onClick={() => this.openInterview()} shape="circle" icon="share-alt" />,
+            ]}
+          >
+          GMS Sales Interview
+          Russell@deephire.com
+          </Card>
+          
           <Card hoverable title="Questions">
             <Table
               showHeader={false}
@@ -115,7 +128,9 @@ class App extends Component {
               dataSource={candidateData}
               columns={columns}
             />
+          
           </Card>
+          
         </Col>
         <Col span={16}>
           {/* <Button shape="circle" icon="search" /> */}

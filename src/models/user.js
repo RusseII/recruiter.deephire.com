@@ -20,6 +20,7 @@ export default {
         payload: response,
       });
     },
+  
     *fetchCurrent(_, { call, put }) {
       try {
         const response = yield call(queryCurrent);

@@ -1,7 +1,8 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
 
-const hostedURL = "https://api.deephire.com"
+// const hostedURL = "https://api.deephire.com"
+const hostedURL = 'http://localhost:3001';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -26,17 +27,23 @@ export async function queryRule2(params) {
   return request(`${hostedURL}/v1.0/get_candidates/${params}`);
 }
 
+export async function shareShortLink(data) {
+  return request(`${hostedURL}/v1.0/create_shortlist`, {
+    method: 'POST',
+    body: data,
+  });
+}
 
 export async function getInterviews(params) {
-         console.log(params);
-         console.log(stringify(params));
-         if (params == null) {
-           // params = 'test@gmail.com';
-           // console.log(JSON.stringify(params));
-           return null;
-         }
-         return request(`${hostedURL}/v1.0/get_interviews/${params}`);
-       }
+  console.log(params);
+  console.log(stringify(params));
+  if (params == null) {
+    // params = 'test@gmail.com';
+    // console.log(JSON.stringify(params));
+    return null;
+  }
+  return request(`${hostedURL}/v1.0/get_interviews/${params}`);
+}
 
 export async function removeRule(params) {
   return request('/api/rule', {

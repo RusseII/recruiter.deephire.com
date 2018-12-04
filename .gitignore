@@ -35,3 +35,7 @@ functions/mock
 
 # screenshot
 screenshot
+
+#misc
+auth0-variables.js
+
