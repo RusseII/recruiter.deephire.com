@@ -16,7 +16,7 @@ import {
   message,
   Steps,
   Radio,
-  Dropdown
+  Dropdown,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -33,12 +33,9 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 
-
 //  Form.create()
 //  class CreateForm extends PureComponent {
 //    // (props => {
-
-   
 
 //    render() {
 //     //  const { modalVisible, form, handleAdd, handleModalVisible, selectedRows } = this.props;
@@ -46,13 +43,6 @@ const getValue = obj =>
 //      return <div>{renderContent(this.state.currentStep, 's')}</div>;
 //    }
 //  };
-
-
-
-
-
-
-
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ rule, loading, user, form }) => ({
@@ -276,12 +266,12 @@ class Candidates extends PureComponent {
           destroyOnClose
           title="Create Shareable Link"
           visible={this.state.modalVisible}
-          onOk={this.okHandle}
+          onOk={this.createLinkButton}
           okText="Create Link"
           onCancel={() => this.handleModalVisible()}
         >
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="email">
-            {this.props.form.getFieldDecorator('desc', {
+            {this.props.form.getFieldDecorator('email', {
               rules: [{ required: true, message: 'Need Email!', min: 1 }],
             })(<Input placeholder="Who do you want to share this with?" />)}
           </FormItem>
@@ -294,7 +284,7 @@ class Candidates extends PureComponent {
           destroyOnClose
           title="Create Shareable Link"
           visible={this.state.modalVisible}
-          onOk={this.okHandle}
+          onOk={() => this.handleModalVisible()}
           okText="Done"
           onCancel={() => this.handleModalVisible()}
         >
@@ -309,9 +299,10 @@ class Candidates extends PureComponent {
     message.success('Link Created!');
   };
 
-  okHandle = () => {
-    this.props.form.validateFields((err, email) => {
+  createLinkButton = () => {
+    this.props.form.validateFields((err, data) => {
       if (err) return;
+      const { email } = data;
       this.props.form.resetFields();
       // handleAdd(fieldsValue);
       const shortList = { email, interviews: this.state.selectedRows };
@@ -323,12 +314,7 @@ class Candidates extends PureComponent {
   createLink(shortListJson) {
     const { dispatch } = this.props;
     dispatch({ type: 'form/share', payload: shortListJson });
-    console.log();
-    const response = { short_url: 'link.deephire/share5.com' };
-    this.setState({ response: response.short_url });
     this.success();
-
-    console.log(response);
   }
 
   render() {
@@ -336,8 +322,7 @@ class Candidates extends PureComponent {
       rule: { data },
       loading,
       currentUser,
-      data5
-      
+      data5,
     } = this.props;
     console.log('EEEEEK', data5);
     console.log('Currentuser', currentUser);
