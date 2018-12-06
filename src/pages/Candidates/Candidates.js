@@ -33,6 +33,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 
+    
 //  Form.create()
 //  class CreateForm extends PureComponent {
 //    // (props => {
@@ -49,7 +50,7 @@ const getValue = obj =>
   currentUser: user.currentUser,
   rule,
   loading: loading.models.rule,
-  data5: form.step,
+  // data5: form.step,
 }))
 @Form.create()
 class Candidates extends PureComponent {
@@ -170,6 +171,25 @@ class Candidates extends PureComponent {
   handleMenuClick = e => {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
+
+    if (!selectedRows) return;
+    switch (e.key) {
+      case 'remove':
+        dispatch({
+          type: 'rule/remove',
+          payload: {
+            key: selectedRows.map(row => row.key),
+          },
+          callback: () => {
+            this.setState({
+              selectedRows: [],
+            });
+          },
+        });
+        break;
+      default:
+        break;
+    }
   };
 
   handleSelectRows = rows => {
@@ -260,6 +280,8 @@ class Candidates extends PureComponent {
   }
 
   renderContent = (currentStep, formVals) => {
+    const { rule: { shareLink } } = this.props;
+    console.log(shareLink);
     if (currentStep === 1) {
       return (
         <Modal
@@ -279,18 +301,10 @@ class Candidates extends PureComponent {
       );
     }
     if (currentStep === 2) {
-      return (
-        <Modal
-          destroyOnClose
-          title="Create Shareable Link"
-          visible={this.state.modalVisible}
-          onOk={() => this.handleModalVisible()}
-          okText="Done"
-          onCancel={() => this.handleModalVisible()}
-        >
-          <div>Here is your shareable link: {this.props.data5.shareLink}</div>
-        </Modal>
-      );
+      return <Modal destroyOnClose title="Create Shareable Link" visible={this.state.modalVisible} onOk={() => this.handleDone()} okText="Done" onCancel={() => this.handleDone()}>
+        <div>Here is your shareable link: {shareLink}</div>
+        {/* // this.props.data5.shareLink; */}
+             </Modal>;
     }
     return null;
   };
@@ -305,27 +319,38 @@ class Candidates extends PureComponent {
       const { email } = data;
       this.props.form.resetFields();
       // handleAdd(fieldsValue);
+      console.log('boom', this.state.selectedRows);
       const shortList = { email, interviews: this.state.selectedRows };
       this.createLink(shortList);
       this.setState({ currentStep: this.state.currentStep + 1 });
     });
   };
 
+  handleDone = () => {
+    this.setState({ currentStep: 1 });
+    this.handleModalVisible();
+  }
+
   createLink(shortListJson) {
     const { dispatch } = this.props;
-    dispatch({ type: 'form/share', payload: shortListJson });
+    dispatch({ type: 'rule/share', payload: shortListJson });
     this.success();
   }
 
   render() {
     const {
-      rule: { data },
+      rule: { data }, 
+     
+      rule,
       loading,
       currentUser,
-      data5,
+      // data5,
     } = this.props;
-    console.log('EEEEEK', data5);
     console.log('Currentuser', currentUser);
+    console.log(rule)
+    console.log(data, "d5")
+
+
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -336,7 +361,6 @@ class Candidates extends PureComponent {
 
     const parentMethods = {
       renderContent: this.renderContent,
-      selectedRows: this.state.selectedRows,
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
     };
@@ -359,21 +383,13 @@ class Candidates extends PureComponent {
               selectedRows={selectedRows}
               loading={loading}
               data={data}
-              size="small"
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
             />
           </div>
         </Card>
-        {this.renderContent(this.state.currentStep, 's')}
-        {stepFormValues && Object.keys(stepFormValues).length ? (
-          <UpdateForm
-            {...updateMethods}
-            updateModalVisible={updateModalVisible}
-            values={stepFormValues}
-          />
-        ) : null}
+        {this.renderContent(this.state.currentStep)}
       </PageHeaderWrapper>
     );
   }

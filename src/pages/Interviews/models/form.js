@@ -28,18 +28,7 @@ export default {
       yield put(routerRedux.push('/interview/create-interview/result'));
       yield console.log(response);
     },
-    *share({ payload, callback }, { call, put }) {
-      console.log('share rule.js');
-
-      const response = yield call(shareShortLink, payload);
-      console.log(response, 'ZZZZZZZZZZZZZ');
-
-      yield put({
-        type: 'saveStepFormData',
-        shareLink: response,
-      });
-      if (callback) callback();
-    },
+   
     *submitviewInterview({ payload }, { call }) {
       yield call(fakeSubmitForm, payload);
       message.success('提交成功');

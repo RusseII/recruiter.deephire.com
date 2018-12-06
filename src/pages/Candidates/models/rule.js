@@ -4,7 +4,7 @@ import {
   removeRule,
   addRule,
   updateRule,
-  shareRule,
+  shareShortLink,
 } from '@/services/api';
 
 export default {
@@ -23,6 +23,9 @@ export default {
 
       let response = yield call(queryRule2, payload);
       console.log(response);
+      response.forEach((resp, index) => {
+        response[index].key = index;
+      });
       response = { list: response };
       console.log(response);
 
@@ -30,6 +33,18 @@ export default {
         type: 'save',
         payload: response,
       });
+    },
+    *share({ payload, callback }, { call, put }) {
+      console.log('share rule.js');
+
+      const response = yield call(shareShortLink, payload);
+      console.log(response, 'ZZZZZZZZZZZZZ');
+
+      yield put({
+        type: 'shareLink',
+        payload: response,
+      });
+      if (callback) callback();
     },
 
     *view_interviews({ payload }, { call, put }) {
@@ -79,9 +94,12 @@ export default {
 
   reducers: {
     save(state, action) {
+      return { ...state, data: action.payload };
+    },
+    shareLink(state, action) {
       return {
         ...state,
-        data: action.payload,
+        shareLink: action.payload,
       };
     },
   },

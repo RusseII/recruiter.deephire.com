@@ -28,10 +28,14 @@ export async function queryRule2(params) {
 }
 
 export async function shareShortLink(data) {
-  return request(`${hostedURL}/v1.0/create_shortlist`, {
+  console.log("ran")
+  console.log("data")
+  const x =request(`${hostedURL}/v1.0/create_shortlist`, {
     method: 'POST',
     body: data,
   });
+  console.log(x, "run")
+  return x
 }
 
 export async function getInterviews(params) {

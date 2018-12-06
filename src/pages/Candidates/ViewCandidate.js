@@ -98,72 +98,46 @@ class App extends Component {
     console.log(ReactPlayer.canPlay(responseUrl));
     console.log(candidateData, activeQuestion);
 
-    return (
-      <Row gutter={24}>
-        <Col span={8}>
-          <Card
-            style={{marginBottom: "20px"}}
-            hoverable
-            title="Russell Ratcliffe"
-            actions={[
-              <Button shape="circle" icon="setting" />,
-              <Button onClick={() => this.openInterview()} shape="circle" icon="share-alt" />,
-            ]}
-          >
-          GMS Sales Interview
-          Russell@deephire.com
-          </Card>
-          
+    return <Row gutter={24}>
+      <Col span={8}>
+          <Card style={{ marginBottom: '20px' }} hoverable title={candidateData[0].user_name} actions={[<Button shape="circle" icon="setting" />, <Button onClick={() => this.openInterview()} shape="circle" icon="share-alt" />]} />
+
           <Card hoverable title="Questions">
             <Table
-              showHeader={false}
-              onRow={(record, index) => ({
-                onClick: () => {
+showHeader={false}
+onRow={(record, index) => ({ onClick: () => {
                   this.setState({ activeQuestion: index });
-                },
-              })}
-              rowClassName={(record, index) => (index === activeQuestion ? styles.selected : '')}
-              pagination={false}
-              bordered
-              dataSource={candidateData}
-              columns={columns}
+                } })}
+rowClassName={(record, index) => (index === activeQuestion ? styles.selected : '')}
+pagination={false}
+bordered
+dataSource={candidateData}
+columns={columns}
             />
-          
           </Card>
-          
         </Col>
-        <Col span={16}>
+      <Col span={16}>
           {/* <Button shape="circle" icon="search" /> */}
-          <Card
-            title={question_text}
-            actions={[
-              <Button shape="circle" icon="setting" />,
-              <Button onClick={() => this.openInterview()} shape="circle" icon="share-alt" />,
-            ]}
-          >
+          <Card title={question_text} actions={[<Button shape="circle" icon="setting" />, <Button onClick={() => this.openInterview()} shape="circle" icon="share-alt" />]}>
             {/* // actions={[<Icon type="setting" />, <Icon type="share-alt" />]} */}
             <div className={styles.playerWrapper}>
               <ReactPlayer
-                onError={() =>
-                  this.setState({
+onError={() => this.setState({
                     errorinVid: true,
-                  })
+                  })}
+preload
+controls
+playing
+className={styles.reactPlayer // onEnded={() => this.setState({activeQuestion: activeQuestion + 1})}
                 }
-                preload
-                controls
-                playing
-                className={
-                  styles.reactPlayer // onEnded={() => this.setState({activeQuestion: activeQuestion + 1})}
-                }
-                height="100%"
-                width="100%"
-                url={responseUrl}
+height="100%"
+width="100%"
+url={responseUrl}
               />
             </div>
           </Card>
         </Col>
-      </Row>
-    );
+    </Row>;
   }
 }
 
