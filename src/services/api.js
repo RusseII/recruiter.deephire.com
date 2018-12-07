@@ -1,8 +1,8 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
 
-const hostedURL = "https://api.deephire.com"
-// const hostedURL = 'http://localhost:3001';
+// const hostedURL = "https://api.deephire.com"
+const hostedURL = 'http://localhost:3001';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -28,14 +28,14 @@ export async function queryRule2(params) {
 }
 
 export async function shareShortLink(data) {
-  console.log("ran")
-  console.log("data")
-  const x =request(`${hostedURL}/v1.0/create_shortlist`, {
+  console.log('ran');
+  console.log('data');
+  const x = request(`${hostedURL}/v1.0/create_shortlist`, {
     method: 'POST',
     body: data,
   });
-  console.log(x, "run")
-  return x
+  console.log(x, 'run');
+  return x;
 }
 
 export async function getInterviews(params) {

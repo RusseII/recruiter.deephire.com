@@ -17,6 +17,7 @@ import {
   Steps,
   Radio,
   Dropdown,
+  Checkbox
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -292,33 +293,53 @@ class Candidates extends PureComponent {
           okText="Create Link"
           onCancel={() => this.handleModalVisible()}
         >
-          <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="email">
+
+          <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
+            {this.props.form.getFieldDecorator('name', {
+              
+            })(<Input placeholder="Their email" />)}
+          </FormItem>
+        
+          <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
             {this.props.form.getFieldDecorator('email', {
-              rules: [{ required: true, message: 'Need Email!', min: 1 }],
+             
             })(<Input placeholder="Who do you want to share this with?" />)}
           </FormItem>
+          <Row gutter={0}>
+            <Col span={5} />
+            <Col span={15}> <Checkbox>Hide Candidate Info</Checkbox></Col>
+
+          </Row>
+
         </Modal>
       );
     }
     if (currentStep === 2) {
       return <Modal destroyOnClose title="Create Shareable Link" visible={this.state.modalVisible} onOk={() => this.handleDone()} okText="Done" onCancel={() => this.handleDone()}>
         <div>Here is your shareable link: {shareLink}</div>
-        {/* // this.props.data5.shareLink; */}
              </Modal>;
     }
     return null;
   };
 
   success = () => {
+    // const { rule: { shareLink } } = this.props;
+
+
     message.success('Link Created!');
   };
+
+  
+  
+  
 
   createLinkButton = () => {
     this.props.form.validateFields((err, data) => {
       if (err) return;
-      const { email } = data;
+      let { email } = data;
       this.props.form.resetFields();
       // handleAdd(fieldsValue);
+      if (!email) email = "noEmailEntered"
       console.log('boom', this.state.selectedRows);
       const shortList = { email, interviews: this.state.selectedRows };
       this.createLink(shortList);
@@ -375,7 +396,11 @@ class Candidates extends PureComponent {
             <div className={styles.tableListOperator}>
               {selectedRows.length > 0 && (
                 <span>
-                  <Button onClick={this.handleModalVisible}>Share</Button>
+                  <Button
+                    type="primary"
+                    onClick={this.handleModalVisible}
+                  >Share
+                  </Button>
                 </span>
               )}
             </div>

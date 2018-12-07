@@ -3,8 +3,11 @@ import { render } from 'react-dom';
 import ReactPlayer from 'react-player';
 
 import { Card, Col, Row, Icon, Table, Button } from 'antd';
+import router from 'umi/router';
+
 
 import styles from './ViewCandidate.less';
+
 
 const columns = [
   {
@@ -22,6 +25,11 @@ class App extends Component {
       activeQuestion: null,
     };
   }
+
+  
+
+
+  
 
   componentDidMount() {
     const id = this.CleanVariable(this.GetURLParameter('id'));
@@ -59,7 +67,25 @@ class App extends Component {
   };
 
   getName() {
-    return this.state.candidateData[0].user_name;
+    const {candidateData} = this.state;
+    return candidateData[0].user_name;
+  }
+
+  nextQuestion = () => {
+    const {activeQuestion, candidateData} = this.state;
+
+    if (activeQuestion + 1 < candidateData.length){
+    this.setState({activeQuestion: activeQuestion + 1});
+    }
+  }
+
+
+  previousQuestion = () => {
+    const {activeQuestion} = this.state;
+    console.log(activeQuestion)
+    if (activeQuestion > 0 ){
+    this.setState({activeQuestion: activeQuestion - 1});
+    }
   }
 
   GetURLParameter(sParam) {
@@ -84,6 +110,12 @@ class App extends Component {
     return res;
   }
 
+
+  goToCandidates = () => {
+    router.push(`/candidates/candidates`);
+
+  }
+
   render() {
     const { candidateData, comments, activeQuestion, requestFailed } = this.state;
     if (!candidateData) return <p>Loading...</p>;
@@ -94,50 +126,86 @@ class App extends Component {
       return <p>There is no data for this user, please message our support</p>;
     }
 
-    const { response_url: responseUrl, question_text } = candidateData[activeQuestion];
+    const { response_url: responseUrl, question_text, candidate_email, interview_name } = candidateData[activeQuestion];
     console.log(ReactPlayer.canPlay(responseUrl));
     console.log(candidateData, activeQuestion);
 
-    return <Row gutter={24}>
-      <Col span={8}>
-          <Card style={{ marginBottom: '20px' }} hoverable title={candidateData[0].user_name} actions={[<Button shape="circle" icon="setting" />, <Button onClick={() => this.openInterview()} shape="circle" icon="share-alt" />]} />
+    return(
+      <div>
+        <Button
+          style={{marginBottom: "20px"
+        }}
+          onClick={this.goToCandidates}
+          type="secondary"
+        >
+          <Icon type="left" />Back to Candidates
+        </Button>
 
-          <Card hoverable title="Questions">
-            <Table
-showHeader={false}
-onRow={(record, index) => ({ onClick: () => {
+        <Button
+          style={{float: "right", marginLeft: "20px",marginBottom: "20px"
+        }}
+          shape="circle"
+          icon="setting"
+        />
+        <Button
+          style={{float: "right", marginBottom: "20px"
+        }}
+          onClick={this.openInterview}
+          type="primary"
+        >
+       
+
+           Share Candidate
+          <Icon type="share-alt" />
+        </Button>
+
+     
+        <Row gutter={24}>
+          <Col span={8}>
+            <Card style={{ marginBottom: '20px' }} hoverable title={candidateData[0].user_name}> 
+              <Icon type="insurance"  /> {interview_name}<br />
+
+              <Icon type="mail"  /> {candidate_email}
+            
+            </Card>
+
+            <Card hoverable title="Questions">
+              <Table
+                showHeader={false}
+                onRow={(record, index) => ({ onClick: () => {
                   this.setState({ activeQuestion: index });
                 } })}
-rowClassName={(record, index) => (index === activeQuestion ? styles.selected : '')}
-pagination={false}
-bordered
-dataSource={candidateData}
-columns={columns}
-            />
-          </Card>
-        </Col>
-      <Col span={16}>
-          {/* <Button shape="circle" icon="search" /> */}
-          <Card title={question_text} actions={[<Button shape="circle" icon="setting" />, <Button onClick={() => this.openInterview()} shape="circle" icon="share-alt" />]}>
-            {/* // actions={[<Icon type="setting" />, <Icon type="share-alt" />]} */}
-            <div className={styles.playerWrapper}>
-              <ReactPlayer
-onError={() => this.setState({
+                rowClassName={(record, index) => (index === activeQuestion ? styles.selected : '')}
+                pagination={false}
+                bordered
+                dataSource={candidateData}
+                columns={columns}
+              />
+            </Card>
+          </Col>
+          <Col span={16}>
+            {/* <Button shape="circle" icon="search" /> */}
+            <Card title={question_text} actions={[<Button shape="circle" icon="left" onClick={this.previousQuestion} />, <Button onClick={this.nextQuestion} shape="circle" icon="right" />]}>
+              {/* // actions={[<Icon type="setting" />, <Icon type="share-alt" />]} */}
+              <div className={styles.playerWrapper}>
+                <ReactPlayer
+                  onError={() => this.setState({
                     errorinVid: true,
                   })}
-preload
-controls
-playing
-className={styles.reactPlayer // onEnded={() => this.setState({activeQuestion: activeQuestion + 1})}
+                  preload
+                  controls
+                  playing
+                  className={styles.reactPlayer // onEnded={() => this.setState({activeQuestion: activeQuestion + 1})}
                 }
-height="100%"
-width="100%"
-url={responseUrl}
-              />
-            </div>
-          </Card>
-        </Col>
-    </Row>;
+                  height="100%"
+                  width="100%"
+                  url={responseUrl}
+                />
+              </div>
+            </Card>
+          </Col>
+        </Row>
+      </div>);
   }
 }
 
