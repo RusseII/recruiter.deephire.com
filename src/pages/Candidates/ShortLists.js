@@ -23,7 +23,7 @@ import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import router from 'umi/router';
 
-import styles from './Candidates.less';
+import styles from './ShortLists.less';
 
 const readableTime = require('readable-timestamp');
 
@@ -47,6 +47,8 @@ const getValue = obj =>
 //  };
 
 /* eslint react/no-multi-comp:0 */
+
+const today = new Date();
 @connect(({ rule, loading, user, form }) => ({
   currentUser: user.currentUser,
   rule,
@@ -63,28 +65,47 @@ class Candidates extends PureComponent {
     formValues: {},
     stepFormValues: {},
     currentStep: 1,
+    dog: {
+      list: [
+        {
+          name: 'Maren Lates',
+          email: 'maren59@google.com',
+          clicks: '3',
+          last_viewed: today,
+          short_url: 'link.deephire.com/34343',
+        },
+        {
+          name: 'Matty Fate',
+          email: 'mfate2@zoom.com',
+          clicks: '0',
+          last_viewed: today,
+          short_url: 'link.deephire.com/34re3',
+        },
+        {},
+      ],
+    },
   };
 
   columns = [
     {
-      title: 'Interview Name',
-      dataIndex: 'interview_name',
-    },
-    {
       title: 'Name',
-      dataIndex: 'user_name',
+      dataIndex: 'name',
     },
     {
-      title: 'Email',
-      dataIndex: 'candidate_email',
+      title: 'email',
+      dataIndex: 'email',
     },
     {
-      title: 'Time',
+      title: 'Clicks',
+      dataIndex: 'clicks',
+    },
+    {
+      title: 'Last Viewed',
       // dataIndex: 'python_datetime',
       sorter: true,
       render(test, data) {
         try {
-          const dateObj = new Date(data.python_datetime);
+          const dateObj = new Date(data.last_viewed);
           const displayTime = readableTime(dateObj);
           return <div>{displayTime}</div>;
         } catch {
@@ -93,10 +114,10 @@ class Candidates extends PureComponent {
       },
     },
     {
-      title: 'View',
+      title: 'Share Link',
       render: (text, data) => (
         <Fragment>
-          <a onClick={() => this.openInterview(true, data)}>View</a>
+          <a>{data.short_url}</a>
           {/* <a href="">订阅警报</a> */}
         </Fragment>
       ),
@@ -229,17 +250,6 @@ class Candidates extends PureComponent {
     });
   };
 
-  openInterview = (flag, data) => {
-    const { company_id, user_id } = data;
-    // const {$oid} = _id
-    // console.log($oid)
-    console.log('id here', data);
-    // const url = `http://localhost:8000/interview/view-interviews2/?id=${company_id}&candidate=${user_id}`;
-    router.push(`/candidates/view-candidate/?id=${company_id}&candidate=${user_id}`);
-
-    // window.open(url, "_blank");
-  };
-
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -280,19 +290,16 @@ class Candidates extends PureComponent {
     return expandForm ? this.renderviewInterview() : this.renderSimpleForm();
   }
 
-   
-
   success = () => {
     // const { rule: { shareLink } } = this.props;
-
 
     message.success('Link Created!');
   };
 
-  
-  
   renderContent = (currentStep, formVals) => {
-    const { rule: { shareLink } } = this.props;
+    const {
+      rule: { shareLink },
+    } = this.props;
     console.log(shareLink);
     if (currentStep === 1) {
       return (
@@ -304,48 +311,55 @@ class Candidates extends PureComponent {
           okText="Create Link"
           onCancel={() => this.handleModalVisible()}
         >
-
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
-            {this.props.form.getFieldDecorator('name', {
-              
-            })(<Input placeholder="Their email" />)}
+            {this.props.form.getFieldDecorator('name', {})(<Input placeholder="Their email" />)}
           </FormItem>
-        
+
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
-            {this.props.form.getFieldDecorator('email', {
-             
-            })(<Input placeholder="Who do you want to share this with?" />)}
+            {this.props.form.getFieldDecorator('email', {})(
+              <Input placeholder="Who do you want to share this with?" />
+            )}
           </FormItem>
           <Row gutter={0}>
             <Col span={5} />
-            <Col span={15}> <Checkbox>Hide Candidate Info</Checkbox></Col>
-
+            <Col span={15}>
+              {' '}
+              <Checkbox>Hide Candidate Info</Checkbox>
+            </Col>
           </Row>
-
         </Modal>
       );
     }
     if (currentStep === 2) {
-      return <Modal destroyOnClose title="Create Shareable Link" visible={this.state.modalVisible} onOk={() => this.handleDone()} okText="Done" onCancel={() => this.handleDone()}>
-        <Button type="secondary" onClick={this.handleModalVisible}>
+      return (
+        <Modal
+          destroyOnClose
+          title="Create Shareable Link"
+          visible={this.state.modalVisible}
+          onOk={() => this.handleDone()}
+          okText="Done"
+          onCancel={() => this.handleDone()}
+        >
+          <Button type="secondary" onClick={this.handleModalVisible}>
             View all Links
-        </Button> <div>Here is your shareable link: {shareLink}</div>
-      </Modal>;
+          </Button>{' '}
+          <div>Here is your shareable link: {shareLink}</div>
+        </Modal>
+      );
     }
     return null;
   };
-  
 
   createLinkButton = () => {
-    const {form, currentUser} = this.props
+    const { form, currentUser } = this.props;
     const { email: recruiterEmail } = currentUser;
-    const {selectedRows, currentStep} = this.state
+    const { selectedRows, currentStep } = this.state;
     form.validateFields((err, data) => {
       if (err) return;
       let { email } = data;
       form.resetFields();
       // handleAdd(fieldsValue);
-      if (!email) email = "noEmailEntered"
+      if (!email) email = 'noEmailEntered';
       const shortList = { email, created_by: recruiterEmail, interviews: selectedRows };
       this.createLink(shortList);
       this.setState({ currentStep: currentStep + 1 });
@@ -355,7 +369,7 @@ class Candidates extends PureComponent {
   handleDone = () => {
     this.setState({ currentStep: 1 });
     this.handleModalVisible();
-  }
+  };
 
   createLink(shortListJson) {
     const { dispatch } = this.props;
@@ -365,19 +379,18 @@ class Candidates extends PureComponent {
 
   render() {
     const {
-      rule: { data }, 
-     
+      rule: { data },
+
       rule,
       loading,
       currentUser,
       // data5,
     } = this.props;
     console.log('Currentuser', currentUser);
-    console.log(rule)
-    console.log(data, "d5")
+    console.log(rule);
+    console.log(data, 'd5');
 
-
-    const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
+    const { dog, selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">删除</Menu.Item>
@@ -385,6 +398,7 @@ class Candidates extends PureComponent {
       </Menu>
     );
 
+    console.log(dog);
     const parentMethods = {
       renderContent: this.renderContent,
       handleAdd: this.handleAdd,
@@ -401,10 +415,8 @@ class Candidates extends PureComponent {
             <div className={styles.tableListOperator}>
               {selectedRows.length > 0 && (
                 <span>
-                  <Button
-                    type="primary"
-                    onClick={this.handleModalVisible}
-                  >Share
+                  <Button type="primary" onClick={this.handleModalVisible}>
+                    Share
                   </Button>
                 </span>
               )}
@@ -412,7 +424,7 @@ class Candidates extends PureComponent {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data}
+              data={dog}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}

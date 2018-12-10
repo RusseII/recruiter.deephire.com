@@ -77,7 +77,13 @@ export default [
           component: './Candidates/ViewCandidate',
           hideInMenu: true,
 
+        }, {path: '/candidates/share-links',
+          name: 'shareLinks',
+          authority: ['user'],
+          component: './Candidates/ShortLists',
+
         }],
+        
       },
 
       {
