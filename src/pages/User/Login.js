@@ -42,7 +42,7 @@ class LoginPage extends Component {
   handleSubmit = (err, values) => {
     this.loginForm.validateFields((err, values) => {
       if (!err) {
-        this.renderMessage('Invalid Email or Password');
+//         this.renderMessage('Invalid Email or Password');
 
         console.log('submitted');
         const auth = new Auth(this.props);
