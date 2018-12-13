@@ -87,7 +87,7 @@ class LoginPage extends Component {
             this.loginForm = form;
           }}
         >
-//           {this.state.status === 'error' && this.renderMessage('Invalid Email or Password')}
+          {/* {this.state.status === 'error' && this.renderMessage('Invalid Email or Password')} */}
           <Tab key="account" tab="Log In">
             <UserName name="email" placeholder="email" />
             <Password
