@@ -10,6 +10,21 @@ export default [
       { path: '/user/callback', component: './User/Callback' },
     ],
   },
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+
   {
     path: '/',
     component: '../layouts/BasicLayout',
@@ -17,6 +32,32 @@ export default [
     authority: ['user'],
     routes: [
       { path: '/', redirect: 'interview/create-interview/info' },
+
+      {
+        path: '/dashboard',
+        name: 'dashboard',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/dashboard/analysis',
+            name: 'analysis',
+            component: './Dashboard/Analysis',
+          },
+          {
+            path: '/dashboard/monitor',
+            name: 'monitor',
+            component: './Dashboard/Monitor',
+          },
+          {
+            path: '/dashboard/workplace',
+            name: 'workplace',
+            component: './Dashboard/Workplace',
+          },
+        ],
+      },
+ 
+
+
 
       {
         path: '/interview',

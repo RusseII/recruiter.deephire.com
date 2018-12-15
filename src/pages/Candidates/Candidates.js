@@ -6,17 +6,10 @@ import {
   Card,
   Form,
   Input,
-  Select,
-  Icon,
   Button,
   Menu,
-  InputNumber,
-  DatePicker,
   Modal,
   message,
-  Steps,
-  Radio,
-  Dropdown,
   Checkbox
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
@@ -290,6 +283,10 @@ class Candidates extends PureComponent {
   };
 
   
+
+  onCheckHideInfo = (e) => {
+    this.setState({hideInfo: e.target.checked})
+  }
   
   renderContent = (currentStep, formVals) => {
     const { rule: { shareLink } } = this.props;
@@ -318,7 +315,7 @@ class Candidates extends PureComponent {
           </FormItem>
           <Row gutter={0}>
             <Col span={5} />
-            <Col span={15}> <Checkbox>Hide Candidate Info</Checkbox></Col>
+            <Col span={15}> <Checkbox onChange={this.onCheckHideInfo}>Hide Candidate Info</Checkbox></Col>
 
           </Row>
 
@@ -330,23 +327,25 @@ class Candidates extends PureComponent {
         <Button type="secondary" onClick={this.handleModalVisible}>
             View all Links
         </Button> <div>Here is your shareable link: {shareLink}</div>
-      </Modal>;
+             </Modal>;
     }
     return null;
   };
   
 
+ 
+
   createLinkButton = () => {
     const {form, currentUser} = this.props
     const { email: recruiterEmail } = currentUser;
-    const {selectedRows, currentStep} = this.state
+    const {selectedRows, currentStep, hideInfo} = this.state
     form.validateFields((err, data) => {
       if (err) return;
       let { email } = data;
       form.resetFields();
       // handleAdd(fieldsValue);
       if (!email) email = "noEmailEntered"
-      const shortList = { email, created_by: recruiterEmail, interviews: selectedRows };
+      const shortList = { hideInfo ,email, created_by: recruiterEmail, interviews: selectedRows };
       this.createLink(shortList);
       this.setState({ currentStep: currentStep + 1 });
     });

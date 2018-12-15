@@ -110,6 +110,7 @@ class StandardTable extends PureComponent {
           />
         </div>
         <Table
+          scroll={{x: true}}
           loading={loading}
           rowKey={rowKey || 'key'}
           rowSelection={rowSelection}

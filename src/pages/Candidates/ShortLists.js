@@ -88,13 +88,15 @@ class Candidates extends PureComponent {
 
   columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-    },
-    {
-      title: 'email',
-      dataIndex: 'email',
-    },
+      title: 'Shared With',
+      render(test, data) {
+        try {
+          return <div>{data.name}<br />{data.email}</div>;
+        } catch {
+          return null;
+        }
+      },    },
+    
     {
       title: 'Clicks',
       dataIndex: 'clicks',
@@ -409,7 +411,7 @@ class Candidates extends PureComponent {
       handleUpdate: this.handleUpdate,
     };
     return (
-      <PageHeaderWrapper title="Candidates">
+      <PageHeaderWrapper title="Short Lists">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
@@ -422,6 +424,7 @@ class Candidates extends PureComponent {
               )}
             </div>
             <StandardTable
+
               selectedRows={selectedRows}
               loading={loading}
               data={dog}
