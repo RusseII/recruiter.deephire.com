@@ -1,20 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import {
-  Row,
-  Col,
-  Card,
-  Form,
-  Input,
-  Button,
-  Menu,
-  Modal,
-  message,
-  Checkbox
-} from 'antd';
+import { Row, Col, Card, Form, Input, Button, Menu, Modal, message, Checkbox } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import router from 'umi/router';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import Result from '@/components/Result';
 
 import styles from './Candidates.less';
 
@@ -27,7 +18,6 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 
-    
 //  Form.create()
 //  class CreateForm extends PureComponent {
 //    // (props => {
@@ -219,6 +209,7 @@ class Candidates extends PureComponent {
   handleModalVisible = flag => {
     this.setState({
       modalVisible: !!flag,
+      hideInfo: false,
     });
   };
 
@@ -273,108 +264,149 @@ class Candidates extends PureComponent {
     return expandForm ? this.renderviewInterview() : this.renderSimpleForm();
   }
 
-   
+  actions = (
+    <Fragment>
+      <Button type="secondary" onClick={this.handleModalVisible}>
+        View all Links
+      </Button>
+    </Fragment>
+  );
 
   success = () => {
     // const { rule: { shareLink } } = this.props;
 
-
     message.success('Link Created!');
   };
 
-  
+  onCheckHideInfo = e => {
+    this.setState({ hideInfo: e.target.checked });
+  };
 
-  onCheckHideInfo = (e) => {
-    this.setState({hideInfo: e.target.checked})
-  }
-  
-  renderContent = (currentStep, formVals) => {
-    const { rule: { shareLink } } = this.props;
-    console.log(shareLink);
+  information = shareLink => (
+    <div className={styles.information}>
+      <Row>
+        <Col xs={24} sm={24} className={styles.label}>
+          {`${shareLink}     `}
+          <CopyToClipboard text={shareLink}>
+            <Button size="small" icon="copy" />
+          </CopyToClipboard>
+        </Col>
+      </Row>
+      <br />
+    </div>
+  );
+
+  renderContent = currentStep => {
+    const {
+      rule: { shareLink },
+      form,
+    } = this.props;
+    const { shareEmail, modalVisible } = this.state;
+
     if (currentStep === 1) {
       return (
         <Modal
           destroyOnClose
           title="Create Shareable Link"
-          visible={this.state.modalVisible}
+          visible={modalVisible}
           onOk={this.createLinkButton}
           okText="Create Link"
           onCancel={() => this.handleModalVisible()}
         >
-
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
-            {this.props.form.getFieldDecorator('name', {
-              
-            })(<Input placeholder="Their email" />)}
+            {form.getFieldDecorator('name', {})(<Input placeholder="Their email" />)}
           </FormItem>
-        
+
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
-            {this.props.form.getFieldDecorator('email', {
-             
-            })(<Input placeholder="Who do you want to share this with?" />)}
+            {form.getFieldDecorator('email', {})(
+              <Input placeholder="Who do you want to share this with?" />
+            )}
           </FormItem>
           <Row gutter={0}>
             <Col span={5} />
-            <Col span={15}> <Checkbox onChange={this.onCheckHideInfo}>Hide Candidate Info</Checkbox></Col>
-
+            <Col span={15}>
+              {' '}
+              <Checkbox onChange={this.onCheckHideInfo}>Hide Candidate Info</Checkbox>
+            </Col>
           </Row>
-
         </Modal>
       );
     }
     if (currentStep === 2) {
-      return <Modal destroyOnClose title="Create Shareable Link" visible={this.state.modalVisible} onOk={() => this.handleDone()} okText="Done" onCancel={() => this.handleDone()}>
-        <Button type="secondary" onClick={this.handleModalVisible}>
+      return (
+        <Modal
+          destroyOnClose
+          title="Create Shareable Link"
+          visible={modalVisible}
+          onOk={() => this.handleDone()}
+          okText="Done"
+          onCancel={() => this.handleDone()}
+        >
+          <Result
+            type="success"
+            title="Share Link Created!"
+            description={`Send this link to ${shareEmail}`}
+            extra={this.information(shareLink, 'russell@deephire.com')}
+            // extra="hi"
+            actions={this.actions}
+            className={styles.result}
+            extraStyle={{ textAlign: 'center', padding: '5px', fontSize: '15px' }}
+          />
+          {/* <Button type="secondary" onClick={this.handleModalVisible}>
             View all Links
-        </Button> <div>Here is your shareable link: {shareLink}</div>
-             </Modal>;
+        </Button> <div>Here is your shareable link:           <Col xs={24} sm={16}>
+          {`${shareLink}  `}
+          <CopyToClipboard text={shareLink}>
+            <Button size="small" icon="copy" />
+          </CopyToClipboard>
+                                                              </Col> */}
+          {/* </div> */}
+        </Modal>
+      );
     }
     return null;
   };
-  
-
- 
 
   createLinkButton = () => {
-    const {form, currentUser} = this.props
+    const { form, currentUser } = this.props;
     const { email: recruiterEmail } = currentUser;
-    const {selectedRows, currentStep, hideInfo} = this.state
+    const { selectedRows, currentStep, hideInfo } = this.state;
     form.validateFields((err, data) => {
       if (err) return;
       let { email } = data;
       form.resetFields();
       // handleAdd(fieldsValue);
-      if (!email) email = "noEmailEntered"
-      const shortList = { hideInfo ,email, created_by: recruiterEmail, interviews: selectedRows };
+      if (!email) email = 'noEmailEntered';
+      const shortList = { hideInfo, email, created_by: recruiterEmail, interviews: selectedRows };
       this.createLink(shortList);
-      this.setState({ currentStep: currentStep + 1 });
+      console.log('here', shortList);
+      this.setState({ shareEmail: email, currentStep: currentStep + 1 });
     });
   };
 
   handleDone = () => {
     this.setState({ currentStep: 1 });
     this.handleModalVisible();
-  }
+  };
 
   createLink(shortListJson) {
     const { dispatch } = this.props;
     dispatch({ type: 'rule/share', payload: shortListJson });
+    this.setState({ hideInfo: false });
     this.success();
   }
 
   render() {
     const {
-      rule: { data }, 
-     
+      rule: { data },
+
       rule,
       loading,
       currentUser,
-      // data5,
     } = this.props;
     console.log('Currentuser', currentUser);
-    console.log(rule)
-    console.log(data, "d5")
-
+    console.log(rule);
+    console.log(data, 'd5');
 
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
@@ -400,10 +432,8 @@ class Candidates extends PureComponent {
             <div className={styles.tableListOperator}>
               {selectedRows.length > 0 && (
                 <span>
-                  <Button
-                    type="primary"
-                    onClick={this.handleModalVisible}
-                  >Share
+                  <Button type="primary" onClick={this.handleModalVisible}>
+                    Share
                   </Button>
                 </span>
               )}

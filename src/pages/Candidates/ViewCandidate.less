@@ -75,10 +75,24 @@ body > #root > div {
   left: 0;
 }
 
-
 .selected {
-
-
-  background-color: #f1f7fe
+  background-color: #f1f7fe;
 }
 
+.information {
+  line-height: 22px;
+  :global {
+    .ant-row:not(:last-child) {
+      margin-bottom: 24px;
+    }
+  }
+
+  .label {
+    color: @heading-color;
+    text-align: right;
+    padding-right: 8px;
+    @media screen and (max-width: @screen-sm) {
+      text-align: left;
+    }
+  }
+}
