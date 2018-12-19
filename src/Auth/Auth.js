@@ -30,6 +30,7 @@ export default class Auth {
     if (props) {
       this.dispatch = props.dispatch;
     }
+
     this.login = this.login.bind(this);
     this.signup = this.signup.bind(this);
     this.loginWithGoogle = this.loginWithGoogle.bind(this);
@@ -43,8 +44,11 @@ export default class Auth {
       { realm: AUTH_CONFIG.dbConnectionName, username, password },
       (err, authResult) => {
         if (err) {
-          console.log(err);
-          // alert(`Error: ${err.description}. Check the c÷nsole for further details.`);
+          console.log('err, EEK');
+          // this.dispatch({
+          //   type: 'login/loginFailed',
+          // });
+          alert(`Invalid password or username`);
         }
       }
     );

@@ -206,13 +206,6 @@ class Candidates extends PureComponent {
     });
   };
 
-  handleModalVisible = flag => {
-    this.setState({
-      modalVisible: !!flag,
-      hideInfo: false,
-    });
-  };
-
   openInterview = (flag, data) => {
     const { company_id, user_id } = data;
     // const {$oid} = _id
@@ -283,9 +276,9 @@ class Candidates extends PureComponent {
   };
 
   information = shareLink => (
-    <div className={styles.information}>
+    <div>
       <Row>
-        <Col xs={24} sm={24} className={styles.label}>
+        <Col xs={24} sm={24}>
           {`${shareLink}     `}
           <CopyToClipboard text={shareLink}>
             <Button size="small" icon="copy" />
@@ -348,7 +341,7 @@ class Candidates extends PureComponent {
             description={`Send this link to ${shareEmail}`}
             extra={this.information(shareLink, 'russell@deephire.com')}
             // extra="hi"
-            actions={this.actions}
+            // actions={this.actions}
             className={styles.result}
             extraStyle={{ textAlign: 'center', padding: '5px', fontSize: '15px' }}
           />
@@ -365,6 +358,13 @@ class Candidates extends PureComponent {
       );
     }
     return null;
+  };
+
+  handleModalVisible = flag => {
+    this.setState({
+      modalVisible: !!flag,
+      hideInfo: false,
+    });
   };
 
   createLinkButton = () => {

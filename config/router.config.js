@@ -11,20 +11,6 @@ export default [
     ],
   },
 
-  
-
-
-
-
-  
-
-
-
-
-
-
-
-
   {
     path: '/',
     component: '../layouts/BasicLayout',
@@ -33,31 +19,28 @@ export default [
     routes: [
       { path: '/', redirect: 'interview/create-interview/info' },
 
-      {
-        path: '/dashboard',
-        name: 'dashboard',
-        icon: 'dashboard',
-        routes: [
-          {
-            path: '/dashboard/analysis',
-            name: 'analysis',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/dashboard/monitor',
-            name: 'monitor',
-            component: './Dashboard/Monitor',
-          },
-          {
-            path: '/dashboard/workplace',
-            name: 'workplace',
-            component: './Dashboard/Workplace',
-          },
-        ],
-      },
- 
-
-
+      // {
+      //   path: '/dashboard',
+      //   name: 'dashboard',
+      //   icon: 'dashboard',
+      //   routes: [
+      //     {
+      //       path: '/dashboard/analysis',
+      //       name: 'analysis',
+      //       component: './Dashboard/Analysis',
+      //     },
+      //     {
+      //       path: '/dashboard/monitor',
+      //       name: 'monitor',
+      //       component: './Dashboard/Monitor',
+      //     },
+      //     {
+      //       path: '/dashboard/workplace',
+      //       name: 'workplace',
+      //       component: './Dashboard/Workplace',
+      //     },
+      //   ],
+      // },
 
       {
         path: '/interview',
@@ -98,7 +81,6 @@ export default [
             authority: ['user'],
             component: './Candidates/ViewInterviews',
           },
-        
         ],
       },
       {
@@ -111,20 +93,21 @@ export default [
             name: 'searchtable',
             component: './Candidates/Candidates',
           },
-        
-          {path: '/candidates/view-candidate',
-          name: 'viewCandidate',
-          authority: ['user'],
-          component: './Candidates/ViewCandidate',
-          hideInMenu: true,
 
-        }, {path: '/candidates/share-links',
-          name: 'shareLinks',
-          authority: ['user'],
-          component: './Candidates/ShortLists',
+          {
+            path: '/candidates/view-candidate',
+            name: 'viewCandidate',
+            authority: ['user'],
+            component: './Candidates/ViewCandidate',
+            hideInMenu: true,
+          },
+          // {path: '/candidates/share-links',
+          //   name: 'shareLinks',
+          //   authority: ['user'],
+          //   component: './Candidates/ShortLists',
 
-        }],
-        
+          // }
+        ],
       },
 
       {

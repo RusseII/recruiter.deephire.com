@@ -37,6 +37,13 @@ export default {
       yield call(getFakeCaptcha, payload);
     },
 
+    *loginFailed({ payload }, { put }) {
+      yield put({
+        type: 'loginFailed',
+        payload,
+      });
+    },
+
     *logout(_, { put }) {
       yield put({
         type: 'changeLoginStatus',
@@ -64,6 +71,12 @@ export default {
         ...state,
         status: payload.status,
         type: payload.type,
+      };
+    },
+    loginFailed(state, action) {
+      return {
+        ...state,
+        loginFailed: action.payload,
       };
     },
   },
