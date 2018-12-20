@@ -42,9 +42,9 @@ class LoginPage extends Component {
   handleSubmit = (err, values) => {
     this.loginForm.validateFields((err, values) => {
       if (!err) {
-//         this.renderMessage('Invalid Email or Password');
+        // this.renderMessage('Invalid Email or Password');
 
-        console.log('submitted');
+
         const auth = new Auth(this.props);
 
         const { type } = this.state;
@@ -54,8 +54,10 @@ class LoginPage extends Component {
         } else {
           auth.signup(values.email, values.password);
         }
-        this.setState({ status: 'error' });
       }
+      // else {
+      // this.setState({ status: 'error' });
+      // }
     });
   };
 
@@ -75,7 +77,8 @@ class LoginPage extends Component {
 
   render() {
     const { login, submitting } = this.props;
-    const { type, autoLogin } = this.state;
+    console.log('LOGIN PROPS HERE', login);
+    const { type, autoLogin, status } = this.state;
 
     return (
       <div className={styles.main}>
@@ -87,6 +90,7 @@ class LoginPage extends Component {
             this.loginForm = form;
           }}
         >
+
           {/* {this.state.status === 'error' && this.renderMessage('Invalid Email or Password')} */}
           <Tab key="account" tab="Log In">
             <UserName name="email" placeholder="email" />
@@ -113,11 +117,9 @@ class LoginPage extends Component {
             </a>
           </div>
 
-          <Submit loading={submitting}>
-            {this.state.type === 'account' ? 'Log in' : 'Sign up'}
-          </Submit>
+          <Submit loading={submitting}>{type === 'account' ? 'Log in' : 'Sign up'}</Submit>
           <div className={styles.other}>
-            {this.state.type === 'account' ? 'Or Login With' : 'Or Signup With'}
+            {type === 'account' ? 'Or Login With' : 'Or Signup With'}
             <Button
               onClick={this.loginWithGoogle}
               shape="circle"

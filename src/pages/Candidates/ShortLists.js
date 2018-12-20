@@ -1,13 +1,29 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Card, Form, Input, Button, Menu, Modal, message, Checkbox } from 'antd';
+import {
+  Row,
+  Col,
+  Card,
+  Form,
+  Input,
+  Select,
+  Icon,
+  Button,
+  Menu,
+  InputNumber,
+  DatePicker,
+  Modal,
+  message,
+  Steps,
+  Radio,
+  Dropdown,
+  Checkbox
+} from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import router from 'umi/router';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import Result from '@/components/Result';
 
-import styles from './Candidates.less';
+import styles from './ShortLists.less';
 
 const readableTime = require('readable-timestamp');
 
@@ -18,6 +34,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 
+    
 //  Form.create()
 //  class CreateForm extends PureComponent {
 //    // (props => {
@@ -30,6 +47,8 @@ const getValue = obj =>
 //  };
 
 /* eslint react/no-multi-comp:0 */
+
+const today = new Date();
 @connect(({ rule, loading, user, form }) => ({
   currentUser: user.currentUser,
   rule,
@@ -46,28 +65,49 @@ class Candidates extends PureComponent {
     formValues: {},
     stepFormValues: {},
     currentStep: 1,
+    dog: {
+      list: [
+        {
+          name: 'Maren Lates',
+          email: 'maren59@google.com',
+          clicks: '3',
+          last_viewed: today,
+          short_url: 'link.deephire.com/34343',
+        },
+        {
+          name: 'Matty Fate',
+          email: 'mfate2@zoom.com',
+          clicks: '0',
+          last_viewed: today,
+          short_url: 'link.deephire.com/34re3',
+        },
+        {},
+      ],
+    },
   };
 
   columns = [
     {
-      title: 'Interview Name',
-      dataIndex: 'interview_name',
+      title: 'Shared With',
+      render(test, data) {
+        try {
+          return <div>{data.name}<br />{data.email}</div>;
+        } catch {
+          return null;
+        }
+      },    },
+    
+    {
+      title: 'Clicks',
+      dataIndex: 'clicks',
     },
     {
-      title: 'Name',
-      dataIndex: 'user_name',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'candidate_email',
-    },
-    {
-      title: 'Time',
+      title: 'Last Viewed',
       // dataIndex: 'python_datetime',
       sorter: true,
       render(test, data) {
         try {
-          const dateObj = new Date(data.python_datetime);
+          const dateObj = new Date(data.last_viewed);
           const displayTime = readableTime(dateObj);
           return <div>{displayTime}</div>;
         } catch {
@@ -76,10 +116,10 @@ class Candidates extends PureComponent {
       },
     },
     {
-      title: 'View',
+      title: 'Share Link',
       render: (text, data) => (
         <Fragment>
-          <a onClick={() => this.openInterview(true, data)}>View</a>
+          <a>{data.short_url}</a>
           {/* <a href="">订阅警报</a> */}
         </Fragment>
       ),
@@ -206,15 +246,10 @@ class Candidates extends PureComponent {
     });
   };
 
-  openInterview = (flag, data) => {
-    const { company_id, user_id } = data;
-    // const {$oid} = _id
-    // console.log($oid)
-    console.log('id here', data);
-    // const url = `http://localhost:8000/interview/view-interviews2/?id=${company_id}&candidate=${user_id}`;
-    router.push(`/candidates/view-candidate/?id=${company_id}&candidate=${user_id}`);
-
-    // window.open(url, "_blank");
+  handleModalVisible = flag => {
+    this.setState({
+      modalVisible: !!flag,
+    });
   };
 
   handleUpdateModalVisible = (flag, record) => {
@@ -257,61 +292,33 @@ class Candidates extends PureComponent {
     return expandForm ? this.renderviewInterview() : this.renderSimpleForm();
   }
 
-  actions = (
-    <Fragment>
-      <Button type="secondary" onClick={this.handleModalVisible}>
-        View all Links
-      </Button>
-    </Fragment>
-  );
-
   success = () => {
     // const { rule: { shareLink } } = this.props;
 
     message.success('Link Created!');
   };
 
-  onCheckHideInfo = e => {
-    this.setState({ hideInfo: e.target.checked });
-  };
-
-  information = shareLink => (
-    <div>
-      <Row>
-        <Col xs={24} sm={24}>
-          {`${shareLink}     `}
-          <CopyToClipboard text={shareLink}>
-            <Button size="small" icon="copy" />
-          </CopyToClipboard>
-        </Col>
-      </Row>
-      <br />
-    </div>
-  );
-
-  renderContent = currentStep => {
+  renderContent = (currentStep, formVals) => {
     const {
       rule: { shareLink },
-      form,
     } = this.props;
-    const { shareEmail, modalVisible } = this.state;
-
+    console.log(shareLink);
     if (currentStep === 1) {
       return (
         <Modal
           destroyOnClose
           title="Create Shareable Link"
-          visible={modalVisible}
+          visible={this.state.modalVisible}
           onOk={this.createLinkButton}
           okText="Create Link"
           onCancel={() => this.handleModalVisible()}
         >
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
-            {form.getFieldDecorator('name', {})(<Input placeholder="Their email" />)}
+            {this.props.form.getFieldDecorator('name', {})(<Input placeholder="Their email" />)}
           </FormItem>
 
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
-            {form.getFieldDecorator('email', {})(
+            {this.props.form.getFieldDecorator('email', {})(
               <Input placeholder="Who do you want to share this with?" />
             )}
           </FormItem>
@@ -319,7 +326,7 @@ class Candidates extends PureComponent {
             <Col span={5} />
             <Col span={15}>
               {' '}
-              <Checkbox onChange={this.onCheckHideInfo}>Hide Candidate Info</Checkbox>
+              <Checkbox>Hide Candidate Info</Checkbox>
             </Col>
           </Row>
         </Modal>
@@ -330,57 +337,34 @@ class Candidates extends PureComponent {
         <Modal
           destroyOnClose
           title="Create Shareable Link"
-          visible={modalVisible}
+          visible={this.state.modalVisible}
           onOk={() => this.handleDone()}
           okText="Done"
           onCancel={() => this.handleDone()}
         >
-          <Result
-            type="success"
-            title="Share Link Created!"
-            description={`Send this link to ${shareEmail}`}
-            extra={this.information(shareLink, 'russell@deephire.com')}
-            // extra="hi"
-            // actions={this.actions}
-            className={styles.result}
-            extraStyle={{ textAlign: 'center', padding: '5px', fontSize: '15px' }}
-          />
-          {/* <Button type="secondary" onClick={this.handleModalVisible}>
+          <Button type="secondary" onClick={this.handleModalVisible}>
             View all Links
-        </Button> <div>Here is your shareable link:           <Col xs={24} sm={16}>
-          {`${shareLink}  `}
-          <CopyToClipboard text={shareLink}>
-            <Button size="small" icon="copy" />
-          </CopyToClipboard>
-                                                              </Col> */}
-          {/* </div> */}
+          </Button>{' '}
+          <div>Here is your shareable link: {shareLink}</div>
         </Modal>
       );
     }
     return null;
   };
 
-  handleModalVisible = flag => {
-    this.setState({
-      modalVisible: !!flag,
-      hideInfo: false,
-    });
-  };
-
   createLinkButton = () => {
     const { form, currentUser } = this.props;
     const { email: recruiterEmail } = currentUser;
-    const { selectedRows, currentStep, hideInfo } = this.state;
+    const { selectedRows, currentStep } = this.state;
     form.validateFields((err, data) => {
       if (err) return;
       let { email } = data;
       form.resetFields();
       // handleAdd(fieldsValue);
       if (!email) email = 'noEmailEntered';
-      const shortList = { hideInfo, email, created_by: recruiterEmail, interviews: selectedRows };
+      const shortList = { email, created_by: recruiterEmail, interviews: selectedRows };
       this.createLink(shortList);
-      console.log('here', shortList);
-      this.setState({ shareEmail: email, currentStep: currentStep + 1 });
+      this.setState({ currentStep: currentStep + 1 });
     });
   };
 
@@ -392,7 +376,6 @@ class Candidates extends PureComponent {
   createLink(shortListJson) {
     const { dispatch } = this.props;
     dispatch({ type: 'rule/share', payload: shortListJson });
-    this.setState({ hideInfo: false });
     this.success();
   }
 
@@ -403,12 +386,13 @@ class Candidates extends PureComponent {
       rule,
       loading,
       currentUser,
+      // data5,
     } = this.props;
     console.log('Currentuser', currentUser);
     console.log(rule);
     console.log(data, 'd5');
 
-    const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
+    const { dog, selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">删除</Menu.Item>
@@ -416,6 +400,7 @@ class Candidates extends PureComponent {
       </Menu>
     );
 
+    console.log(dog);
     const parentMethods = {
       renderContent: this.renderContent,
       handleAdd: this.handleAdd,
@@ -426,7 +411,7 @@ class Candidates extends PureComponent {
       handleUpdate: this.handleUpdate,
     };
     return (
-      <PageHeaderWrapper title="Candidates">
+      <PageHeaderWrapper title="Short Lists">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
@@ -439,9 +424,10 @@ class Candidates extends PureComponent {
               )}
             </div>
             <StandardTable
+
               selectedRows={selectedRows}
               loading={loading}
-              data={data}
+              data={dog}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}

@@ -10,6 +10,7 @@ export default function Result({
   description,
   extra,
   actions,
+  extraStyle,
   ...restProps
 }) {
   const iconMap = {
@@ -22,7 +23,13 @@ export default function Result({
       <div className={styles.icon}>{iconMap[type]}</div>
       <div className={styles.title}>{title}</div>
       {description && <div className={styles.description}>{description}</div>}
-      {extra && <div className={styles.extra}>{extra}</div>}
+      {extra && (
+        <div style={extraStyle} className={styles.extra}>
+          {extra}
+        </div>
+      )}
+      {/* {description && <div className={`${customStyles != null ? customStyles : ''} ${styles.description}`}>{description}</div>} */}
+
       {actions && <div className={styles.actions}>{actions}</div>}
     </div>
   );
