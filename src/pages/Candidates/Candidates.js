@@ -6,6 +6,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import router from 'umi/router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Result from '@/components/Result';
+import { showConfirm } from '@/utils/utils';
 
 import styles from './Candidates.less';
 
@@ -396,9 +397,32 @@ class Candidates extends PureComponent {
     this.success();
   }
 
+  // handleDelete = e => {
+  //   const { dispatch } = this.props;
+  //   const { selectedRows } = this.state;
+  //   const profile = JSON.parse(localStorage.getItem('profile'));
+  //   const { email } = profile;
+
+  //   if (!selectedRows) return;
+  //       dispatch({
+  //         type: 'rule/removeCandidate',
+  //         payload: {
+  //           email,
+  //           selectedRows,
+  //         },
+  //         callback: () => {
+  //           this.setState({
+  //             selectedRows: [],
+  //           });
+  //         },
+  //       });
+
+  // };
+
   render() {
     const {
       rule: { data },
+      dispatch,
 
       rule,
       loading,
@@ -434,6 +458,16 @@ class Candidates extends PureComponent {
                 <span>
                   <Button type="primary" onClick={this.handleModalVisible}>
                     Share
+                  </Button>
+                  <Button
+                    type="danger"
+                    onClick={() => {
+                      showConfirm(dispatch, selectedRows, 'rule/removeCandidate', () =>
+                        this.setState({ selectedRows: [] })
+                      );
+                    }}
+                  >
+                    Delete
                   </Button>
                 </span>
               )}

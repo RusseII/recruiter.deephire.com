@@ -25,9 +25,9 @@ import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './Candidates.less';
+import { showConfirm } from '@/utils/utils';
 
 const readableTime = require('readable-timestamp');
-
 
 const FormItem = Form.Item;
 const { Step } = Steps;
@@ -43,9 +43,6 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['default', 'processing', 'success', 'error'];
-
-
-
 
 const CreateForm = Form.create()(props => {
   const { modalVisible, form, handleAdd, handleModalVisible } = props;
@@ -274,16 +271,12 @@ class UpdateForm extends PureComponent {
   }
 }
 
-
-
-
 /* eslint react/no-multi-comp:0 */
 @connect(({ rule, loading, user }) => ({
   currentUser: user.currentUser,
   rule,
   loading: loading.models.rule,
 }))
-
 @Form.create()
 class TableList extends PureComponent {
   state = {
@@ -295,8 +288,6 @@ class TableList extends PureComponent {
     stepFormValues: {},
   };
 
-
- 
   columns = [
     {
       title: 'Interview Name',
@@ -305,26 +296,22 @@ class TableList extends PureComponent {
     {
       title: 'Interview Questions',
       // dataIndex: "interview_quesions",
-        render(x, data) {
-          console.log(data.interview_questions)
-          
-          try { 
-          const listItems = data.interview_questions.map((d) => <div><li key={d.question}>{d.question}</li><br /></div>);
-          return (
-            <div>{listItems} </div>
-          ) 
+      render(x, data) {
+        console.log(data.interview_questions);
+
+        try {
+          const listItems = data.interview_questions.map(d => (
+            <div>
+              <li key={d.question}>{d.question}</li>
+              <br />
+            </div>
+          ));
+          return <div>{listItems} </div>;
+        } catch {
+          return null;
         }
-          catch {return null}
-         
-        
-        
-        
-         
-         
-        }
-      
+      },
     },
-    
 
     {
       title: 'Created',
@@ -332,14 +319,15 @@ class TableList extends PureComponent {
       sorter: true,
       render(test, data) {
         try {
-          console.log("QQQQQ", data)
-        console.log(data.python_datetime)
-        const dateObj = new Date(data.python_datetime)
-        const displayTime = (readableTime(dateObj))
-        return <div>{displayTime}</div>
-      } 
-      catch {return null}
-    }
+          console.log('QQQQQ', data);
+          console.log(data.python_datetime);
+          const dateObj = new Date(data.python_datetime);
+          const displayTime = readableTime(dateObj);
+          return <div>{displayTime}</div>;
+        } catch {
+          return null;
+        }
+      },
     },
     {
       title: 'Interview Link',
@@ -645,8 +633,8 @@ class TableList extends PureComponent {
       rule: { data },
       loading,
       currentUser,
+      dispatch,
     } = this.props;
-
 
     console.log('Currentuser', currentUser);
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
@@ -669,7 +657,23 @@ class TableList extends PureComponent {
       <PageHeaderWrapper title="Interviews">
         <Card bordered={false}>
           <div className={styles.tableList}>
-          
+            {selectedRows.length > 0 && (
+              <span>
+                <Button
+                  type="danger"
+                  onClick={() => {
+                    showConfirm(dispatch, selectedRows, 'rule/removeInterview', () =>
+                      this.setState({ selectedRows: [] })
+                    );
+                  }}
+                >
+                  Delete
+                </Button>
+                <br />
+                <br />
+              </span>
+            )}
+
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

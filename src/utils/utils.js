@@ -2,9 +2,43 @@ import moment from 'moment';
 import React from 'react';
 import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
+import { Modal, Button } from 'antd';
+
+const confirm = Modal.confirm;
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
+}
+
+const handleDelete = (dispatch, selectedRows, type) => {
+  const profile = JSON.parse(localStorage.getItem('profile'));
+  const { email } = profile;
+
+  if (!selectedRows) return;
+  dispatch({
+    type,
+    payload: {
+      email,
+      selectedRows,
+    },
+  });
+};
+
+export function showConfirm(dispatch, selectedRows, type, callback) {
+  confirm({
+    title: 'Do you want to delete these items?',
+    okType: 'danger',
+    okText: 'Yes',
+    onOk() {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(handleDelete(dispatch, selectedRows, type));
+          callback();
+        }, 3000);
+      }).catch(() => console.log('Oops errors!'));
+    },
+    onCancel() {},
+  });
 }
 
 export function getTimeDistance(type) {

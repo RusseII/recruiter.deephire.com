@@ -1,8 +1,8 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
 
-
 const hostedURL = 'https://api.deephire.com';
+const newApi = 'http://a.deephire.com';
 
 // const hostedURL = 'http://localhost:3001';
 
@@ -51,24 +51,34 @@ export async function getInterviews(params) {
   return request(`${hostedURL}/v1.0/get_interviews/${params}`);
 }
 
-export async function removeRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'delete',
-    },
-  });
+export async function removeInterview(params) {
+  const { email, selectedRows } = params;
+  await Promise.all(
+    selectedRows.map(async value => {
+      const { _id } = value;
+      const { $oid } = _id;
+      const res = await request(`${newApi}/v1/interviews/${$oid}`, {
+        method: 'DELETE',
+      });
+      return res;
+    })
+  );
+  return request(`${hostedURL}/v1.0/get_interviews/${email}`);
 }
 
-export async function addRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
-  });
+export async function removeCandidate(params) {
+  const { email, selectedRows } = params;
+  await Promise.all(
+    selectedRows.map(async value => {
+      const { user_id, company_id } = value;
+      const res = await request(`${newApi}/v1/candidates/${user_id}/${company_id}`, {
+        method: 'DELETE',
+      });
+      return res;
+    })
+  );
+  console.log(email, 'EAMIL HERE');
+  return request(`${hostedURL}/v1.0/get_candidates/${email}`);
 }
 
 export async function updateRule(params) {

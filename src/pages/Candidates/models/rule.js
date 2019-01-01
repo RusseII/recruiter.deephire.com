@@ -5,6 +5,8 @@ import {
   addRule,
   updateRule,
   shareShortLink,
+  removeInterview,
+  removeCandidate,
 } from '@/services/api';
 
 export default {
@@ -71,6 +73,39 @@ export default {
       if (callback) callback();
     },
 
+    *removeCandidate({ payload, callback }, { call, put }) {
+      console.log('remove rule.js');
+      console.log(payload);
+      let response = yield call(removeCandidate, payload);
+      console.log(response);
+      response.forEach((resp, index) => {
+        response[index].key = index;
+      });
+      response = { list: response };
+
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *removeInterview({ payload, callback }, { call, put }) {
+      console.log('remove rule.js');
+      console.log(payload);
+      let response = yield call(removeInterview, payload);
+      console.log(response);
+      response.forEach((resp, index) => {
+        response[index].key = index;
+      });
+      response = { list: response };
+
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
     *remove({ payload, callback }, { call, put }) {
       console.log('remove rule.js');
 
