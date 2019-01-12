@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import Link from 'umi/link';
 import { Checkbox, Alert, Icon, Button } from 'antd';
 import Login from '@/components/Login';
+import { sendEmail } from '@/services/api';
 
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import styles from './Login.less';
@@ -40,10 +41,16 @@ class LoginPage extends Component {
   }
 
   handleSubmit = (err, values) => {
+    if (values.email != 'demo@deephire.com') {
+      sendEmail({
+        recipients: ['russell@deephire.com'],
+        subject: values.email + ' tried to login',
+        message: values.email,
+      });
+    }
     this.loginForm.validateFields((err, values) => {
       if (!err) {
         // this.renderMessage('Invalid Email or Password');
-
 
         const auth = new Auth(this.props);
 
@@ -90,7 +97,6 @@ class LoginPage extends Component {
             this.loginForm = form;
           }}
         >
-
           {/* {this.state.status === 'error' && this.renderMessage('Invalid Email or Password')} */}
           <Tab key="account" tab="Log In">
             <UserName name="email" placeholder="email" />
