@@ -5,6 +5,7 @@ import ReactPlayer from 'react-player';
 import { Card, Col, Row, Icon, Table, Button, Modal, Input, Checkbox, Form, message } from 'antd';
 import router from 'umi/router';
 import Result from '@/components/Result';
+import InfoCardEditable from '@/components/InfoCardEditable';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { connect } from 'dva';
@@ -111,7 +112,7 @@ class App extends Component {
           onCancel={() => this.handleModalVisible()}
         >
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
-            {form.getFieldDecorator('name', {})(<Input placeholder="Their email" />)}
+            {form.getFieldDecorator('name', {})(<Input placeholder="Their name" />)}
           </FormItem>
 
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
@@ -272,42 +273,22 @@ class App extends Component {
     return (
       <div>
         {this.renderContent(currentStep)}
-        <Button
-          style={{
-            marginBottom: '20px',
-          }}
-          onClick={this.goToCandidates}
-          type="secondary"
-        >
+
+        <Button style={{ marginBottom: '20px' }} onClick={this.goToCandidates} type="secondary">
           <Icon type="left" />
           Back to Candidates
         </Button>
-
-        {/* <Button
-          style={{float: "right", marginLeft: "20px",marginBottom: "20px"
-        }}
-          shape="circle"
-          icon="setting"
-        /> */}
         <Button
-          style={{
-            float: 'right',
-            marginBottom: '20px',
-          }}
+          style={{ float: 'right', marginBottom: '20px' }}
           onClick={this.handleModalVisible}
           type="primary"
         >
           Share Candidate
           <Icon type="share-alt" />
         </Button>
-
         <Row gutter={24}>
           <Col span={8}>
-            <Card style={{ marginBottom: '20px' }} hoverable title={candidateData[0].user_name}>
-              <Icon type="insurance" /> {interview_name}
-              <br />
-              <Icon type="mail" /> {candidate_email}
-            </Card>
+            <InfoCardEditable name={interview_name} email={candidate_email} />
 
             <Card hoverable title="Questions">
               <Table

@@ -308,7 +308,7 @@ class Candidates extends PureComponent {
           onCancel={() => this.handleModalVisible()}
         >
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
-            {form.getFieldDecorator('name', {})(<Input placeholder="Their email" />)}
+            {form.getFieldDecorator('name', {})(<Input placeholder="Their name" />)}
           </FormItem>
 
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
@@ -346,15 +346,6 @@ class Candidates extends PureComponent {
             className={styles.result}
             extraStyle={{ textAlign: 'center', padding: '5px', fontSize: '15px' }}
           />
-          {/* <Button type="secondary" onClick={this.handleModalVisible}>
-            View all Links
-        </Button> <div>Here is your shareable link:           <Col xs={24} sm={16}>
-          {`${shareLink}  `}
-          <CopyToClipboard text={shareLink}>
-            <Button size="small" icon="copy" />
-          </CopyToClipboard>
-                                                              </Col> */}
-          {/* </div> */}
         </Modal>
       );
     }
@@ -396,28 +387,6 @@ class Candidates extends PureComponent {
     this.setState({ hideInfo: false });
     this.success();
   }
-
-  // handleDelete = e => {
-  //   const { dispatch } = this.props;
-  //   const { selectedRows } = this.state;
-  //   const profile = JSON.parse(localStorage.getItem('profile'));
-  //   const { email } = profile;
-
-  //   if (!selectedRows) return;
-  //       dispatch({
-  //         type: 'rule/removeCandidate',
-  //         payload: {
-  //           email,
-  //           selectedRows,
-  //         },
-  //         callback: () => {
-  //           this.setState({
-  //             selectedRows: [],
-  //           });
-  //         },
-  //       });
-
-  // };
 
   render() {
     const {
