@@ -1,27 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import {
-  Row,
-  Col,
-  Card,
-  Form,
-  Input,
-  Select,
-  Icon,
-  Button,
-  Menu,
-  InputNumber,
-  DatePicker,
-  Modal,
-  message,
-  Steps,
-  Radio,
-  Dropdown,
-  Checkbox,
-} from 'antd';
+import { Row, Col, Card, Form, Input, Button, Menu, Modal, message, Checkbox } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import router from 'umi/router';
 
 import styles from './ShortLists.less';
 

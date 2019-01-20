@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import Link from 'umi/link';
-import { Checkbox, Alert, Icon, Button } from 'antd';
+import { Checkbox, Alert, Button } from 'antd';
 import Login from '@/components/Login';
 import { sendEmail } from '@/services/api';
 
-import { formatMessage, FormattedMessage } from 'umi/locale';
 import styles from './Login.less';
 import Auth from '../../Auth/Auth';
 

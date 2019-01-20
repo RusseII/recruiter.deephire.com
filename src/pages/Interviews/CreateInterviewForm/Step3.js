@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Button, Row, Col, Icon } from 'antd';
+import { Button, Row, Col } from 'antd';
 import router from 'umi/router';
 import Result from '@/components/Result';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
