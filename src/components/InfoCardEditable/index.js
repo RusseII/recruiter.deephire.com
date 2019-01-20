@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-import { Card, Col, Row, Icon, Table, Button, Modal, Input, Checkbox, Form, message } from 'antd';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Card, Row, Icon, Input, Checkbox, Form, message } from 'antd';
 
-import { connect } from 'dva';
 import AddYTModal from './AddYTModal';
 
 class InfoCardEditable extends React.Component {
@@ -26,14 +24,17 @@ class InfoCardEditable extends React.Component {
           <Icon type="insurance" /> {name}
         </Row>
         <Row>
-          <Icon type="mail" /> {email}{' '}
+          <Icon type="mail" /> {email}
         </Row>
         <Row>
           <Icon type="youtube" /> <a> youtube.com/ahahhahah</a>
         </Row>
-        <Button type="dashed" onClick={this.toggleModalVisible}>
-          <Icon type="plus" /> Add Youtube Link
-        </Button>
+        <Row>
+          <Button type="dashed" onClick={this.toggleModalVisible}>
+            <Icon type="plus" /> Add Youtube Link
+          </Button>
+        </Row>
+
         <AddYTModal visable={modalVisible} toggle={this.toggleModalVisible} />
       </Card>
     );

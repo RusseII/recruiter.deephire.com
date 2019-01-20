@@ -44,7 +44,7 @@ class LoginPage extends Component {
     if (values.email != 'demo@deephire.com') {
       sendEmail({
         recipients: ['russell@deephire.com'],
-        subject: values.email + ' tried to login',
+        subject: `${values.email} tried to login`,
         message: values.email,
       });
     }

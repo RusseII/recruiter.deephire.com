@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
 import {
   Row,
   Col,
@@ -10,24 +9,19 @@ import {
   Select,
   Icon,
   Button,
-  Dropdown,
-  Menu,
   InputNumber,
   DatePicker,
   Modal,
   message,
-  Badge,
-  Divider,
   Steps,
   Radio,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
+import readableTime from 'readable-timestamp';
 import styles from './Candidates.less';
 import { showConfirm } from '@/utils/utils';
-
-const readableTime = require('readable-timestamp');
 
 const FormItem = Form.Item;
 const { Step } = Steps;
@@ -41,8 +35,6 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['default', 'processing', 'success', 'error'];
 
 const CreateForm = Form.create()(props => {
   const { modalVisible, form, handleAdd, handleModalVisible } = props;
@@ -388,7 +380,7 @@ class TableList extends PureComponent {
   };
 
   handleFormReset = () => {
-    const { form, dispatch } = this.props;
+    const { form } = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
@@ -406,10 +398,7 @@ class TableList extends PureComponent {
     });
   };
 
-  handleMenuClick = e => {
-    const { dispatch } = this.props;
-    const { selectedRows } = this.state;
-
+  handleMenuClick = () => {
     // if (!selectedRows) return;
     // switch (e.key) {
     //   case 'remove':
@@ -439,7 +428,7 @@ class TableList extends PureComponent {
   handleSearch = e => {
     e.preventDefault();
 
-    const { dispatch, form } = this.props;
+    const { form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -638,12 +627,6 @@ class TableList extends PureComponent {
 
     console.log('Currentuser', currentUser);
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">删除</Menu.Item>
-        <Menu.Item key="approval">批量审批</Menu.Item>
-      </Menu>
-    );
 
     const parentMethods = {
       handleAdd: this.handleAdd,
