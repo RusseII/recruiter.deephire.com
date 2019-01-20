@@ -1,9 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import { Card, Col, Row, Icon, Table, Button, Modal, Input, Checkbox, Form, message } from 'antd';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-
-import { connect } from 'dva';
+import { Modal, Input, Form } from 'antd';
 
 const FormItem = Form.Item;
 

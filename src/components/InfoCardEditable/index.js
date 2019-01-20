@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import { Card, Row, Icon, Input, Checkbox, Form, message } from 'antd';
+import { Card, Row, Icon } from 'antd';
 
 import AddYTModal from './AddYTModal';
 
