@@ -5,13 +5,17 @@ import { Modal, Input, Form } from 'antd';
 const FormItem = Form.Item;
 
 const AddYTModal = Form.create()(props => {
-  const { toggle, visable, form } = props;
+  const { form, toggle, visable, addYouTubeLink } = props;
+
+  // const {getFieldDecorator} = this.form;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
+      console.log(fieldsValue);
       if (err) return;
       form.resetFields();
-      handleAdd(fieldsValue);
+      addYouTubeLink(fieldsValue.youTubeLink);
+      toggle();
     });
   };
   return (
@@ -24,7 +28,7 @@ const AddYTModal = Form.create()(props => {
       onOk={okHandle}
     >
       <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="YouTube Link">
-        {<Input placeholder="YouTube Link" />}
+        {form.getFieldDecorator('youTubeLink', {})(<Input placeholder="YouTube Link" />)}
       </FormItem>
     </Modal>
   );

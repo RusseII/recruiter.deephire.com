@@ -21,7 +21,7 @@ const columns = [
   },
 ];
 
-@connect(({ rule, loading, user, form }) => ({
+@connect(({ rule, user }) => ({
   currentUser: user.currentUser,
   rule,
   // data5: form.step,
@@ -52,6 +52,7 @@ class App extends Component {
           this.setState({
             candidateData: data,
             activeQuestion: 0,
+            videoUrl: data[0].response_url,
           });
         },
         () => {
@@ -82,14 +83,21 @@ class App extends Component {
     const { activeQuestion, candidateData } = this.state;
 
     if (activeQuestion + 1 < candidateData.length) {
+      this.setVideoUrl(candidateData[activeQuestion + 1].response_url);
+
       this.setState({ activeQuestion: activeQuestion + 1 });
     }
   };
 
+  setVideoUrl = videoUrl => {
+    this.setState({ videoUrl });
+  };
+
   previousQuestion = () => {
-    const { activeQuestion } = this.state;
+    const { activeQuestion, candidateData } = this.state;
     console.log(activeQuestion);
     if (activeQuestion > 0) {
+      this.setVideoUrl(candidateData[activeQuestion - 1].response_url);
       this.setState({ activeQuestion: activeQuestion - 1 });
     }
   };
@@ -252,7 +260,14 @@ class App extends Component {
   };
 
   render() {
-    const { candidateData, comments, activeQuestion, requestFailed, currentStep } = this.state;
+    const {
+      candidateData,
+      comments,
+      activeQuestion,
+      requestFailed,
+      currentStep,
+      videoUrl,
+    } = this.state;
     if (!candidateData) return <p>Loading...</p>;
     if (comments === null) return <p> Loading! </p>;
     if (activeQuestion === null) return <p> Loading questions... </p>;
@@ -261,14 +276,8 @@ class App extends Component {
       return <p>There is no data for this user, please message our support</p>;
     }
 
-    const {
-      response_url: responseUrl,
-      question_text,
-      candidate_email,
-      interview_name,
-    } = candidateData[activeQuestion];
-    console.log(ReactPlayer.canPlay(responseUrl));
-    console.log(candidateData, activeQuestion);
+    const { question_text, candidate_email, interview_name } = candidateData[activeQuestion];
+    // console.log(ReactPlayer.canPlay(response_url));
 
     return (
       <div>
@@ -288,13 +297,19 @@ class App extends Component {
         </Button>
         <Row gutter={24}>
           <Col span={8}>
-            <InfoCardEditable name={interview_name} email={candidate_email} />
+            <InfoCardEditable
+              name={interview_name}
+              email={candidate_email}
+              setVideoUrl={this.setVideoUrl}
+            />
 
             <Card hoverable title="Questions">
               <Table
                 showHeader={false}
                 onRow={(record, index) => ({
                   onClick: () => {
+                    this.setVideoUrl(candidateData[index].response_url);
+
                     this.setState({ activeQuestion: index });
                   },
                 })}
@@ -318,6 +333,7 @@ class App extends Component {
               {/* // actions={[<Icon type="setting" />, <Icon type="share-alt" />]} */}
               <div className={styles.playerWrapper}>
                 <ReactPlayer
+                  youtubeConfig={{ playerVars: { rel: false, modestbranding: true } }}
                   onError={() =>
                     this.setState({
                       errorinVid: true,
@@ -331,7 +347,7 @@ class App extends Component {
                   }
                   height="100%"
                   width="100%"
-                  url={responseUrl}
+                  url={videoUrl}
                 />
               </div>
             </Card>
