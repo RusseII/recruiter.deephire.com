@@ -32,9 +32,7 @@ const GetURLParameter = sParam => {
   return null;
 };
 
-// find %20, %40 in a string and replaces with a ' ' and '@' respectively
 const CleanVariable = res => {
-  // if (res === null) return;
   if (res === undefined) return null;
   const no20 = res.replace(/%20/g, ' ');
   const response = no20.replace(/%40/g, '@');
@@ -44,7 +42,6 @@ const CleanVariable = res => {
 @connect(({ rule, user }) => ({
   currentUser: user.currentUser,
   rule,
-  // data5: form.step,
 }))
 @Form.create()
 class App extends Component {
@@ -201,8 +198,6 @@ class App extends Component {
   };
 
   success = () => {
-    // const { rule: { shareLink } } = this.props;
-
     message.success('Link Created!');
   };
 
@@ -221,7 +216,6 @@ class App extends Component {
       if (err) return;
       let { email } = data;
       form.resetFields();
-      // handleAdd(fieldsValue);
       if (!email) email = 'noEmailEntered';
       const shortList = { hideInfo, email, created_by: recruiterEmail, interviews: candidateData };
       this.createLink(shortList);
@@ -315,7 +309,6 @@ class App extends Component {
             </Card>
           </Col>
           <Col span={16}>
-            {/* <Button shape="circle" icon="search" /> */}
             <Card
               title={currentQuestionText}
               actions={[
@@ -323,19 +316,13 @@ class App extends Component {
                 <Button onClick={this.nextQuestion} shape="circle" icon="right" />,
               ]}
             >
-              {/* // actions={[<Icon type="setting" />, <Icon type="share-alt" />]} */}
               <div className={styles.playerWrapper}>
                 <ReactPlayer
-                  youtubeConfig={{ playerVars: { rel: false, modestbranding: true } }} //   this.setState({ // onError={() =>
-                  //     errorinVid: true,
-                  //   })
-                  // }
+                  youtubeConfig={{ playerVars: { rel: false, modestbranding: true } }}
                   preload
                   controls
                   playing
-                  className={
-                    styles.reactPlayer // onEnded={() => this.setState({activeQuestion: activeQuestion + 1})}
-                  }
+                  className={styles.reactPlayer}
                   height="100%"
                   width="100%"
                   url={videoUrl}
