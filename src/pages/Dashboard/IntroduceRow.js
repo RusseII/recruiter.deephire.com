@@ -1,10 +1,10 @@
 import React, { memo } from 'react';
 import { Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedMessage } from 'umi/locale';
+import numeral from 'numeral';
 import styles from './Analysis.less';
 import { ChartCard, MiniArea, MiniBar, MiniProgress, Field } from '@/components/Charts';
 import Trend from '@/components/Trend';
-import numeral from 'numeral';
 
 const topColResponsiveProps = {
   xs: 24,

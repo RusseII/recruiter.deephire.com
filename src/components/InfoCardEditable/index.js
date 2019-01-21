@@ -49,7 +49,10 @@ class InfoCardEditable extends React.Component {
           renderItem={(item, index) => (
             <div>
               <Icon type="youtube" />{' '}
-              <a onClick={() => setVideoData(item, 'YouTube Video')}> {item} </a>
+              <a onClick={() => setVideoData(item, 'YouTube Video')}>
+                {' '}
+                {item.replace('www.youtube.com/watch?v=', 'youtu.be/')}{' '}
+              </a>
               <Popconfirm
                 placement="rightTop"
                 title="Are you sure you want to delete this?"
