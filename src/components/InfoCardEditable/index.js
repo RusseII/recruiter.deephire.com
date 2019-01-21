@@ -30,13 +30,13 @@ class InfoCardEditable extends React.Component {
   };
 
   render() {
-    const { setVideoUrl, name, email } = this.props;
+    const { setVideoData, userName, interviewName, email } = this.props;
     const { modalVisible } = this.state;
 
     return (
-      <Card>
+      <Card style={{ marginBottom: '20px' }} hoverable title={userName}>
         <Row>
-          <Icon type="insurance" /> {name}
+          <Icon type="insurance" /> {interviewName}
         </Row>
         <Row>
           <Icon type="mail" /> {email}
@@ -48,7 +48,8 @@ class InfoCardEditable extends React.Component {
           dataSource={youtubeLinks}
           renderItem={(item, index) => (
             <div>
-              <Icon type="youtube" /> <a onClick={() => setVideoUrl(item)}> {item} </a>
+              <Icon type="youtube" />{' '}
+              <a onClick={() => setVideoData(item, 'YouTube Video')}> {item} </a>
               <Popconfirm
                 placement="rightTop"
                 title="Are you sure you want to delete this?"
