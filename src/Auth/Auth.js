@@ -3,7 +3,7 @@ import { routerRedux } from 'dva/router';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 
-import { AUTH_CONFIG } from './auth0-variables';
+import AUTH_CONFIG from './auth0-variables';
 
 // import history from '../history';
 
@@ -15,14 +15,6 @@ export default class Auth {
     responseType: 'token id_token',
     scope: 'openid profile email',
   });
-
-  //    auth0Social = new auth0.WebAuth({
-  //     domain: AUTH_CONFIG.domain,
-  //     clientID: AUTH_CONFIG.clientId,
-  //     redirectUri: AUTH_CONFIG.callbackUrl,
-  //     responseType: 'token id_token',
-  //     scope: 'openid profile email',
-  //   });
 
   userProfile;
 
@@ -85,7 +77,6 @@ export default class Auth {
       if (err) {
         console.log(err);
         alert(`Error: ${err.description}. Check the console for further details.`);
-
         return;
       }
 
@@ -97,7 +88,7 @@ export default class Auth {
         },
         (err, authResult) => {
           if (err) {
-            console.log(err);
+            console.log(err, authResult);
             alert(`Error: ${err.description}. Check the console for further details.`);
           }
         }
