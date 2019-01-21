@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
 import ReactPlayer from 'react-player';
 
 import { Card, Col, Row, Icon, Table, Button, Modal, Input, Checkbox, Form, message } from 'antd';
 import router from 'umi/router';
 import Result from '@/components/Result';
+import InfoCardEditable from '@/components/InfoCardEditable';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { connect } from 'dva';
@@ -20,10 +20,28 @@ const columns = [
   },
 ];
 
-@connect(({ rule, loading, user, form }) => ({
+const GetURLParameter = sParam => {
+  const sPageURL = window.location.search.substring(1);
+  const sURLVariables = sPageURL.split('&');
+  for (let i = 0; i < sURLVariables.length; i += 1) {
+    const sParameterName = sURLVariables[i].split('=');
+    if (sParameterName[0] === sParam) {
+      return sParameterName[1];
+    }
+  }
+  return null;
+};
+
+const CleanVariable = res => {
+  if (res === undefined) return null;
+  const no20 = res.replace(/%20/g, ' ');
+  const response = no20.replace(/%40/g, '@');
+  return response;
+};
+
+@connect(({ rule, user }) => ({
   currentUser: user.currentUser,
   rule,
-  // data5: form.step,
 }))
 @Form.create()
 class App extends Component {
@@ -38,8 +56,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const id = this.CleanVariable(this.GetURLParameter('id'));
-    const userToken = this.CleanVariable(this.GetURLParameter('candidate'));
+    const id = CleanVariable(GetURLParameter('id'));
+    const userToken = CleanVariable(GetURLParameter('candidate'));
     this.setState({ id, userToken });
     // var url = "https://localhost:3001/v1.0/get_candidate_videos/";
     const url = 'https://api.deephire.com/v1.0/get_candidate_videos/';
@@ -51,6 +69,8 @@ class App extends Component {
           this.setState({
             candidateData: data,
             activeQuestion: 0,
+            videoUrl: data[0].response_url,
+            currentQuestionText: data[0].question_text,
           });
         },
         () => {
@@ -61,34 +81,40 @@ class App extends Component {
       );
   }
 
-  openInterview = () => {
-    // const { company_id, user_id } = data;
-    // const {$oid} = _id
-    // console.log($oid)
-    const url = `https://candidates.deephire.com/?id=${this.state.id}&candidate=${
-      this.state.userToken
-    }`;
-
-    window.open(url, '_blank');
-  };
-
   getName() {
     const { candidateData } = this.state;
     return candidateData[0].user_name;
   }
 
+  openInterview = () => {
+    const { userToken, id } = this.state;
+    const url = `https://candidates.deephire.com/?id=${id}&candidate=${userToken}`;
+
+    window.open(url, '_blank');
+  };
+
   nextQuestion = () => {
     const { activeQuestion, candidateData } = this.state;
 
     if (activeQuestion + 1 < candidateData.length) {
+      const videoUrl = candidateData[activeQuestion + 1].response_url;
+      const questionText = candidateData[activeQuestion + 1].question_text;
+      this.setVideoData(videoUrl, questionText);
+
       this.setState({ activeQuestion: activeQuestion + 1 });
     }
   };
 
+  setVideoData = (videoUrl, currentQuestionText) => {
+    this.setState({ videoUrl, currentQuestionText });
+  };
+
   previousQuestion = () => {
-    const { activeQuestion } = this.state;
-    console.log(activeQuestion);
+    const { activeQuestion, candidateData } = this.state;
     if (activeQuestion > 0) {
+      const videoUrl = candidateData[activeQuestion - 1].response_url;
+      const questionText = candidateData[activeQuestion - 1].question_text;
+      this.setVideoData(videoUrl, questionText);
       this.setState({ activeQuestion: activeQuestion - 1 });
     }
   };
@@ -111,7 +137,7 @@ class App extends Component {
           onCancel={() => this.handleModalVisible()}
         >
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
-            {form.getFieldDecorator('name', {})(<Input placeholder="Their email" />)}
+            {form.getFieldDecorator('name', {})(<Input placeholder="Their name" />)}
           </FormItem>
 
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
@@ -144,20 +170,9 @@ class App extends Component {
             title="Share Link Created!"
             description={`Send this link to ${shareEmail}`}
             extra={this.information(shareLink, 'russell@deephire.com')}
-            // extra="hi"
-            // actions={this.actions}
             className={styles.result}
             extraStyle={{ textAlign: 'center', padding: '5px', fontSize: '15px' }}
           />
-          {/* <Button type="secondary" onClick={this.handleModalVisible}>
-            View all Links
-        </Button> <div>Here is your shareable link:           <Col xs={24} sm={16}>
-          {`${shareLink}  `}
-          <CopyToClipboard text={shareLink}>
-            <Button size="small" icon="copy" />
-          </CopyToClipboard>
-                                                              </Col> */}
-          {/* </div> */}
         </Modal>
       );
     }
@@ -183,8 +198,6 @@ class App extends Component {
   };
 
   success = () => {
-    // const { rule: { shareLink } } = this.props;
-
     message.success('Link Created!');
   };
 
@@ -203,11 +216,9 @@ class App extends Component {
       if (err) return;
       let { email } = data;
       form.resetFields();
-      // handleAdd(fieldsValue);
       if (!email) email = 'noEmailEntered';
       const shortList = { hideInfo, email, created_by: recruiterEmail, interviews: candidateData };
       this.createLink(shortList);
-      console.log('here', shortList);
       this.setState({ shareEmail: email, currentStep: currentStep + 1 });
     });
   };
@@ -217,6 +228,10 @@ class App extends Component {
     this.handleModalVisible();
   };
 
+  goToCandidates = () => {
+    router.push(`/candidates/candidates`);
+  };
+
   createLink(shortListJson) {
     const { dispatch } = this.props;
     dispatch({ type: 'rule/share', payload: shortListJson });
@@ -224,34 +239,16 @@ class App extends Component {
     this.success();
   }
 
-  GetURLParameter(sParam) {
-    const sPageURL = window.location.search.substring(1);
-    const sURLVariables = sPageURL.split('&');
-    for (let i = 0; i < sURLVariables.length; i++) {
-      const sParameterName = sURLVariables[i].split('=');
-      if (sParameterName[0] == sParam) {
-        return sParameterName[1];
-      }
-    }
-    return null;
-  }
-
-  // find %20, %40 in a string and replaces with a ' ' and '@' respectively
-  CleanVariable(res) {
-    // if (res === null) return;
-    if (res == undefined) return;
-
-    var res = res.replace(/%20/g, ' ');
-    var res = res.replace(/%40/g, '@');
-    return res;
-  }
-
-  goToCandidates = () => {
-    router.push(`/candidates/candidates`);
-  };
-
   render() {
-    const { candidateData, comments, activeQuestion, requestFailed, currentStep } = this.state;
+    const {
+      candidateData,
+      comments,
+      activeQuestion,
+      requestFailed,
+      currentStep,
+      videoUrl,
+      currentQuestionText,
+    } = this.state;
     if (!candidateData) return <p>Loading...</p>;
     if (comments === null) return <p> Loading! </p>;
     if (activeQuestion === null) return <p> Loading questions... </p>;
@@ -261,59 +258,45 @@ class App extends Component {
     }
 
     const {
-      response_url: responseUrl,
-      question_text,
-      candidate_email,
-      interview_name,
-    } = candidateData[activeQuestion];
-    console.log(ReactPlayer.canPlay(responseUrl));
-    console.log(candidateData, activeQuestion);
+      candidate_email: candidateEmail,
+      interview_name: interviewName,
+      user_name: userName,
+    } = candidateData[0];
+    // console.log(ReactPlayer.canPlay(response_url));
 
     return (
       <div>
         {this.renderContent(currentStep)}
-        <Button
-          style={{
-            marginBottom: '20px',
-          }}
-          onClick={this.goToCandidates}
-          type="secondary"
-        >
+
+        <Button style={{ marginBottom: '20px' }} onClick={this.goToCandidates} type="secondary">
           <Icon type="left" />
           Back to Candidates
         </Button>
-
-        {/* <Button
-          style={{float: "right", marginLeft: "20px",marginBottom: "20px"
-        }}
-          shape="circle"
-          icon="setting"
-        /> */}
         <Button
-          style={{
-            float: 'right',
-            marginBottom: '20px',
-          }}
+          style={{ float: 'right', marginBottom: '20px' }}
           onClick={this.handleModalVisible}
           type="primary"
         >
           Share Candidate
           <Icon type="share-alt" />
         </Button>
-
         <Row gutter={24}>
           <Col span={8}>
-            <Card style={{ marginBottom: '20px' }} hoverable title={candidateData[0].user_name}>
-              <Icon type="insurance" /> {interview_name}
-              <br />
-              <Icon type="mail" /> {candidate_email}
-            </Card>
+            <InfoCardEditable
+              userName={userName}
+              interviewName={interviewName}
+              email={candidateEmail}
+              setVideoData={this.setVideoData}
+            />
 
             <Card hoverable title="Questions">
               <Table
                 showHeader={false}
                 onRow={(record, index) => ({
                   onClick: () => {
+                    const url = candidateData[index].response_url;
+                    const text = candidateData[index].question_text;
+                    this.setVideoData(url, text);
                     this.setState({ activeQuestion: index });
                   },
                 })}
@@ -326,31 +309,23 @@ class App extends Component {
             </Card>
           </Col>
           <Col span={16}>
-            {/* <Button shape="circle" icon="search" /> */}
             <Card
-              title={question_text}
+              title={currentQuestionText}
               actions={[
                 <Button shape="circle" icon="left" onClick={this.previousQuestion} />,
                 <Button onClick={this.nextQuestion} shape="circle" icon="right" />,
               ]}
             >
-              {/* // actions={[<Icon type="setting" />, <Icon type="share-alt" />]} */}
               <div className={styles.playerWrapper}>
                 <ReactPlayer
-                  onError={() =>
-                    this.setState({
-                      errorinVid: true,
-                    })
-                  }
+                  youtubeConfig={{ playerVars: { rel: false, modestbranding: true } }}
                   preload
                   controls
                   playing
-                  className={
-                    styles.reactPlayer // onEnded={() => this.setState({activeQuestion: activeQuestion + 1})}
-                  }
+                  className={styles.reactPlayer}
                   height="100%"
                   width="100%"
-                  url={responseUrl}
+                  url={videoUrl}
                 />
               </div>
             </Card>

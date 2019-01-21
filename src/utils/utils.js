@@ -2,7 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
-import { Modal, Button } from 'antd';
+import { Modal } from 'antd';
 
 const confirm = Modal.confirm;
 

@@ -5,7 +5,6 @@ import styles from './Analysis.less';
 import { ChartCard, MiniArea, MiniBar, MiniProgress, Field } from '@/components/Charts';
 import Trend from '@/components/Trend';
 import numeral from 'numeral';
-import Yuan from '@/utils/Yuan';
 
 const topColResponsiveProps = {
   xs: 24,
@@ -21,7 +20,12 @@ const IntroduceRow = memo(({ loading, visitData }) => (
     <Col {...topColResponsiveProps}>
       <ChartCard
         bordered={false}
-        title={<FormattedMessage id="app.analysis.total-sales" defaultMessage="Total Interviews Completed" />}
+        title={
+          <FormattedMessage
+            id="app.analysis.total-sales"
+            defaultMessage="Total Interviews Completed"
+          />
+        }
         action={
           <Tooltip
             title={<FormattedMessage id="app.analysis.introduce" defaultMessage="Introduce" />}
@@ -65,7 +69,12 @@ const IntroduceRow = memo(({ loading, visitData }) => (
         total={numeral(68).format('0,0')}
         footer={
           <Field
-            label={<FormattedMessage id="app.analysis.day-visits" defaultMessage="Daily ShortList Views" />}
+            label={
+              <FormattedMessage
+                id="app.analysis.day-visits"
+                defaultMessage="Daily ShortList Views"
+              />
+            }
             // value={numeral(19).format('0,0')}
           />
         }
@@ -78,7 +87,12 @@ const IntroduceRow = memo(({ loading, visitData }) => (
       <ChartCard
         bordered={false}
         loading={loading}
-        title={<FormattedMessage id="app.analysis.payments" defaultMessage="Waiting on Client Feedback" />}
+        title={
+          <FormattedMessage
+            id="app.analysis.payments"
+            defaultMessage="Waiting on Client Feedback"
+          />
+        }
         action={
           <Tooltip
             title={<FormattedMessage id="app.analysis.introduce" defaultMessage="Introduce" />}
@@ -95,15 +109,12 @@ const IntroduceRow = memo(({ loading, visitData }) => (
                 defaultMessage="Most Days: Bill Ratcliffe (send nudge)
                 "
               />
-               
             }
             // value="60%"
-          /> 
-          
+          />
         }
         contentHeight={46}
       >
-
         <MiniBar data={visitData} />
       </ChartCard>
     </Col>

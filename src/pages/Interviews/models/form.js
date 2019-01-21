@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { fakeSubmitForm, createInterview, shareShortLink } from '@/services/api';
+import { fakeSubmitForm, createInterview } from '@/services/api';
 
 export default {
   namespace: 'form',
@@ -28,7 +28,7 @@ export default {
       yield put(routerRedux.push('/interview/create-interview/result'));
       yield console.log(response);
     },
-   
+
     *submitviewInterview({ payload }, { call }) {
       yield call(fakeSubmitForm, payload);
       message.success('提交成功');

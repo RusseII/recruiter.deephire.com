@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button, Divider, InputNumber, Icon } from 'antd';
-import router from 'umi/router';
 import styles from './style.less';
 // import { createInterview } from '@/services/api';
 

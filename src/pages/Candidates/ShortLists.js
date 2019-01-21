@@ -1,27 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import {
-  Row,
-  Col,
-  Card,
-  Form,
-  Input,
-  Select,
-  Icon,
-  Button,
-  Menu,
-  InputNumber,
-  DatePicker,
-  Modal,
-  message,
-  Steps,
-  Radio,
-  Dropdown,
-  Checkbox
-} from 'antd';
+import { Row, Col, Card, Form, Input, Button, Menu, Modal, message, Checkbox } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import router from 'umi/router';
 
 import styles from './ShortLists.less';
 
@@ -34,7 +15,6 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 
-    
 //  Form.create()
 //  class CreateForm extends PureComponent {
 //    // (props => {
@@ -91,12 +71,19 @@ class Candidates extends PureComponent {
       title: 'Shared With',
       render(test, data) {
         try {
-          return <div>{data.name}<br />{data.email}</div>;
+          return (
+            <div>
+              {data.name}
+              <br />
+              {data.email}
+            </div>
+          );
         } catch {
           return null;
         }
-      },    },
-    
+      },
+    },
+
     {
       title: 'Clicks',
       dataIndex: 'clicks',
@@ -314,7 +301,7 @@ class Candidates extends PureComponent {
           onCancel={() => this.handleModalVisible()}
         >
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
-            {this.props.form.getFieldDecorator('name', {})(<Input placeholder="Their email" />)}
+            {this.props.form.getFieldDecorator('name', {})(<Input placeholder="Their name" />)}
           </FormItem>
 
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
@@ -424,7 +411,6 @@ class Candidates extends PureComponent {
               )}
             </div>
             <StandardTable
-
               selectedRows={selectedRows}
               loading={loading}
               data={dog}

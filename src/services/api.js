@@ -10,6 +10,14 @@ export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
 
+export async function sendEmail(data) {
+  console.log(data);
+  return request(`${newApi}/v1/emails`, {
+    method: 'POST',
+    body: data,
+  });
+}
+
 export async function queryActivities() {
   return request('/api/activities');
 }
