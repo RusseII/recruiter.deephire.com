@@ -2,10 +2,10 @@ import { stringify } from 'qs';
 import request from '@/utils/request';
 
 const hostedURL = 'https://api.deephire.com';
-// const newApi = 'https://a.deephire.com';
+const newApi = 'https://a.deephire.com';
 
 // const hostedURL = 'http://localhost:3001';
-const newApi = 'http://localhost:3000';
+// const newApi = 'http://localhost:3000';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
