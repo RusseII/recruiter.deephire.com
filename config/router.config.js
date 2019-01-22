@@ -45,11 +45,11 @@ export default [
       {
         path: '/interview',
         icon: 'form',
-        name: 'form',
+        name: 'Interviews',
         routes: [
           {
             path: '/interview/create-interview',
-            name: 'createinterview',
+            name: 'Create New Interview',
             component: './Interviews/CreateInterviewForm',
             hideChildrenInMenu: true,
             routes: [
@@ -77,7 +77,7 @@ export default [
           },
           {
             path: '/interview/view-interviews',
-            name: 'viewInterview',
+            name: "View Created Interviews",
             authority: ['user'],
             component: './Candidates/ViewInterviews',
           },
@@ -86,11 +86,11 @@ export default [
       {
         path: '/candidates',
         icon: 'table',
-        name: 'list',
+        name: 'Candidates',
         routes: [
           {
             path: '/candidates/candidates',
-            name: 'searchtable',
+            name: 'Candidate Videos',
             component: './Candidates/Candidates',
           },
 
@@ -111,13 +111,13 @@ export default [
       },
 
       {
-        name: 'account',
+        name: 'Account',
         icon: 'user',
         path: '/account',
         routes: [
           {
             path: '/account/settings',
-            name: 'settings',
+            name: 'Profile',
             component: './Account/Settings/Info',
             routes: [
               {

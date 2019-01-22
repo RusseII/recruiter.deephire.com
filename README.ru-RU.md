@@ -6,8 +6,7 @@
 
 UI-решение "из коробки" для корпоративных приложений как React boilerplate
 
-[![CircleCI Status](https://circleci.com/gh/ant-design/ant-design-pro.svg?style=svg)](https://circleci.com/gh/ant-design/ant-design-pro/)
-[![Build status](https://ci.appveyor.com/api/projects/status/67fxu2by3ibvqtat/branch/master?svg=true)](https://ci.appveyor.com/project/afc163/ant-design-pro/branch/master)
+[![Build Status](https://dev.azure.com/qixiancs/ant-design-pro/_apis/build/status/ant-design.ant-design-pro?branchName=master)](https://dev.azure.com/qixiancs/ant-design-pro/_build/latest?definitionId=1?branchName=master)
 [![Dependencies](https://img.shields.io/david/ant-design/ant-design-pro.svg)](https://david-dm.org/ant-design/ant-design-pro)
 [![DevDependencies](https://img.shields.io/david/dev/ant-design/ant-design-pro.svg)](https://david-dm.org/ant-design/ant-design-pro?type=dev)
 [![Gitter](https://badges.gitter.im/ant-design/ant-design-pro.svg)](https://gitter.im/ant-design/ant-design-pro?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
@@ -95,7 +94,7 @@ $ npm start         # visit http://localhost:8000
 
 ## Распространение
 
-Любые варианты распространения приветствуются! Вот несколько примероы того, как вы можете помочь распространению проекта:
+Любые варианты распространения приветствуются! Вот несколько примеров того, как вы можете помочь распространению проекта:
 
 - Использовать DeepHire в ежедневной работе.
 - Создавать [задачи](http://github.com/ant-design/ant-design-pro/issues) заводить баги или отвечать на вопросы.

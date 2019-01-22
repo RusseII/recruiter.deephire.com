@@ -20,7 +20,7 @@ export default {
         payload: response,
       });
     },
-  
+
     *fetchCurrent(_, { call, put }) {
       try {
         const response = yield call(queryCurrent);
@@ -61,7 +61,8 @@ export default {
         ...state,
         currentUser: {
           ...state.currentUser,
-          notifyCount: action.payload,
+          notifyCount: action.payload.totalCount,
+          unreadCount: action.payload.unreadCount,
         },
       };
     },
