@@ -2,9 +2,10 @@ import { stringify } from 'qs';
 import request from '@/utils/request';
 
 const hostedURL = 'https://api.deephire.com';
-const newApi = 'https://a.deephire.com';
+// const newApi = 'https://a.deephire.com';
 
 // const hostedURL = 'http://localhost:3001';
+const newApi = 'http://localhost:3000';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -16,6 +17,19 @@ export async function sendEmail(data) {
     method: 'POST',
     body: data,
   });
+}
+
+// get profile from id
+export async function getCandidateProfile(id) {
+  return request(`${newApi}/v1/candidates/${id}`);
+}
+
+// take json and create or update
+export async function updateCandidateProfile(data) {
+  console.log(data);
+  delete data._id;
+
+  return request(`${newApi}/v1/candidates`, { method: 'PUT', body: data });
 }
 
 export async function queryActivities() {

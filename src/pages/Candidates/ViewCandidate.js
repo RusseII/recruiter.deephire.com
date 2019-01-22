@@ -6,6 +6,7 @@ import router from 'umi/router';
 import Result from '@/components/Result';
 import InfoCardEditable from '@/components/InfoCardEditable';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { getCandidateProfile } from '@/services/api';
 
 import { connect } from 'dva';
 import styles from './ViewCandidate.less';
@@ -48,13 +49,10 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      activeQuestion: null,
-      modalVisible: false,
-      currentStep: 1,
-    };
+    this.state = { activeQuestion: null, modalVisible: false, currentStep: 1 };
   }
 
+  // candidateProfileData: { userId: "google-oauth2|116875612836803552763"}
   componentDidMount() {
     const id = CleanVariable(GetURLParameter('id'));
     const userToken = CleanVariable(GetURLParameter('candidate'));
@@ -66,19 +64,33 @@ class App extends Component {
       .then(results => results.json())
       .then(
         data => {
+          // console.log(data)
           this.setState({
             candidateData: data,
             activeQuestion: 0,
             videoUrl: data[0].response_url,
             currentQuestionText: data[0].question_text,
           });
+          return data[0];
         },
         () => {
           this.setState({
             requestFailed: true,
           });
         }
-      );
+      )
+      .then(data => {
+        console.log(data);
+        const { user_id } = data;
+
+        getCandidateProfile(user_id).then(candidateProfileData => {
+          if (candidateProfileData) {
+            this.setState({ candidateProfileData });
+          } else {
+            this.setState({ candidateProfileData: { userId: user_id } });
+          }
+        });
+      });
   }
 
   getName() {
@@ -248,6 +260,7 @@ class App extends Component {
       currentStep,
       videoUrl,
       currentQuestionText,
+      candidateProfileData,
     } = this.state;
     if (!candidateData) return <p>Loading...</p>;
     if (comments === null) return <p> Loading! </p>;
@@ -287,6 +300,7 @@ class App extends Component {
               interviewName={interviewName}
               email={candidateEmail}
               setVideoData={this.setVideoData}
+              candidateProfileData={candidateProfileData}
             />
 
             <Card hoverable title="Questions">
@@ -318,7 +332,7 @@ class App extends Component {
             >
               <div className={styles.playerWrapper}>
                 <ReactPlayer
-                  youtubeConfig={{ playerVars: { rel: false, modestbranding: true } }}
+                  youTubeConfig={{ playerVars: { rel: false, modestbranding: true } }}
                   preload
                   controls
                   playing

@@ -39,7 +39,7 @@ class LoginPage extends Component {
   }
 
   handleSubmit = (err, values) => {
-    if (values.email != 'demo@deephire.com') {
+    if (values.email !== 'demo@deephire.com') {
       sendEmail({
         recipients: ['russell@deephire.com'],
         subject: `${values.email} tried to login`,

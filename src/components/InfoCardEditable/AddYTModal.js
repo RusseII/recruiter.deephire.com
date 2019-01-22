@@ -22,12 +22,12 @@ const AddYTModal = Form.create()(props => {
     <Modal
       okText="Add"
       destroyOnClose
-      title="Add Youtube Link"
+      title="Add YouTube Link"
       visible={visable}
       onCancel={toggle}
       onOk={okHandle}
     >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="YouTube Link">
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Yoube Link">
         {form.getFieldDecorator('youTubeLink', {})(<Input placeholder="YouTube Link" />)}
       </FormItem>
     </Modal>
