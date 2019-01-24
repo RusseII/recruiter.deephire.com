@@ -14,6 +14,9 @@ module.exports = {
     page: true,
   },
   rules: {
+    'no-console': ['error', { allow: ['error'] }],
+    'no-shadow': 0,
+
     'react/jsx-filename-extension': [1, { extensions: ['.js'] }],
     'react/jsx-wrap-multilines': 0,
     'react/prop-types': 0,

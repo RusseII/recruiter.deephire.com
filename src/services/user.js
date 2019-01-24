@@ -10,10 +10,7 @@ export async function queryCurrent() {
   return new Promise((resolve, reject) => {
     auth.getProfile((err, profile) => {
       if (!err) return resolve(profile);
-      // console.log(err)
-      // auth.logout()
       return reject(err);
     });
   });
-  // return request('/api/currentUser');
 }
