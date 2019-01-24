@@ -80,14 +80,13 @@ class App extends Component {
         }
       )
       .then(data => {
-        console.log(data);
-        const { user_id } = data;
+        const { user_id: userId } = data;
 
-        getCandidateProfile(user_id).then(candidateProfileData => {
+        getCandidateProfile(userId).then(candidateProfileData => {
           if (candidateProfileData) {
             this.setState({ candidateProfileData });
           } else {
-            this.setState({ candidateProfileData: { userId: user_id } });
+            this.setState({ candidateProfileData: { userId } });
           }
         });
       });
