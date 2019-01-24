@@ -24,22 +24,42 @@ export async function createInterview(params) {
 }
 
 export async function sendEmail(data) {
+  const authorization = {
+    authorization: `Bearer ${localStorage.getItem('access_token')}`,
+  };
+
   return request(`${newApi}/v1/emails`, {
     method: 'POST',
+    headers: authorization,
     body: data,
   });
 }
 
 // get profile from id
 export async function getCandidateProfile(id) {
-  return request(`${newApi}/v1/candidates/${id}`);
+  const authorization = {
+    authorization: `Bearer ${localStorage.getItem('access_token')}`,
+  };
+
+  return request(`${newApi}/v1/candidates/${id}`, {
+    method: 'GET',
+    headers: authorization,
+  });
 }
 
 // take json and create or update
 export async function updateCandidateProfile(data) {
+  const authorization = {
+    authorization: `Bearer ${localStorage.getItem('access_token')}`,
+  };
+
   const sendData = data;
   delete sendData._id;
-  return request(`${newApi}/v1/candidates`, { method: 'PUT', body: sendData });
+  return request(`${newApi}/v1/candidates`, {
+    method: 'PUT',
+    headers: authorization,
+    body: sendData,
+  });
 }
 
 export async function queryRule2(params) {
@@ -68,12 +88,17 @@ export async function getInterviews(params) {
 
 export async function removeInterview(params) {
   const { email, selectedRows } = params;
+  const authorization = {
+    authorization: `Bearer ${localStorage.getItem('access_token')}`,
+  };
+
   await Promise.all(
     selectedRows.map(async value => {
       const { _id } = value;
       const { $oid } = _id;
       const res = await request(`${newApi}/v1/interviews/${$oid}`, {
         method: 'DELETE',
+        headers: authorization,
       });
       return res;
     })
@@ -83,11 +108,16 @@ export async function removeInterview(params) {
 
 export async function removeCandidate(params) {
   const { email, selectedRows } = params;
+  const authorization = {
+    authorization: `Bearer ${localStorage.getItem('access_token')}`,
+  };
+
   await Promise.all(
     selectedRows.map(async value => {
       const { user_id: userId, company_id: companyId } = value;
       const res = await request(`${newApi}/v1/candidates/${userId}/${companyId}`, {
         method: 'DELETE',
+        headers: authorization,
       });
       return res;
     })
