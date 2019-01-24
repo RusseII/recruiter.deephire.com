@@ -18,30 +18,6 @@ export default [
     authority: ['user'],
     routes: [
       { path: '/', redirect: 'interview/create-interview/info' },
-
-      // {
-      //   path: '/dashboard',
-      //   name: 'dashboard',
-      //   icon: 'dashboard',
-      //   routes: [
-      //     {
-      //       path: '/dashboard/analysis',
-      //       name: 'analysis',
-      //       component: './Dashboard/Analysis',
-      //     },
-      //     {
-      //       path: '/dashboard/monitor',
-      //       name: 'monitor',
-      //       component: './Dashboard/Monitor',
-      //     },
-      //     {
-      //       path: '/dashboard/workplace',
-      //       name: 'workplace',
-      //       component: './Dashboard/Workplace',
-      //     },
-      //   ],
-      // },
-
       {
         path: '/interview',
         icon: 'form',
@@ -77,7 +53,7 @@ export default [
           },
           {
             path: '/interview/view-interviews',
-            name: "View Created Interviews",
+            name: 'View Created Interviews',
             authority: ['user'],
             component: './Candidates/ViewInterviews',
           },
@@ -101,15 +77,8 @@ export default [
             component: './Candidates/ViewCandidate',
             hideInMenu: true,
           },
-          // {path: '/candidates/share-links',
-          //   name: 'shareLinks',
-          //   authority: ['user'],
-          //   component: './Candidates/ShortLists',
-
-          // }
         ],
       },
-
       {
         name: 'Account',
         icon: 'user',

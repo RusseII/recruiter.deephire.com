@@ -21,15 +21,11 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      console.log('payload', payload);
-
       let response = yield call(queryRule2, payload);
-      console.log(response);
       response.forEach((resp, index) => {
         response[index].key = index;
       });
       response = { list: response };
-      console.log(response);
 
       yield put({
         type: 'save',
@@ -37,10 +33,7 @@ export default {
       });
     },
     *share({ payload, callback }, { call, put }) {
-      console.log('share rule.js');
-
       const response = yield call(shareShortLink, payload);
-      console.log(response, 'ZZZZZZZZZZZZZ');
 
       yield put({
         type: 'shareLink',
@@ -50,12 +43,8 @@ export default {
     },
 
     *view_interviews({ payload }, { call, put }) {
-      console.log('payload', payload);
-
       let response = yield call(getInterviews, payload);
-      console.log(response);
       response = { list: response };
-      console.log(response);
 
       yield put({
         type: 'save',
@@ -63,8 +52,6 @@ export default {
       });
     },
     *add({ payload, callback }, { call, put }) {
-      console.log('add rule.js');
-
       const response = yield call(addRule, payload);
       yield put({
         type: 'save',
@@ -74,10 +61,7 @@ export default {
     },
 
     *removeCandidate({ payload, callback }, { call, put }) {
-      console.log('remove rule.js');
-      console.log(payload);
       let response = yield call(removeCandidate, payload);
-      console.log(response);
       response.forEach((resp, index) => {
         response[index].key = index;
       });
@@ -91,10 +75,7 @@ export default {
     },
 
     *removeInterview({ payload, callback }, { call, put }) {
-      console.log('remove rule.js');
-      console.log(payload);
       let response = yield call(removeInterview, payload);
-      console.log(response);
       response.forEach((resp, index) => {
         response[index].key = index;
       });
@@ -107,8 +88,6 @@ export default {
       if (callback) callback();
     },
     *remove({ payload, callback }, { call, put }) {
-      console.log('remove rule.js');
-
       const response = yield call(removeRule, payload);
       yield put({
         type: 'save',
@@ -117,7 +96,6 @@ export default {
       if (callback) callback();
     },
     *update({ payload, callback }, { call, put }) {
-      console.log('update rule.js');
       const response = yield call(updateRule, payload);
       yield put({
         type: 'save',
