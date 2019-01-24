@@ -7,8 +7,20 @@ const newApi = 'https://a.deephire.com';
 // const hostedURL = 'http://localhost:3001';
 // const newApi = 'http://localhost:3000';
 
-export async function queryProjectNotice() {
-  return request('/api/project/notice');
+export async function createInterview(params) {
+  const { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions, email } = params;
+  const questions = interviewQuestions.map(a => ({
+    question: a,
+  }));
+
+  const data = {
+    interviewName,
+    email,
+    interview_questions: questions,
+    interview_config: { retakesAllowed, prepTime, answerTime },
+  };
+
+  return request(`${hostedURL}/v1.0/create_interview`, { method: 'POST', body: data });
 }
 
 export async function sendEmail(data) {
@@ -30,13 +42,6 @@ export async function updateCandidateProfile(data) {
   return request(`${newApi}/v1/candidates`, { method: 'PUT', body: sendData });
 }
 
-export async function queryActivities() {
-  return request('/api/activities');
-}
-
-export async function queryRule(params) {
-  return request(`/api/rule?${stringify(params)}`);
-}
 export async function queryRule2(params) {
   if (params == null) {
     // params = 'test@gmail.com';
@@ -106,25 +111,6 @@ export async function fakeSubmitForm(params) {
     body: params,
   });
 }
-
-export async function createInterview(params) {
-  const { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions, email } = params;
-  const questions = interviewQuestions.map(a => ({
-    question: a,
-  }));
-
-  const data = {
-    interviewName,
-    email,
-    interview_questions: questions,
-    interview_config: { retakesAllowed, prepTime, answerTime },
-  };
-
-  return request(`${hostedURL}/v1.0/create_interview`, { method: 'POST', body: data });
-}
-
-//   return request(hostedURL + '/v1.0/companies');
-// }
 
 export async function fakeChartData() {
   return request('/api/fake_chart_data');
@@ -199,4 +185,16 @@ export async function queryNotices(params = {}) {
 
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
+}
+
+export async function queryProjectNotice() {
+  return request('/api/project/notice');
+}
+
+export async function queryActivities() {
+  return request('/api/activities');
+}
+
+export async function queryRule(params) {
+  return request(`/api/rule?${stringify(params)}`);
 }
