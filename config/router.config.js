@@ -39,11 +39,7 @@ export default [
                 name: 'info',
                 component: './Interviews/CreateInterviewForm/Step1',
               },
-              {
-                path: '/interview/create-interview/confirm',
-                name: 'confirm',
-                component: './Interviews/CreateInterviewForm/Step2',
-              },
+
               {
                 path: '/interview/create-interview/result',
                 name: 'result',
