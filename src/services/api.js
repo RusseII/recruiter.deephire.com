@@ -12,7 +12,6 @@ export async function queryProjectNotice() {
 }
 
 export async function sendEmail(data) {
-  console.log(data);
   return request(`${newApi}/v1/emails`, {
     method: 'POST',
     body: data,
@@ -26,10 +25,9 @@ export async function getCandidateProfile(id) {
 
 // take json and create or update
 export async function updateCandidateProfile(data) {
-  console.log(data);
-  delete data._id;
-
-  return request(`${newApi}/v1/candidates`, { method: 'PUT', body: data });
+  const sendData = data;
+  delete sendData._id;
+  return request(`${newApi}/v1/candidates`, { method: 'PUT', body: sendData });
 }
 
 export async function queryActivities() {
@@ -37,37 +35,27 @@ export async function queryActivities() {
 }
 
 export async function queryRule(params) {
-  console.log(params);
   return request(`/api/rule?${stringify(params)}`);
 }
 export async function queryRule2(params) {
-  console.log(params);
-  console.log(stringify(params));
   if (params == null) {
     // params = 'test@gmail.com';
-    // console.log(JSON.stringify(params));
     return null;
   }
   return request(`${hostedURL}/v1.0/get_candidates/${params}`);
 }
 
 export async function shareShortLink(data) {
-  console.log('ran');
-  console.log('data');
   const x = request(`${hostedURL}/v1.0/create_shortlist`, {
     method: 'POST',
     body: data,
   });
-  console.log(x, 'run');
   return x;
 }
 
 export async function getInterviews(params) {
-  console.log(params);
-  console.log(stringify(params));
   if (params == null) {
     // params = 'test@gmail.com';
-    // console.log(JSON.stringify(params));
     return null;
   }
   return request(`${hostedURL}/v1.0/get_interviews/${params}`);
@@ -92,14 +80,13 @@ export async function removeCandidate(params) {
   const { email, selectedRows } = params;
   await Promise.all(
     selectedRows.map(async value => {
-      const { user_id, company_id } = value;
-      const res = await request(`${newApi}/v1/candidates/${user_id}/${company_id}`, {
+      const { user_id: userId, company_id: companyId } = value;
+      const res = await request(`${newApi}/v1/candidates/${userId}/${companyId}`, {
         method: 'DELETE',
       });
       return res;
     })
   );
-  console.log(email, 'EAMIL HERE');
   return request(`${hostedURL}/v1.0/get_candidates/${email}`);
 }
 
@@ -121,23 +108,21 @@ export async function fakeSubmitForm(params) {
 }
 
 export async function createInterview(params) {
-  let { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions, email } = params;
-  interviewQuestions = interviewQuestions.map(a => ({
+  const { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions, email } = params;
+  const questions = interviewQuestions.map(a => ({
     question: a,
   }));
 
   const data = {
     interviewName,
     email,
-    interview_questions: interviewQuestions,
+    interview_questions: questions,
     interview_config: { retakesAllowed, prepTime, answerTime },
   };
 
   return request(`${hostedURL}/v1.0/create_interview`, { method: 'POST', body: data });
 }
 
-// export  function createInterview(params) {
-//   console.log(params)
 //   return request(hostedURL + '/v1.0/companies');
 // }
 
