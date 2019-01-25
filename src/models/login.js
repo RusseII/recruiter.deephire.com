@@ -13,7 +13,7 @@ export default {
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
+    *login({ put }) {
       reloadAuthorized();
       const urlParams = new URL(window.location.href);
       const params = getPageQuery();

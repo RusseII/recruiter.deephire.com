@@ -11,7 +11,6 @@ const AddYTModal = Form.create()(props => {
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue);
       if (err) return;
       form.resetFields();
       addYouTubeLink(fieldsValue.youTubeLink);

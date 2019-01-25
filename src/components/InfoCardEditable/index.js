@@ -6,11 +6,6 @@ import styles from './index.less';
 import AddYTModal from './AddYTModal';
 import { updateCandidateProfile } from '@/services/api';
 
-// const youTubeLinks = [
-//   'https://www.youTube.com/watch?v=aMk5j0xV1Rw',
-//   'https://www.youTube.com/watch?v=5EGacrmhxn8',
-// ];
-
 class InfoCardEditable extends React.Component {
   state = { modalVisible: false };
 
@@ -34,17 +29,14 @@ class InfoCardEditable extends React.Component {
 
   remove = i => {
     const { candidateProfileData } = this.state;
-    // youTubeLinks.splice(i, 1);
     candidateProfileData.youTubeLinks.splice(i, 1);
     this.setState({ candidateProfileData });
     updateCandidateProfile(candidateProfileData);
   };
 
   addYouTubeLink = link => {
-    console.log('addYouTubeLink');
     const { candidateProfileData } = this.state;
     const { youTubeLinks } = candidateProfileData;
-    // youTubeLinks.push(link);
     if (!youTubeLinks) {
       candidateProfileData.youTubeLinks = [];
     }
@@ -59,7 +51,6 @@ class InfoCardEditable extends React.Component {
     if (!candidateProfileData) return null;
     const { setVideoData, userName, interviewName, email } = this.props;
     const { youTubeLinks } = candidateProfileData;
-    // this.setState({ candidateProfileData: this.props.candidateProfileData});
 
     return (
       <Card style={{ marginBottom: '20px' }} hoverable title={userName}>

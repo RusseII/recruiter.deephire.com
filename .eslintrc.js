@@ -17,6 +17,7 @@ module.exports = {
     'no-console': ['error', { allow: ['error'] }],
     'no-shadow': 0,
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
+    'no-alert': 0,
 
     'react/jsx-filename-extension': [1, { extensions: ['.js'] }],
     'react/jsx-wrap-multilines': 0,
