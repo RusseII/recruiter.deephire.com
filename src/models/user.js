@@ -20,7 +20,7 @@ export default {
         payload: response,
       });
     },
-  
+
     *fetchCurrent(_, { call, put }) {
       try {
         const response = yield call(queryCurrent);
@@ -29,7 +29,6 @@ export default {
           payload: response,
         });
       } catch {
-        console.log('UH OH ERROR');
         localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
         localStorage.removeItem('expires_at');
@@ -61,7 +60,8 @@ export default {
         ...state,
         currentUser: {
           ...state.currentUser,
-          notifyCount: action.payload,
+          notifyCount: action.payload.totalCount,
+          unreadCount: action.payload.unreadCount,
         },
       };
     },

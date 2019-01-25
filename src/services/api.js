@@ -7,67 +7,73 @@ const newApi = 'https://a.deephire.com';
 // const hostedURL = 'http://localhost:3001';
 // const newApi = 'http://localhost:3000';
 
-export async function queryProjectNotice() {
-  return request('/api/project/notice');
+const setHeaders = () => ({
+  authorization: `Bearer ${localStorage.getItem('access_token')}`,
+});
+
+export async function createInterview(params) {
+  const { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions, email } = params;
+  const questions = interviewQuestions.map(a => ({
+    question: a,
+  }));
+
+  const data = {
+    interviewName,
+    email,
+    interview_questions: questions,
+    interview_config: { retakesAllowed, prepTime, answerTime },
+  };
+
+  return request(`${hostedURL}/v1.0/create_interview`, { method: 'POST', body: data });
 }
 
 export async function sendEmail(data) {
-  console.log(data);
   return request(`${newApi}/v1/emails`, {
     method: 'POST',
+    headers: setHeaders(),
     body: data,
   });
 }
 
 // get profile from id
 export async function getCandidateProfile(id) {
-  return request(`${newApi}/v1/candidates/${id}`);
+  return request(`${newApi}/v1/candidates/${id}`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
 }
 
 // take json and create or update
 export async function updateCandidateProfile(data) {
-  console.log(data);
-  delete data._id;
+  const sendData = data;
+  delete sendData._id;
 
-  return request(`${newApi}/v1/candidates`, { method: 'PUT', body: data });
+  return request(`${newApi}/v1/candidates`, {
+    method: 'PUT',
+    headers: setHeaders(),
+    body: sendData,
+  });
 }
 
-export async function queryActivities() {
-  return request('/api/activities');
-}
-
-export async function queryRule(params) {
-  console.log(params);
-  return request(`/api/rule?${stringify(params)}`);
-}
 export async function queryRule2(params) {
-  console.log(params);
-  console.log(stringify(params));
   if (params == null) {
     // params = 'test@gmail.com';
-    // console.log(JSON.stringify(params));
     return null;
   }
   return request(`${hostedURL}/v1.0/get_candidates/${params}`);
 }
 
 export async function shareShortLink(data) {
-  console.log('ran');
-  console.log('data');
   const x = request(`${hostedURL}/v1.0/create_shortlist`, {
     method: 'POST',
     body: data,
   });
-  console.log(x, 'run');
   return x;
 }
 
 export async function getInterviews(params) {
-  console.log(params);
-  console.log(stringify(params));
   if (params == null) {
     // params = 'test@gmail.com';
-    // console.log(JSON.stringify(params));
     return null;
   }
   return request(`${hostedURL}/v1.0/get_interviews/${params}`);
@@ -75,12 +81,14 @@ export async function getInterviews(params) {
 
 export async function removeInterview(params) {
   const { email, selectedRows } = params;
+
   await Promise.all(
     selectedRows.map(async value => {
       const { _id } = value;
       const { $oid } = _id;
       const res = await request(`${newApi}/v1/interviews/${$oid}`, {
         method: 'DELETE',
+        headers: setHeaders(),
       });
       return res;
     })
@@ -90,24 +98,25 @@ export async function removeInterview(params) {
 
 export async function removeCandidate(params) {
   const { email, selectedRows } = params;
+
   await Promise.all(
     selectedRows.map(async value => {
-      const { user_id, company_id } = value;
-      const res = await request(`${newApi}/v1/candidates/${user_id}/${company_id}`, {
+      const { user_id: userId, company_id: companyId } = value;
+      const res = await request(`${newApi}/v1/candidates/${userId}/${companyId}`, {
         method: 'DELETE',
+        headers: setHeaders(),
       });
       return res;
     })
   );
-  console.log(email, 'EAMIL HERE');
   return request(`${hostedURL}/v1.0/get_candidates/${email}`);
 }
 
-export async function updateRule(params) {
-  return request('/api/rule', {
+export async function updateRule(params = {}) {
+  return request(`/api/rule?${stringify(params.query)}`, {
     method: 'POST',
     body: {
-      ...params,
+      ...params.body,
       method: 'update',
     },
   });
@@ -119,27 +128,6 @@ export async function fakeSubmitForm(params) {
     body: params,
   });
 }
-
-export async function createInterview(params) {
-  let { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions, email } = params;
-  interviewQuestions = interviewQuestions.map(a => ({
-    question: a,
-  }));
-
-  const data = {
-    interviewName,
-    email,
-    interview_questions: interviewQuestions,
-    interview_config: { retakesAllowed, prepTime, answerTime },
-  };
-
-  return request(`${hostedURL}/v1.0/create_interview`, { method: 'POST', body: data });
-}
-
-// export  function createInterview(params) {
-//   console.log(params)
-//   return request(hostedURL + '/v1.0/companies');
-// }
 
 export async function fakeChartData() {
   return request('/api/fake_chart_data');
@@ -208,10 +196,22 @@ export async function fakeRegister(params) {
   });
 }
 
-export async function queryNotices() {
-  return request('/api/notices');
+export async function queryNotices(params = {}) {
+  return request(`/api/notices?${stringify(params)}`);
 }
 
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
+}
+
+export async function queryProjectNotice() {
+  return request('/api/project/notice');
+}
+
+export async function queryActivities() {
+  return request('/api/activities');
+}
+
+export async function queryRule(params) {
+  return request(`/api/rule?${stringify(params)}`);
 }

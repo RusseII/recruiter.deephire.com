@@ -1,4 +1,13 @@
 export default {
+  'menu.Interviews': 'Interviews',
+  'menu.Interviews.View Created Interviews': 'View Created Interviews',
+  'menu.Interviews.Create New Interview': 'Create New Interview',
+  'menu.Interviews.Create New Interview.Create': 'Create',
+  'menu.Interviews.Create New Interview.Success': 'Success',
+
+  'menu.Candidates': 'Candidates',
+  'menu.Candidates.Candidate Videos': 'Candidate Videos',
+
   'navbar.lang': '中文',
   'component.globalHeader.search': 'Search',
   'component.globalHeader.search.example1': 'Search example 1',

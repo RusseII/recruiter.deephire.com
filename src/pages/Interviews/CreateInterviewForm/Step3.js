@@ -8,12 +8,10 @@ import styles from './style.less';
 
 @connect(({ form, user }) => ({
   currentUser: user.currentUser,
-
   data: form.step,
 }))
 class Step3 extends React.PureComponent {
   render() {
-    console.log(this.props);
     const { data, currentUser } = this.props;
     const onFinish = () => {
       router.push('/interview/create-interview/info');
@@ -30,9 +28,6 @@ class Step3 extends React.PureComponent {
               <Button size="small" icon="copy" />
             </CopyToClipboard>
           </Col>
-          {/* <Col xs={4} sm={8}> */}
-
-          {/* </Col> */}
         </Row>
         <Row>
           <Col xs={24} sm={8} className={styles.label}>
@@ -49,7 +44,6 @@ class Step3 extends React.PureComponent {
         <Button type="primary" onClick={onFinish}>
           Create another
         </Button>
-        {/* <Button>Do Nothing</Button> */}
       </Fragment>
     );
     return (
