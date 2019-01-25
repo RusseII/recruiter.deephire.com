@@ -58,7 +58,8 @@ export default {
   define: {
     APP_TYPE: process.env.APP_TYPE || '',
   },
-  treeShaking: true,
+  //  this being commented in breaks the build??
+  // treeShaking: true,
   targets: {
     ie: 11,
   },

@@ -36,13 +36,13 @@ export default [
               },
               {
                 path: '/interview/create-interview/info',
-                name: 'info',
+                name: 'Create',
                 component: './Interviews/CreateInterviewForm/Step1',
               },
 
               {
                 path: '/interview/create-interview/result',
-                name: 'result',
+                name: 'Success',
                 component: './Interviews/CreateInterviewForm/Step3',
               },
             ],
