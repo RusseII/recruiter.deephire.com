@@ -10,6 +10,7 @@ export default class Auth {
     domain: AUTH_CONFIG.domain,
     clientID: AUTH_CONFIG.clientId,
     redirectUri: AUTH_CONFIG.callbackUrl,
+    audience: 'http://a.deephire.com',
     responseType: 'token id_token',
     scope: 'openid profile email',
   });
