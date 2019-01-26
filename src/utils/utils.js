@@ -4,7 +4,7 @@ import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
 import { Modal } from 'antd';
 
-const confirm = Modal.confirm;
+const { confirm } = Modal;
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -35,7 +35,7 @@ export function showConfirm(dispatch, selectedRows, type, callback) {
           resolve(handleDelete(dispatch, selectedRows, type));
           callback();
         }, 3000);
-      }).catch(() => console.log('Oops errors!'));
+      }).catch(err => console.error('Error confirming', err));
     },
     onCancel() {},
   });
