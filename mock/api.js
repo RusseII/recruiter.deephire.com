@@ -1,6 +1,5 @@
 import mockjs from 'mockjs';
 
-console.log('called mockjs');
 const titles = [
   'Russell Ratcliffe',
   'Angular',
@@ -64,7 +63,6 @@ const user = [
 
 function fakeList(count) {
   const list = [];
-  console.log('fake list called');
   for (let i = 0; i < count; i += 1) {
     list.push({
       id: `fake-list-${i}`,

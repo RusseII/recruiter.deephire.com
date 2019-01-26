@@ -28,7 +28,6 @@ for (let i = 0; i < 46; i += 1) {
 }
 
 function getRule(req, res, u) {
-  console.log('getRule called');
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
@@ -76,7 +75,6 @@ function getRule(req, res, u) {
       current: parseInt(params.currentPage, 10) || 1,
     },
   };
-  console.log('ran');
   return res.json(result);
 }
 
@@ -133,7 +131,6 @@ function postRule(req, res, u, b) {
       total: tableListDataSource.length,
     },
   };
-  console.log(res.json(result));
   return res.json(result);
 }
 

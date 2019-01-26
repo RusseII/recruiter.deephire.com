@@ -1,42 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Checkbox, Alert, Button } from 'antd';
+import { Alert, Button } from 'antd';
 import Login from '@/components/Login';
 import { sendEmail } from '@/services/api';
 
 import styles from './Login.less';
 import Auth from '../../Auth/Auth';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
+const { Tab, UserName, Password, Submit } = Login;
 
-@connect(({ login, loading }) => ({
-  login,
+const auth = new Auth();
+
+@connect(({ loading }) => ({
   submitting: loading.effects['login/login'],
 }))
 class LoginPage extends Component {
   state = {
     type: 'account',
-    autoLogin: true,
   };
 
   onTabChange = type => {
     this.setState({ type });
   };
-
-  loginWithGoogle() {
-    const auth = new Auth();
-    auth.loginWithGoogle();
-  }
-
-  loginWithLinkedin() {
-    const auth = new Auth();
-    auth.loginWithLinkedin();
-  }
-
-  loginWithFacebook() {
-    const auth = new Auth();
-    auth.loginWithFacebook();
-  }
 
   handleSubmit = (err, values) => {
     if (values.email !== 'demo@deephire.com') {
@@ -48,31 +33,14 @@ class LoginPage extends Component {
     }
     this.loginForm.validateFields((err, values) => {
       if (!err) {
-        // this.renderMessage('Invalid Email or Password');
-
-        const auth = new Auth(this.props);
-
         const { type } = this.state;
 
         if (type === 'account') {
-          const status = auth.login(values.email, values.password);
+          auth.login(values.email, values.password);
         } else {
           auth.signup(values.email, values.password);
         }
       }
-      // else {
-      // this.setState({ status: 'error' });
-      // }
-    });
-  };
-
-  //   console.log(type)
-
-  // };
-
-  changeAutoLogin = e => {
-    this.setState({
-      autoLogin: e.target.checked,
     });
   };
 
@@ -81,10 +49,8 @@ class LoginPage extends Component {
   );
 
   render() {
-    const { login, submitting } = this.props;
-    console.log('LOGIN PROPS HERE', login);
-    const { type, autoLogin, status } = this.state;
-
+    const { submitting } = this.props;
+    const { type } = this.state;
     return (
       <div className={styles.main}>
         <Login
@@ -95,7 +61,6 @@ class LoginPage extends Component {
             this.loginForm = form;
           }}
         >
-          {/* {this.state.status === 'error' && this.renderMessage('Invalid Email or Password')} */}
           <Tab key="account" tab="Log In">
             <UserName name="email" placeholder="email" />
             <Password
@@ -113,9 +78,6 @@ class LoginPage extends Component {
             />
           </Tab>
           <div>
-            <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
-              Remember me
-            </Checkbox>
             <a style={{ float: 'right' }} href="">
               Forgot password
             </a>
@@ -125,21 +87,21 @@ class LoginPage extends Component {
           <div className={styles.other}>
             {type === 'account' ? 'Or Login With' : 'Or Signup With'}
             <Button
-              onClick={this.loginWithGoogle}
+              onClick={auth.loginWithGoogle}
               shape="circle"
               size="large"
               icon="google"
               style={{ marginLeft: 16 }}
             />
             <Button
-              onClick={this.loginWithLinkedin}
+              onClick={auth.loginWithLinkedin}
               shape="circle"
               size="large"
               icon="linkedin"
               style={{ marginLeft: 16 }}
             />
             <Button
-              onClick={this.loginWithFacebook}
+              onClick={auth.loginWithFacebook}
               shape="circle"
               size="large"
               icon="facebook"

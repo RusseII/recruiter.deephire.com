@@ -4,7 +4,7 @@ import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
 import { Modal } from 'antd';
 
-const confirm = Modal.confirm;
+const { confirm } = Modal;
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -35,7 +35,7 @@ export function showConfirm(dispatch, selectedRows, type, callback) {
           resolve(handleDelete(dispatch, selectedRows, type));
           callback();
         }, 3000);
-      }).catch(() => console.log('Oops errors!'));
+      }).catch(err => console.error('Error confirming', err));
     },
     onCancel() {},
   });
@@ -195,12 +195,11 @@ export function formatWan(val) {
       <span>
         {result}
         <span
-          styles={{
+          style={{
             position: 'relative',
             top: -2,
             fontSize: 14,
             fontStyle: 'normal',
-            lineHeight: 20,
             marginLeft: 2,
           }}
         >
@@ -212,6 +211,7 @@ export function formatWan(val) {
   return result;
 }
 
+// 给官方演示站点用，用于关闭真实开发环境不需要使用的特性
 export function isAntdPro() {
   return window.location.hostname === 'preview.pro.ant.design';
 }

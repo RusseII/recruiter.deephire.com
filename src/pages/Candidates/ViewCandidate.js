@@ -7,7 +7,6 @@ import Result from '@/components/Result';
 import InfoCardEditable from '@/components/InfoCardEditable';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getCandidateProfile } from '@/services/api';
-
 import { connect } from 'dva';
 import styles from './ViewCandidate.less';
 
@@ -52,19 +51,16 @@ class App extends Component {
     this.state = { activeQuestion: null, modalVisible: false, currentStep: 1 };
   }
 
-  // candidateProfileData: { userId: "google-oauth2|116875612836803552763"}
   componentDidMount() {
     const id = CleanVariable(GetURLParameter('id'));
     const userToken = CleanVariable(GetURLParameter('candidate'));
-    this.setState({ id, userToken });
-    // var url = "https://localhost:3001/v1.0/get_candidate_videos/";
+
     const url = 'https://api.deephire.com/v1.0/get_candidate_videos/';
 
     fetch(`${url + id}/${userToken}`)
       .then(results => results.json())
       .then(
         data => {
-          // console.log(data)
           this.setState({
             candidateData: data,
             activeQuestion: 0,
@@ -80,30 +76,17 @@ class App extends Component {
         }
       )
       .then(data => {
-        console.log(data);
-        const { user_id } = data;
+        const { user_id: userId } = data;
 
-        getCandidateProfile(user_id).then(candidateProfileData => {
+        getCandidateProfile(userId).then(candidateProfileData => {
           if (candidateProfileData) {
             this.setState({ candidateProfileData });
           } else {
-            this.setState({ candidateProfileData: { userId: user_id } });
+            this.setState({ candidateProfileData: { userId } });
           }
         });
       });
   }
-
-  getName() {
-    const { candidateData } = this.state;
-    return candidateData[0].user_name;
-  }
-
-  openInterview = () => {
-    const { userToken, id } = this.state;
-    const url = `https://candidates.deephire.com/?id=${id}&candidate=${userToken}`;
-
-    window.open(url, '_blank');
-  };
 
   nextQuestion = () => {
     const { activeQuestion, candidateData } = this.state;

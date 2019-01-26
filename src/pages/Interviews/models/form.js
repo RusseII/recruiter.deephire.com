@@ -15,10 +15,7 @@ export default {
       message.success('提交成功');
     },
     *submitStepForm({ payload }, { call, put }) {
-      // createInterview("test").then(x => console.log(x))
       const response = yield call(createInterview, payload);
-      console.log(response);
-      // response = `https://interview.deephire.com/pickInterview/${encodeURIComponent(response)}`;
 
       yield put({
         type: 'saveStepFormData',
@@ -26,7 +23,6 @@ export default {
       });
 
       yield put(routerRedux.push('/interview/create-interview/result'));
-      yield console.log(response);
     },
 
     *submitviewInterview({ payload }, { call }) {
