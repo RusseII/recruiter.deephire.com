@@ -5,6 +5,8 @@ import { Card, Col, Row, Icon, Table, Button, Modal, Input, Checkbox, Form, mess
 import router from 'umi/router';
 import Result from '@/components/Result';
 import InfoCardEditable from '@/components/InfoCardEditable';
+import ShareCandidateButton from '@/components/ShareCandidateButton';
+
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getCandidateProfile } from '@/services/api';
 import { connect } from 'dva';
@@ -262,8 +264,8 @@ class App extends Component {
 
     return (
       <div>
+        <ShareCandidateButton />
         {this.renderContent(currentStep)}
-
         <Button style={{ marginBottom: '20px' }} onClick={this.goToCandidates} type="secondary">
           <Icon type="left" />
           Back to Candidates
