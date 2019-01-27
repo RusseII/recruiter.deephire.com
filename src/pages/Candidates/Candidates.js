@@ -7,6 +7,7 @@ import router from 'umi/router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Result from '@/components/Result';
 import { showConfirm } from '@/utils/utils';
+import ShareCandidateButton from '@/components/ShareCandidateButton';
 
 import styles from './Candidates.less';
 
@@ -245,9 +246,8 @@ class Candidates extends PureComponent {
             <div className={styles.tableListOperator}>
               {selectedRows.length > 0 && (
                 <span>
-                  <Button type="primary" onClick={this.handleModalVisible}>
-                    Share
-                  </Button>
+                  <ShareCandidateButton candidateData={selectedRows} />
+
                   <Button
                     type="danger"
                     onClick={() => {
