@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 
-import { Card, Col, Row, Icon, Table, Button, Modal, Input, Checkbox, Form, message } from 'antd';
+import { Card, Col, Row, Icon, Table, Button, Form } from 'antd';
 
 import InfoCardEditable from '@/components/InfoCardEditable';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 
 import { getCandidateProfile } from '@/services/api';
 import { connect } from 'dva';
+import router from 'umi/router';
 import styles from './ViewCandidate.less';
 
 const columns = [
@@ -46,7 +47,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { activeQuestion: null, modalVisible: false, currentStep: 1 };
+    this.state = { activeQuestion: null };
   }
 
   componentDidMount() {
@@ -86,6 +87,10 @@ class App extends Component {
       });
   }
 
+  goToCandidates = () => {
+    router.push(`/candidates/candidates`);
+  };
+
   nextQuestion = () => {
     const { activeQuestion, candidateData } = this.state;
 
@@ -118,7 +123,6 @@ class App extends Component {
       comments,
       activeQuestion,
       requestFailed,
-      currentStep,
       videoUrl,
       currentQuestionText,
       candidateProfileData,

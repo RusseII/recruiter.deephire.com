@@ -6,8 +6,6 @@ import Result from '@/components/Result';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { connect } from 'dva';
 
-// import styles from './index.less';
-
 const FormItem = Form.Item;
 
 @connect(({ rule, user }) => ({
@@ -37,7 +35,7 @@ class ShareCandidateButton extends React.Component {
     this.handleModalVisible();
   };
 
-  handleModalVisible = flag => {
+  handleModalVisible = () => {
     const { modalVisible } = this.state;
     this.setState({ modalVisible: !modalVisible, hideInfo: false });
   };
@@ -119,7 +117,6 @@ class ShareCandidateButton extends React.Component {
             title="Share Link Created!"
             description={`Send this link to ${shareEmail}`}
             extra={this.information(shareLink, 'russell@deephire.com')}
-            // className={styles.result}
             extraStyle={{ textAlign: 'center', padding: '5px', fontSize: '15px' }}
           />
         </Modal>
