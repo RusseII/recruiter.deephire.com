@@ -7,8 +7,6 @@ const FormItem = Form.Item;
 const AddYTModal = Form.create()(props => {
   const { form, toggle, visable, addYouTubeLink } = props;
 
-  // const {getFieldDecorator} = this.form;
-
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
