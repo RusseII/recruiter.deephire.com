@@ -1,7 +1,6 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Button } from 'antd';
-import StandardTable from '@/components/StandardTable';
+import { Card, Button, List, AutoComplete, Icon, Checkbox, Row, Col } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import router from 'umi/router';
 import { showConfirm } from '@/utils/utils';
@@ -11,6 +10,251 @@ import styles from './Candidates.less';
 
 const readableTime = require('readable-timestamp');
 
+const mockData = {
+  list: [
+    {
+      _id: {
+        $oid: '5c4ca732f2b3768b9ecb4fad',
+      },
+      candidate_email: 'russell@deephire.com',
+      interview_name: 'no_name',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Russell Ratcliffe',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+    {
+      _id: {
+        $oid: 'otherid',
+      },
+      candidate_email: 'emerson@deephire.com',
+      interview_name: 'I love interviews2',
+      python_datetime: '2018-11-09 16:22:37',
+      user_id: 'google-oauth2|108316160914067599948',
+      user_name: 'Emerson Clouder',
+      responses: [
+        {
+          question_text: 'What are three words that describe youtself? And Why?',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+        {
+          question_text: 'question 2 hahah',
+          response_url: 'https://vimeo.com/299965218/3f595787a6',
+        },
+      ],
+    },
+  ],
+};
+
 @connect(({ rule, loading, user }) => ({
   currentUser: user.currentUser,
   rule,
@@ -19,42 +263,8 @@ const readableTime = require('readable-timestamp');
 class Candidates extends PureComponent {
   state = {
     selectedRows: [],
+    dataSource: ['Item', 'Emerson', 'test', 'mock', 'ruseell;,'],
   };
-
-  columns = [
-    {
-      title: 'Interview Name',
-      dataIndex: 'interview_name',
-    },
-    {
-      title: 'Name',
-      dataIndex: 'user_name',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'candidate_email',
-    },
-    {
-      title: 'Time',
-      render(test, data) {
-        try {
-          const dateObj = new Date(data.python_datetime);
-          const displayTime = readableTime(dateObj);
-          return <div>{displayTime}</div>;
-        } catch {
-          return null;
-        }
-      },
-    },
-    {
-      title: 'View',
-      render: (text, data) => (
-        <Fragment>
-          <a onClick={() => this.openInterview(data)}>View</a>
-        </Fragment>
-      ),
-    },
-  ];
 
   componentDidMount() {
     const profile = JSON.parse(localStorage.getItem('profile'));
@@ -69,9 +279,15 @@ class Candidates extends PureComponent {
     }
   }
 
-  handleSelectRows = rows => {
+  onChange = checkedValues => {
     this.setState({
-      selectedRows: rows,
+      selectedRows: checkedValues,
+    });
+  };
+
+  handleSearch = value => {
+    this.setState({
+      dataSource: !value ? [] : [value, value + value, value + value + value],
     });
   };
 
@@ -80,46 +296,99 @@ class Candidates extends PureComponent {
     router.push(`/candidates/view-candidate/?id=${companyId}&candidate=${userId}`);
   };
 
+  friendlyDate = rawDate => {
+    const dateObj = new Date(rawDate);
+    const displayTime = readableTime(dateObj);
+    return displayTime;
+  };
+
   render() {
     const {
-      rule: { data },
+      // rule: { data },
       dispatch,
       loading,
     } = this.props;
 
-    const { selectedRows } = this.state;
+    const { list } = mockData;
+
+    const CardInfo = ({ item }) => (
+      <div className={styles.cardInfo}>
+        <p>{item.candidate_email}</p>
+        <p className={styles.body}>{item.interview_name}</p>
+        <p className={styles.body}>{this.friendlyDate(item.python_datetime)}</p>
+      </div>
+    );
+
+    const { selectedRows, dataSource } = this.state;
 
     return (
       <PageHeaderWrapper title="Candidates">
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              {selectedRows.length > 0 && (
-                <span>
-                  <ShareCandidateButton candidateData={selectedRows} />
-
-                  <Button
-                    type="danger"
-                    onClick={() => {
-                      showConfirm(dispatch, selectedRows, 'rule/removeCandidate', () =>
-                        this.setState({ selectedRows: [] })
-                      );
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </span>
-              )}
-            </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={data}
-              columns={this.columns}
-              onSelectRow={this.handleSelectRows}
-            />
+        <Card>
+          <div className={styles.tableListOperator}>
+            <Row type="flex" justify="start" gutter={16}>
+              <Col>
+                <ShareCandidateButton
+                  isDisabled={selectedRows.length === 0}
+                  candidateData={selectedRows}
+                />
+              </Col>
+              <Col>
+                <Button
+                  disabled={selectedRows.length === 0}
+                  type="danger"
+                  onClick={() => {
+                    showConfirm(dispatch, selectedRows, 'rule/removeCandidate', () =>
+                      this.setState({ selectedRows: [] })
+                    );
+                  }}
+                >
+                  Delete
+                </Button>
+              </Col>
+              <Col>
+                <AutoComplete
+                  dataSource={dataSource}
+                  style={{ width: 200 }}
+                  // onSelect={this.onSelect}
+                  onSearch={this.handleSearch}
+                  placeholder="Search"
+                />
+              </Col>
+            </Row>
           </div>
         </Card>
+
+        <div className={styles.filterCardList}>
+          <Checkbox.Group style={{ width: '100%' }} onChange={this.onChange}>
+            <List
+              rowKey="id"
+              style={{ marginTop: 24 }}
+              grid={{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
+              loading={loading}
+              dataSource={list}
+              renderItem={item => (
+                <List.Item key={item.id}>
+                  <Card
+                    bodyStyle={{ paddingBottom: 20 }}
+                    actions={[
+                      <div>
+                        <Checkbox value={item} />
+                      </div>,
+                      <a onClick={() => this.openInterview(item)}>
+                        <p>View</p>
+                      </a>,
+                    ]}
+                  >
+                    <Card.Meta avatar={<Icon type="user" />} title={item.user_name} />
+                    <div className={styles.cardItemContent}>
+                      <CardInfo item={item} />
+                    </div>
+                  </Card>
+                </List.Item>
+              )}
+            />
+          </Checkbox.Group>
+        </div>
       </PageHeaderWrapper>
     );
   }

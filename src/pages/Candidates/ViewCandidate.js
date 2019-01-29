@@ -19,49 +19,6 @@ const columns = [
   },
 ];
 
-const mockData = [
-  {
-    _id: {
-      $oid: '5c4ca732f2b3768b9ecb4fad',
-    },
-    candidate_email: 'russell@deephire.com',
-    interview_name: 'no_name',
-    python_datetime: '2018-11-09 16:22:37',
-    user_id: 'google-oauth2|108316160914067599948',
-    user_name: 'Russell Ratcliffe',
-    responses: [
-      {
-        question_text: 'What are three words that describe youtself? And Why?',
-        response_url: 'https://vimeo.com/299965218/3f595787a6',
-      },
-      {
-        question_text: 'question 2 hahah',
-        response_url: 'https://vimeo.com/299965218/3f595787a6',
-      },
-    ],
-  },
-  {
-    _id: {
-      $oid: 'otherid',
-    },
-    candidate_email: 'emerson@deephire.com',
-    interview_name: 'I love interviews2',
-    python_datetime: '2018-11-09 16:22:37',
-    user_id: 'google-oauth2|108316160914067599948',
-    user_name: 'Emerson Clouder',
-    responses: [
-      {
-        question_text: 'What are three words that describe youtself? And Why?',
-        response_url: 'https://vimeo.com/299965218/3f595787a6',
-      },
-      {
-        question_text: 'question 2 hahah',
-        response_url: 'https://vimeo.com/299965218/3f595787a6',
-      },
-    ],
-  },
-];
-
 const GetURLParameter = sParam => {
   const sPageURL = window.location.search.substring(1);
   const sURLVariables = sPageURL.split('&');

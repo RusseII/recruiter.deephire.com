@@ -127,10 +127,11 @@ class ShareCandidateButton extends React.Component {
 
   render() {
     const { currentStep } = this.state;
+    const { isDisabled } = this.props;
     return (
       <div>
         {this.renderCorrectModal(currentStep)}{' '}
-        <Button onClick={this.handleModalVisible} type="primary">
+        <Button disabled={isDisabled} onClick={this.handleModalVisible} type="primary">
           Share Candidate
           <Icon type="share-alt" />
         </Button>
