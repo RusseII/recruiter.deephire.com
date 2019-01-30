@@ -78,9 +78,9 @@ class Candidates extends PureComponent {
 
     const searchDataSource = [];
     data.list.forEach(candidate => {
-      searchDataSource.push(candidate.user_name);
-      searchDataSource.push(candidate.candidate_email);
-      searchDataSource.push(candidate.interview_name);
+      if (candidate.user_name != null) searchDataSource.push(candidate.user_name);
+      if (candidate.candidate_email != null) searchDataSource.push(candidate.candidate_email);
+      if (candidate.interview_name != null) searchDataSource.push(candidate.interview_name);
     });
 
     const unique = [...new Set(searchDataSource)];

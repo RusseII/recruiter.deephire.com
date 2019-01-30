@@ -18,9 +18,9 @@ const friendlyDate = rawDate => {
 
 const CardInfo = ({ item }) => (
   <div className={styles.cardInfo}>
-    <p>{item.candidate_email}</p>
-    <p className={styles.body}>{item.interview_name}</p>
-    <p className={styles.body}>{friendlyDate(item.python_datetime)}</p>
+    <p>{item.candidate_email || '-'}</p>
+    <p className={styles.body}>{item.interview_name || '-'}</p>
+    <p className={styles.body}>{friendlyDate(item.python_datetime) || '-'}</p>
   </div>
 );
 
