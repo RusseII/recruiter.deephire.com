@@ -1,14 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Button, List, AutoComplete, Icon, Checkbox, Row, Col } from 'antd';
+import { Card, Button, List, AutoComplete, Checkbox, Row, Col } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import router from 'umi/router';
 import { showConfirm } from '@/utils/utils';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
+import CandidateCard from '@/components/CandidateCard';
 
 import styles from './Candidates.less';
-
-const readableTime = require('readable-timestamp');
 
 // const mockData = {
 //   list: [
@@ -304,17 +302,6 @@ class Candidates extends PureComponent {
     }
   };
 
-  openInterview = data => {
-    const { company_id: companyId, user_id: userId } = data;
-    router.push(`/candidates/view-candidate/?id=${companyId}&candidate=${userId}`);
-  };
-
-  friendlyDate = rawDate => {
-    const dateObj = new Date(rawDate);
-    const displayTime = readableTime(dateObj);
-    return displayTime;
-  };
-
   render() {
     const {
       rule: { data },
@@ -344,14 +331,6 @@ class Candidates extends PureComponent {
     const unique = [...new Set(searchDataSource)];
 
     const { dispatch, loading } = this.props;
-
-    const CardInfo = ({ item }) => (
-      <div className={styles.cardInfo}>
-        <p>{item.candidate_email}</p>
-        <p className={styles.body}>{item.interview_name}</p>
-        <p className={styles.body}>{this.friendlyDate(item.python_datetime)}</p>
-      </div>
-    );
 
     const { selectedCards } = this.state;
 
@@ -406,22 +385,7 @@ class Candidates extends PureComponent {
               dataSource={filteredData}
               renderItem={item => (
                 <List.Item key={item.id}>
-                  <Card
-                    bodyStyle={{ paddingBottom: 20 }}
-                    actions={[
-                      <div>
-                        <Checkbox value={item} />
-                      </div>,
-                      <a onClick={() => this.openInterview(item)}>
-                        <p>View</p>
-                      </a>,
-                    ]}
-                  >
-                    <Card.Meta avatar={<Icon type="user" />} title={item.user_name} />
-                    <div className={styles.cardItemContent}>
-                      <CardInfo item={item} />
-                    </div>
-                  </Card>
+                  <CandidateCard item={item} />
                 </List.Item>
               )}
             />
