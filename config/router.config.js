@@ -65,13 +65,17 @@ export default [
             name: 'Candidate Videos',
             component: './Candidates/Candidates',
           },
-
           {
             path: '/candidates/view-candidate',
             name: 'viewCandidate',
             authority: ['user'],
             component: './Candidates/ViewCandidate',
             hideInMenu: true,
+          },
+          {
+            path: '/candidates/shortlists',
+            name: 'Short Lists',
+            component: './ShortLists/ShortLists',
           },
         ],
       },

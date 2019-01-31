@@ -7,6 +7,7 @@ export default {
 
   'menu.Candidates': 'Candidates',
   'menu.Candidates.Candidate Videos': 'Candidate Videos',
+  'menu.Candidates.Short Lists': 'Short Lists',
 
   'navbar.lang': '中文',
   'component.globalHeader.search': 'Search',
