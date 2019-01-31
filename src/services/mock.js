@@ -103,15 +103,32 @@ export const candidateList = {
   ],
 };
 
-export const shortList = {
-  _id: {
-    $oid: '5c51a3867cebba00081dc71c',
+export const shortLists = [
+  {
+    _id: {
+      $oid: '5c51a3867cebba00081dc71c',
+    },
+    created_by: 'russell@deephire.com',
+    name: 'Hiring Manager',
+    email: 'hiringmanager@goog.com',
+    clicks: ['2019-01-29 22:58:34'],
+    link: 'https://google.com',
+    hideInfo: false,
+    interviews: candidateList.list,
   },
-  created_by: 'russell@deephire.com',
-  email: 'hiringmanager@goog.com',
-  hideInfo: false,
-  interviews: candidateList.list,
-};
+  {
+    _id: {
+      $oid: '5c51a3867cebba00081dc71c',
+    },
+    created_by: 'russell@deephire.com',
+    name: 'Aother GOober',
+    email: 'goober@goog.com',
+    clicks: ['2019-01-29 22:58:34', '2019-01-29 22:58:34', 1548954928550],
+    link: 'https://google.com',
+    hideInfo: false,
+    interviews: candidateList.list,
+  },
+];
 
 export const shortListsWithAnalytics = {
   // what do you think makes sense for the analytics to be stored as?
