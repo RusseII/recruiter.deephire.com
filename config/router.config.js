@@ -72,10 +72,24 @@ export default [
             component: './Candidates/ViewCandidate',
             hideInMenu: true,
           },
+        ],
+      },
+      {
+        path: '/shortlists',
+        icon: 'ordered-list',
+        name: 'Short Lists',
+        routes: [
           {
-            path: '/candidates/shortlists',
+            path: '/shortlists/shortlists',
             name: 'Short Lists',
             component: './ShortLists/ShortLists',
+          },
+          {
+            path: '/shortlists/shortlistanalytics',
+            name: 'shortListAnalytics',
+            authority: ['user'],
+            component: './ShortLists/ShortListAnalytics',
+            hideInMenu: true,
           },
         ],
       },

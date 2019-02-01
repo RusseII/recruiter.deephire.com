@@ -8,7 +8,7 @@ import readableTime from 'readable-timestamp';
 import styles from './ShortLists.less';
 import { showConfirm } from '@/utils/utils';
 
-import { getShortlists } from '@/services/api';
+import { getShortLists } from '@/services/api';
 
 const columns = [
   {
@@ -78,7 +78,7 @@ class ShortLists extends PureComponent {
   };
 
   componentDidMount() {
-    getShortlists().then(r => this.setState({ data: r }));
+    getShortLists().then(r => this.setState({ data: r }));
   }
 
   handleSelectRows = rows => {

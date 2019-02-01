@@ -28,7 +28,7 @@ export async function createInterview(params) {
   return request(`${hostedURL}/v1.0/create_interview`, { method: 'POST', body: data });
 }
 
-export async function getShortlists() {
+export async function getShortLists() {
   // return request(`${newApi}/v1/shortlists/`, {
   //   method: 'GET',
   //   headers: setHeaders(),
@@ -37,7 +37,7 @@ export async function getShortlists() {
 }
 
 // gets data for a specific shortlist, useful for analytics page
-export async function getShortlistData() {
+export async function getShortListData() {
   // return request(`${newApi}/v1/shortlists/id`, {
   //   method: 'GET',
   //   headers: setHeaders(),

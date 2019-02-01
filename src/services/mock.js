@@ -132,7 +132,7 @@ export const shortLists = [
 
 export const shortListsWithAnalytics = {
   // what do you think makes sense for the analytics to be stored as?
-  clicks: ['timestamp1, timestamp2, timestamp3'],
+  clicks: ['2019-01-29 22:58:34', '2019-01-29 22:58:34', 1548954928550],
 
   _id: {
     $oid: '5c51a3867cebba00081dc71c',
@@ -140,5 +140,5 @@ export const shortListsWithAnalytics = {
   created_by: 'russell@deephire.com',
   email: 'hiringmanager@goog.com',
   hideInfo: false,
-  interviews: candidateList.list,
+  list: candidateList.list,
 };
