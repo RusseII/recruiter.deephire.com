@@ -1,4 +1,3 @@
-English 
 
 <h1 align="center">DeepHire</h1>
 
