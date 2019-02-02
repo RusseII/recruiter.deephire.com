@@ -1,6 +1,6 @@
 import React, { Component, Suspense } from 'react';
 import { connect } from 'dva';
-import { Row, Col, List, Checkbox, Card, Statistic, Rate, Divider } from 'antd';
+import { Row, Col, List, Checkbox, Card } from 'antd';
 
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -8,6 +8,8 @@ import { getTimeDistance } from '@/utils/utils';
 import { getShortListData } from '@/services/api';
 
 import styles from './ShortListAnalytics.less';
+import ShortListAnalyticsCard from '../../components/ShortListAnalyticsCard';
+import ShortListStatsCard from '../../components/ShortListStatsCard';
 
 const ProportionSales = React.lazy(() => import('./ProportionSales'));
 
@@ -51,7 +53,10 @@ class ShortListAnalytics extends Component {
       return null;
     }
 
-    const filteredData = analyticsData.list;
+    const views = analyticsData.clicks.length;
+
+    const candidateList = analyticsData.list;
+
     const { loading } = this.props;
     const { candidateStatus } = this.state;
 
@@ -77,11 +82,11 @@ class ShortListAnalytics extends Component {
 
     return (
       <GridContent>
-        <PageHeaderWrapper title={`Short List - sent to ${analyticsData.email}`}>
+        <PageHeaderWrapper title={`Short List - ${analyticsData.email}`}>
           <Card className={styles.shortListStatsCard}>
             <div className={styles.shortListTitle}>Short List Statistics</div>
             <Row gutter={16}>
-              <Col span={12}>
+              <Col xl={12} lg={24} md={24} sm={24} xs={24}>
                 <Suspense fallback={null}>
                   <ProportionSales
                     title="Candidates status"
@@ -92,35 +97,8 @@ class ShortListAnalytics extends Component {
                   />
                 </Suspense>
               </Col>
-              <Col span={12}>
-                <Card className={styles.shortListStatsCardStats}>
-                  <Row>
-                    <Col span={8}>
-                      <div className={styles.shortListStats}>Views</div>
-                    </Col>
-                    <Col span={4}>
-                      <div className={styles.shortListStatsValue}>20</div>
-                    </Col>
-                  </Row>
-                  <Divider />
-                  <Row>
-                    <Col span={8}>
-                      <div className={styles.shortListStats}> Time Spent</div>
-                    </Col>
-                    <Col>
-                      <div className={styles.shortListStatsValue}>20 minutes</div>
-                    </Col>
-                  </Row>
-                  <Divider />
-                  <Row>
-                    <Col span={8}>
-                      <div className={styles.shortListStats}>Passed</div>
-                    </Col>
-                    <Col>
-                      <div className={styles.shortListStatsValue}>3/5 Candidates</div>
-                    </Col>
-                  </Row>
-                </Card>
+              <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+                <ShortListStatsCard views={views} />
               </Col>
             </Row>
           </Card>
@@ -135,40 +113,10 @@ class ShortListAnalytics extends Component {
                 style={{ marginTop: 24 }}
                 grid={{ gutter: 24, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }}
                 loading={loading}
-                dataSource={filteredData}
+                dataSource={candidateList}
                 renderItem={item => (
                   <List.Item key={item.id}>
-                    <Card
-                      id={item.id}
-                      className={styles.candidateAnalyticsCard}
-                      subTitle={item.candidate_email}
-                      bordered={false}
-                      style={{ backgroundColor: '#fff' }}
-                    >
-                      <div className={styles.title}>{item.user_name}</div>
-                      <div className={styles.subtitle}>{item.candidate_email}</div>
-                      <Row gutter={16}>
-                        <Col span={6}>
-                          <Statistic title="Views" value={5} />
-                        </Col>
-                        <Col span={7}>
-                          <Statistic title="Time Spent" value="10 min" />
-                        </Col>
-                        <Col span={11}>
-                          <div className={styles.statHeading}>Rating</div>
-                          <Rate disabled defaultValue={2} />
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col san={24}>
-                          <div className={styles.candidateFeedback}>
-                            {' '}
-                            I like this guy. He shows a lot of charisma and character and hutzpa.
-                            Highly reccomended.{' '}
-                          </div>
-                        </Col>
-                      </Row>
-                    </Card>
+                    <ShortListAnalyticsCard item={item} />
                   </List.Item>
                 )}
               />
