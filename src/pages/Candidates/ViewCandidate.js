@@ -9,41 +9,23 @@ import ShareCandidateButton from '@/components/ShareCandidateButton';
 import { getCandidateProfile } from '@/services/api';
 import { connect } from 'dva';
 import router from 'umi/router';
+import qs from 'qs';
 import styles from './ViewCandidate.less';
 
 const columns = [
   {
     title: 'Questions',
-    dataIndex: 'question_text',
-    key: 'question_text',
+    dataIndex: 'question',
+    key: 'question',
   },
 ];
-
-const GetURLParameter = sParam => {
-  const sPageURL = window.location.search.substring(1);
-  const sURLVariables = sPageURL.split('&');
-  for (let i = 0; i < sURLVariables.length; i += 1) {
-    const sParameterName = sURLVariables[i].split('=');
-    if (sParameterName[0] === sParam) {
-      return sParameterName[1];
-    }
-  }
-  return null;
-};
-
-const CleanVariable = res => {
-  if (res === undefined) return null;
-  const no20 = res.replace(/%20/g, ' ');
-  const response = no20.replace(/%40/g, '@');
-  return response;
-};
 
 @connect(({ rule, user }) => ({
   currentUser: user.currentUser,
   rule,
 }))
 @Form.create()
-class App extends Component {
+class ViewCandidate extends Component {
   constructor(props) {
     super(props);
 
@@ -51,22 +33,24 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const id = CleanVariable(GetURLParameter('id'));
-    const userToken = CleanVariable(GetURLParameter('candidate'));
+    const { location } = this.props;
+    const id = qs.parse(location.search)['?id'];
 
-    const url = 'https://api.deephire.com/v1.0/get_candidate_videos/';
+    const url = 'https://a.deephire.com/v1/videos/';
 
-    fetch(`${url + id}/${userToken}`)
+    fetch(`${url + id}`)
       .then(results => results.json())
       .then(
         data => {
+          const [first] = data;
+
           this.setState({
-            candidateData: data,
+            candidateData: first,
             activeQuestion: 0,
-            videoUrl: data[0].response_url,
-            currentQuestionText: data[0].question_text,
+            videoUrl: first.responses[0].response,
+            currentQuestionText: first.responses[0].question,
           });
-          return data[0];
+          return data;
         },
         () => {
           this.setState({
@@ -75,7 +59,7 @@ class App extends Component {
         }
       )
       .then(data => {
-        const { user_id: userId } = data;
+        const { userId } = data;
 
         getCandidateProfile(userId).then(candidateProfileData => {
           if (candidateProfileData) {
@@ -95,8 +79,8 @@ class App extends Component {
     const { activeQuestion, candidateData } = this.state;
 
     if (activeQuestion + 1 < candidateData.length) {
-      const videoUrl = candidateData[activeQuestion + 1].response_url;
-      const questionText = candidateData[activeQuestion + 1].question_text;
+      const videoUrl = candidateData.responses[activeQuestion + 1].response;
+      const questionText = candidateData.responses[activeQuestion + 1].question;
       this.setVideoData(videoUrl, questionText);
 
       this.setState({ activeQuestion: activeQuestion + 1 });
@@ -110,8 +94,8 @@ class App extends Component {
   previousQuestion = () => {
     const { activeQuestion, candidateData } = this.state;
     if (activeQuestion > 0) {
-      const videoUrl = candidateData[activeQuestion - 1].response_url;
-      const questionText = candidateData[activeQuestion - 1].question_text;
+      const videoUrl = candidateData.responses[activeQuestion - 1].response;
+      const questionText = candidateData.responses[activeQuestion - 1].question;
       this.setVideoData(videoUrl, questionText);
       this.setState({ activeQuestion: activeQuestion - 1 });
     }
@@ -136,12 +120,7 @@ class App extends Component {
       return <p>There is no data for this user, please message our support</p>;
     }
 
-    const {
-      candidate_email: candidateEmail,
-      interview_name: interviewName,
-      user_name: userName,
-    } = candidateData[0];
-    // console.log(ReactPlayer.canPlay(response_url));
+    const { candidateEmail, interviewName, userName } = candidateData;
 
     return (
       <div>
@@ -168,8 +147,8 @@ class App extends Component {
                 showHeader={false}
                 onRow={(record, index) => ({
                   onClick: () => {
-                    const url = candidateData[index].response_url;
-                    const text = candidateData[index].question_text;
+                    const url = candidateData.responses[index].response;
+                    const text = candidateData.responses[index].question;
                     this.setVideoData(url, text);
                     this.setState({ activeQuestion: index });
                   },
@@ -177,7 +156,7 @@ class App extends Component {
                 rowClassName={(record, index) => (index === activeQuestion ? styles.selected : '')}
                 pagination={false}
                 bordered
-                dataSource={candidateData}
+                dataSource={candidateData.responses}
                 columns={columns}
               />
             </Card>
@@ -210,4 +189,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default ViewCandidate;
