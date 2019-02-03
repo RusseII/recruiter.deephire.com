@@ -12,9 +12,10 @@ import { showConfirm } from '@/utils/utils';
 import { getShortLists } from '@/services/api';
 
 const openShortListAnalytics = data => {
-  let { id } = data;
-  id = 'dumb';
-  router.push(`/shortlists/shortlistanalytics/?id=${id}`);
+  const {
+    _id: { $oid },
+  } = data;
+  router.push(`/shortlists/shortlistanalytics/?id=${$oid}`);
 };
 
 const columns = [
