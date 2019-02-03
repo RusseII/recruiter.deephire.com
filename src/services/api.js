@@ -3,10 +3,10 @@ import request from '@/utils/request';
 import { shortLists, shortListsWithAnalytics } from './mock';
 
 const hostedURL = 'https://api.deephire.com';
-const newApi = 'https://a.deephire.com';
+// const newApi = 'https://a.deephire.com';
 
 // const hostedURL = 'http://localhost:3001';
-// const newApi = 'http://localhost:3000';
+const newApi = 'http://localhost:3000';
 
 const setHeaders = () => ({
   authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -38,7 +38,7 @@ export async function getShortLists() {
 
 // gets data for a specific shortlist, useful for analytics page
 export async function getShortListData() {
-  // return request(`${newApi}/v1/shortlists/id`, {
+  // return request(`${newApi}/v1/shortlists/${id}`, {
   //   method: 'GET',
   //   headers: setHeaders(),
   // });

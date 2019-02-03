@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Tabs, Skeleton, Button, Row, Col } from 'antd';
+import { Tabs, Skeleton, Row, Col, Tooltip } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import classNames from 'classnames';
@@ -63,13 +63,12 @@ export default class PageHeader extends PureComponent {
                       </Col>
                       <Col>
                         <h1 className={styles.title}>
-                          <a>{shortUrl}</a>
+                          <Tooltip title="Click to copy">
+                            <CopyToClipboard text={shortUrl}>
+                              <a>{shortUrl}</a>
+                            </CopyToClipboard>
+                          </Tooltip>
                         </h1>
-                      </Col>
-                      <Col style={{ 'padding-top': 5 }}>
-                        <CopyToClipboard text={shortUrl}>
-                          <Button size="small" icon="copy" />
-                        </CopyToClipboard>
                       </Col>
                     </Row>
                   )}
