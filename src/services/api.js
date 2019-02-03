@@ -1,6 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-import { shortLists, shortListsWithAnalytics } from './mock';
+import { shortListsWithAnalytics } from './mock';
 
 const hostedURL = 'https://api.deephire.com';
 const newApi = 'https://a.deephire.com';
@@ -29,11 +29,11 @@ export async function createInterview(params) {
 }
 
 export async function getShortLists() {
-  // return request(`${newApi}/v1/shortlists/`, {
-  //   method: 'GET',
-  //   headers: setHeaders(),
-  // });
-  return new Promise(resolve => resolve({ list: shortLists }));
+  return request(`${newApi}/v1/shortlists`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  // return new Promise(resolve => resolve({ list: shortLists }));
 }
 
 // gets data for a specific shortlist, useful for analytics page

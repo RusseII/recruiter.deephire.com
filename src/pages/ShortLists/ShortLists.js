@@ -29,8 +29,9 @@ const columns = [
       const { clicks } = data;
 
       const clickCount = clicks ? clicks.length : 0;
-      const dateObj = new Date(clicks[clickCount - 1]);
-      const displayTime = readableTime(dateObj);
+
+      const dateObj = clicks ? new Date(clicks[clickCount - 1]) : '-';
+      const displayTime = clicks ? readableTime(dateObj) : '-';
 
       return (
         <Fragment>
@@ -56,11 +57,11 @@ const columns = [
   {
     title: 'Link',
     render: data => {
-      const { link } = data;
+      const { shortUrl } = data;
 
       return (
         <Tooltip title="Click to copy">
-          <a>{link || '-'}</a>
+          <a>{shortUrl || '-'}</a>
         </Tooltip>
       );
     },
@@ -115,13 +116,13 @@ class ShortLists extends PureComponent {
 
     let filteredList = [];
     if (searchTerm == null) {
-      filteredList = data.list;
+      filteredList = data;
     } else {
-      filteredList = data.list.filter(shortList => shortList.email === searchTerm);
+      filteredList = data.filter(shortList => shortList.email === searchTerm);
     }
 
     const searchDataSource = [];
-    data.list.forEach(shortList => {
+    data.forEach(shortList => {
       if (shortList.email != null) searchDataSource.push(shortList.email);
     });
     const unique = [...new Set(searchDataSource)];
