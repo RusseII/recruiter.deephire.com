@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import router from 'umi/router';
 import { Card, Button, Tooltip, Row, Col, AutoComplete } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -9,6 +10,12 @@ import styles from './ShortLists.less';
 import { showConfirm } from '@/utils/utils';
 
 import { getShortLists } from '@/services/api';
+
+const openShortListAnalytics = data => {
+  let { id } = data;
+  id = 'dumb';
+  router.push(`/shortlists/shortlistanalytics/?id=${id}`);
+};
 
 const columns = [
   {
@@ -64,6 +71,10 @@ const columns = [
         </Tooltip>
       );
     },
+  },
+  {
+    title: 'Analytics',
+    render: data => <a onClick={() => openShortListAnalytics(data)}>View</a>,
   },
 ];
 
