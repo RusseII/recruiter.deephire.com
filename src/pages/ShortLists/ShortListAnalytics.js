@@ -1,6 +1,7 @@
 import React, { Component, Suspense } from 'react';
 import { connect } from 'dva';
 import { Row, Col, List, Checkbox } from 'antd';
+import qs from 'qs';
 
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -25,7 +26,10 @@ class ShortListAnalytics extends Component {
   };
 
   componentDidMount() {
-    getShortListData().then(r => this.setState({ analyticsData: r }));
+    const { location } = this.props;
+    const id = qs.parse(location.search)['?id'];
+
+    getShortListData(id).then(r => this.setState({ analyticsData: r }));
   }
 
   handleChangeCandidateStatusPie = e => {
@@ -60,7 +64,6 @@ class ShortListAnalytics extends Component {
     if (!analyticsData) {
       return null;
     }
-
     const { loading } = this.props;
 
     let lastViewed = 'Not Seen';

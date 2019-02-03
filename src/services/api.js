@@ -38,7 +38,7 @@ export async function getShortLists() {
 
 // gets data for a specific shortlist, useful for analytics page
 export async function getShortListData() {
-  // return request(`${newApi}/v1/shortlists/id`, {
+  // return request(`${newApi}/v1/shortlists/${id}`, {
   //   method: 'GET',
   //   headers: setHeaders(),
   // });
