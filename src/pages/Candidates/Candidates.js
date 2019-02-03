@@ -70,17 +70,17 @@ class Candidates extends PureComponent {
     } else {
       filteredData = data.list.filter(
         candidate =>
-          candidate.candidate_email === searchTerm ||
-          candidate.interview_name === searchTerm ||
-          candidate.user_name === searchTerm
+          candidate.candidateEmail === searchTerm ||
+          candidate.interviewName === searchTerm ||
+          candidate.userName === searchTerm
       );
     }
 
     const searchDataSource = [];
     data.list.forEach(candidate => {
-      if (candidate.user_name != null) searchDataSource.push(candidate.user_name);
-      if (candidate.candidate_email != null) searchDataSource.push(candidate.candidate_email);
-      if (candidate.interview_name != null) searchDataSource.push(candidate.interview_name);
+      if (candidate.userName != null) searchDataSource.push(candidate.userName);
+      if (candidate.candidateEmail != null) searchDataSource.push(candidate.candidateEmail);
+      if (candidate.interviewName != null) searchDataSource.push(candidate.interviewName);
     });
 
     const unique = [...new Set(searchDataSource)];

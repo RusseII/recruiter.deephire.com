@@ -1,12 +1,12 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-import { shortLists, shortListsWithAnalytics } from './mock';
+import { shortListsWithAnalytics } from './mock';
 
 const hostedURL = 'https://api.deephire.com';
-const newApi = 'https://a.deephire.com';
+// const newApi = 'https://a.deephire.com';
 
 // const hostedURL = 'http://localhost:3001';
-// const newApi = 'http://localhost:3000';
+const newApi = 'http://localhost:3000';
 
 const setHeaders = () => ({
   authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -28,17 +28,17 @@ export async function createInterview(params) {
   return request(`${hostedURL}/v1.0/create_interview`, { method: 'POST', body: data });
 }
 
-export async function getShortlists() {
-  // return request(`${newApi}/v1/shortlists/`, {
-  //   method: 'GET',
-  //   headers: setHeaders(),
-  // });
-  return new Promise(resolve => resolve({ list: shortLists }));
+export async function getShortLists() {
+  return request(`${newApi}/v1/shortlists`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  // return new Promise(resolve => resolve({ list: shortLists }));
 }
 
 // gets data for a specific shortlist, useful for analytics page
-export async function getShortlistData() {
-  // return request(`${newApi}/v1/shortlists/id`, {
+export async function getShortListData() {
+  // return request(`${newApi}/v1/shortlists/${id}`, {
   //   method: 'GET',
   //   headers: setHeaders(),
   // });
@@ -73,18 +73,23 @@ export async function updateCandidateProfile(data) {
   });
 }
 
-export async function queryRule2(params) {
+export async function getVideos(params) {
   if (params == null) {
     // params = 'test@gmail.com';
     return null;
   }
-  return request(`${hostedURL}/v1.0/get_candidates/${params}`);
+  // return request(`${hostedURL}/v1.0/get_candidates/${params}`);
+  return request(`${newApi}/v1/videos`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
 }
 
 export async function shareShortLink(data) {
-  const x = request(`${hostedURL}/v1.0/create_shortlist`, {
+  const x = request(`${newApi}/v1/shortlists`, {
     method: 'POST',
     body: data,
+    headers: setHeaders(),
   });
   return x;
 }
@@ -115,19 +120,22 @@ export async function removeInterview(params) {
 }
 
 export async function removeCandidate(params) {
-  const { email, selectedRows } = params;
+  const { selectedRows } = params;
 
   await Promise.all(
     selectedRows.map(async value => {
-      const { user_id: userId, company_id: companyId } = value;
-      const res = await request(`${newApi}/v1/candidates/${userId}/${companyId}`, {
+      const { _id } = value;
+      const res = await request(`${newApi}/v1/videos/${_id}`, {
         method: 'DELETE',
         headers: setHeaders(),
       });
       return res;
     })
   );
-  return request(`${hostedURL}/v1.0/get_candidates/${email}`);
+  return request(`${newApi}/v1/videos`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
 }
 
 export async function updateRule(params = {}) {

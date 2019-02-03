@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import router from 'umi/router';
 import { Card, Button, Tooltip, Row, Col, AutoComplete } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -8,7 +9,14 @@ import readableTime from 'readable-timestamp';
 import styles from './ShortLists.less';
 import { showConfirm } from '@/utils/utils';
 
-import { getShortlists } from '@/services/api';
+import { getShortLists } from '@/services/api';
+
+const openShortListAnalytics = data => {
+  const {
+    _id: { $oid },
+  } = data;
+  router.push(`/shortlists/shortlistanalytics/?id=${$oid}`);
+};
 
 const columns = [
   {
@@ -29,8 +37,9 @@ const columns = [
       const { clicks } = data;
 
       const clickCount = clicks ? clicks.length : 0;
-      const dateObj = new Date(clicks[clickCount - 1]);
-      const displayTime = readableTime(dateObj);
+
+      const dateObj = clicks ? new Date(clicks[clickCount - 1]) : '-';
+      const displayTime = clicks ? readableTime(dateObj) : '-';
 
       return (
         <Fragment>
@@ -56,14 +65,18 @@ const columns = [
   {
     title: 'Link',
     render: data => {
-      const { link } = data;
+      const { shortUrl } = data;
 
       return (
         <Tooltip title="Click to copy">
-          <a>{link || '-'}</a>
+          <a>{shortUrl || '-'}</a>
         </Tooltip>
       );
     },
+  },
+  {
+    title: 'Analytics',
+    render: data => <a onClick={() => openShortListAnalytics(data)}>View</a>,
   },
 ];
 
@@ -78,7 +91,7 @@ class ShortLists extends PureComponent {
   };
 
   componentDidMount() {
-    getShortlists().then(r => this.setState({ data: r }));
+    getShortLists().then(r => this.setState({ data: r }));
   }
 
   handleSelectRows = rows => {
@@ -115,13 +128,13 @@ class ShortLists extends PureComponent {
 
     let filteredList = [];
     if (searchTerm == null) {
-      filteredList = data.list;
+      filteredList = data;
     } else {
-      filteredList = data.list.filter(shortList => shortList.email === searchTerm);
+      filteredList = data.filter(shortList => shortList.email === searchTerm);
     }
 
     const searchDataSource = [];
-    data.list.forEach(shortList => {
+    data.forEach(shortList => {
       if (shortList.email != null) searchDataSource.push(shortList.email);
     });
     const unique = [...new Set(searchDataSource)];
