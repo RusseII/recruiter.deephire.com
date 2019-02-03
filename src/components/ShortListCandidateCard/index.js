@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, Icon, Row, Col, Statistic, Rate } from 'antd';
+import { Card, Icon, Row, Col, Statistic, Rate, Tooltip } from 'antd';
 import styles from './index.less';
 
 const ShortListAnalyticsCard = ({ item }) => (
@@ -17,19 +17,33 @@ const ShortListAnalyticsCard = ({ item }) => (
       </Col>
       <Col>
         {item.interview === 'yes' && (
-          <Icon type="check-circle" style={{ fontSize: '24px', color: '#08c', marginTop: 5 }} />
+          <Tooltip title="Client wants to interview this candidate">
+            <Icon type="check-circle" style={{ fontSize: '24px', color: '#08c', marginTop: 5 }} />
+          </Tooltip>
         )}
         {item.interview === 'maybe' && (
-          <Icon
-            type="question-circle"
-            style={{ fontSize: '24px', color: '#e8e247', marginTop: 5 }}
-          />
+          <Tooltip title="Client unsure about candidate">
+            <Icon
+              type="question-circle"
+              style={{ fontSize: '24px', color: '#f2ea09', marginTop: 5 }}
+            />
+          </Tooltip>
         )}
         {item.interview === 'no' && (
-          <Icon type="close-circle" style={{ fontSize: '24px', color: '#d33d3d', marginTop: 5 }} />
+          <Tooltip title="Client does not want to interview">
+            <Icon
+              type="close-circle"
+              style={{ fontSize: '24px', color: '#d33d3d', marginTop: 5 }}
+            />
+          </Tooltip>
         )}
         {!item.interview && (
-          <Icon type="clock-circle" style={{ fontSize: '24px', color: '#b2b2b2', marginTop: 5 }} />
+          <Tooltip title="Client has not yet viewed this candidate">
+            <Icon
+              type="clock-circle"
+              style={{ fontSize: '24px', color: '#b2b2b2', marginTop: 5 }}
+            />
+          </Tooltip>
         )}
       </Col>
     </Row>
@@ -39,9 +53,6 @@ const ShortListAnalyticsCard = ({ item }) => (
     <Row type="flex" justify="start" gutter={24}>
       <Col>
         <Statistic title="Views" value={item.clicks.length} />
-      </Col>
-      <Col>
-        <Statistic title="Time Spent" value="10 min" />
       </Col>
       <Col>
         <div className={styles.statHeading}>Rating</div>

@@ -16,9 +16,9 @@ const ProportionSales = memo(
         <div className={styles.salesCardExtra}>
           <div className={styles.salesTypeRadio}>
             <Radio.Group value={candidateStatus} onChange={handleChangeSalesType}>
-              <Radio.Button value="all">All</Radio.Button>
-              <Radio.Button value="complete">Completed</Radio.Button>
-              <Radio.Button value="incomplete">Incomplete</Radio.Button>
+              <Radio.Button value="overview">Overview</Radio.Button>
+              <Radio.Button value="reviewed">Reviewed</Radio.Button>
+              <Radio.Button value="notReviewed">Not Reviewed</Radio.Button>
             </Radio.Group>
           </div>
         </div>
@@ -26,7 +26,7 @@ const ProportionSales = memo(
       // style={{ marginTop: 24 }}
     >
       <Pie
-        colors={['green', 'red', 'gray']}
+        colors={['#08c', 'gray', 'red']}
         hasLegend
         subTitle="Candidates"
         total={() => <Yuan>{salesPieData.reduce((pre, now) => now.y + pre, 0)}</Yuan>}

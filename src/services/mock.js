@@ -152,7 +152,7 @@ export const shortLists = [
 export const shortListsWithAnalytics = {
   // what do you think makes sense for the analytics to be stored as?
   clicks: ['2019-01-29 22:58:34', '2019-01-29 22:58:34', 1548954928550],
-
+  shortUrl: 'https://google.com',
   _id: {
     $oid: '5c51a3867cebba00081dc71c',
   },

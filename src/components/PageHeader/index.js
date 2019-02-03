@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import { Tabs, Skeleton } from 'antd';
+import { Tabs, Skeleton, Button, Row, Col } from 'antd';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 import classNames from 'classnames';
 import styles from './index.less';
 import BreadcrumbView from './breadcrumb';
@@ -16,6 +18,7 @@ export default class PageHeader extends PureComponent {
   render() {
     const {
       title,
+      shortUrl,
       logo,
       action,
       content,
@@ -53,7 +56,23 @@ export default class PageHeader extends PureComponent {
               {logo && <div className={styles.logo}>{logo}</div>}
               <div className={styles.main}>
                 <div className={styles.row}>
-                  {title && <h1 className={styles.title}>{title}</h1>}
+                  {title && (
+                    <Row type="flex" justify="start" gutter={24}>
+                      <Col style={{ 'flex-grow': 1 }}>
+                        <h1 className={styles.title}>{title}</h1>
+                      </Col>
+                      <Col>
+                        <h1 className={styles.title}>
+                          <a>{shortUrl}</a>
+                        </h1>
+                      </Col>
+                      <Col style={{ 'padding-top': 5 }}>
+                        <CopyToClipboard text={shortUrl}>
+                          <Button size="small" icon="copy" />
+                        </CopyToClipboard>
+                      </Col>
+                    </Row>
+                  )}
                   {action && <div className={styles.action}>{action}</div>}
                 </div>
                 <div className={styles.row}>

@@ -10,6 +10,7 @@ const openInterview = item => {
   const { company_id: companyId, user_id: userId } = item;
   router.push(`/candidates/view-candidate/?id=${companyId}&candidate=${userId}`);
 };
+
 const friendlyDate = rawDate => {
   const dateObj = new Date(rawDate);
   const displayTime = readableTime(dateObj);
