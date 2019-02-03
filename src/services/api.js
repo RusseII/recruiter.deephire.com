@@ -73,18 +73,23 @@ export async function updateCandidateProfile(data) {
   });
 }
 
-export async function queryRule2(params) {
+export async function getVideos(params) {
   if (params == null) {
     // params = 'test@gmail.com';
     return null;
   }
-  return request(`${hostedURL}/v1.0/get_candidates/${params}`);
+  // return request(`${hostedURL}/v1.0/get_candidates/${params}`);
+  return request(`${newApi}/v1/videos`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
 }
 
 export async function shareShortLink(data) {
-  const x = request(`${hostedURL}/v1.0/create_shortlist`, {
+  const x = request(`${newApi}/v1/shortlists`, {
     method: 'POST',
     body: data,
+    headers: setHeaders(),
   });
   return x;
 }
@@ -115,19 +120,22 @@ export async function removeInterview(params) {
 }
 
 export async function removeCandidate(params) {
-  const { email, selectedRows } = params;
+  const { selectedRows } = params;
 
   await Promise.all(
     selectedRows.map(async value => {
-      const { user_id: userId, company_id: companyId } = value;
-      const res = await request(`${newApi}/v1/candidates/${userId}/${companyId}`, {
+      const { _id } = value;
+      const res = await request(`${newApi}/v1/videos/${_id}`, {
         method: 'DELETE',
         headers: setHeaders(),
       });
       return res;
     })
   );
-  return request(`${hostedURL}/v1.0/get_candidates/${email}`);
+  return request(`${newApi}/v1/videos`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
 }
 
 export async function updateRule(params = {}) {

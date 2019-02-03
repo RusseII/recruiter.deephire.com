@@ -7,8 +7,8 @@ import styles from './index.less';
 const readableTime = require('readable-timestamp');
 
 const openInterview = item => {
-  const { company_id: companyId, user_id: userId } = item;
-  router.push(`/candidates/view-candidate/?id=${companyId}&candidate=${userId}`);
+  const { interviewId, userId } = item;
+  router.push(`/candidates/view-candidate/?id=${interviewId}&candidate=${userId}`);
 };
 
 const friendlyDate = rawDate => {
@@ -19,9 +19,9 @@ const friendlyDate = rawDate => {
 
 const CardInfo = ({ item }) => (
   <div className={styles.cardInfo}>
-    <p>{item.candidate_email || '-'}</p>
-    <p className={styles.body}>{item.interview_name || '-'}</p>
-    <p className={styles.body}>{friendlyDate(item.python_datetime) || '-'}</p>
+    <p>{item.candidateEmail || '-'}</p>
+    <p className={styles.body}>{item.interviewName || '-'}</p>
+    <p className={styles.body}>{friendlyDate(item.timestamp) || '-'}</p>
   </div>
 );
 
@@ -30,7 +30,7 @@ const CandidateCard = ({ item }) => (
     bodyStyle={{ paddingBottom: 20 }}
     actions={[<Checkbox value={item} />, <a onClick={() => openInterview(item)}>View</a>]}
   >
-    <Card.Meta avatar={<Icon type="user" />} title={item.user_name} />
+    <Card.Meta avatar={<Icon type="user" />} title={item.userName} />
     <div className={styles.cardItemContent}>
       <CardInfo item={item} />
     </div>

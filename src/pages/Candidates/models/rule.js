@@ -1,6 +1,6 @@
 import {
   getInterviews,
-  queryRule2,
+  getVideos,
   removeRule,
   addRule,
   updateRule,
@@ -21,7 +21,7 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      let response = yield call(queryRule2, payload);
+      let response = yield call(getVideos, payload);
       response.forEach((resp, index) => {
         response[index].key = index;
       });
@@ -37,7 +37,7 @@ export default {
 
       yield put({
         type: 'shareLink',
-        payload: response,
+        payload: response.shortUrl,
       });
       if (callback) callback();
     },
