@@ -7,8 +7,8 @@ import styles from './index.less';
 const readableTime = require('readable-timestamp');
 
 const openInterview = item => {
-  const { interviewId, userId } = item;
-  router.push(`/candidates/view-candidate/?id=${interviewId}&candidate=${userId}`);
+  const { _id } = item;
+  router.push(`/candidates/view-candidate/?id=${_id}`);
 };
 
 const friendlyDate = rawDate => {
