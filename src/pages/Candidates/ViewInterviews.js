@@ -1,17 +1,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Card, Form, Button } from 'antd';
+import { Tooltip, message, Card, Form, Button } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import readableTime from 'readable-timestamp';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styles from './Candidates.less';
 import { showConfirm } from '@/utils/utils';
-
-const openInterview = data => {
-  const { short_url: shortUrl } = data;
-  window.open(shortUrl, '_blank');
-};
 
 const columns = [
   {
@@ -52,7 +48,11 @@ const columns = [
     title: 'Interview Link',
     render: (text, data) => (
       <Fragment>
-        <a onClick={() => openInterview(data)}>{data.short_url}</a>
+        <Tooltip title="Click to copy">
+          <CopyToClipboard text={data.short_url} onCopy={() => message.success('Link Copied')}>
+            <a>{data.short_url || '-'}</a>
+          </CopyToClipboard>
+        </Tooltip>
       </Fragment>
     ),
   },

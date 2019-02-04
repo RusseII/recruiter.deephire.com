@@ -1,11 +1,12 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
-import { Card, Button, Tooltip, Row, Col, AutoComplete } from 'antd';
+import { message, Card, Button, Tooltip, Row, Col, AutoComplete } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import readableTime from 'readable-timestamp';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styles from './ShortLists.less';
 import { showConfirm } from '@/utils/utils';
 
@@ -69,7 +70,9 @@ const columns = [
 
       return (
         <Tooltip title="Click to copy">
-          <a>{shortUrl || '-'}</a>
+          <CopyToClipboard text={shortUrl} onCopy={() => message.success('Link Copied')}>
+            <a>{shortUrl || '-'}</a>
+          </CopyToClipboard>
         </Tooltip>
       );
     },
