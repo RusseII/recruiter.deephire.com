@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Button, Row, Col } from 'antd';
+import { Tooltip, message, Button, Row, Col } from 'antd';
 import router from 'umi/router';
 import Result from '@/components/Result';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -23,10 +23,20 @@ class Step3 extends React.PureComponent {
             Interview Link：
           </Col>
           <Col xs={24} sm={16}>
-            {`${data.interviewLink}  `}
-            <CopyToClipboard text={data.interviewLink}>
-              <Button size="small" icon="copy" />
-            </CopyToClipboard>
+            <Tooltip title="Click to copy">
+              <CopyToClipboard
+                text={data.interviewLink}
+                onCopy={() => message.success('Link Copied')}
+              >
+                <a>{`${data.interviewLink}  `}</a>
+              </CopyToClipboard>
+              <CopyToClipboard
+                text={data.interviewLink}
+                onCopy={() => message.success('Link Copied')}
+              >
+                <Button size="small" icon="copy" />
+              </CopyToClipboard>
+            </Tooltip>
           </Col>
         </Row>
         <Row>

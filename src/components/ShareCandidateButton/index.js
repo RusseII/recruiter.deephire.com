@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Icon, Button, Row, Modal, Form, Input, Col, Checkbox, message } from 'antd';
+import { Tooltip, Icon, Button, Row, Modal, Form, Input, Col, Checkbox, message } from 'antd';
 import Result from '@/components/Result';
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -20,10 +20,15 @@ class ShareCandidateButton extends React.Component {
     <div>
       <Row>
         <Col xs={24} sm={24}>
-          {`${shareLink}     `}
-          <CopyToClipboard text={shareLink}>
-            <Button size="small" icon="copy" />
-          </CopyToClipboard>
+          <Tooltip title="Click to copy">
+            <CopyToClipboard text={shareLink} onCopy={() => message.success('Link Copied')}>
+              <a>{`${shareLink}     `}</a>
+            </CopyToClipboard>
+
+            <CopyToClipboard text={shareLink} onCopy={() => message.success('Link Copied')}>
+              <Button size="small" icon="copy" />
+            </CopyToClipboard>
+          </Tooltip>
         </Col>
       </Row>
       <br />
