@@ -1,16 +1,17 @@
 import React, { Component, Suspense } from 'react';
 import { connect } from 'dva';
-import { Row, Col, List, Checkbox } from 'antd';
+import { Row, Col, List } from 'antd';
 import qs from 'qs';
 
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import ShortListCandidateCard from '@/components/ShortListCandidateCard';
+
 import { getTimeDistance } from '@/utils/utils';
 import { getShortListData } from '@/services/api';
 
 import styles from './ShortListAnalytics.less';
-import ShortListCandidateCard from '../../components/ShortListCandidateCard';
-import ShortListStatsCard from '../../components/ShortListStatsCard';
+import ShortListStatsCard from '@/components/ShortListStatsCard';
 
 const ProportionSales = React.lazy(() => import('./ProportionSales'));
 
@@ -158,20 +159,18 @@ class ShortListAnalytics extends Component {
             <div className={styles.candidatesTitle}>Candidates</div>
           </Card> */}
           <div className={styles.cardList}>
-            <Checkbox.Group style={{ width: '100%' }} onChange={this.cardSelectOnChange}>
-              <List
-                rowKey="id"
-                style={{ marginTop: 24 }}
-                grid={{ gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }}
-                loading={loading}
-                dataSource={candidateList}
-                renderItem={item => (
-                  <List.Item key={item.id}>
-                    <ShortListCandidateCard item={item} />
-                  </List.Item>
-                )}
-              />
-            </Checkbox.Group>
+            <List
+              rowKey="id"
+              style={{ marginTop: 24 }}
+              grid={{ gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }}
+              loading={loading}
+              dataSource={candidateList}
+              renderItem={item => (
+                <List.Item key={item.id}>
+                  <ShortListCandidateCard item={item} />
+                </List.Item>
+              )}
+            />
           </div>
         </PageHeaderWrapper>
       </GridContent>

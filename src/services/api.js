@@ -3,10 +3,10 @@ import request from '@/utils/request';
 import { shortListsWithAnalytics } from './mock';
 
 const hostedURL = 'https://api.deephire.com';
-// const newApi = 'https://a.deephire.com';
+const newApi = 'https://a.deephire.com';
 
 // const hostedURL = 'http://localhost:3001';
-const newApi = 'http://localhost:3000';
+// const newApi = 'http://localhost:3000';
 
 const setHeaders = () => ({
   authorization: `Bearer ${localStorage.getItem('access_token')}`,

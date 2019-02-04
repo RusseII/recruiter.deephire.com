@@ -7,13 +7,13 @@ const ShortListAnalyticsCard = ({ item }) => (
   <Card
     id={item.id}
     className={styles.candidateAnalyticsCard}
-    subTitle={item.candidate_email}
+    subTitle={item.candidateEmail}
     bordered={false}
     style={{ backgroundColor: '#fff' }}
   >
     <Row type="flex" justify="start" gutter={24}>
       <Col>
-        <div className={styles.title}>{item.user_name}</div>
+        <div className={styles.title}>{item.userName}</div>
       </Col>
       <Col>
         {item.interview === 'yes' && (
@@ -48,7 +48,7 @@ const ShortListAnalyticsCard = ({ item }) => (
       </Col>
     </Row>
 
-    <div className={styles.subtitle}>{item.candidate_email}</div>
+    <div className={styles.subtitle}>{item.candidateEmail}</div>
 
     <Row type="flex" justify="start" gutter={24}>
       <Col>
