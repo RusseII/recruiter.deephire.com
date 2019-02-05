@@ -71,19 +71,15 @@ class ShortListAnalytics extends Component {
 
     let lastViewed = 'Not Seen';
     if (analyticsData.clicks) {
-      lastViewed = this.friendlyDate(analyticsData.clicks[0]);
+      const length = analyticsData.clicks.length - 1;
+      lastViewed = this.friendlyDate(analyticsData.clicks[length]);
     }
 
-    const { shortUrl, interviews } = analyticsData;
+    const { shortUrl, interviews, clicks } = analyticsData;
 
     const totalCandidates = interviews.length;
 
-    let views = 0;
-    interviews.forEach(candidate => {
-      if (candidate.clicks) {
-        views += candidate.clicks.length;
-      }
-    });
+    const views = clicks.length;
 
     let reviewedCandidates = 0;
     let notReviewedCandidates = 0;
@@ -94,15 +90,15 @@ class ShortListAnalytics extends Component {
     let declinedCandidates = 0;
 
     interviews.forEach(candidate => {
-      if (candidate.interview) reviewedCandidates += 1;
+      if (candidate.interest) reviewedCandidates += 1;
       else if (candidate.clicks) notReviewedCandidates += 1;
       else notSeenCandidates += 1;
     });
 
     interviews.forEach(candidate => {
-      if (candidate.interview === 'yes') acceptedCandidates += 1;
-      else if (candidate.interview === 'maybe') maybeCandidates += 1;
-      else if (candidate.interview === 'no') declinedCandidates += 1;
+      if (candidate.interest === 1) acceptedCandidates += 1;
+      else if (candidate.interest === 2) maybeCandidates += 1;
+      else if (candidate.interest === 3) declinedCandidates += 1;
     });
 
     const overviewCandidateStatus = [
@@ -133,8 +129,6 @@ class ShortListAnalytics extends Component {
     return (
       <GridContent>
         <PageHeaderWrapper title={`Short List - ${analyticsData.email}`} shortUrl={shortUrl}>
-          {/* <Card className={styles.shortListStatsCard}> */}
-          {/* <div className={styles.shortListTitle}>Short List Statistics</div> */}
           <Row gutter={16}>
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
@@ -156,11 +150,7 @@ class ShortListAnalytics extends Component {
               />
             </Col>
           </Row>
-          {/* </Card> */}
 
-          {/* <Card className={styles.candidatesTitleCard}>
-            <div className={styles.candidatesTitle}>Candidates</div>
-          </Card> */}
           <div className={styles.cardList}>
             <List
               rowKey="id"

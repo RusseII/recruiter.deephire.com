@@ -16,12 +16,14 @@ const ShortListAnalyticsCard = ({ item }) => (
         <div className={styles.title}>{item.userName}</div>
       </Col>
       <Col>
-        {item.interview === 'yes' && (
+        {/* Yes */}
+        {item.interest === 1 && (
           <Tooltip title="Client wants to interview this candidate">
             <Icon type="check-circle" style={{ fontSize: '24px', color: '#08c', marginTop: 5 }} />
           </Tooltip>
         )}
-        {item.interview === 'maybe' && (
+        {/* maybe */}
+        {item.interest === 2 && (
           <Tooltip title="Client unsure about candidate">
             <Icon
               type="question-circle"
@@ -29,7 +31,8 @@ const ShortListAnalyticsCard = ({ item }) => (
             />
           </Tooltip>
         )}
-        {item.interview === 'no' && (
+        {/* no */}
+        {item.interest === 3 && (
           <Tooltip title="Client does not want to interview">
             <Icon
               type="close-circle"
@@ -37,8 +40,8 @@ const ShortListAnalyticsCard = ({ item }) => (
             />
           </Tooltip>
         )}
-        {!item.interview && (
-          <Tooltip title="Client has not yet viewed this candidate">
+        {!item.interest && (
+          <Tooltip title="Client has not yet reviewed this candidate">
             <Icon
               type="clock-circle"
               style={{ fontSize: '24px', color: '#b2b2b2', marginTop: 5 }}
@@ -67,13 +70,11 @@ const ShortListAnalyticsCard = ({ item }) => (
           </Col>
         </Row>
       ) : (
-        item.feedback.map(feedback => (
-          <Row>
-            <Col span={24}>
-              <div className={styles.candidateFeedback}>{feedback}</div>
-            </Col>
-          </Row>
-        ))
+        <Row>
+          <Col span={24}>
+            <div className={styles.candidateFeedback}>{item.feedback}</div>
+          </Col>
+        </Row>
       )}
     </div>
   </Card>
