@@ -61,10 +61,12 @@ class ShortListAnalytics extends Component {
   };
 
   render() {
-    const { analyticsData, candidateStatus } = this.state;
-    if (!analyticsData) {
+    const { analyticsData: temp, candidateStatus } = this.state;
+    if (!temp) {
       return null;
     }
+    const analyticsData = temp[0];
+
     const { loading } = this.props;
 
     let lastViewed = 'Not Seen';
@@ -72,14 +74,15 @@ class ShortListAnalytics extends Component {
       lastViewed = this.friendlyDate(analyticsData.clicks[0]);
     }
 
-    const { shortUrl } = analyticsData;
+    const { shortUrl, interviews } = analyticsData;
 
-    const candidateList = analyticsData.list;
-    const totalCandidates = candidateList.length;
+    const totalCandidates = interviews.length;
 
     let views = 0;
-    candidateList.forEach(candidate => {
-      views += candidate.clicks.length;
+    interviews.forEach(candidate => {
+      if (candidate.clicks) {
+        views += candidate.clicks.length;
+      }
     });
 
     let reviewedCandidates = 0;
@@ -90,13 +93,13 @@ class ShortListAnalytics extends Component {
     let maybeCandidates = 0;
     let declinedCandidates = 0;
 
-    candidateList.forEach(candidate => {
+    interviews.forEach(candidate => {
       if (candidate.interview) reviewedCandidates += 1;
-      else if (candidate.clicks.length > 0) notReviewedCandidates += 1;
+      else if (candidate.clicks) notReviewedCandidates += 1;
       else notSeenCandidates += 1;
     });
 
-    candidateList.forEach(candidate => {
+    interviews.forEach(candidate => {
       if (candidate.interview === 'yes') acceptedCandidates += 1;
       else if (candidate.interview === 'maybe') maybeCandidates += 1;
       else if (candidate.interview === 'no') declinedCandidates += 1;
@@ -164,7 +167,7 @@ class ShortListAnalytics extends Component {
               style={{ marginTop: 24 }}
               grid={{ gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }}
               loading={loading}
-              dataSource={candidateList}
+              dataSource={interviews}
               renderItem={item => (
                 <List.Item key={item.id}>
                   <ShortListCandidateCard item={item} />

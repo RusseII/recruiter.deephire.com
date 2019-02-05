@@ -13,10 +13,8 @@ import { showConfirm } from '@/utils/utils';
 import { getShortLists } from '@/services/api';
 
 const openShortListAnalytics = data => {
-  const {
-    _id: { $oid },
-  } = data;
-  router.push(`/shortlists/shortlistanalytics/?id=${$oid}`);
+  const { _id } = data;
+  router.push(`/shortlists/shortlistanalytics/?id=${_id}`);
 };
 
 const columns = [
@@ -64,6 +62,10 @@ const columns = [
     },
   },
   {
+    title: 'Analytics',
+    render: data => <a onClick={() => openShortListAnalytics(data)}>View</a>,
+  },
+  {
     title: 'Link',
     render: data => {
       const { shortUrl } = data;
@@ -76,10 +78,6 @@ const columns = [
         </Tooltip>
       );
     },
-  },
-  {
-    title: 'Analytics',
-    render: data => <a onClick={() => openShortListAnalytics(data)}>View</a>,
   },
 ];
 
