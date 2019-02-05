@@ -7,9 +7,6 @@ export default {
 
   'menu.Candidates': 'Candidates',
   'menu.Candidates.Candidate Videos': 'Candidate Videos',
-  'menu.Short Lists.Short Lists': 'Short Lists',
-  'menu.Short Lists.shortListAnalytics': 'Short List Analytics',
-  'menu.Short Lists': 'Short Lists',
 
   'navbar.lang': '中文',
   'component.globalHeader.search': 'Search',

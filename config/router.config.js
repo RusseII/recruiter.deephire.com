@@ -65,6 +65,7 @@ export default [
             name: 'Candidate Videos',
             component: './Candidates/Candidates',
           },
+
           {
             path: '/candidates/view-candidate',
             name: 'viewCandidate',

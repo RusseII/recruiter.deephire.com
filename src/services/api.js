@@ -1,6 +1,5 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-// import { shortListsWithAnalytics } from './mock';
 
 const hostedURL = 'https://api.deephire.com';
 const newApi = 'https://a.deephire.com';
