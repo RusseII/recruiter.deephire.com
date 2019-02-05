@@ -1,15 +1,12 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Button } from 'antd';
-import StandardTable from '@/components/StandardTable';
+import { Card, Button, List, AutoComplete, Checkbox, Row, Col } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import router from 'umi/router';
 import { showConfirm } from '@/utils/utils';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
+import CandidateCard from '@/components/CandidateCard';
 
 import styles from './Candidates.less';
-
-const readableTime = require('readable-timestamp');
 
 @connect(({ rule, loading, user }) => ({
   currentUser: user.currentUser,
@@ -18,43 +15,8 @@ const readableTime = require('readable-timestamp');
 }))
 class Candidates extends PureComponent {
   state = {
-    selectedRows: [],
+    selectedCards: [],
   };
-
-  columns = [
-    {
-      title: 'Interview Name',
-      dataIndex: 'interview_name',
-    },
-    {
-      title: 'Name',
-      dataIndex: 'user_name',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'candidate_email',
-    },
-    {
-      title: 'Time',
-      render(test, data) {
-        try {
-          const dateObj = new Date(data.python_datetime);
-          const displayTime = readableTime(dateObj);
-          return <div>{displayTime}</div>;
-        } catch {
-          return null;
-        }
-      },
-    },
-    {
-      title: 'View',
-      render: (text, data) => (
-        <Fragment>
-          <a onClick={() => this.openInterview(data)}>View</a>
-        </Fragment>
-      ),
-    },
-  ];
 
   componentDidMount() {
     const profile = JSON.parse(localStorage.getItem('profile'));
@@ -69,57 +31,121 @@ class Candidates extends PureComponent {
     }
   }
 
-  handleSelectRows = rows => {
+  cardSelectOnChange = checkedValues => {
     this.setState({
-      selectedRows: rows,
+      selectedCards: checkedValues,
     });
   };
 
-  openInterview = data => {
-    const { company_id: companyId, user_id: userId } = data;
-    router.push(`/candidates/view-candidate/?id=${companyId}&candidate=${userId}`);
+  autoCompleteSelect = value => {
+    if (value === '') {
+      this.setState({
+        searchTerm: null,
+      });
+    } else {
+      this.setState({
+        searchTerm: value,
+      });
+    }
+  };
+
+  autoCompleteSearch = value => {
+    if (value === '') {
+      this.setState({
+        searchTerm: null,
+      });
+    }
   };
 
   render() {
     const {
       rule: { data },
-      dispatch,
-      loading,
     } = this.props;
+    const { searchTerm } = this.state;
 
-    const { selectedRows } = this.state;
+    let filteredData = [];
+
+    if (searchTerm == null) {
+      filteredData = data.list;
+    } else {
+      filteredData = data.list.filter(
+        candidate =>
+          candidate.candidateEmail === searchTerm ||
+          candidate.interviewName === searchTerm ||
+          candidate.userName === searchTerm
+      );
+    }
+
+    const searchDataSource = [];
+    data.list.forEach(candidate => {
+      if (candidate.userName != null) searchDataSource.push(candidate.userName);
+      if (candidate.candidateEmail != null) searchDataSource.push(candidate.candidateEmail);
+      if (candidate.interviewName != null) searchDataSource.push(candidate.interviewName);
+    });
+
+    const unique = [...new Set(searchDataSource)];
+
+    const { dispatch, loading } = this.props;
+
+    const { selectedCards } = this.state;
 
     return (
       <PageHeaderWrapper title="Candidates">
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              {selectedRows.length > 0 && (
-                <span>
-                  <ShareCandidateButton candidateData={selectedRows} />
-
-                  <Button
-                    type="danger"
-                    onClick={() => {
-                      showConfirm(dispatch, selectedRows, 'rule/removeCandidate', () =>
-                        this.setState({ selectedRows: [] })
-                      );
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </span>
-              )}
-            </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={data}
-              columns={this.columns}
-              onSelectRow={this.handleSelectRows}
-            />
+        <Card>
+          <div className={styles.tableListOperator}>
+            <Row type="flex" justify="start" gutter={16}>
+              <Col>
+                <ShareCandidateButton
+                  isDisabled={selectedCards.length === 0}
+                  candidateData={selectedCards}
+                />
+              </Col>
+              <Col>
+                <Button
+                  disabled={selectedCards.length === 0}
+                  type="danger"
+                  onClick={() => {
+                    showConfirm(dispatch, selectedCards, 'rule/removeCandidate', () =>
+                      this.setState({ selectedCards: [] })
+                    );
+                  }}
+                >
+                  Delete
+                </Button>
+              </Col>
+              <Col>
+                <AutoComplete
+                  allowClear
+                  dataSource={unique}
+                  style={{ width: 200 }}
+                  onSelect={this.autoCompleteSelect}
+                  onSearch={this.autoCompleteSearch}
+                  filterOption={(inputValue, option) =>
+                    option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                  }
+                  placeholder="Search"
+                />
+              </Col>
+            </Row>
           </div>
         </Card>
+
+        <div className={styles.filterCardList}>
+          <Checkbox.Group style={{ width: '100%' }} onChange={this.cardSelectOnChange}>
+            <List
+              rowKey="id"
+              style={{ marginTop: 24 }}
+              grid={{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
+              loading={loading}
+              dataSource={filteredData}
+              renderItem={item => (
+                <List.Item key={item.id}>
+                  <CandidateCard item={item} />
+                </List.Item>
+              )}
+            />
+          </Checkbox.Group>
+        </div>
       </PageHeaderWrapper>
     );
   }

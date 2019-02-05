@@ -25,7 +25,7 @@
   "dependencies": {
     "@antv/data-set": "^0.9.6",
     "@babel/runtime": "^7.0.0",
-    "antd": "^3.9.2",
+    "antd": "^3.13.0",
     "auth0-js": "9.8.0",
     "bizcharts": "^3.2.2",
     "bizcharts-plugin-slider": "^2.0.3",
@@ -42,7 +42,7 @@
     "omit.js": "^1.0.0",
     "path-to-regexp": "^2.4.0",
     "prop-types": "^15.5.10",
-    "qs": "^6.5.2",
+    "qs": "^6.6.0",
     "rc-animate": "^2.4.4",
     "react": "^16.5.1",
     "react-container-query": "^0.11.0",
