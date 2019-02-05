@@ -79,7 +79,7 @@ class ShortListAnalytics extends Component {
 
     const totalCandidates = interviews.length;
 
-    const views = clicks.length;
+    const views = clicks ? clicks.length : 0;
 
     let reviewedCandidates = 0;
     let notReviewedCandidates = 0;
