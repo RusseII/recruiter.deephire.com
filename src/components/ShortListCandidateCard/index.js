@@ -58,7 +58,7 @@ const ShortListAnalyticsCard = ({ item }) => (
 
     <Row type="flex" justify="start" gutter={24}>
       <Col>
-        <Statistic title="Views" value={item.clicks ? item.clicks.length : '-'} />
+        <Statistic title="Views" value={item.clicks ? item.clicks.length : ''} />
       </Col>
       <Col>
         <div className={styles.statHeading}>Rating</div>

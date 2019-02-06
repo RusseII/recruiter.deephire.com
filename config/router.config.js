@@ -17,7 +17,7 @@ export default [
     Routes: ['src/pages/Authorized'],
     authority: ['user'],
     routes: [
-      { path: '/', redirect: 'interview/create-interview/info' },
+      { path: '/', redirect: 'candidates/candidates' },
       {
         path: '/interview',
         icon: 'form',

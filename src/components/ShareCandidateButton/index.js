@@ -50,15 +50,13 @@ class ShareCandidateButton extends React.Component {
   };
 
   createLinkButton = () => {
-    const { candidateData, form, currentUser } = this.props;
+    const { candidateData, form } = this.props;
     const { currentStep, hideInfo } = this.state;
-    const { email: recruiterEmail } = currentUser;
     form.validateFields((err, data) => {
       if (err) return;
-      let { email } = data;
+      const { email, name } = data;
       form.resetFields();
-      if (!email) email = 'noEmailEntered';
-      const shortList = { hideInfo, email, created_by: recruiterEmail, interviews: candidateData };
+      const shortList = { name, hideInfo, email, interviews: candidateData };
       this.createLink(shortList);
       this.setState({ shareEmail: email, currentStep: currentStep + 1 });
     });
@@ -89,7 +87,7 @@ class ShareCandidateButton extends React.Component {
           onCancel={() => this.handleModalVisible()}
         >
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
-            {form.getFieldDecorator('name', {})(<Input placeholder="Their name" />)}
+            {form.getFieldDecorator('name', {})(<Input placeholder="Client Name" />)}
           </FormItem>
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
             {form.getFieldDecorator('email', {})(

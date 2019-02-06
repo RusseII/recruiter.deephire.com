@@ -8,6 +8,7 @@ export default {
   'menu.Candidates': 'Candidates',
   'menu.Candidates.Candidate Videos': 'Candidate Videos',
   'menu.Short Lists': 'Short Lists',
+  'menu.Short Lists.Short Lists': 'All',
   'menu.Short Lists.shortListAnalytics': 'Analytics',
 
   'navbar.lang': '中文',

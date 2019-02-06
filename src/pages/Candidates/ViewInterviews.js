@@ -45,7 +45,7 @@ const columns = [
     },
   },
   {
-    title: 'Interview Link',
+    title: 'Interview Link (send this to candidates)',
     render: (text, data) => (
       <Fragment>
         <Tooltip title="Click to copy">
