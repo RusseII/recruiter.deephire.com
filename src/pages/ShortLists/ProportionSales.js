@@ -9,11 +9,11 @@ const ProportionSales = props => {
 
   let pieColors;
   if (candidateStatus === 'overview') {
-    pieColors = ['#54ed1c', '#f2f213', 'gray', '#ef8a0e', '#f04764', '#8543e0'];
+    pieColors = ['#54ed1c', '#f7f707', '#f04764', '#ef8a0e', '#f0f2f5'];
   } else if (candidateStatus === 'reviewed') {
-    pieColors = ['#54ed1c', '#f2f213', 'gray'];
+    pieColors = ['#54ed1c', '#f7f707', '#f04764'];
   } else {
-    pieColors = ['#08c', '#ef8a0e', '#f04764'];
+    pieColors = ['#08c', '#ef8a0e', '#f0f2f5'];
   }
   return (
     <Card
