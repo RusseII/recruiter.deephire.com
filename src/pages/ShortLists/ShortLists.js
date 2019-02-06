@@ -132,12 +132,15 @@ class ShortLists extends PureComponent {
     if (searchTerm == null) {
       filteredList = data;
     } else {
-      filteredList = data.filter(shortList => shortList.email === searchTerm);
+      filteredList = data.filter(
+        shortList => shortList.email === searchTerm || shortList.name === searchTerm
+      );
     }
 
     const searchDataSource = [];
     data.forEach(shortList => {
-      if (shortList.email != null) searchDataSource.push(shortList.email);
+      if (shortList.email != null && shortList.email !== '') searchDataSource.push(shortList.email);
+      if (shortList.name != null && shortList.name !== '') searchDataSource.push(shortList.name);
     });
     const unique = [...new Set(searchDataSource)];
 
