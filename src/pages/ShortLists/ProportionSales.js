@@ -1,11 +1,21 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Card, Radio } from 'antd';
 import styles from './ShortListAnalytics.less';
 import { Pie } from '@/components/Charts';
 import Yuan from '@/utils/Yuan';
 
-const ProportionSales = memo(
-  ({ candidateStatus, loading, salesPieData, handleChangeSalesType, title }) => (
+const ProportionSales = props => {
+  const { candidateStatus, loading, salesPieData, handleChangeSalesType, title } = props;
+
+  let pieColors;
+  if (candidateStatus === 'overview') {
+    pieColors = ['#54ed1c', '#f2f213', 'gray', '#ef8a0e', '#f04764', '#8543e0'];
+  } else if (candidateStatus === 'reviewed') {
+    pieColors = ['#54ed1c', '#f2f213', 'gray'];
+  } else {
+    pieColors = ['#08c', '#ef8a0e', '#f04764'];
+  }
+  return (
     <Card
       loading={loading}
       className={styles.salesCard}
@@ -23,10 +33,9 @@ const ProportionSales = memo(
           </div>
         </div>
       }
-      // style={{ marginTop: 24 }}
     >
       <Pie
-        colors={['#08c', 'gray', 'red']}
+        colors={pieColors}
         hasLegend
         subTitle="Candidates"
         total={() => <Yuan>{salesPieData.reduce((pre, now) => now.y + pre, 0)}</Yuan>}
@@ -37,7 +46,7 @@ const ProportionSales = memo(
         style={{ padding: '8px 0' }}
       />
     </Card>
-  )
-);
+  );
+};
 
 export default ProportionSales;

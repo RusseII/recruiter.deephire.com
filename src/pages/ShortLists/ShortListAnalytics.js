@@ -24,6 +24,7 @@ const readableTime = require('readable-timestamp');
 class ShortListAnalytics extends Component {
   state = {
     rangePickerValue: getTimeDistance('year'),
+    candidateStatus: 'overview',
   };
 
   componentDidMount() {
@@ -103,12 +104,15 @@ class ShortListAnalytics extends Component {
 
     const overviewCandidateStatus = [
       { x: 'Accepted', y: acceptedCandidates },
+      { x: 'Undecided', y: maybeCandidates },
+      { x: 'Declined', y: declinedCandidates },
+      { x: 'Not Reviewed', y: notReviewedCandidates },
       { x: 'Not Seen', y: notSeenCandidates },
     ];
 
     const reviewedCandidateStatus = [
       { x: 'Accepted', y: acceptedCandidates },
-      { x: 'Unsure', y: maybeCandidates },
+      { x: 'Undecided', y: maybeCandidates },
       { x: 'Declined', y: declinedCandidates },
     ];
 
