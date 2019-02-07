@@ -17,7 +17,7 @@ const ShortListAnalyticsCard = ({ item }) => (
       </Col>
       <Col>
         {/* Yes */}
-        {item.interest === 1 && (
+        {(item.interest ? item.interest === 1 : item.rating > 3) && (
           <Tooltip title="Client wants to interview this candidate">
             <Icon
               type="check-circle"
@@ -26,7 +26,7 @@ const ShortListAnalyticsCard = ({ item }) => (
           </Tooltip>
         )}
         {/* maybe */}
-        {item.interest === 2 && (
+        {(item.interest ? item.interest === 2 : item.rating < 4 && item.rating > 1) && (
           <Tooltip title="Client unsure about candidate">
             <Icon
               type="question-circle"
@@ -35,7 +35,7 @@ const ShortListAnalyticsCard = ({ item }) => (
           </Tooltip>
         )}
         {/* no */}
-        {item.interest === 3 && (
+        {(item.interest ? item.interest === 3 : item.rating < 2 && item.rating > 0) && (
           <Tooltip title="Client does not want to interview">
             <Icon
               type="close-circle"
@@ -43,14 +43,15 @@ const ShortListAnalyticsCard = ({ item }) => (
             />
           </Tooltip>
         )}
-        {!item.interest && (
-          <Tooltip title="Client has not yet reviewed this candidate">
-            <Icon
-              type="clock-circle"
-              style={{ fontSize: '24px', color: '#808080', marginTop: 5 }}
-            />
-          </Tooltip>
-        )}
+        {!item.interest &&
+          !item.rating && (
+            <Tooltip title="Client has not yet reviewed this candidate">
+              <Icon
+                type="clock-circle"
+                style={{ fontSize: '24px', color: '#808080', marginTop: 5 }}
+              />
+            </Tooltip>
+          )}
       </Col>
     </Row>
 

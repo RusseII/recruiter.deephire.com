@@ -91,15 +91,24 @@ class ShortListAnalytics extends Component {
     let declinedCandidates = 0;
 
     interviews.forEach(candidate => {
-      if (candidate.interest) reviewedCandidates += 1;
+      if (candidate.interest || candidate.rating) reviewedCandidates += 1;
       else if (candidate.clicks) notReviewedCandidates += 1;
       else notSeenCandidates += 1;
     });
 
     interviews.forEach(candidate => {
-      if (candidate.interest === 1) acceptedCandidates += 1;
-      else if (candidate.interest === 2) maybeCandidates += 1;
-      else if (candidate.interest === 3) declinedCandidates += 1;
+      if (candidate.interest ? candidate.interest === 1 : candidate.rating > 3)
+        acceptedCandidates += 1;
+      else if (
+        candidate.interest ? candidate.interest === 2 : candidate.rating < 4 && candidate.rating > 1
+      )
+        maybeCandidates += 1;
+      else if (
+        candidate.interest
+          ? candidate.interest === 3
+          : candidate.rating < 2 && candidate.rating > -1
+      )
+        declinedCandidates += 1;
     });
 
     const overviewCandidateStatus = [
