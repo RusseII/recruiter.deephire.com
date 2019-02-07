@@ -90,6 +90,10 @@ class ShortListAnalytics extends Component {
     let maybeCandidates = 0;
     let declinedCandidates = 0;
 
+    if (!interviews) {
+      return null;
+    }
+
     interviews.forEach(candidate => {
       if (candidate.interest || candidate.rating) reviewedCandidates += 1;
       else if (candidate.clicks) notReviewedCandidates += 1;
