@@ -163,7 +163,8 @@ class ShortLists extends PureComponent {
         <Card>
           <div className={styles.tableListOperator}>
             <Row type="flex" justify="start" gutter={16}>
-              <Col>
+              {/* TODO ADD THIS BACK IN */}
+              {/* <Col>
                 <Button
                   disabled={selectedRows.length === 0}
                   type="danger"
@@ -175,7 +176,7 @@ class ShortLists extends PureComponent {
                 >
                   Delete
                 </Button>
-              </Col>
+              </Col> */}
               <Col>
                 <AutoComplete
                   allowClear

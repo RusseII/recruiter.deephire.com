@@ -118,6 +118,23 @@ export async function removeInterview(params) {
   return request(`${hostedURL}/v1.0/get_interviews/${email}`);
 }
 
+export async function deleteShortList(params) {
+  const { selectedRows } = params;
+
+  await Promise.all(
+    selectedRows.map(async value => {
+      const { _id } = value;
+      const { $oid } = _id;
+      const res = await request(`${newApi}/v1/shortlists/${$oid}`, {
+        method: 'DELETE',
+        headers: setHeaders(),
+      });
+      return res;
+    })
+  );
+  return getShortLists();
+}
+
 export async function removeCandidate(params) {
   const { selectedRows } = params;
 

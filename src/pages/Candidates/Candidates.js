@@ -100,7 +100,8 @@ class Candidates extends PureComponent {
                   candidateData={selectedCards}
                 />
               </Col>
-              <Col>
+              {/* TODO ADD THIS BACK */}
+              {/* <Col>
                 <Button
                   disabled={selectedCards.length === 0}
                   type="danger"
@@ -112,7 +113,7 @@ class Candidates extends PureComponent {
                 >
                   Delete
                 </Button>
-              </Col>
+              </Col> */}
               <Col>
                 <AutoComplete
                   allowClear
