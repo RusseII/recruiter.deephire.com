@@ -15,11 +15,11 @@ function initTotalList(columns) {
 class StandardTable extends PureComponent {
   constructor(props) {
     super(props);
-    const { columns } = props;
+    const { columns, selectedRows } = props;
     const needTotalList = initTotalList(columns);
 
     this.state = {
-      selectedRowKeys: [],
+      selectedRowKeys: selectedRows,
       needTotalList,
     };
   }
@@ -110,7 +110,7 @@ class StandardTable extends PureComponent {
           />
         </div>
         <Table
-          scroll={{x: true}}
+          scroll={{ x: true }}
           loading={loading}
           rowKey={rowKey || 'key'}
           rowSelection={rowSelection}
