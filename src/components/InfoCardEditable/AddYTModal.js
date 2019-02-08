@@ -11,7 +11,7 @@ const AddYTModal = Form.create()(props => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       form.resetFields();
-      addYouTubeLink(fieldsValue.youTubeLink);
+      addYouTubeLink(fieldsValue.youtubeLink);
       toggle();
     });
   };
@@ -24,8 +24,8 @@ const AddYTModal = Form.create()(props => {
       onCancel={toggle}
       onOk={okHandle}
     >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Yoube Link">
-        {form.getFieldDecorator('youTubeLink', {})(<Input placeholder="YouTube Link" />)}
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Youtube Link">
+        {form.getFieldDecorator('youtubeLink', {})(<Input placeholder="YouTube Link" />)}
       </FormItem>
     </Modal>
   );

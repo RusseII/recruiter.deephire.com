@@ -6,7 +6,6 @@ import { Card, Col, Row, Icon, Table, Button, Form } from 'antd';
 import InfoCardEditable from '@/components/InfoCardEditable';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 
-import { getCandidateProfile } from '@/services/api';
 import { connect } from 'dva';
 import router from 'umi/router';
 import qs from 'qs';
@@ -57,18 +56,7 @@ class ViewCandidate extends Component {
             requestFailed: true,
           });
         }
-      )
-      .then(data => {
-        const { userId } = data;
-
-        getCandidateProfile(userId).then(candidateProfileData => {
-          if (candidateProfileData) {
-            this.setState({ candidateProfileData });
-          } else {
-            this.setState({ candidateProfileData: { userId } });
-          }
-        });
-      });
+      );
   }
 
   goToCandidates = () => {
@@ -109,7 +97,6 @@ class ViewCandidate extends Component {
       requestFailed,
       videoUrl,
       currentQuestionText,
-      candidateProfileData,
     } = this.state;
 
     if (!candidateData) return <p>Loading...</p>;
@@ -120,7 +107,7 @@ class ViewCandidate extends Component {
       return <p>There is no data for this user, please message our support</p>;
     }
 
-    const { candidateEmail, interviewName, userName } = candidateData;
+    const { candidateEmail, interviewName, userName, userId } = candidateData;
 
     return (
       <div>
@@ -135,11 +122,11 @@ class ViewCandidate extends Component {
         <Row gutter={24}>
           <Col span={8}>
             <InfoCardEditable
+              userId={userId}
               userName={userName}
               interviewName={interviewName}
               email={candidateEmail}
               setVideoData={this.setVideoData}
-              candidateProfileData={candidateProfileData}
             />
 
             <Card hoverable title="Questions">
@@ -171,7 +158,7 @@ class ViewCandidate extends Component {
             >
               <div className={styles.playerWrapper}>
                 <ReactPlayer
-                  youTubeConfig={{ playerVars: { rel: false, modestbranding: true } }}
+                  youtubeConfig={{ playerVars: { rel: false, modestbranding: true } }}
                   preload
                   controls
                   playing

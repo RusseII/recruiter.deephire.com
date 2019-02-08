@@ -61,11 +61,11 @@ export async function getCandidateProfile(id) {
 }
 
 // take json and create or update
-export async function updateCandidateProfile(data) {
+export async function updateCandidateProfile(userId, data) {
   const sendData = data;
   delete sendData._id;
 
-  return request(`${newApi}/v1/candidates`, {
+  return request(`${newApi}/v1/candidates/${userId}`, {
     method: 'PUT',
     headers: setHeaders(),
     body: sendData,

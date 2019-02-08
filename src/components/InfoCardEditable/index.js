@@ -4,20 +4,17 @@ import { Button, Card, Row, Icon, List, Popconfirm } from 'antd';
 
 import styles from './index.less';
 import AddYTModal from './AddYTModal';
-import { updateCandidateProfile } from '@/services/api';
+import { updateCandidateProfile, getCandidateProfile } from '@/services/api';
 
 class InfoCardEditable extends React.Component {
-  state = { modalVisible: false };
+  state = { modalVisible: false, candidateProfileData: {} };
 
   componentDidMount() {
-    const { candidateProfileData } = this.props;
+    const { userId } = this.props;
 
-    this.setState({ candidateProfileData });
-  }
-
-  componentWillReceiveProps(props) {
-    const { candidateProfileData } = props;
-    this.setState({ candidateProfileData });
+    getCandidateProfile(userId).then(r => {
+      if (r) this.setState({ candidateProfileData: r });
+    });
   }
 
   toggleModalVisible = () => {
@@ -28,21 +25,25 @@ class InfoCardEditable extends React.Component {
   };
 
   remove = i => {
+    const { userId } = this.props;
     const { candidateProfileData } = this.state;
-    candidateProfileData.youTubeLinks.splice(i, 1);
+    candidateProfileData.youtubeLinks.splice(i, 1);
     this.setState({ candidateProfileData });
-    updateCandidateProfile(candidateProfileData);
+    updateCandidateProfile(userId, candidateProfileData);
   };
 
   addYouTubeLink = link => {
+    const { userId } = this.props;
+
     const { candidateProfileData } = this.state;
-    const { youTubeLinks } = candidateProfileData;
-    if (!youTubeLinks) {
-      candidateProfileData.youTubeLinks = [];
+    const { youtubeLinks } = candidateProfileData;
+    if (!youtubeLinks) {
+      candidateProfileData.youtubeLinks = [link];
+    } else {
+      candidateProfileData.youtubeLinks.push(link);
     }
-    candidateProfileData.youTubeLinks.push(link);
     this.setState({ candidateProfileData });
-    updateCandidateProfile(candidateProfileData);
+    updateCandidateProfile(userId, candidateProfileData);
   };
 
   render() {
@@ -50,7 +51,7 @@ class InfoCardEditable extends React.Component {
 
     if (!candidateProfileData) return null;
     const { setVideoData, userName, interviewName, email } = this.props;
-    const { youTubeLinks } = candidateProfileData;
+    const { youtubeLinks } = candidateProfileData;
 
     return (
       <Card style={{ marginBottom: '20px' }} hoverable title={userName}>
@@ -62,9 +63,11 @@ class InfoCardEditable extends React.Component {
         </Row>
 
         <List
-          locale={{ emptyText: '' }}
+          locale={{ emptyText: ' ' }}
+          // locale=""
+
           size="small"
-          dataSource={youTubeLinks}
+          dataSource={youtubeLinks}
           renderItem={(item, index) => (
             <div>
               <Icon type="youtube" />{' '}
@@ -87,7 +90,7 @@ class InfoCardEditable extends React.Component {
 
         <Row>
           <Button type="dashed" onClick={this.toggleModalVisible}>
-            <Icon type="plus" /> Add youTube Link
+            <Icon type="plus" /> Add Youtube Link
           </Button>
         </Row>
 
