@@ -119,8 +119,8 @@ class ViewCandidate extends Component {
           <ShareCandidateButton candidateData={candidateData} />
         </div>
 
-        <Row gutter={24}>
-          <Col span={8}>
+        <Row type="flex" gutter={24}>
+          <Col xs={{ span: 24, order: 2 }} sm={24} md={8} lg={8} xl={8}>
             <InfoCardEditable
               userId={userId}
               userName={userName}
@@ -148,8 +148,15 @@ class ViewCandidate extends Component {
               />
             </Card>
           </Col>
-          <Col span={16}>
+          <Col
+            xs={{ span: 24, order: 1 }}
+            sm={{ span: 24, order: 1 }}
+            md={{ span: 16, order: 2 }}
+            lg={{ span: 16, order: 2 }}
+            xl={{ span: 16, order: 2 }}
+          >
             <Card
+              style={{ marginBottom: 20 }}
               title={currentQuestionText}
               actions={[
                 <Button shape="circle" icon="left" onClick={this.previousQuestion} />,
