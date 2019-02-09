@@ -1,6 +1,6 @@
 module.exports = {
   parser: 'babel-eslint',
-  extends: ['airbnb', 'prettier', 'plugin:compat/recommended'],
+  extends: ['airbnb', 'prettier', 'plugin:compat/recommended', 'react-hooks'],
   env: {
     browser: true,
     node: true,
@@ -14,6 +14,8 @@ module.exports = {
     page: true,
   },
   rules: {
+    'react-hooks/rules-of-hooks': 'error',
+
     'no-console': ['error', { allow: ['error'] }],
     'no-shadow': 0,
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
