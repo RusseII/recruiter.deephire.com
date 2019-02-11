@@ -1,14 +1,14 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
-import { message, Card, Button, Tooltip, Row, Col, AutoComplete } from 'antd';
+import { message, Card, Tooltip, Row, Col, AutoComplete } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import readableTime from 'readable-timestamp';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styles from './ShortLists.less';
-import { showConfirm } from '@/utils/utils';
+// import { showConfirm } from '@/utils/utils';
 
 import { getShortLists } from '@/services/api';
 
@@ -124,7 +124,7 @@ class ShortLists extends PureComponent {
 
   render() {
     const { data, searchTerm } = this.state;
-    const { loading, dispatch } = this.props;
+    const { loading } = this.props;
 
     if (!data) return null;
 
@@ -149,14 +149,6 @@ class ShortLists extends PureComponent {
     };
 
     const { selectedRows } = this.state;
-
-    filteredList.forEach((listItem, listIndex) => {
-      selectedRows.forEach(rowItem => {
-        if (listItem !== rowItem) {
-          selectedRows.splice(listIndex, 1);
-        }
-      });
-    });
 
     return (
       <PageHeaderWrapper title="Short Lists">
