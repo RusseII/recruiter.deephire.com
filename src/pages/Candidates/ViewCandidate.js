@@ -66,7 +66,7 @@ class ViewCandidate extends Component {
   nextQuestion = () => {
     const { activeQuestion, candidateData } = this.state;
 
-    if (activeQuestion + 1 < candidateData.length) {
+    if (activeQuestion + 1 < candidateData.responses.length) {
       const videoUrl = candidateData.responses[activeQuestion + 1].response;
       const questionText = candidateData.responses[activeQuestion + 1].question;
       this.setVideoData(videoUrl, questionText);
@@ -159,7 +159,7 @@ class ViewCandidate extends Component {
               style={{ marginBottom: 20 }}
               title={currentQuestionText}
               actions={[
-                <Button shape="circle" icon="left" onClick={this.previousQuestion} />,
+                <Button shape="circle" icon="left" onClick={() => this.previousQuestion()} />,
                 <Button onClick={this.nextQuestion} shape="circle" icon="right" />,
               ]}
             >
