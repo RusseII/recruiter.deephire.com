@@ -47,7 +47,7 @@ if (process.env.APP_TYPE === 'site') {
   plugins.push([
     'umi-plugin-ga',
     {
-      code: 'UA-72788897-6',
+      code: 'UA-103192788-1',
     },
   ]);
 }
