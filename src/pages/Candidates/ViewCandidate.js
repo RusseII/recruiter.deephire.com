@@ -116,7 +116,7 @@ class ViewCandidate extends Component {
           Back to Candidates
         </Button>
         <div style={{ float: 'right', marginBottom: '20px' }}>
-          <ShareCandidateButton candidateData={candidateData} />
+          <ShareCandidateButton candidateData={[candidateData]} />
         </div>
 
         <Row type="flex" gutter={24}>
