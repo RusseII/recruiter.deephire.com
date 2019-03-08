@@ -12,14 +12,13 @@
     "site": "npm run presite && cross-env APP_TYPE=site npm run build && firebase deploy",
     "analyze": "cross-env ANALYZE=1 umi build",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",
-    "lint": "eslint --ext .js src mock tests && npm run lint:style",
+    "lint": "eslint --ext .js src mock  && npm run lint:style",
     "lint:fix": "eslint --fix --ext .js src mock tests && npm run lint:style",
     "lint-staged": "lint-staged",
     "lint-staged:js": "eslint --ext .js",
     "test": "umi test",
     "generate-mock": "node ./scripts/generateMock.js",
     "test:component": "umi test ./src/components",
-    "test:all": "node ./tests/run-tests.js",
     "prettier": "prettier --write ./src/**/**/**/*"
   },
   "dependencies": {
