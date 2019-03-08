@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Button, List, AutoComplete, Checkbox, Row, Col } from 'antd';
+import { Card, List, AutoComplete, Checkbox, Row, Col } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import { showConfirm } from '@/utils/utils';
+// import { showConfirm } from '@/utils/utils';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 import CandidateCard from '@/components/CandidateCard';
 
@@ -85,7 +85,7 @@ class Candidates extends PureComponent {
 
     const unique = [...new Set(searchDataSource)];
 
-    const { dispatch, loading } = this.props;
+    const { loading } = this.props;
 
     const { selectedCards } = this.state;
 
