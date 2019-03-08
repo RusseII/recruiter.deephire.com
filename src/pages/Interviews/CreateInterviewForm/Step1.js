@@ -110,12 +110,18 @@ class Step1 extends React.PureComponent {
     e.preventDefault();
     validateFields((err, values) => {
       if (!err) {
+        // sometimes there was null values inside the array, which broke everything
+        const cleanedValueData = values;
+        cleanedValueData.interviewQuestions = values.interviewQuestions.filter(
+          value => value != null
+        );
+
         this.enterLoading();
         dispatch({
           type: 'form/submitStepForm',
           payload: {
             ...data,
-            ...values,
+            ...cleanedValueData,
             email,
           },
         });
