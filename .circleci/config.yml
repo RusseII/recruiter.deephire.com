@@ -29,11 +29,18 @@ jobs:
           name: AWS cloudfront
           command: aws configure set preview.cloudfront true
 
+      - run:
+          name: Install node modules
+          command: yarn
+      - run:
+          name: Run Tests
+          command: yarn test
+
       - deploy:
           name: Push to s3 PROD
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              CI=false yarn && yarn build
+              CI=false yarn build
               aws s3 sync dist/ s3://recruiter.deephire.com
               aws cloudfront create-invalidation --distribution-id E3NQM2SFD9O6RQ  --paths "/*"
             fi
@@ -41,6 +48,6 @@ jobs:
           name: Push to s3 DEVELOP
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              CI=false npm run build
+              CI=false yarn build
               aws s3 sync build/ s3://dev-recruiter.deephire.com
             fi
