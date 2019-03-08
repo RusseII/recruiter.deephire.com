@@ -2,10 +2,10 @@ import { stringify } from 'qs';
 import request from '@/utils/request';
 
 const hostedURL = 'https://api.deephire.com';
-const newApi = 'https://a.deephire.com';
+const newApi = 'https://a.deephire.com/v1';
 
 // const hostedURL = 'http://localhost:3001';
-// const newApi = 'http://localhost:3000';
+// const newApi = 'http://localhost:3000/v1';
 
 const setHeaders = () => ({
   authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -28,7 +28,7 @@ export async function createInterview(params) {
 }
 
 export async function getShortLists() {
-  return request(`${newApi}/v1/shortlists`, {
+  return request(`${newApi}/shortlists`, {
     method: 'GET',
     headers: setHeaders(),
   });
@@ -37,7 +37,7 @@ export async function getShortLists() {
 
 // gets data for a specific shortlist, useful for analytics page
 export async function getShortListData(id) {
-  return request(`${newApi}/v1/shortlists/${id}`, {
+  return request(`${newApi}/shortlists/${id}`, {
     method: 'GET',
     headers: setHeaders(),
   });
@@ -45,7 +45,7 @@ export async function getShortListData(id) {
 }
 
 export async function sendEmail(data) {
-  return request(`${newApi}/v1/emails`, {
+  return request(`${newApi}/emails`, {
     method: 'POST',
     headers: setHeaders(),
     body: data,
@@ -54,7 +54,7 @@ export async function sendEmail(data) {
 
 // get profile from id
 export async function getCandidateProfile(id) {
-  return request(`${newApi}/v1/candidates/${id}`, {
+  return request(`${newApi}/candidates/${id}`, {
     method: 'GET',
     headers: setHeaders(),
   });
@@ -65,7 +65,7 @@ export async function updateCandidateProfile(userId, data) {
   const sendData = data;
   delete sendData._id;
 
-  return request(`${newApi}/v1/candidates/${userId}`, {
+  return request(`${newApi}/candidates/${userId}`, {
     method: 'PUT',
     headers: setHeaders(),
     body: sendData,
@@ -78,14 +78,14 @@ export async function getVideos(params) {
     return null;
   }
   // return request(`${hostedURL}/v1.0/get_candidates/${params}`);
-  return request(`${newApi}/v1/videos`, {
+  return request(`${newApi}/videos`, {
     method: 'GET',
     headers: setHeaders(),
   });
 }
 
 export async function shareShortLink(data) {
-  const x = request(`${newApi}/v1/shortlists`, {
+  const x = request(`${newApi}/shortlists`, {
     method: 'POST',
     body: data,
     headers: setHeaders(),
@@ -108,7 +108,7 @@ export async function removeInterview(params) {
     selectedRows.map(async value => {
       const { _id } = value;
       const { $oid } = _id;
-      const res = await request(`${newApi}/v1/interviews/${$oid}`, {
+      const res = await request(`${newApi}/interviews/${$oid}`, {
         method: 'DELETE',
         headers: setHeaders(),
       });
@@ -125,7 +125,7 @@ export async function deleteShortList(params) {
     selectedRows.map(async value => {
       const { _id } = value;
       const { $oid } = _id;
-      const res = await request(`${newApi}/v1/shortlists/${$oid}`, {
+      const res = await request(`${newApi}/shortlists/${$oid}`, {
         method: 'DELETE',
         headers: setHeaders(),
       });
@@ -141,14 +141,14 @@ export async function removeCandidate(params) {
   await Promise.all(
     selectedRows.map(async value => {
       const { _id } = value;
-      const res = await request(`${newApi}/v1/videos/${_id}`, {
+      const res = await request(`${newApi}/videos/${_id}`, {
         method: 'DELETE',
         headers: setHeaders(),
       });
       return res;
     })
   );
-  return request(`${newApi}/v1/videos`, {
+  return request(`${newApi}/videos`, {
     method: 'GET',
     headers: setHeaders(),
   });
@@ -257,3 +257,5 @@ export async function queryActivities() {
 export async function queryRule(params) {
   return request(`/api/rule?${stringify(params)}`);
 }
+
+export { newApi, hostedURL };
