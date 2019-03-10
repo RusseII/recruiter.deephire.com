@@ -5,7 +5,7 @@
 
 Automated Video Interviews Built for Recruiters
 
-[![Build Status](https://dev.azure.com/qixiancs/ant-design-pro/_apis/build/status/ant-design.ant-design-pro?branchName=master)](https://dev.azure.com/qixiancs/ant-design-pro/_build/latest?definitionId=1?branchName=master)
+[![CircleCI](https://circleci.com/gh/RusseII/recruiter.deephire.io/tree/master.svg?style=svg&circle-token=8463e824f7adf292e2199d326ae19c1405db6700)](https://circleci.com/gh/RusseII/recruiter.deephire.io/tree/maste
 [![Dependencies](https://img.shields.io/david/ant-design/ant-design-pro.svg)](https://david-dm.org/ant-design/ant-design-pro)
 [![DevDependencies](https://img.shields.io/david/dev/ant-design/ant-design-pro.svg)](https://david-dm.org/ant-design/ant-design-pro?type=dev)
 [![Gitter](https://img.shields.io/gitter/room/ant-design/pro-english.svg)](https://gitter.im/ant-design/pro-english?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)(🇺🇸)
