@@ -4,12 +4,10 @@
 <div align="center">
 
 Automated Video Interviews Built for Recruiters
-
-[![CircleCI](https://circleci.com/gh/RusseII/recruiter.deephire.io/tree/master.svg?style=svg&circle-token=8463e824f7adf292e2199d326ae19c1405db6700)](https://circleci.com/gh/RusseII/recruiter.deephire.io/tree/maste
+[![CircleCI](https://circleci.com/gh/RusseII/recruiter.deephire.io/tree/master.svg?style=svg&circle-token=8463e824f7adf292e2199d326ae19c1405db6700)](https://circleci.com/gh/RusseII/recruiter.deephire.io/tree/master)
 [![Dependencies](https://img.shields.io/david/ant-design/ant-design-pro.svg)](https://david-dm.org/ant-design/ant-design-pro)
 [![DevDependencies](https://img.shields.io/david/dev/ant-design/ant-design-pro.svg)](https://david-dm.org/ant-design/ant-design-pro?type=dev)
-[![Gitter](https://img.shields.io/gitter/room/ant-design/pro-english.svg)](https://gitter.im/ant-design/pro-english?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)(🇺🇸)
-[![Gitter](https://img.shields.io/gitter/room/ant-design/ant-design-pro.svg?style=flat-square)](https://gitter.im/ant-design/ant-design-pro?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)(🇨🇳)
+
 
 
 ![](https://s3.amazonaws.com/deephire/logos/deephire+shortlists+photo.jpg)
