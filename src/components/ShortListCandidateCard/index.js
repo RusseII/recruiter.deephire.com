@@ -43,15 +43,14 @@ const ShortListAnalyticsCard = ({ item }) => (
             />
           </Tooltip>
         )}
-        {!item.interest &&
-          !item.rating && (
-            <Tooltip title="Client has not yet reviewed this candidate">
-              <Icon
-                type="clock-circle"
-                style={{ fontSize: '24px', color: '#808080', marginTop: 5 }}
-              />
-            </Tooltip>
-          )}
+        {!item.interest && !item.rating && (
+          <Tooltip title="Client has not yet reviewed this candidate">
+            <Icon
+              type="clock-circle"
+              style={{ fontSize: '24px', color: '#808080', marginTop: 5 }}
+            />
+          </Tooltip>
+        )}
       </Col>
     </Row>
 
@@ -79,6 +78,15 @@ const ShortListAnalyticsCard = ({ item }) => (
             <div className={styles.candidateFeedback}>{item.feedback}</div>
           </Col>
         </Row>
+      )}
+
+      {item.candidateEmail == "russell@deephire.com" && (
+        <div style={{ paddingTop: '20px' }}>
+          {'Russell_Resume.pdf: '}
+          <Icon style={{ color: 'green' }} type="check-circle" />
+          {'Russell_Cover_Letter.pdf: '}
+          <Icon style={{ color: 'green' }} type="check-circle" />
+        </div>
       )}
     </div>
   </Card>
