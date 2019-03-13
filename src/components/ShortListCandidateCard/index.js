@@ -85,7 +85,7 @@ const ShortListAnalyticsCard = ({ item }) => (
           {'Russell_Resume.pdf: '}
           <Icon style={{ color: 'green' }} type="check-circle" /> <br/>
           {'Russell_Cover_Letter.pdf: '}
-          <Icon style={{ color: 'green' }} type="check-circle" />
+          <Icon style={{ color: 'red' }} type="close-circle" />
         </div>
       )}
     </div>
