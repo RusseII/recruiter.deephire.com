@@ -83,7 +83,7 @@ const ShortListAnalyticsCard = ({ item }) => (
       {item.candidateEmail == "russell@deephire.com" && (
         <div style={{ paddingTop: '20px' }}>
           {'Russell_Resume.pdf: '}
-          <Icon style={{ color: 'green' }} type="check-circle" />
+          <Icon style={{ color: 'green' }} type="check-circle" /> <br>
           {'Russell_Cover_Letter.pdf: '}
           <Icon style={{ color: 'green' }} type="check-circle" />
         </div>
