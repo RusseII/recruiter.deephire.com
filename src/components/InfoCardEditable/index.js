@@ -1,11 +1,20 @@
 import React from 'react';
 
-import { Button, Card, Row, Icon, List, Popconfirm } from 'antd';
+import { Upload, Button, Card, Row, Icon, List, Popconfirm } from 'antd';
 
 import styles from './index.less';
 import AddYTModal from './AddYTModal';
 import { updateCandidateProfile, getCandidateProfile } from '@/services/api';
 
+const props = {
+  action: '//jsonplaceholder.typicode.com/posts/',
+  onChange({ file, fileList }) {
+    if (file.status !== 'uploading') {
+      console.log(file, fileList);
+    }
+  },
+  defaultFileList: [],
+};
 class InfoCardEditable extends React.Component {
   state = { modalVisible: false, candidateProfileData: {} };
 
@@ -89,9 +98,14 @@ class InfoCardEditable extends React.Component {
         />
 
         <Row>
-          <Button type="dashed" onClick={this.toggleModalVisible}>
+          <Button style={{ marginRight: '20px' }} type="dashed" onClick={this.toggleModalVisible}>
             <Icon type="plus" /> Add Youtube Link
           </Button>
+          <Upload {...props}>
+            <Button>
+              <Icon type="upload" /> Add Document
+            </Button>
+          </Upload>
         </Row>
 
         <AddYTModal
