@@ -78,10 +78,12 @@ export async function getVideos(params) {
     return null;
   }
   // return request(`${hostedURL}/v1.0/get_candidates/${params}`);
-  return request(`${newApi}/videos`, {
+  const videos = request(`${newApi}/videos`, {
     method: 'GET',
     headers: setHeaders(),
   });
+  videos.then(r => r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1)));
+  return videos;
 }
 
 export async function shareShortLink(data) {
