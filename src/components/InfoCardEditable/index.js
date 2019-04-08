@@ -6,24 +6,27 @@ import styles from './index.less';
 import AddYTModal from './AddYTModal';
 import { updateCandidateProfile, getCandidateProfile } from '@/services/api';
 
-const props = {
-  action: '//jsonplaceholder.typicode.com/posts/',
-  onChange({ file, fileList }) {
-    if (file.status !== 'uploading') {
-      console.log(file, fileList);
-    }
-  },
-  defaultFileList: [],
-};
-const InfoCardEditable = ({ userId, setVideoData, userName, interviewName, email }) => {
+const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
   const [modalVisible, setmodalVisible] = useState(false);
   const [candidateProfileData, setCandidateProfileData] = useState({});
 
   useEffect(() => {
-    getCandidateProfile(userId).then(r => {
+    getCandidateProfile(email).then(r => {
       if (r) setCandidateProfileData(r);
     });
   }, []);
+
+  const props = {
+    name: 'upfile',
+    action: `https://dev-a.deephire.com/v1/candidates/${email}/documents/`,
+    headers: { authorization: `Bearer ${localStorage.getItem('access_token')}` },
+    onChange({ file, fileList }) {
+      if (file.status !== 'uploading') {
+        console.log(file, fileList);
+      }
+    },
+    // defaultFileList: candidateProfileData.files,
+  };
 
   const toggleModalVisible = () => {
     setmodalVisible(!modalVisible);
@@ -32,7 +35,7 @@ const InfoCardEditable = ({ userId, setVideoData, userName, interviewName, email
   const remove = i => {
     candidateProfileData.youtubeLinks.splice(i, 1);
     // setCandidateProfileData(candidateProfileData);
-    updateCandidateProfile(userId, candidateProfileData).then(r => setCandidateProfileData(r));
+    updateCandidateProfile(email, candidateProfileData).then(r => setCandidateProfileData(r));
   };
 
   const addYouTubeLink = link => {
@@ -42,7 +45,7 @@ const InfoCardEditable = ({ userId, setVideoData, userName, interviewName, email
     } else {
       candidateProfileData.youtubeLinks.push(link);
     }
-    updateCandidateProfile(userId, candidateProfileData).then(r => setCandidateProfileData(r));
+    updateCandidateProfile(email, candidateProfileData).then(r => setCandidateProfileData(r));
   };
 
   if (!candidateProfileData) return null;
@@ -87,7 +90,7 @@ const InfoCardEditable = ({ userId, setVideoData, userName, interviewName, email
         <Button style={{ marginRight: '20px' }} type="dashed" onClick={toggleModalVisible}>
           <Icon type="plus" /> Add Youtube Link
         </Button>
-        <Upload {...props}>
+        <Upload {...props} defaultFileList={candidateProfileData.files}>
           <Button>
             <Icon type="upload" /> Add Document
           </Button>
