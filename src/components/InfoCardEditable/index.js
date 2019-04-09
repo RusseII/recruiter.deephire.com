@@ -20,12 +20,13 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
     name: 'upfile',
     action: `https://dev-a.deephire.com/v1/candidates/${email}/documents/`,
     headers: { authorization: `Bearer ${localStorage.getItem('access_token')}` },
-    onChange({ file, fileList }) {
-      if (file.status !== 'uploading') {
-        console.log(file, fileList);
-      }
-    },
-    // defaultFileList: candidateProfileData.files,
+    // onChange({ file, fileList }) {
+    //   if (file.status !== 'uploading') {
+    //     console.log(file, fileList);
+    //   }
+    // },
+    defaultFileList: candidateProfileData.files,
+    key: candidateProfileData.files,
   };
 
   const toggleModalVisible = () => {
@@ -90,7 +91,7 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
         <Button style={{ marginRight: '20px' }} type="dashed" onClick={toggleModalVisible}>
           <Icon type="plus" /> Add Youtube Link
         </Button>
-        <Upload {...props} defaultFileList={candidateProfileData.files}>
+        <Upload {...props}>
           <Button>
             <Icon type="upload" /> Add Document
           </Button>
