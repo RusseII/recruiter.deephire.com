@@ -23,7 +23,7 @@ const codeMessage = {
 };
 
 const checkStatus = response => {
-  if (response.status >= 200 && response.status < 300) {
+  if ((response.status >= 200 && response.status < 300 )|| response.status === 404) {
     return response;
   }
   const errortext = codeMessage[response.status] || response.statusText;
