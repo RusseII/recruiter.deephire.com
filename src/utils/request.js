@@ -8,18 +8,18 @@ const codeMessage = {
   200: 'Success',
   201: 'Created。',
   202: 'Accepted',
-  204: 'No Content。',
+  204: 'No Content',
   400: 'Bad Request',
   401: 'Your session has expired and you must log in again.',
   403: 'Forbidden',
   404: 'Not Found',
-  406: 'Not Acceptable。',
+  406: 'Not Acceptable',
   410: 'Gone',
   422: 'Unprocessable Entity',
   500: 'Internal Server Error',
   502: 'Bad Gateway',
   503: 'Service Unavaliable',
-  504: 'Gateway Timeout。',
+  504: 'Gateway Timeout',
 };
 
 const checkStatus = response => {
