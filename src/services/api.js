@@ -60,6 +60,12 @@ export async function getCandidateProfile(id) {
   });
 }
 
+export async function removeCandidateDocument(email, id) {
+  return request(`${newApi}/candidates/${email}/documents/${id}`, {
+    method: 'DELETE',
+    headers: setHeaders(),
+  });
+}
 // take json and create or update
 export async function updateCandidateProfile(email, data) {
   const sendData = data;

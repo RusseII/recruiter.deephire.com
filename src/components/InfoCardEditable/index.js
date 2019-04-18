@@ -4,29 +4,49 @@ import { Upload, Button, Card, Row, Icon, List, Popconfirm } from 'antd';
 
 import styles from './index.less';
 import AddYTModal from './AddYTModal';
-import { updateCandidateProfile, getCandidateProfile } from '@/services/api';
+import {
+  updateCandidateProfile,
+  getCandidateProfile,
+  removeCandidateDocument,
+} from '@/services/api';
 
 const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
   const [modalVisible, setmodalVisible] = useState(false);
   const [candidateProfileData, setCandidateProfileData] = useState({});
+  const [key, setKey] = useState(1);
 
   useEffect(() => {
     getCandidateProfile(email).then(r => {
-      if (r) setCandidateProfileData(r);
+      const candidateProfile = r;
+      if (r) {
+        if (candidateProfile.files) {
+          candidateProfile.files = r.files.map(r => ({
+            ...r,
+            url: `https://a.deephire.com/v1/candidates/${email}/documents/${r.uid}`,
+          }));
+        }
+        setCandidateProfileData(candidateProfile);
+      }
     });
-  }, []);
+  }, [key]);
 
   const props = {
     name: 'upfile',
     action: `https://dev-a.deephire.com/v1/candidates/${email}/documents/`,
     headers: { authorization: `Bearer ${localStorage.getItem('access_token')}` },
-    // onChange({ file, fileList }) {
-    //   if (file.status !== 'uploading') {
-    //     console.log(file, fileList);
-    //   }
-    // },
+    onChange({ file, fileList }) {
+      console.log(file);
+
+      if (file.status === 'done') {
+        setKey(file.status);
+      }
+    },
     defaultFileList: candidateProfileData.files,
     key: candidateProfileData.files,
+    onRemove(file) {
+      console.log(file);
+      removeCandidateDocument(email, file.uid);
+    },
   };
 
   const toggleModalVisible = () => {
@@ -91,7 +111,7 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
         <Button style={{ marginRight: '20px' }} type="dashed" onClick={toggleModalVisible}>
           <Icon type="plus" /> Add Youtube Link
         </Button>
-        <Upload {...props}>
+        <Upload key={key} {...props}>
           <Button>
             <Icon type="upload" /> Add Document
           </Button>
