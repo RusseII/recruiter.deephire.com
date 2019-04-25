@@ -135,7 +135,7 @@ class ShareCandidateButton extends React.Component {
       <div>
         {this.renderCorrectModal(currentStep)}{' '}
         <Button disabled={isDisabled} onClick={this.handleModalVisible} type="primary">
-          Share Candidate
+          Share Candidates
           <Icon type="share-alt" />
         </Button>
       </div>
