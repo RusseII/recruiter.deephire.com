@@ -29,8 +29,7 @@ const ViewCandidate = ({ location }) => {
   useEffect(() => {
     getVideo(id).then(data => {
       const [first] = data;
-      const { responses } = first;
-      const [response] = responses;
+      const [response] = first.responses;
       setCandidateData(first);
       setVideoData({ videoUrl: response.response, currentQuestionText: response.question });
     });
