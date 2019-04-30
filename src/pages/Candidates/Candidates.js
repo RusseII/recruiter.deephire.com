@@ -1,18 +1,13 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'dva';
 import { Card, List, AutoComplete, Checkbox, Row, Col } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 // import { showConfirm } from '@/utils/utils';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 import CandidateCard from '@/components/CandidateCard';
+import { getVideos } from '@/services/api';
 
 import styles from './Candidates.less';
 
-@connect(({ rule, loading, user }) => ({
-  currentUser: user.currentUser,
-  rule,
-  loading: loading.models.rule,
-}))
 class Candidates extends PureComponent {
   state = {
     selectedCards: [],
@@ -21,14 +16,8 @@ class Candidates extends PureComponent {
   componentDidMount() {
     const profile = JSON.parse(localStorage.getItem('profile'));
     const { email } = profile;
-    const { dispatch } = this.props;
 
-    if (email) {
-      dispatch({
-        type: 'rule/fetch',
-        payload: email,
-      });
-    }
+    getVideos(email).then(data => this.setState({ data }));
   }
 
   cardSelectOnChange = checkedValues => {
@@ -58,17 +47,15 @@ class Candidates extends PureComponent {
   };
 
   render() {
-    const {
-      rule: { data },
-    } = this.props;
-    const { searchTerm } = this.state;
+    const { searchTerm, data } = this.state;
 
+    if (!data) return null;
     let filteredData = [];
 
     if (searchTerm == null) {
-      filteredData = data.list;
+      filteredData = data;
     } else {
-      filteredData = data.list.filter(
+      filteredData = data.filter(
         candidate =>
           candidate.candidateEmail === searchTerm ||
           candidate.interviewName === searchTerm ||
@@ -77,7 +64,7 @@ class Candidates extends PureComponent {
     }
 
     const searchDataSource = [];
-    data.list.forEach(candidate => {
+    data.forEach(candidate => {
       if (candidate.userName != null) searchDataSource.push(candidate.userName);
       if (candidate.candidateEmail != null) searchDataSource.push(candidate.candidateEmail);
       if (candidate.interviewName != null) searchDataSource.push(candidate.interviewName);
@@ -100,20 +87,6 @@ class Candidates extends PureComponent {
                   candidateData={selectedCards}
                 />
               </Col>
-              {/* TODO ADD THIS BACK */}
-              {/* <Col>
-                <Button
-                  disabled={selectedCards.length === 0}
-                  type="danger"
-                  onClick={() => {
-                    showConfirm(dispatch, selectedCards, 'rule/removeCandidate', () =>
-                      this.setState({ selectedCards: [] })
-                    );
-                  }}
-                >
-                  Delete
-                </Button>
-              </Col> */}
               <Col>
                 <AutoComplete
                   allowClear
