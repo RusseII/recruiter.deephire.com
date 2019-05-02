@@ -2,7 +2,7 @@ import CandidateCard from '@/components/CandidateCard';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 import { getVideos } from '@/services/api';
-import { AutoComplete, Card, Checkbox, Col, List, Row } from 'antd';
+import { Button, AutoComplete, Card, Checkbox, Col, List, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styles from './Candidates.less';
 
@@ -54,18 +54,17 @@ const Candidates = () => {
   return (
     <PageHeaderWrapper title="Candidates">
       <Card>
-        <Row type="flex" justify="start" gutter={16}>
+        <Row type="flex" justify="space-between" gutter={16}>
           <Col>
             <ShareCandidateButton
+              marginRight
               isDisabled={selectedCards.length === 0}
               candidateData={selectedCards}
             />
-          </Col>
-          <Col>
+
             <AutoComplete
               allowClear
               dataSource={dataSource}
-              style={{ width: 200 }}
               onSelect={filter}
               onSearch={shouldClear}
               filterOption={(inputValue, option) =>
@@ -73,6 +72,9 @@ const Candidates = () => {
               }
               placeholder="Filter"
             />
+          </Col>
+          <Col>
+            <Button>View Archived</Button>
           </Col>
         </Row>
       </Card>
