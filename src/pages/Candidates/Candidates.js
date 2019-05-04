@@ -1,7 +1,9 @@
 import CandidateCard from '@/components/CandidateCard';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
-import { getVideos } from '@/services/api';
+import ArchiveButton from '@/components/ArchiveButton';
+
+import { getArchivedVideos, getVideos } from '@/services/api';
 import { Button, AutoComplete, Card, Checkbox, Col, List, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styles from './Candidates.less';
@@ -12,6 +14,7 @@ const Candidates = () => {
   const [data, setData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [archives, setArchives] = useState(false);
 
   const createDataSource = data => {
     const searchDataSource = [];
@@ -24,16 +27,25 @@ const Candidates = () => {
     setDataSource(unique);
   };
 
-  useEffect(() => {
+  const getData = async () => {
+    setLoading(true);
     const profile = JSON.parse(localStorage.getItem('profile'));
     const { email } = profile;
-    getVideos(email).then(data => {
-      createDataSource(data);
-      setData(data);
-      setLoading(false);
-      setFilteredData(data);
-    });
-  }, []);
+    let data = {};
+    if (archives) {
+      data = await getArchivedVideos(email);
+    } else {
+      data = await getVideos(email);
+    }
+    createDataSource(data);
+    setData(data);
+    setLoading(false);
+    setFilteredData(data);
+  };
+
+  useEffect(() => {
+    getData();
+  }, [archives]);
 
   const shouldClear = value => {
     if (!value) {
@@ -61,6 +73,13 @@ const Candidates = () => {
               isDisabled={selectedCards.length === 0}
               candidateData={selectedCards}
             />
+            <ArchiveButton
+              setSelectedCards={setSelectedCards}
+              reload={getData}
+              archives={archives}
+              route="videos"
+              archiveData={selectedCards}
+            />
 
             <AutoComplete
               allowClear
@@ -74,7 +93,9 @@ const Candidates = () => {
             />
           </Col>
           <Col>
-            <Button>View Archived</Button>
+            <Button onClick={() => setArchives(!archives)}>
+              {archives ? 'View All' : 'View Archived'}{' '}
+            </Button>
           </Col>
         </Row>
       </Card>

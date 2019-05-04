@@ -96,6 +96,26 @@ export async function getVideos(params) {
   videos.then(r => r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1)));
   return videos;
 }
+export async function getArchivedVideos(params) {
+  if (params == null) {
+    return null;
+  }
+  const videos = request(`${newApi}/videos/archives`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  videos.then(r => r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1)));
+  return videos;
+}
+
+export async function arch(data, route, archives = false) {
+  const archiveRoute = archives ? 'unarchive' : 'archive';
+  return request(`${newApi}/${route}/${archiveRoute}`, {
+    method: 'POST',
+    body: data,
+    headers: setHeaders(),
+  });
+}
 
 export async function getVideo(id) {
   return request(`${newApi}/videos/${id}`, {
