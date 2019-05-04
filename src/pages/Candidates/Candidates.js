@@ -59,7 +59,7 @@ const Candidates = () => {
   return (
     <PageHeaderWrapper title="Candidates">
       <Card>
-        <Row align="middle" type="flex" justify="space-between" gutter={16}>
+        <Row align="middle" type="flex" justify="space-between">
           <Col>
             <ShareCandidateButton
               marginRight
