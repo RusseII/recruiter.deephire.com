@@ -1,61 +1,12 @@
 @import '~antd/lib/style/themes/default.less';
 @import '~@/utils/utils.less';
 
-.App {
-  text-align: center;
-  background-color: green;
-
-  /* font-family: "Source Sans Pro", sans-serif; */
-}
 body > #root > div {
   height: 100vh;
-
-  /* font-family: "Source Sans Pro", sans-serif; */
-}
-
-.cardContainer {
-  border: 1px solid white;
-
-  background-color: red;
-  display: block;
-  border-radius: 5px;
-  text-align: left;
-
-  margin-block-start: 10px;
-}
-
-.cardContent {
-  padding-left: 3%;
-  padding-top: 1%;
-  padding-bottom: 1%;
-}
-
-.Collapsible {
-  width: 100%;
-
-  padding-block-start: 20px;
-
-  background-color: #f6f7f8;
-}
-
-.Collapsible__contentInner:target {
-  background-color: black;
-}
-
-.Collapsible__contentInner {
-  padding: 10px;
-  border: 1px solid white;
-  border-top: 0;
-  background-color: white;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  color: #59687c;
 }
 
 .playerWrapper {
   position: relative;
-
-  /* Player ratio: 100 / (1280 / 720) */
   padding-top: 75%;
 }
 
@@ -67,22 +18,4 @@ body > #root > div {
 
 .selected {
   background-color: #f1f7fe;
-}
-
-.information {
-  line-height: 22px;
-  :global {
-    .ant-row:not(:last-child) {
-      margin-bottom: 24px;
-    }
-  }
-
-  .label {
-    color: @heading-color;
-    text-align: right;
-    padding-right: 8px;
-    @media screen and (max-width: @screen-sm) {
-      text-align: left;
-    }
-  }
 }

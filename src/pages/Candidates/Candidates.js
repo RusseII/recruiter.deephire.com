@@ -21,7 +21,7 @@ const Candidates = () => {
     data.forEach(candidate => {
       if (candidate.userName) searchDataSource.push(candidate.userName);
       if (candidate.candidateEmail) searchDataSource.push(candidate.candidateEmail);
-      if (candidate.interviewName != null) searchDataSource.push(candidate.interviewName);
+      if (candidate.interviewName) searchDataSource.push(candidate.interviewName);
     });
     const unique = [...new Set(searchDataSource)];
     setDataSource(unique);
@@ -87,7 +87,6 @@ const Candidates = () => {
               placeholder="Filter"
             />
           </Col>
-
           <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
         </Row>
       </Card>

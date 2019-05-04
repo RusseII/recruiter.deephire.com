@@ -111,44 +111,41 @@ const ShortLists = () => {
   return (
     <PageHeaderWrapper title="Short Lists">
       <Card>
-        <div className={styles.tableListOperator}>
-          <Row align="middle" type="flex" justify="space-between">
-            <Col>
-              {selectedRows.length !== 0 && (
-                <ArchiveButton
-                  onClick={() => setSelectedRows([])}
-                  reload={getData}
-                  archives={archives}
-                  route="shortlists"
-                  archiveData={selectedRows}
-                />
-              )}
-              <AutoComplete
-                allowClear
-                dataSource={dataSource}
-                onSelect={filter}
-                onSearch={shouldClear}
-                filterOption={(inputValue, option) =>
-                  option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                }
-                placeholder="Filter"
+        <Row align="middle" type="flex" justify="space-between">
+          <Col>
+            {selectedRows.length !== 0 && (
+              <ArchiveButton
+                onClick={() => setSelectedRows([])}
+                reload={getData}
+                archives={archives}
+                route="shortlists"
+                archiveData={selectedRows}
               />
-            </Col>
-            <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
-          </Row>
-        </div>
+            )}
+            <AutoComplete
+              allowClear
+              dataSource={dataSource}
+              onSelect={filter}
+              onSearch={shouldClear}
+              filterOption={(inputValue, option) =>
+                option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+              }
+              placeholder="Filter"
+            />
+          </Col>
+          <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
+        </Row>
       </Card>
+
       <Card bordered={false}>
-        <div className={styles.tableList}>
-          <StandardTable
-            selectedRows={selectedRows}
-            loading={loading}
-            data={{ list: filteredData }}
-            size="small"
-            columns={columns}
-            onSelectRow={rows => setSelectedRows(rows)}
-          />
-        </div>
+        <StandardTable
+          selectedRows={selectedRows}
+          loading={loading}
+          data={{ list: filteredData }}
+          size="small"
+          columns={columns}
+          onSelectRow={rows => setSelectedRows(rows)}
+        />
       </Card>
     </PageHeaderWrapper>
   );
