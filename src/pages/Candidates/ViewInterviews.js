@@ -1,13 +1,10 @@
-import React, { PureComponent, Fragment } from 'react';
-import { connect } from 'dva';
-import { Tooltip, message, Card, Form, Button } from 'antd';
-import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
-import readableTime from 'readable-timestamp';
+import StandardTable from '@/components/StandardTable';
+import { getInterviews } from '@/services/api';
+import { Card, message, Tooltip } from 'antd';
+import React, { Fragment, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import styles from './Candidates.less';
-import { showConfirm } from '@/utils/utils';
+import readableTime from 'readable-timestamp';
 
 const columns = [
   {
@@ -30,7 +27,6 @@ const columns = [
       }
     },
   },
-
   {
     title: 'Created',
     sorter: true,
@@ -58,79 +54,36 @@ const columns = [
   },
 ];
 
-@connect(({ rule, loading, user }) => ({
-  currentUser: user.currentUser,
-  rule,
-  loading: loading.models.rule,
-}))
-@Form.create()
-class TableList extends PureComponent {
-  state = {
-    selectedRows: [],
-  };
+const TableList = () => {
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
 
-  componentDidMount() {
+  const getData = async () => {
+    setLoading(true);
     const profile = JSON.parse(localStorage.getItem('profile'));
     const { email } = profile;
-    const { dispatch } = this.props;
-
-    if (email) {
-      dispatch({
-        type: 'rule/view_interviews',
-        payload: email,
-      });
-    }
-  }
-
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
+    const data = await getInterviews(email);
+    setData(data);
+    setLoading(false);
   };
 
-  render() {
-    const {
-      rule: { data },
-      loading,
-      dispatch,
-    } = this.props;
+  useEffect(() => getData(), []);
 
-    const { selectedRows } = this.state;
-
-    return (
-      <PageHeaderWrapper title="Interviews">
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            {selectedRows.length > 0 && (
-              <span>
-                <Button
-                  type="danger"
-                  onClick={() => {
-                    showConfirm(dispatch, selectedRows, 'rule/removeInterview', () =>
-                      this.setState({ selectedRows: [] })
-                    );
-                  }}
-                >
-                  Delete
-                </Button>
-                <br />
-                <br />
-              </span>
-            )}
-
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={data}
-              size="small"
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-            />
-          </div>
-        </Card>
-      </PageHeaderWrapper>
-    );
-  }
-}
+  return (
+    <PageHeaderWrapper title="Interviews">
+      <Card bordered={false}>
+        <StandardTable
+          selectedRows={selectedRows}
+          loading={loading}
+          data={{ list: data }}
+          size="small"
+          columns={columns}
+          onSelectRow={rows => setSelectedRows(rows)}
+        />
+      </Card>
+    </PageHeaderWrapper>
+  );
+};
 
 export default TableList;
