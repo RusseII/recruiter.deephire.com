@@ -1,10 +1,11 @@
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import StandardTable from '@/components/StandardTable';
-import { getInterviews } from '@/services/api';
+import { getInterviews, getArchivedInterviews } from '@/services/api';
 import { Card, message, Tooltip } from 'antd';
 import React, { Fragment, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
+import ArchiveButton from '@/components/ArchiveButton';
 
 const columns = [
   {
@@ -58,21 +59,38 @@ const TableList = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [archives, setArchives] = useState(false);
 
   const getData = async () => {
     setLoading(true);
     const profile = JSON.parse(localStorage.getItem('profile'));
     const { email } = profile;
-    const data = await getInterviews(email);
+    const data = await (archives ? getArchivedInterviews(email) : getInterviews(email));
     setData(data);
     setLoading(false);
   };
+  useEffect(() => {
+    getData();
+  }, [archives]);
 
-  useEffect(() => getData(), []);
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <PageHeaderWrapper title="Interviews">
       <Card bordered={false}>
+        {selectedRows.length !== 0 && (
+          <ArchiveButton
+            onClick={() => setSelectedRows([])}
+            reload={getData}
+            archives={archives}
+            route="videos"
+            archiveData={selectedRows}
+          />
+        )}
+        <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
+
         <StandardTable
           selectedRows={selectedRows}
           loading={loading}

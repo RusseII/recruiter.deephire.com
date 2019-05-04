@@ -29,18 +29,11 @@ const Candidates = () => {
 
   const getData = async () => {
     setLoading(true);
-    const profile = JSON.parse(localStorage.getItem('profile'));
-    const { email } = profile;
-    let data = {};
-    if (archives) {
-      data = await getArchivedVideos(email);
-    } else {
-      data = await getVideos(email);
-    }
+    const data = await (archives ? getArchivedVideos() : getVideos());
     createDataSource(data);
     setData(data);
-    setLoading(false);
     setFilteredData(data);
+    setLoading(false);
   };
 
   useEffect(() => {

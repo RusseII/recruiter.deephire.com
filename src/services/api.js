@@ -108,6 +108,12 @@ export async function getArchivedVideos(params) {
   return videos;
 }
 
+export async function getArchivedInterviews() {
+  return request(`${newApi}/interviews/archives`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
 export async function arch(data, route, archives = false) {
   const archiveRoute = archives ? 'unarchive' : 'archive';
   return request(`${newApi}/${route}/${archiveRoute}`, {
