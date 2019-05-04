@@ -4,7 +4,7 @@ import ShareCandidateButton from '@/components/ShareCandidateButton';
 import ArchiveButton from '@/components/ArchiveButton';
 
 import { getArchivedVideos, getVideos } from '@/services/api';
-import { Button, AutoComplete, Card, Checkbox, Col, List, Row } from 'antd';
+import { AutoComplete, Card, Checkbox, Col, List, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styles from './Candidates.less';
 
@@ -66,20 +66,22 @@ const Candidates = () => {
   return (
     <PageHeaderWrapper title="Candidates">
       <Card>
-        <Row type="flex" justify="space-between" gutter={16}>
+        <Row align="middle" type="flex" justify="space-between" gutter={16}>
           <Col>
             <ShareCandidateButton
               marginRight
               isDisabled={selectedCards.length === 0}
               candidateData={selectedCards}
             />
-            <ArchiveButton
-              setSelectedCards={setSelectedCards}
-              reload={getData}
-              archives={archives}
-              route="videos"
-              archiveData={selectedCards}
-            />
+            {selectedCards.length !== 0 && (
+              <ArchiveButton
+                onClick={() => setSelectedCards([])}
+                reload={getData}
+                archives={archives}
+                route="videos"
+                archiveData={selectedCards}
+              />
+            )}
 
             <AutoComplete
               allowClear
@@ -92,17 +94,15 @@ const Candidates = () => {
               placeholder="Filter"
             />
           </Col>
-          <Col>
-            <Button onClick={() => setArchives(!archives)}>
-              {archives ? 'View All' : 'View Archived'}{' '}
-            </Button>
-          </Col>
+
+          <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
         </Row>
       </Card>
 
       <Checkbox.Group
         className={styles.filterCardList}
         onChange={checked => setSelectedCards(checked)}
+        value={selectedCards}
       >
         <List
           rowKey="id"

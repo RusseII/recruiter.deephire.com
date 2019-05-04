@@ -1,15 +1,21 @@
 import React from 'react';
 
-import { Button } from 'antd';
+import { message, Button } from 'antd';
 import { arch } from '@/services/api';
 
-const Archive = ({ setSelectedCards, archiveData, route, archives, reload }) => {
-  const shouldArch = () => {
+const Archive = ({ onClick, archiveData, route, archives, reload }) => {
+  const shouldArch = async () => {
     const data = archiveData.map(data => data._id);
-    arch(data, route, archives).then(reload());
-    setSelectedCards([]);
+    await arch(data, route, archives);
+    await reload();
+    onClick();
+    message.success(archives ? 'Succesfully unarchived' : 'Successfully archived');
   };
-  return <Button onClick={shouldArch}>{archives ? 'Unarchive' : 'Archive'}</Button>;
+  return (
+    <Button style={{ marginRight: '16px' }} onClick={shouldArch}>
+      {archives ? 'Unarchive' : 'Archive'}
+    </Button>
+  );
 };
 
 export default Archive;
