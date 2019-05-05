@@ -1,7 +1,7 @@
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import StandardTable from '@/components/StandardTable';
 import { getInterviews, getArchivedInterviews } from '@/services/api';
-import { Card, message, Tooltip } from 'antd';
+import { Row, Col, Card, message, Tooltip } from 'antd';
 import React, { Fragment, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
@@ -79,18 +79,24 @@ const TableList = () => {
 
   return (
     <PageHeaderWrapper title="Interviews">
-      <Card bordered={false}>
-        {selectedRows.length !== 0 && (
-          <ArchiveButton
-            onClick={() => setSelectedRows([])}
-            reload={getData}
-            archives={archives}
-            route="videos"
-            archiveData={selectedRows}
-          />
-        )}
-        <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
+      <Card>
+        <Row align="middle" type="flex" justify="space-between">
+          <Col>
+            {selectedRows.length !== 0 && (
+              <ArchiveButton
+                onClick={() => setSelectedRows([])}
+                reload={getData}
+                archives={archives}
+                route="videos"
+                archiveData={selectedRows}
+              />
+            )}
+          </Col>
+          <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
+        </Row>
+      </Card>
 
+      <Card bordered={false}>
         <StandardTable
           selectedRows={selectedRows}
           loading={loading}
