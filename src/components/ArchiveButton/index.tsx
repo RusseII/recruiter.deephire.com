@@ -1,9 +1,16 @@
-import React from 'react';
-
-import { message, Button } from 'antd';
 import { arch } from '@/services/api';
+import { Button, message } from 'antd';
+import React, { FC } from 'react';
 
-const Archive = ({ onClick, archiveData, route, archives, reload }) => {
+type ArchiveProps = {
+  onClick: () => void;
+  archiveData: { _id: string }[];
+  route: string;
+  archives: boolean;
+  reload: () => void;
+};
+
+const Archive: FC<ArchiveProps> = ({ onClick, archiveData, route, archives, reload }) => {
   const shouldArch = async () => {
     const data = archiveData.map(data => data._id);
     await arch(data, route, archives);
