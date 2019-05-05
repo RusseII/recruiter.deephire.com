@@ -28,7 +28,7 @@ const CandidateCard = ({ item }) => (
   <Card
     bodyStyle={{ paddingBottom: 20 }}
     actions={[
-      <Checkbox style={{ paddingLeft: '50px', paddingRight: '50px' }} value={item} />,
+      <Checkbox style={{ paddingLeft: '50', paddingRight: '50' }} value={item} />,
       <a onClick={() => openInterview(item)}>View</a>,
     ]}
   >
