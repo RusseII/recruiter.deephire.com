@@ -29,3 +29,20 @@ Modern browsers and IE11.
 | --------- | --------- | --------- | --------- | --------- |
 | IE11, Edge| last 2 versions| last 2 versions| last 2 versions| last 2 versions
 
+
+
+### Running instructions
+```
+git clone https://github.com/RusseII/recruiter.deephire.com.git 
+cd recruiter.deephire.com
+yarn
+yarn start 
+```
+
+In src/Auth/auth0-variables.js, change callbackUrl to use localhost 
+```
+callbackUrl: 'http://localhost:8000/user/callback',
+// callbackUrl: 'https://recruiter.deephire.com/user/callback',
+```
+
+Go to http://localhost:8000
