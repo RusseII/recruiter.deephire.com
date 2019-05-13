@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
-import { Alert, Button } from 'antd';
 import Login from '@/components/Login';
 import { sendEmail } from '@/services/api';
-
-import styles from './Login.less';
+import { Alert, Button } from 'antd';
+import { connect } from 'dva';
+import React, { Component } from 'react';
 import Auth from '../../Auth/Auth';
+import styles from './Login.less';
 
 const { Tab, UserName, Password, Submit } = Login;
 
@@ -78,9 +77,9 @@ class LoginPage extends Component {
             />
           </Tab>
           <div>
-            <a style={{ float: 'right' }} href="">
+            {/* <a style={{ float: 'right' }} href="">
               Forgot password
-            </a>
+            </a> */}
           </div>
 
           <Submit loading={submitting}>{type === 'account' ? 'Log in' : 'Sign up'}</Submit>
