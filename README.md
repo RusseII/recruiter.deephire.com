@@ -15,7 +15,7 @@ Automated Video Interviews Built for Recruiters
 
 </div>
 
-- Preview: https://recruiters.deephire.com
+- Preview: https://recruiter.deephire.com
 - Home Page: https://deephire.com
 - API: https://a.deephire.com
 - Blog: https://blog.deephire.com
