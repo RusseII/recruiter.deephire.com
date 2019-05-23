@@ -1,6 +1,6 @@
 import React, { Component, Suspense } from 'react';
 import { connect } from 'dva';
-import { Row, Col, List } from 'antd';
+import { Row, Col, List, Skeleton } from 'antd';
 import qs from 'qs';
 
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
@@ -17,21 +17,30 @@ const ProportionSales = React.lazy(() => import('./ProportionSales'));
 
 const readableTime = require('readable-timestamp');
 
-@connect(({ chart, loading }) => ({
-  chart,
-  loading: loading.effects['chart/fetch'],
-}))
+@connect(({ chart, loading }) => {
+  return {
+    chart,
+    loading: loading.effects['chart/fetch'],
+  };
+})
 class ShortListAnalytics extends Component {
   state = {
+    analyticsData: { clicks: [], email: '', interviews: [], shortUrl: '', temp: {} },
     rangePickerValue: getTimeDistance('year'),
     candidateStatus: 'overview',
+    skeletonLoading: true,
   };
 
   componentDidMount() {
     const { location } = this.props;
     const id = qs.parse(location.search)['?id'];
 
-    getShortListData(id).then(r => this.setState({ analyticsData: r }));
+    getShortListData(id).then(r => {
+      this.setState({
+        analyticsData: r,
+        skeletonLoading: false,
+      });
+    });
   }
 
   handleChangeCandidateStatusPie = e => {
@@ -62,24 +71,58 @@ class ShortListAnalytics extends Component {
   };
 
   render() {
+    const { skeletonLoading } = this.state;
+    const { loading } = this.props;
     const { analyticsData: temp, candidateStatus } = this.state;
-    if (!temp) {
-      return null;
-    }
+
     const analyticsData = temp[0];
 
-    const { loading } = this.props;
-
-    let lastViewed = 'Not Seen';
-    if (analyticsData.clicks) {
-      const length = analyticsData.clicks.length - 1;
-      lastViewed = this.friendlyDate(analyticsData.clicks[length]);
+    // Renders skeletons if analyticsData is undefined
+    if (!analyticsData) {
+      return (
+        <GridContent>
+          <PageHeaderWrapper>
+            <Row gutter={16}>
+              <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+                <Suspense fallback={null}>
+                  <Skeleton loading={skeletonLoading} active avatar />
+                </Suspense>
+              </Col>
+              <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+                <Skeleton loading={skeletonLoading} active />
+              </Col>
+            </Row>
+            <Skeleton loading={skeletonLoading} active>
+              <div className={styles.cardList}>
+                <List
+                  rowKey="id"
+                  style={{ marginTop: 24 }}
+                  loading={loading}
+                  grid={{ gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }}
+                  renderItem={item => (
+                    <List.Item key={item.id}>
+                      <ShortListCandidateCard item={item} />
+                    </List.Item>
+                  )}
+                />
+              </div>
+            </Skeleton>
+          </PageHeaderWrapper>
+        </GridContent>
+      );
     }
 
-    const { shortUrl, interviews, clicks } = analyticsData;
+    // Renders everything by default if analyticsData is defined
+    const { email, clicks, interviews, shortUrl } = analyticsData;
+
+    let lastViewed = 'Not Seen';
+
+    if (clicks) {
+      const length = clicks.length - 1;
+      lastViewed = this.friendlyDate(clicks[length]);
+    }
 
     const totalCandidates = interviews ? interviews.length : 0;
-
     const views = clicks ? clicks.length : 0;
 
     let reviewedCandidates = 0;
@@ -90,17 +133,12 @@ class ShortListAnalytics extends Component {
     let maybeCandidates = 0;
     let declinedCandidates = 0;
 
-    if (!interviews) {
-      return null;
-    }
-
-    interviews.forEach(candidate => {
+    analyticsData.interviews.forEach(candidate => {
       if (candidate.interest || candidate.rating) reviewedCandidates += 1;
       else if (candidate.clicks) notReviewedCandidates += 1;
       else notSeenCandidates += 1;
     });
-
-    interviews.forEach(candidate => {
+    analyticsData.interviews.forEach(candidate => {
       if (candidate.interest ? candidate.interest === 1 : candidate.rating > 3)
         acceptedCandidates += 1;
       else if (
@@ -145,7 +183,7 @@ class ShortListAnalytics extends Component {
 
     return (
       <GridContent>
-        <PageHeaderWrapper title={`Short List - ${analyticsData.email}`} shortUrl={shortUrl}>
+        <PageHeaderWrapper title={`Short List - ${email}`} shortUrl={shortUrl}>
           <Row gutter={16}>
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
@@ -167,13 +205,12 @@ class ShortListAnalytics extends Component {
               />
             </Col>
           </Row>
-
           <div className={styles.cardList}>
             <List
               rowKey="id"
               style={{ marginTop: 24 }}
-              grid={{ gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }}
               loading={loading}
+              grid={{ gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }}
               dataSource={interviews}
               renderItem={item => (
                 <List.Item key={item.id}>
