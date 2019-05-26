@@ -1,10 +1,10 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
 
-const hostedURL = 'https://api.deephire.com';
+// const newApi = 'http://localhost:3000/v1';
 const newApi = 'https://a.deephire.com/v1';
 
-// const hostedURL = 'http://localhost:3001';
+// const newApi = 'http://localhost:3001';
 // const newApi = 'http://localhost:3000/v1';
 
 const setHeaders = () => ({
@@ -12,19 +12,26 @@ const setHeaders = () => ({
 });
 
 export async function createInterview(params) {
-  const { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions, email } = params;
+  const {
+    prepTime,
+    retakesAllowed,
+    answerTime,
+    interviewName,
+    interviewQuestions,
+    email: createdBy,
+  } = params;
   const questions = interviewQuestions.map(a => ({
     question: a,
   }));
 
-  const data = {
+  const body = {
     interviewName,
-    email,
-    interview_questions: questions,
-    interview_config: { retakesAllowed, prepTime, answerTime },
+    createdBy,
+    interviewQuestions: questions,
+    interviewConfig: { retakesAllowed, prepTime, answerTime },
   };
 
-  return request(`${hostedURL}/v1.0/create_interview`, { method: 'POST', body: data });
+  return request(`${newApi}/interviews`, { method: 'POST', body, headers: setHeaders() });
 }
 
 export async function getShortLists() {
@@ -140,30 +147,26 @@ export async function shareShortLink(data) {
   return x;
 }
 
-export async function getInterviews(params) {
-  if (params == null) {
-    // params = 'test@gmail.com';
-    return null;
-  }
-  return request(`${hostedURL}/v1.0/get_interviews/${params}`);
+export async function getInterviews() {
+  return request(`${newApi}/interviews`, { method: 'GET', headers: setHeaders() });
 }
 
-export async function removeInterview(params) {
-  const { email, selectedRows } = params;
+// export async function removeInterview(params) {
+//   const { email, selectedRows } = params;
 
-  await Promise.all(
-    selectedRows.map(async value => {
-      const { _id } = value;
-      const { $oid } = _id;
-      const res = await request(`${newApi}/interviews/${$oid}`, {
-        method: 'DELETE',
-        headers: setHeaders(),
-      });
-      return res;
-    })
-  );
-  return request(`${hostedURL}/v1.0/get_interviews/${email}`);
-}
+//   await Promise.all(
+//     selectedRows.map(async value => {
+//       const { _id } = value;
+//       const { $oid } = _id;
+//       const res = await request(`${newApi}/interviews/${$oid}`, {
+//         method: 'DELETE',
+//         headers: setHeaders(),
+//       });
+//       return res;
+//     })
+//   );
+//   return request(`${newApi}/interviews${email}`);
+// }
 
 export async function deleteShortList(params) {
   const { selectedRows } = params;
@@ -305,4 +308,4 @@ export async function queryRule(params) {
   return request(`/api/rule?${stringify(params)}`);
 }
 
-export { newApi, hostedURL };
+export { newApi };

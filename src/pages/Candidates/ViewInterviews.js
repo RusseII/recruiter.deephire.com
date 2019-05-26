@@ -16,7 +16,7 @@ const columns = [
     title: 'Interview Questions',
     render(x, data) {
       try {
-        const listItems = data.interview_questions.map(d => (
+        const listItems = data.interviewQuestions.map(d => (
           <div>
             <li key={d.question}>{d.question}</li>
             <br />
@@ -33,7 +33,7 @@ const columns = [
     sorter: true,
     render(test, data) {
       try {
-        const dateObj = new Date(data.python_datetime);
+        const dateObj = new Date(data.timestamp);
         const displayTime = readableTime(dateObj);
         return <div>{displayTime}</div>;
       } catch {
@@ -46,8 +46,8 @@ const columns = [
     render: (text, data) => (
       <Fragment>
         <Tooltip title="Click to copy">
-          <CopyToClipboard text={data.short_url} onCopy={() => message.success('Link Copied')}>
-            <a>{data.short_url || '-'}</a>
+          <CopyToClipboard text={data.shortUrl} onCopy={() => message.success('Link Copied')}>
+            <a>{data.shortUrl || '-'}</a>
           </CopyToClipboard>
         </Tooltip>
       </Fragment>
