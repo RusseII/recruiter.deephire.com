@@ -30,9 +30,9 @@ const Candidates = () => {
   const getData = async () => {
     setLoading(true);
     const data = await (archives ? getArchivedVideos() : getVideos());
-    createDataSource(data);
-    setData(data);
-    setFilteredData(data);
+    createDataSource(data || []);
+    setData(data || []);
+    setFilteredData(data || []);
     setLoading(false);
   };
 
