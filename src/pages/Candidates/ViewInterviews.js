@@ -1,13 +1,11 @@
-import React, { PureComponent, Fragment } from 'react';
-import { connect } from 'dva';
-import { Tooltip, message, Card, Form, Button } from 'antd';
-import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
-import readableTime from 'readable-timestamp';
+import StandardTable from '@/components/StandardTable';
+import { getInterviews, getArchivedInterviews } from '@/services/api';
+import { Row, Col, Card, message, Tooltip } from 'antd';
+import React, { Fragment, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import styles from './Candidates.less';
-import { showConfirm } from '@/utils/utils';
+import readableTime from 'readable-timestamp';
+import ArchiveButton from '@/components/ArchiveButton';
 
 const columns = [
   {
@@ -18,7 +16,7 @@ const columns = [
     title: 'Interview Questions',
     render(x, data) {
       try {
-        const listItems = data.interview_questions.map(d => (
+        const listItems = data.interviewQuestions.map(d => (
           <div>
             <li key={d.question}>{d.question}</li>
             <br />
@@ -30,13 +28,12 @@ const columns = [
       }
     },
   },
-
   {
     title: 'Created',
     sorter: true,
     render(test, data) {
       try {
-        const dateObj = new Date(data.python_datetime);
+        const dateObj = new Date(data.timestamp);
         const displayTime = readableTime(dateObj);
         return <div>{displayTime}</div>;
       } catch {
@@ -49,8 +46,8 @@ const columns = [
     render: (text, data) => (
       <Fragment>
         <Tooltip title="Click to copy">
-          <CopyToClipboard text={data.short_url} onCopy={() => message.success('Link Copied')}>
-            <a>{data.short_url || '-'}</a>
+          <CopyToClipboard text={data.shortUrl} onCopy={() => message.success('Link Copied')}>
+            <a>{data.shortUrl || '-'}</a>
           </CopyToClipboard>
         </Tooltip>
       </Fragment>
@@ -58,79 +55,59 @@ const columns = [
   },
 ];
 
-@connect(({ rule, loading, user }) => ({
-  currentUser: user.currentUser,
-  rule,
-  loading: loading.models.rule,
-}))
-@Form.create()
-class TableList extends PureComponent {
-  state = {
-    selectedRows: [],
-  };
+const TableList = () => {
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [archives, setArchives] = useState(false);
 
-  componentDidMount() {
+  const getData = async () => {
+    setLoading(true);
     const profile = JSON.parse(localStorage.getItem('profile'));
     const { email } = profile;
-    const { dispatch } = this.props;
-
-    if (email) {
-      dispatch({
-        type: 'rule/view_interviews',
-        payload: email,
-      });
-    }
-  }
-
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
+    const data = await (archives ? getArchivedInterviews(email) : getInterviews(email));
+    setData(data || []);
+    setLoading(false);
   };
+  useEffect(() => {
+    getData();
+  }, [archives]);
 
-  render() {
-    const {
-      rule: { data },
-      loading,
-      dispatch,
-    } = this.props;
+  useEffect(() => {
+    getData();
+  }, []);
 
-    const { selectedRows } = this.state;
-
-    return (
-      <PageHeaderWrapper title="Interviews">
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            {selectedRows.length > 0 && (
-              <span>
-                <Button
-                  type="danger"
-                  onClick={() => {
-                    showConfirm(dispatch, selectedRows, 'rule/removeInterview', () =>
-                      this.setState({ selectedRows: [] })
-                    );
-                  }}
-                >
-                  Delete
-                </Button>
-                <br />
-                <br />
-              </span>
+  return (
+    <PageHeaderWrapper title="Interviews">
+      <Card>
+        <Row align="middle" type="flex" justify="space-between">
+          <Col>
+            {selectedRows.length !== 0 && (
+              <ArchiveButton
+                onClick={() => setSelectedRows([])}
+                reload={getData}
+                archives={archives}
+                route="interviews"
+                archiveData={selectedRows}
+              />
             )}
+          </Col>
+          <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
+        </Row>
+      </Card>
 
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={data}
-              size="small"
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-            />
-          </div>
-        </Card>
-      </PageHeaderWrapper>
-    );
-  }
-}
+      <Card bordered={false}>
+        <StandardTable
+          selectedRows={selectedRows}
+          loading={loading}
+          data={{ list: data }}
+          size="small"
+          columns={columns}
+          onSelectRow={rows => setSelectedRows(rows)}
+        />
+      </Card>
+    </PageHeaderWrapper>
+  );
+};
 
 export default TableList;

@@ -49,5 +49,5 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               CI=false yarn build
-              aws s3 sync build/ s3://dev-recruiter.deephire.com
+              aws s3 sync dist/ s3://dev-recruiter.deephire.com
             fi

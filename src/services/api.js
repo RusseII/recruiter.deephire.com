@@ -1,10 +1,10 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
 
-const hostedURL = 'https://api.deephire.com';
+// const newApi = 'http://localhost:3000/v1';
 const newApi = 'https://a.deephire.com/v1';
 
-// const hostedURL = 'http://localhost:3001';
+// const newApi = 'http://localhost:3001';
 // const newApi = 'http://localhost:3000/v1';
 
 const setHeaders = () => ({
@@ -12,19 +12,26 @@ const setHeaders = () => ({
 });
 
 export async function createInterview(params) {
-  const { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions, email } = params;
+  const {
+    prepTime,
+    retakesAllowed,
+    answerTime,
+    interviewName,
+    interviewQuestions,
+    email: createdBy,
+  } = params;
   const questions = interviewQuestions.map(a => ({
     question: a,
   }));
 
-  const data = {
+  const body = {
     interviewName,
-    email,
-    interview_questions: questions,
-    interview_config: { retakesAllowed, prepTime, answerTime },
+    createdBy,
+    interviewQuestions: questions,
+    interviewConfig: { retakesAllowed, prepTime, answerTime },
   };
 
-  return request(`${hostedURL}/v1.0/create_interview`, { method: 'POST', body: data });
+  return request(`${newApi}/interviews`, { method: 'POST', body, headers: setHeaders() });
 }
 
 export async function getShortLists() {
@@ -83,11 +90,7 @@ export async function updateCandidateProfile(email, data) {
   });
 }
 
-export async function getVideos(params) {
-  if (params == null) {
-    // params = 'test@gmail.com';
-    return null;
-  }
+export async function getVideos() {
   // return request(`${hostedURL}/v1.0/get_candidates/${params}`);
   const videos = request(`${newApi}/videos`, {
     method: 'GET',
@@ -95,6 +98,44 @@ export async function getVideos(params) {
   });
   videos.then(r => r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1)));
   return videos;
+}
+export async function getArchivedVideos() {
+  const videos = request(`${newApi}/videos/archives`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  videos.then(r => r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1)));
+  return videos;
+}
+
+export async function getArchivedInterviews() {
+  return request(`${newApi}/interviews/archives`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
+export async function getArchivedShortlists() {
+  return request(`${newApi}/shortlists/archives`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
+export async function arch(data, route, archives = false) {
+  const archiveRoute = archives ? 'unarchive' : 'archive';
+  return request(`${newApi}/${route}/${archiveRoute}`, {
+    method: 'POST',
+    body: data,
+    headers: setHeaders(),
+  });
+}
+
+export async function getVideo(id) {
+  return request(`${newApi}/videos/${id}`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
 }
 
 export async function shareShortLink(data) {
@@ -106,30 +147,26 @@ export async function shareShortLink(data) {
   return x;
 }
 
-export async function getInterviews(params) {
-  if (params == null) {
-    // params = 'test@gmail.com';
-    return null;
-  }
-  return request(`${hostedURL}/v1.0/get_interviews/${params}`);
+export async function getInterviews() {
+  return request(`${newApi}/interviews`, { method: 'GET', headers: setHeaders() });
 }
 
-export async function removeInterview(params) {
-  const { email, selectedRows } = params;
+// export async function removeInterview(params) {
+//   const { email, selectedRows } = params;
 
-  await Promise.all(
-    selectedRows.map(async value => {
-      const { _id } = value;
-      const { $oid } = _id;
-      const res = await request(`${newApi}/interviews/${$oid}`, {
-        method: 'DELETE',
-        headers: setHeaders(),
-      });
-      return res;
-    })
-  );
-  return request(`${hostedURL}/v1.0/get_interviews/${email}`);
-}
+//   await Promise.all(
+//     selectedRows.map(async value => {
+//       const { _id } = value;
+//       const { $oid } = _id;
+//       const res = await request(`${newApi}/interviews/${$oid}`, {
+//         method: 'DELETE',
+//         headers: setHeaders(),
+//       });
+//       return res;
+//     })
+//   );
+//   return request(`${newApi}/interviews${email}`);
+// }
 
 export async function deleteShortList(params) {
   const { selectedRows } = params;
@@ -271,4 +308,4 @@ export async function queryRule(params) {
   return request(`/api/rule?${stringify(params)}`);
 }
 
-export { newApi, hostedURL };
+export { newApi };

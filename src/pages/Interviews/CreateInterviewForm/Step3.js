@@ -8,11 +8,12 @@ import styles from './style.less';
 
 @connect(({ form, user }) => ({
   currentUser: user.currentUser,
-  data: form.step,
+  shortLink: form,
 }))
 class Step3 extends React.PureComponent {
   render() {
-    const { data, currentUser } = this.props;
+    const { shortLink, currentUser } = this.props;
+    const { link } = shortLink;
     const onFinish = () => {
       router.push('/interview/create-interview/info');
     };
@@ -24,16 +25,10 @@ class Step3 extends React.PureComponent {
           </Col>
           <Col xs={24} sm={16}>
             <Tooltip title="Click to copy">
-              <CopyToClipboard
-                text={data.interviewLink}
-                onCopy={() => message.success('Link Copied')}
-              >
-                <a>{`${data.interviewLink}  `}</a>
+              <CopyToClipboard text={link} onCopy={() => message.success('Link Copied')}>
+                <a>{`${link}  `}</a>
               </CopyToClipboard>
-              <CopyToClipboard
-                text={data.interviewLink}
-                onCopy={() => message.success('Link Copied')}
-              >
+              <CopyToClipboard text={link} onCopy={() => message.success('Link Copied')}>
                 <Button size="small" icon="copy" />
               </CopyToClipboard>
             </Tooltip>
