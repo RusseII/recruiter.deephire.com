@@ -42,8 +42,8 @@ export default {
       if (callback) callback();
     },
 
-    *view_interviews({ payload }, { call, put }) {
-      let response = yield call(getInterviews, payload);
+    *view_interviews({ thisVariableDoesNothingButErrorsOnRemove }, { call, put }) {
+      let response = yield call(getInterviews);
       response = { list: response };
 
       yield put({
