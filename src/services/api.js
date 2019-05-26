@@ -83,11 +83,7 @@ export async function updateCandidateProfile(email, data) {
   });
 }
 
-export async function getVideos(params) {
-  if (params == null) {
-    // params = 'test@gmail.com';
-    return null;
-  }
+export async function getVideos() {
   // return request(`${hostedURL}/v1.0/get_candidates/${params}`);
   const videos = request(`${newApi}/videos`, {
     method: 'GET',
@@ -95,6 +91,44 @@ export async function getVideos(params) {
   });
   videos.then(r => r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1)));
   return videos;
+}
+export async function getArchivedVideos() {
+  const videos = request(`${newApi}/videos/archives`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  videos.then(r => r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1)));
+  return videos;
+}
+
+export async function getArchivedInterviews() {
+  return request(`${newApi}/interviews/archives`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
+export async function getArchivedShortlists() {
+  return request(`${newApi}/shortlists/archives`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
+export async function arch(data, route, archives = false) {
+  const archiveRoute = archives ? 'unarchive' : 'archive';
+  return request(`${newApi}/${route}/${archiveRoute}`, {
+    method: 'POST',
+    body: data,
+    headers: setHeaders(),
+  });
+}
+
+export async function getVideo(id) {
+  return request(`${newApi}/videos/${id}`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
 }
 
 export async function shareShortLink(data) {

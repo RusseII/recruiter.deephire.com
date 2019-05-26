@@ -34,9 +34,7 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
     name: 'upfile',
     action: `https://dev-a.deephire.com/v1/candidates/${email}/documents/`,
     headers: { authorization: `Bearer ${localStorage.getItem('access_token')}` },
-    onChange({ file, fileList }) {
-      console.log(file);
-
+    onChange({ file }) {
       if (file.status === 'done') {
         setKey(file.status);
       }
@@ -44,7 +42,6 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
     defaultFileList: candidateProfileData.files,
     key: candidateProfileData.files,
     onRemove(file) {
-      console.log(file);
       removeCandidateDocument(email, file.uid);
     },
   };
@@ -90,7 +87,9 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
         renderItem={(item, index) => (
           <div>
             <Icon type="youtube" />{' '}
-            <a onClick={() => setVideoData(item, 'YouTube Video')}>
+            <a
+              onClick={() => setVideoData({ videoUrl: item, currentQuestionText: 'YouTube Video' })}
+            >
               {' '}
               {item.replace('www.youtube.com/watch?v=', 'youtu.be/')}{' '}
             </a>
