@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Card, Checkbox, Icon } from 'antd';
+import React from 'react';
 import router from 'umi/router';
 import styles from './index.less';
 
@@ -28,7 +27,10 @@ const CardInfo = ({ item }) => (
 const CandidateCard = ({ item }) => (
   <Card
     bodyStyle={{ paddingBottom: 20 }}
-    actions={[<Checkbox value={item} />, <a onClick={() => openInterview(item)}>View</a>]}
+    actions={[
+      <Checkbox style={{ paddingLeft: '50', paddingRight: '50' }} value={item} />,
+      <a onClick={() => openInterview(item)}>View</a>,
+    ]}
   >
     <Card.Meta avatar={<Icon type="user" />} title={item.userName} />
     <div className={styles.cardItemContent}>

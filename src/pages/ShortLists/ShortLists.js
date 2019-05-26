@@ -1,16 +1,13 @@
-import React, { PureComponent, Fragment } from 'react';
-import { connect } from 'dva';
-import router from 'umi/router';
-import { message, Card, Tooltip, Row, Col, AutoComplete } from 'antd';
-import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
-import readableTime from 'readable-timestamp';
+import StandardTable from '@/components/StandardTable';
+import { getArchivedShortlists, getShortLists } from '@/services/api';
+import { AutoComplete, Card, Col, message, Row, Tooltip } from 'antd';
+import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import readableTime from 'readable-timestamp';
+import router from 'umi/router';
 import styles from './ShortLists.less';
-// import { showConfirm } from '@/utils/utils';
-
-import { getShortLists } from '@/services/api';
+import ArchiveButton from '@/components/ArchiveButton';
 
 const openShortListAnalytics = data => {
   const { _id } = data;
@@ -23,10 +20,10 @@ const columns = [
     render: data => {
       const { name, email } = data;
       return (
-        <div>
+        <>
           <div>{name}</div>
           <div>{email}</div>
-        </div>
+        </>
       );
     },
   },
@@ -38,34 +35,20 @@ const columns = [
     title: 'Last Viewed',
     render: data => {
       const { clicks } = data;
-
       const clickCount = clicks ? clicks.length : 0;
-
       const dateObj = clicks ? new Date(clicks[clickCount - 1]) : '-';
       const displayTime = clicks ? readableTime(dateObj) : '-';
-
-      return (
-        <Fragment>
-          <div>{displayTime || '-'}</div>
-        </Fragment>
-      );
+      return displayTime || '-';
     },
   },
   {
     title: 'View Count',
     render: data => {
       const { clicks } = data;
-
       const clickCount = clicks ? clicks.length : 0;
-
-      return (
-        <Fragment>
-          <div className={styles.clickCount}>{clickCount || '-'}</div>
-        </Fragment>
-      );
+      return <div className={styles.clickCount}>{clickCount || '-'}</div>;
     },
   },
-
   {
     title: 'Share Link',
     render: data => {
@@ -81,125 +64,91 @@ const columns = [
     },
   },
 ];
+const ShortLists = () => {
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [dataSource, setDataSource] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [archives, setArchives] = useState(false);
 
-@connect(({ rule, loading, user }) => ({
-  currentUser: user.currentUser,
-  rule,
-  loading: loading.models.rule,
-}))
-class ShortLists extends PureComponent {
-  state = {
-    selectedRows: [],
-  };
-
-  componentDidMount() {
-    getShortLists().then(r => this.setState({ data: r }));
-  }
-
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
-  };
-
-  autoCompleteSelect = value => {
-    if (value === '') {
-      this.setState({
-        searchTerm: null,
-      });
-    } else {
-      this.setState({
-        searchTerm: value,
-      });
-    }
-  };
-
-  autoCompleteSearch = value => {
-    if (value === '') {
-      this.setState({
-        searchTerm: null,
-      });
-    }
-  };
-
-  render() {
-    const { data, searchTerm } = this.state;
-    const { loading } = this.props;
-
-    if (!data) return null;
-
-    let filteredList = [];
-    if (searchTerm == null) {
-      filteredList = data;
-    } else {
-      filteredList = data.filter(
-        shortList => shortList.email === searchTerm || shortList.name === searchTerm
-      );
-    }
-
+  const createDataSource = data => {
     const searchDataSource = [];
     data.forEach(shortList => {
-      if (shortList.email != null && shortList.email !== '') searchDataSource.push(shortList.email);
-      if (shortList.name != null && shortList.name !== '') searchDataSource.push(shortList.name);
+      if (shortList.email) searchDataSource.push(shortList.email);
+      if (shortList.name) searchDataSource.push(shortList.name);
     });
     const unique = [...new Set(searchDataSource)];
+    setDataSource(unique);
+  };
 
-    const filteredData = {
-      list: filteredList,
-    };
+  const getData = async () => {
+    setLoading(true);
+    const data = await (archives ? getArchivedShortlists() : getShortLists());
+    createDataSource(data);
+    setData(data);
+    setFilteredData(data);
+    setLoading(false);
+  };
 
-    const { selectedRows } = this.state;
+  useEffect(() => {
+    getData();
+  }, [archives]);
 
-    return (
-      <PageHeaderWrapper title="Short Lists">
-        <Card>
-          <div className={styles.tableListOperator}>
-            <Row type="flex" justify="start" gutter={16}>
-              {/* TODO ADD THIS BACK IN */}
-              {/* <Col>
-                <Button
-                  disabled={selectedRows.length === 0}
-                  type="danger"
-                  onClick={() => {
-                    showConfirm(dispatch, selectedRows, 'rule/removeInterview', () =>
-                      this.setState({ selectedRows: [] })
-                    );
-                  }}
-                >
-                  Delete
-                </Button>
-              </Col> */}
-              <Col>
-                <AutoComplete
-                  allowClear
-                  dataSource={unique}
-                  style={{ width: 200 }}
-                  onSelect={this.autoCompleteSelect}
-                  onSearch={this.autoCompleteSearch}
-                  filterOption={(inputValue, option) =>
-                    option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                  }
-                  placeholder="Search"
-                />
-              </Col>
-            </Row>
-          </div>
-        </Card>
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={filteredData}
-              size="small"
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-            />
-          </div>
-        </Card>
-      </PageHeaderWrapper>
+  const shouldClear = value => {
+    if (!value) {
+      setFilteredData(data);
+    }
+  };
+
+  const filter = searchTerm => {
+    const filteredData = data.filter(
+      candidate => candidate.email === searchTerm || candidate.name === searchTerm
     );
-  }
-}
+    setFilteredData(filteredData);
+  };
+
+  return (
+    <PageHeaderWrapper title="Short Lists">
+      <Card>
+        <Row align="middle" type="flex" justify="space-between">
+          <Col>
+            {selectedRows.length !== 0 && (
+              <ArchiveButton
+                onClick={() => setSelectedRows([])}
+                reload={getData}
+                archives={archives}
+                route="shortlists"
+                archiveData={selectedRows}
+              />
+            )}
+            <AutoComplete
+              allowClear
+              dataSource={dataSource}
+              onSelect={filter}
+              onSearch={shouldClear}
+              filterOption={(inputValue, option) =>
+                option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+              }
+              placeholder="Filter"
+            />
+          </Col>
+          <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
+        </Row>
+      </Card>
+
+      <Card bordered={false}>
+        <StandardTable
+          selectedRows={selectedRows}
+          loading={loading}
+          data={{ list: filteredData }}
+          size="small"
+          columns={columns}
+          onSelectRow={rows => setSelectedRows(rows)}
+        />
+      </Card>
+    </PageHeaderWrapper>
+  );
+};
 
 export default ShortLists;
