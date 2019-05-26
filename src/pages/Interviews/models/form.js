@@ -16,10 +16,9 @@ export default {
     },
     *submitStepForm({ payload }, { call, put }) {
       const response = yield call(createInterview, payload);
-
       yield put({
         type: 'saveStepFormData',
-        interviewLink: response,
+        link: response.shortUrl,
       });
 
       yield put(routerRedux.push('/interview/create-interview/result'));
@@ -35,10 +34,7 @@ export default {
     saveStepFormData(state, payload) {
       return {
         ...state,
-        step: {
-          ...state.step,
-          ...payload,
-        },
+        ...payload,
       };
     },
   },

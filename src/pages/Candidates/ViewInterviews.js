@@ -66,7 +66,7 @@ const TableList = () => {
     const profile = JSON.parse(localStorage.getItem('profile'));
     const { email } = profile;
     const data = await (archives ? getArchivedInterviews(email) : getInterviews(email));
-    setData(data);
+    setData(data || []);
     setLoading(false);
   };
   useEffect(() => {
@@ -87,7 +87,7 @@ const TableList = () => {
                 onClick={() => setSelectedRows([])}
                 reload={getData}
                 archives={archives}
-                route="videos"
+                route="interviews"
                 archiveData={selectedRows}
               />
             )}

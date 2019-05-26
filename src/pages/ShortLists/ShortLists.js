@@ -85,9 +85,9 @@ const ShortLists = () => {
   const getData = async () => {
     setLoading(true);
     const data = await (archives ? getArchivedShortlists() : getShortLists());
-    createDataSource(data);
-    setData(data);
-    setFilteredData(data);
+    createDataSource(data || []);
+    setData(data || []);
+    setFilteredData(data || []);
     setLoading(false);
   };
 
