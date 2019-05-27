@@ -28,8 +28,10 @@ const CandidateCard = ({ item }) => (
   <Card
     bodyStyle={{ paddingBottom: 20 }}
     actions={[
-      <Checkbox style={{ paddingLeft: '50', paddingRight: '50' }} value={item} />,
-      <a onClick={() => openInterview(item)}>View</a>,
+      <Checkbox style={{ paddingLeft: 50, paddingRight: 50 }} value={item} />,
+      <a style={{ paddingLeft: 50, paddingRight: 50 }} onClick={() => openInterview(item)}>
+        View
+      </a>,
     ]}
   >
     <Card.Meta avatar={<Icon type="user" />} title={item.userName} />
