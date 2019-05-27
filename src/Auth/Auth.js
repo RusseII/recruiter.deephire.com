@@ -6,6 +6,10 @@ import { reloadAuthorized } from '../utils/Authorized';
 import AUTH_CONFIG from './auth0-variables';
 
 export default class Auth {
+  tokenRenewalTimeout;
+
+  expiresAt;
+
   auth0 = new auth0.WebAuth({
     domain: AUTH_CONFIG.domain,
     clientID: AUTH_CONFIG.clientId,
@@ -18,6 +22,8 @@ export default class Auth {
   userProfile;
 
   constructor(props = null) {
+    this.scheduleRenewal();
+
     if (props) {
       this.dispatch = props.dispatch;
     }
@@ -99,10 +105,12 @@ export default class Auth {
   };
 
   setSession(authResult) {
-    const expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime());
+    this.expiresAt = JSON.stringify(authResult.expiresIn * 1000 + Date.now());
+
+    this.scheduleRenewal();
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
+    localStorage.setItem('expires_at', this.expiresAt);
 
     this.getProfile((err, profile) => {
       if (!err) {
@@ -122,6 +130,8 @@ export default class Auth {
   }
 
   logout = () => {
+    clearTimeout(this.tokenRenewalTimeout);
+
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
@@ -133,4 +143,27 @@ export default class Auth {
     reloadAuthorized();
     this.dispatch(routerRedux.push('/'));
   };
+
+  renewSession() {
+    this.auth0.checkSession({}, (err, authResult) => {
+      if (authResult && authResult.accessToken && authResult.idToken) {
+        this.setSession(authResult);
+      } else if (err) {
+        this.logout();
+        alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
+      }
+    });
+  }
+
+  // ...
+
+  scheduleRenewal() {
+    const { expiresAt } = this;
+    const timeout = expiresAt - Date.now();
+    if (timeout > 0) {
+      this.tokenRenewalTimeout = setTimeout(() => {
+        this.renewSession();
+      }, timeout);
+    }
+  }
 }
