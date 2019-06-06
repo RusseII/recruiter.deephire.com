@@ -122,7 +122,7 @@ class Step1 extends React.PureComponent {
           payload: {
             ...data,
             ...cleanedValueData,
-            email,
+            createdBy: email,
           },
         });
       }
