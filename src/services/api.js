@@ -18,7 +18,7 @@ export async function createInterview(params) {
     answerTime,
     interviewName,
     interviewQuestions,
-    email: createdBy,
+    createdBy,
   } = params;
   const questions = interviewQuestions.map(a => ({
     question: a,
