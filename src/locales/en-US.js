@@ -10,6 +10,7 @@ export default {
   'menu.Short Lists': 'Short Lists',
   'menu.Short Lists.Short Lists': 'All',
   'menu.Short Lists.shortListAnalytics': 'Analytics',
+  'menu.Account.Profile': 'Profile',
 
   'navbar.lang': '中文',
   'component.globalHeader.search': 'Search',
