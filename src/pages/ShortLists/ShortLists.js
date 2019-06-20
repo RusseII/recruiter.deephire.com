@@ -18,9 +18,10 @@ const columns = [
   {
     title: 'Shared With',
     render: data => {
-      const { name, email } = data;
+      const { name, email, description } = data;
       return (
         <>
+          <div>{description}</div>
           <div>{name}</div>
           <div>{email}</div>
         </>
