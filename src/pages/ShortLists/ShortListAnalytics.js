@@ -145,7 +145,7 @@ class ShortListAnalytics extends Component {
 
     return (
       <GridContent>
-        <PageHeaderWrapper title={`Short List - ${analyticsData.email}`} shortUrl={shortUrl}>
+        <PageHeaderWrapper title={`Share Link - ${analyticsData.name}`} shortUrl={shortUrl}>
           <Row gutter={16}>
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
