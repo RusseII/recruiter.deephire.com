@@ -54,11 +54,11 @@ class ShareCandidateButton extends React.Component {
     const { currentStep, hideInfo } = this.state;
     form.validateFields((err, data) => {
       if (err) return;
-      const { email, name } = data;
+      const { description, name } = data;
       form.resetFields();
-      const shortList = { name, hideInfo, email, interviews: candidateData };
+      const shortList = { description, name, hideInfo, interviews: candidateData };
       this.createLink(shortList);
-      this.setState({ shareEmail: email, currentStep: currentStep + 1 });
+      this.setState({ shareName: name, currentStep: currentStep + 1 });
     });
   };
 
@@ -74,7 +74,7 @@ class ShareCandidateButton extends React.Component {
       rule: { shareLink },
       form,
     } = this.props;
-    const { shareEmail, modalVisible } = this.state;
+    const { shareName, modalVisible } = this.state;
 
     if (currentStep === 1) {
       return (
@@ -86,14 +86,19 @@ class ShareCandidateButton extends React.Component {
           okText="Create Link"
           onCancel={() => this.handleModalVisible()}
         >
+          <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Description">
+            {form.getFieldDecorator('description', {})(
+              <Input placeholder="Descriptive Share Link Name" />
+            )}
+          </FormItem>
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
             {form.getFieldDecorator('name', {})(<Input placeholder="Client Name" />)}
           </FormItem>
-          <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
+          {/* <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
             {form.getFieldDecorator('email', {})(
               <Input placeholder="Who do you want to share this with?" />
             )}
-          </FormItem>
+          </FormItem> */}
           <Row gutter={0}>
             <Col span={5} />
             <Col span={15}>
@@ -118,7 +123,7 @@ class ShareCandidateButton extends React.Component {
           <Result
             type="success"
             title="Share Link Created!"
-            description={`Send this link to ${shareEmail}`}
+            description={`Send this link to ${shareName}`}
             extra={this.information(shareLink, 'russell@deephire.com')}
             extraStyle={{ textAlign: 'center', padding: '5px', fontSize: '15px' }}
           />
