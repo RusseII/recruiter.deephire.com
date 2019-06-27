@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button, Divider, InputNumber, Icon } from 'antd';
 import styles from './style.less';
+import { updateInterviews } from '@/services/api';
 
 const FormItem = Form.Item;
 
@@ -38,10 +39,13 @@ const remove = (form, k) => {
 };
 
 const createFormItems = props => {
-  const { form } = props;
+  const { form, data } = props;
+  const { interviewQuestions } = data || {};
   const { getFieldDecorator, getFieldValue } = form;
 
-  getFieldDecorator('keys', { initialValue: [0] });
+  getFieldDecorator('keys', {
+    initialValue: interviewQuestions ? [...Array(interviewQuestions.length).keys()] : [0],
+  });
   const keys = getFieldValue('keys');
   const formItems = keys.map((k, index) => (
     <FormItem
@@ -52,6 +56,8 @@ const createFormItems = props => {
       key={k}
     >
       {getFieldDecorator(`interviewQuestions[${k}]`, {
+        initialValue:
+          interviewQuestions && interviewQuestions[k] ? interviewQuestions[k].question : null,
         validateTrigger: ['onChange', 'onBlur'],
         rules: [
           {
@@ -79,14 +85,14 @@ const createFormItems = props => {
   return formItems;
 };
 
-@connect(({ form, loading, user }) => ({
+@connect(({ user }) => ({
   currentUser: user.currentUser,
-  submitting: loading.effects['form/submitStepForm'],
-  data: form.step,
+  // submitting: loading.effects['form/submitStepForm'],
 }))
 @Form.create()
 class Step1 extends React.PureComponent {
   state = { loading: false };
+  // this.props.data
 
   enterLoading = () => {
     this.setState({ loading: true });
@@ -103,12 +109,12 @@ class Step1 extends React.PureComponent {
   };
 
   onValidateForm = e => {
-    const { form, dispatch, data, currentUser } = this.props;
+    const { form, dispatch, currentUser, data } = this.props;
     const { email } = currentUser;
     const { validateFields } = form;
 
     e.preventDefault();
-    validateFields((err, values) => {
+    validateFields(async (err, values) => {
       if (!err) {
         // sometimes there was null values inside the array, which broke everything
         const cleanedValueData = values;
@@ -117,20 +123,26 @@ class Step1 extends React.PureComponent {
         );
 
         this.enterLoading();
-        dispatch({
-          type: 'form/submitStepForm',
-          payload: {
-            ...data,
-            ...cleanedValueData,
-            createdBy: email,
-          },
-        });
+        if (data) {
+          await updateInterviews(data._id, cleanedValueData);
+          this.setState({ loading: false });
+        }
+        if (!data) {
+          dispatch({
+            type: 'form/submitStepForm',
+            payload: {
+              ...cleanedValueData,
+              createdBy: email,
+            },
+          });
+        }
       }
     });
   };
 
   render() {
-    const { form } = this.props;
+    const { form, data } = this.props;
+    const { interviewConfig = {}, interviewName } = data || {};
     const { loading } = this.state;
     const { getFieldDecorator } = form;
 
@@ -144,6 +156,7 @@ class Step1 extends React.PureComponent {
         >
           <FormItem {...formItemLayout} label="Name">
             {getFieldDecorator('interviewName', {
+              initialValue: interviewName,
               rules: [
                 {
                   required: true,
@@ -155,21 +168,21 @@ class Step1 extends React.PureComponent {
           </FormItem>
           <FormItem {...formItemLayout} label="Retakes">
             {getFieldDecorator('retakesAllowed', {
-              initialValue: 8,
+              initialValue: interviewConfig.retakesAllowed || 8,
             })(<InputNumber min={0} max={100} />)}
             <span className="ant-form-text"> per interview</span>
           </FormItem>
 
           <FormItem {...formItemLayout} label="Prep Time">
             {getFieldDecorator('prepTime', {
-              initialValue: 45,
+              initialValue: interviewConfig.prepTime || 45,
             })(<InputNumber min={15} max={1000} />)}
             <span className="ant-form-text"> seconds per question</span>
           </FormItem>
 
           <FormItem {...formItemLayout} label="Record Time">
             {getFieldDecorator('answerTime', {
-              initialValue: 90,
+              initialValue: interviewConfig.answerTime || 90,
             })(<InputNumber min={15} max={1000} />)}
             <span className="ant-form-text"> seconds per question</span>
           </FormItem>
@@ -182,25 +195,29 @@ class Step1 extends React.PureComponent {
           </FormItem>
           <FormItem {...formItemLayoutWithOutLabel}>
             <Button loading={loading} type="primary" htmlType="submit">
-              Create Interview
+              {data ? 'Update' : 'Create Interview'}
             </Button>
           </FormItem>
         </Form>
+        {!data && (
+          <Fragment>
+            <Divider style={{ margin: '40px 0 24px' }} />
 
-        <Divider style={{ margin: '40px 0 24px' }} />
-        <div className={styles.desc}>
-          <h3>Other Info</h3>
-          <h4>The Process</h4>
-          <p>
-            Use this page to create an interview. After you submit, you will receive an interview
-            link.
-          </p>
-          <h4>Next</h4>
-          <p>
-            Send the link out to candidates, once they complete their interview, you will receive an
-            email with their videos.
-          </p>
-        </div>
+            <div className={styles.desc}>
+              <h3>Other Info</h3>
+              <h4>The Process</h4>
+              <p>
+                Use this page to create an interview. After you submit, you will receive an
+                interview link.
+              </p>
+              <h4>Next</h4>
+              <p>
+                Send the link out to candidates, once they complete their interview, you will
+                receive an email with their videos.
+              </p>
+            </div>
+          </Fragment>
+        )}
       </Fragment>
     );
   }
