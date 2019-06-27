@@ -1,7 +1,7 @@
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import StandardTable from '@/components/StandardTable';
-import { getInterviews, getArchivedInterviews } from '@/services/api';
-import { Row, Col, Card, message, Tooltip, Modal } from 'antd';
+import { getInterviews, getArchivedInterviews, updateInterviews } from '@/services/api';
+import { message, Row, Col, Card, Tooltip, Modal } from 'antd';
 import React, { Fragment, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
@@ -13,8 +13,13 @@ const TableList = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [archives, setArchives] = useState(false);
-  const [editInterview, setEditInterview] = useState(false);
+  const [editInterview, setEditInterview] = useState(null);
 
+  const updateInterview = async cleanedValueData => {
+    await updateInterviews(editInterview._id, cleanedValueData);
+    setEditInterview(null);
+    message.success('Interview Updated');
+  };
   const columns = [
     {
       title: 'Interview Name',
@@ -78,7 +83,7 @@ const TableList = () => {
   };
   useEffect(() => {
     getData();
-  }, [archives]);
+  }, [archives, editInterview]);
 
   useEffect(() => {
     getData();
@@ -89,11 +94,12 @@ const TableList = () => {
       {editInterview && (
         <Modal
           title="Edit Interview"
-          visible={editInterview}
+          visible={Boolean(editInterview)}
           onCancel={() => setEditInterview(false)}
           footer={null}
+          width={window.innerWidth > 500 ? '60vw' : null}
         >
-          <Step1 data={editInterview} />
+          <Step1 onClick={updateInterview} data={editInterview} />
         </Modal>
       )}
       <Card>

@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button, Divider, InputNumber, Icon } from 'antd';
 import styles from './style.less';
-import { updateInterviews } from '@/services/api';
 
 const FormItem = Form.Item;
 
@@ -109,7 +108,7 @@ class Step1 extends React.PureComponent {
   };
 
   onValidateForm = e => {
-    const { form, dispatch, currentUser, data } = this.props;
+    const { form, dispatch, currentUser, data, onClick } = this.props;
     const { email } = currentUser;
     const { validateFields } = form;
 
@@ -123,8 +122,8 @@ class Step1 extends React.PureComponent {
         );
 
         this.enterLoading();
-        if (data) {
-          await updateInterviews(data._id, cleanedValueData);
+        if (data && onClick) {
+          await onClick(cleanedValueData);
           this.setState({ loading: false });
         }
         if (!data) {
@@ -195,7 +194,7 @@ class Step1 extends React.PureComponent {
           </FormItem>
           <FormItem {...formItemLayoutWithOutLabel}>
             <Button loading={loading} type="primary" htmlType="submit">
-              {data ? 'Update' : 'Create Interview'}
+              {data ? 'Save & Close' : 'Create Interview'}
             </Button>
           </FormItem>
         </Form>
