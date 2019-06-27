@@ -34,6 +34,20 @@ export async function createInterview(params) {
   return request(`${newApi}/interviews`, { method: 'POST', body, headers: setHeaders() });
 }
 
+export async function updateInterviews(id, params) {
+  const { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions } = params;
+  const questions = interviewQuestions.map(a => ({
+    question: a,
+  }));
+
+  const body = {
+    interviewName,
+    interviewQuestions: questions,
+    interviewConfig: { retakesAllowed, prepTime, answerTime },
+  };
+
+  return request(`${newApi}/interviews/${id}`, { method: 'PUT', body, headers: setHeaders() });
+}
 export async function getShortLists() {
   return request(`${newApi}/shortlists`, {
     method: 'GET',
