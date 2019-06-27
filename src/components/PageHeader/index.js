@@ -58,7 +58,7 @@ export default class PageHeader extends PureComponent {
                 <div className={styles.row}>
                   {title && (
                     <Row type="flex" justify="start" gutter={24}>
-                      <Col style={{ 'flex-grow': 1 }}>
+                      <Col style={{ flexGrow: 1 }}>
                         <h1 className={styles.title}>{title}</h1>
                       </Col>
                       <Col>
