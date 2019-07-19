@@ -7,6 +7,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
 import ArchiveButton from '@/components/ArchiveButton';
 import Step1 from '@/pages/Interviews/CreateInterviewForm/Step1';
+import { getHttpUrl } from '@/utils/utils';
 
 const TableList = () => {
   const [selectedRows, setSelectedRows] = useState([]);
@@ -59,7 +60,10 @@ const TableList = () => {
       render: (text, data) => (
         <Fragment>
           <Tooltip title="Click to copy">
-            <CopyToClipboard text={data.shortUrl} onCopy={() => message.success('Link Copied')}>
+            <CopyToClipboard
+              text={getHttpUrl(data.shortUrl)}
+              onCopy={() => message.success('Link Copied')}
+            >
               <a>{data.shortUrl || '-'}</a>
             </CopyToClipboard>
           </Tooltip>

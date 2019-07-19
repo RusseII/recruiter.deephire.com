@@ -215,3 +215,16 @@ export function formatWan(val) {
 export function isAntdPro() {
   return window.location.hostname === 'preview.pro.ant.design';
 }
+
+// eslint-disable-next-line import/prefer-default-export
+export const getHttpUrl = url => {
+  if (
+    url.substring(0, 8) === 'https://' ||
+    url.substring(0, 2) === '//' ||
+    url.substring(0, 7) === 'http://'
+  ) {
+    return url;
+  }
+
+  return `http://${url}`;
+};

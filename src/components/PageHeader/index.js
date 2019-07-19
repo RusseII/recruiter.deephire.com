@@ -5,6 +5,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import classNames from 'classnames';
 import styles from './index.less';
 import BreadcrumbView from './breadcrumb';
+import { getHttpUrl } from '@/utils/utils';
 
 const { TabPane } = Tabs;
 export default class PageHeader extends PureComponent {
@@ -65,7 +66,7 @@ export default class PageHeader extends PureComponent {
                         <h1 className={styles.title}>
                           <Tooltip title="Click to copy">
                             <CopyToClipboard
-                              text={shortUrl}
+                              text={getHttpUrl(shortUrl)}
                               onCopy={() => message.success('Link Copied')}
                             >
                               <a>{shortUrl}</a>
