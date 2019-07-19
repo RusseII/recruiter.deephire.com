@@ -8,6 +8,7 @@ import readableTime from 'readable-timestamp';
 import router from 'umi/router';
 import styles from './ShortLists.less';
 import ArchiveButton from '@/components/ArchiveButton';
+import { getHttpUrl } from '@/utils/utils';
 
 const openShortListAnalytics = data => {
   const { _id } = data;
@@ -57,7 +58,10 @@ const columns = [
 
       return (
         <Tooltip title="Click to copy">
-          <CopyToClipboard text={shortUrl} onCopy={() => message.success('Link Copied')}>
+          <CopyToClipboard
+            text={getHttpUrl(shortUrl)}
+            onCopy={() => message.success('Link Copied')}
+          >
             <a>{shortUrl || '-'}</a>
           </CopyToClipboard>
         </Tooltip>

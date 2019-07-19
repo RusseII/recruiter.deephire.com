@@ -1,4 +1,4 @@
-import { fixedZero, isUrl } from './utils';
+import { fixedZero, isUrl, getHttpUrl } from './utils';
 
 describe('fixedZero tests', () => {
   it('should not pad large numbers', () => {
@@ -58,5 +58,16 @@ describe('isUrl tests', () => {
     expect(isUrl('https://www.example.com/test/123')).toBeTruthy();
     expect(isUrl('http://www.example.com/test/123?foo=bar')).toBeTruthy();
     expect(isUrl('https://www.example.com/test/123?foo=bar')).toBeTruthy();
+  });
+});
+
+describe('getHttpUrl(url) tests', () => {
+  it('should not change http or https urls', () => {
+    expect(getHttpUrl('https://deephire.com')).toEqual('https://deephire.com');
+    expect(getHttpUrl('http://deephire.com')).toEqual('http://deephire.com');
+    expect(getHttpUrl('//deephire.com')).toEqual('//deephire.com');
+  });
+  it('should change non http urls', () => {
+    expect(getHttpUrl('deephire.com')).toEqual('http://deephire.com');
   });
 });

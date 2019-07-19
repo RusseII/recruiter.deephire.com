@@ -5,6 +5,7 @@ import router from 'umi/router';
 import Result from '@/components/Result';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styles from './style.less';
+import { getHttpUrl } from '@/utils/utils';
 
 @connect(({ form, user }) => ({
   currentUser: user.currentUser,
@@ -25,10 +26,16 @@ class Step3 extends React.PureComponent {
           </Col>
           <Col xs={24} sm={16}>
             <Tooltip title="Click to copy">
-              <CopyToClipboard text={link} onCopy={() => message.success('Link Copied')}>
+              <CopyToClipboard
+                text={getHttpUrl(link)}
+                onCopy={() => message.success('Link Copied')}
+              >
                 <a>{`${link}  `}</a>
               </CopyToClipboard>
-              <CopyToClipboard text={link} onCopy={() => message.success('Link Copied')}>
+              <CopyToClipboard
+                text={getHttpUrl(link)}
+                onCopy={() => message.success('Link Copied')}
+              >
                 <Button size="small" icon="copy" />
               </CopyToClipboard>
             </Tooltip>

@@ -5,6 +5,7 @@ import Result from '@/components/Result';
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { connect } from 'dva';
+import { getHttpUrl } from '@/utils/utils';
 
 const FormItem = Form.Item;
 
@@ -21,11 +22,17 @@ class ShareCandidateButton extends React.Component {
       <Row>
         <Col xs={24} sm={24}>
           <Tooltip title="Click to copy">
-            <CopyToClipboard text={shareLink} onCopy={() => message.success('Link Copied')}>
+            <CopyToClipboard
+              text={getHttpUrl(shareLink)}
+              onCopy={() => message.success('Link Copied')}
+            >
               <a>{`${shareLink}     `}</a>
             </CopyToClipboard>
 
-            <CopyToClipboard text={shareLink} onCopy={() => message.success('Link Copied')}>
+            <CopyToClipboard
+              text={getHttpUrl(shareLink)}
+              onCopy={() => message.success('Link Copied')}
+            >
               <Button size="small" icon="copy" />
             </CopyToClipboard>
           </Tooltip>
