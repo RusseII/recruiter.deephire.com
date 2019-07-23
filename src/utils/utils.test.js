@@ -70,4 +70,8 @@ describe('getHttpUrl(url) tests', () => {
   it('should change non http urls', () => {
     expect(getHttpUrl('deephire.com')).toEqual('http://deephire.com');
   });
+  it('should handle null inputs', () => {
+    expect(getHttpUrl(null)).toEqual(null);
+    expect(getHttpUrl(undefined)).toEqual(undefined);
+  });
 });
