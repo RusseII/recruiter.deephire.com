@@ -57,6 +57,7 @@
   "devDependencies": {
     "@types/react": "^16.4.11",
     "@types/react-dom": "^16.0.6",
+    "@typescript-eslint/eslint-plugin": "1.13.0",
     "antd-pro-merge-less": "^1.0.0",
     "antd-pro-theme-webpack-plugin": "^1.1.8",
     "antd-theme-webpack-plugin": "^1.2.0",
