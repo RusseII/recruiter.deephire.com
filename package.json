@@ -57,6 +57,7 @@
   "devDependencies": {
     "@types/react": "^16.4.11",
     "@types/react-dom": "^16.0.6",
+    "@typescript-eslint/eslint-plugin": "1.13.0",
     "antd-pro-merge-less": "^1.0.0",
     "antd-pro-theme-webpack-plugin": "^1.1.8",
     "antd-theme-webpack-plugin": "^1.2.0",
@@ -69,7 +70,9 @@
     "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-compat": "^2.5.1",
+    "eslint-plugin-eslint-comments": "3.1.2",
     "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "22.13.6",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-markdown": "^1.0.0-beta.6",
     "eslint-plugin-react": "^7.11.1",
