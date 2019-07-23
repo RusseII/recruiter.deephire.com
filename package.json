@@ -70,6 +70,7 @@
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-compat": "^2.5.1",
     "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "22.13.6",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-markdown": "^1.0.0-beta.6",
     "eslint-plugin-react": "^7.11.1",
@@ -85,8 +86,7 @@
     "stylelint-config-standard": "^18.0.0",
     "umi": "^2.0.3",
     "umi-plugin-ga": "^1.0.3",
-    "umi-plugin-react": "^1.0.3",
-    "eslint-plugin-jest": "^22.13.6"
+    "umi-plugin-react": "^1.0.3"
   },
   "optionalDependencies": {
     "puppeteer": "1.13.0"

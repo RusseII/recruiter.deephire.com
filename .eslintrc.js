@@ -1,6 +1,7 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: ['airbnb', 'prettier', 'plugin:compat/recommended'],
+  plugins: ['jest'],
   env: {
     browser: true,
     node: true,
@@ -38,6 +39,7 @@ module.exports = {
     'jsx-a11y/anchor-is-valid': 0,
     'linebreak-style': 0,
   },
+
   settings: {
     polyfills: ['fetch', 'promises', 'url'],
   },
