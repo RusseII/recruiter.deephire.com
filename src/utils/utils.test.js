@@ -71,7 +71,7 @@ describe('getHttpUrl(url) tests', () => {
     expect(getHttpUrl('deephire.com')).toEqual('http://deephire.com');
   });
   it('should handle null inputs', () => {
-    expect(getHttpUrl(null)).toEqual(null);
-    expect(getHttpUrl(undefined)).toEqual(undefined);
+    expect(getHttpUrl(null)).toEqual('Loading ...');
+    expect(getHttpUrl(undefined)).toEqual('Loading ...');
   });
 });

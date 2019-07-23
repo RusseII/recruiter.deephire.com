@@ -229,5 +229,5 @@ export const getHttpUrl = url => {
 
     return `http://${url}`;
   }
-  return null;
+  return 'Loading ...';
 };
