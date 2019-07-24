@@ -58,7 +58,6 @@ export default {
   define: {
     APP_TYPE: process.env.APP_TYPE || '',
   },
-  hash: true,
   //  this being commented in breaks the build??
   // treeShaking: true,
   targets: {
