@@ -77,7 +77,7 @@ const ViewCandidate = ({ location }) => {
       </div>
 
       <Row type="flex" gutter={24}>
-        <Col xs={{ span: 24, order: 2 }} sm={24} md={8} lg={8} xl={8}>
+        <Col xs={{ span: 24, order: 2 }} sm={24} md={10} lg={12} xl={10} xxl={10}>
           <InfoCardEditable
             userId={userId}
             userName={userName}
@@ -108,9 +108,10 @@ const ViewCandidate = ({ location }) => {
         <Col
           xs={{ span: 24, order: 1 }}
           sm={{ span: 24, order: 1 }}
-          md={{ span: 16, order: 2 }}
-          lg={{ span: 16, order: 2 }}
-          xl={{ span: 16, order: 2 }}
+          md={{ span: 14, order: 2 }}
+          lg={{ span: 12, order: 2 }}
+          xl={{ span: 14, order: 2 }}
+          xxl={{ span: 14, order: 2 }}
         >
           <Card
             style={{ marginBottom: 20 }}
