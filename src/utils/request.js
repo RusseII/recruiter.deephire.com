@@ -23,7 +23,7 @@ const codeMessage = {
 };
 
 const checkStatus = response => {
-  if ((response.status >= 200 && response.status < 300 )|| response.status === 404) {
+  if ((response.status >= 200 && response.status < 300) || response.status === 404) {
     return response;
   }
   const errortext = codeMessage[response.status] || response.statusText;
@@ -137,6 +137,8 @@ export default function request(url, option) {
       if (status === 401) {
         // @HACK
         /* eslint-disable no-underscore-dangle */
+        router.push('/user/login');
+
         window.g_app._store.dispatch({
           type: 'login/logout',
         });
@@ -149,11 +151,10 @@ export default function request(url, option) {
       }
       if (status <= 504 && status >= 500) {
         router.push('/exception/500');
-        return;
       }
-    //ignore 404 errors
-//       if (status >= 404 && status < 422) {
-//         router.push('/exception/404');
-//       }
+      // ignore 404 errors
+      //       if (status >= 404 && status < 422) {
+      //         router.push('/exception/404');
+      //       }
     });
 }

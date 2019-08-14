@@ -10,6 +10,7 @@ import router from 'umi/router';
 import qs from 'qs';
 import styles from './ViewCandidate.less';
 import { getVideo } from '@/services/api';
+import ArchiveButton from '@/components/ArchiveButton';
 
 const columns = [
   {
@@ -21,20 +22,43 @@ const columns = [
 
 const ViewCandidate = ({ location }) => {
   const id = qs.parse(location.search)['?id'];
-
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [candidateData, setCandidateData] = useState(null);
   const [videoData, setVideoData] = useState({ videoUrl: null, currentQuestionText: null });
+  const [archives, setArchives] = useState(false);
 
-  useEffect(() => {
+  const getData = async () => {
     getVideo(id).then(data => {
       const [first] = data;
-      const [response] = first.responses;
       setCandidateData(first);
-      setVideoData({ videoUrl: response.response, currentQuestionText: response.question });
-    });
-  }, []);
 
+      const [response] = first.responses;
+
+      if (!archives)
+        setVideoData({
+          videoUrl: response ? response.response : null,
+          currentQuestionText: response ? response.question : null,
+        });
+      else if (first.archivedResponses) {
+        const [archivedResponse] = first.archivedResponses;
+        setVideoData({
+          videoUrl: archivedResponse ? archivedResponse.response : null,
+          currentQuestionText: archivedResponse ? archivedResponse.question : 'No Video Selected',
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    getData();
+  }, [archives]);
+
+  // const rowSelection = {
+  //   selectedRowKeys,
+  //   columnWidth: 0,
+  //   fixed: false,
+  //   onChange: setSelectedRowKeys,
+  // };
   const goToCandidates = () => {
     router.push(`/candidates/candidates`);
   };
@@ -63,6 +87,27 @@ const ViewCandidate = ({ location }) => {
   if (candidateData.length === 0) {
     return <p>There is no data for this user, please message our support</p>;
   }
+  const titleData = () => <span>Questions</span>;
+
+  const extraData = () => (
+    <>
+      <ArchiveButton
+        style={{ marginRight: 20 }}
+        reload={getData}
+        archives={archives}
+        route={`videos/${candidateData._id}`}
+        archiveData={[{ _id: activeQuestion }]}
+        onClick={() => null}
+      />
+      <a onClick={() => setArchives(!archives)}>
+        {archives
+          ? `View All (${candidateData.responses ? candidateData.responses.length : 0})`
+          : `View Archived (${
+              candidateData.archivedResponses ? candidateData.archivedResponses.length : 0
+            })`}
+      </a>
+    </>
+  );
 
   const { candidateEmail, interviewName, userName, userId } = candidateData;
 
@@ -86,7 +131,7 @@ const ViewCandidate = ({ location }) => {
             setVideoData={setVideoData}
           />
 
-          <Card hoverable title="Questions">
+          <Card hoverable title={titleData()} extra={extraData()}>
             <Table
               showHeader={false}
               onRow={(record, index) => ({
@@ -100,8 +145,9 @@ const ViewCandidate = ({ location }) => {
               rowClassName={(record, index) => (index === activeQuestion ? styles.selected : '')}
               pagination={false}
               bordered
-              dataSource={candidateData.responses}
+              dataSource={!archives ? candidateData.responses : candidateData.archivedResponses}
               columns={columns}
+              // rowSelection={rowSelection}
             />
           </Card>
         </Col>
