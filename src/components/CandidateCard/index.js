@@ -37,7 +37,12 @@ const CandidateCard = ({ item }) => (
   >
     <Card.Meta
       avatar={
-        <Avatar shape="circle" size="large" icon="user" src={item.responses[0].thumbnail100x100} />
+        <Avatar
+          shape="circle"
+          size="large"
+          icon="user"
+          src={item.responses[0] ? item.responses[0].thumbnail100x100 : null}
+        />
       }
       title={item.userName}
     />
