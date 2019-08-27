@@ -145,6 +145,14 @@ export async function arch(data, route, archives = false) {
   });
 }
 
+export async function cloneInterview(data) {
+  return request(`${newApi}/interviews/duplicate`, {
+    method: 'POST',
+    body: data,
+    headers: setHeaders(),
+  });
+}
+
 export async function getVideo(id) {
   return request(`${newApi}/videos/${id}`, {
     method: 'GET',

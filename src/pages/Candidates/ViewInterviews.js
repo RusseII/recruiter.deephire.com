@@ -6,6 +6,8 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
 import ArchiveButton from '@/components/ArchiveButton';
+import CloneButton from '@/components/CloneButton';
+
 import Step1 from '@/pages/Interviews/CreateInterviewForm/Step1';
 import { getHttpUrl } from '@/utils/utils';
 
@@ -110,13 +112,20 @@ const TableList = () => {
         <Row align="middle" type="flex" justify="space-between">
           <Col>
             {selectedRows.length !== 0 && (
-              <ArchiveButton
-                onClick={() => setSelectedRows([])}
-                reload={getData}
-                archives={archives}
-                route="interviews"
-                archiveData={selectedRows}
-              />
+              <>
+                <ArchiveButton
+                  onClick={() => setSelectedRows([])}
+                  reload={getData}
+                  archives={archives}
+                  route="interviews"
+                  archiveData={selectedRows}
+                />
+                <CloneButton
+                  onClick={() => setSelectedRows([])}
+                  reload={getData}
+                  cloneData={selectedRows}
+                />
+              </>
             )}
           </Col>
           <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
