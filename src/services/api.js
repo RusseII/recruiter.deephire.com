@@ -1,5 +1,7 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
+import AUTH_CONFIG from '@/Auth/auth0-variables';
+import auth0 from 'auth0-js';
 
 // const newApi = 'http://localhost:3000/v1';
 const newApi = 'https://a.deephire.com/v1';
@@ -173,22 +175,17 @@ export async function getInterviews() {
   return request(`${newApi}/interviews`, { method: 'GET', headers: setHeaders() });
 }
 
-// export async function removeInterview(params) {
-//   const { email, selectedRows } = params;
+export async function resetPassword(email) {
+  const webAuth = new auth0.WebAuth({
+    domain: AUTH_CONFIG.domain,
+    clientID: AUTH_CONFIG.clientId,
+  });
 
-//   await Promise.all(
-//     selectedRows.map(async value => {
-//       const { _id } = value;
-//       const { $oid } = _id;
-//       const res = await request(`${newApi}/interviews/${$oid}`, {
-//         method: 'DELETE',
-//         headers: setHeaders(),
-//       });
-//       return res;
-//     })
-//   );
-//   return request(`${newApi}/interviews${email}`);
-// }
+  return webAuth.changePassword({
+    connection: AUTH_CONFIG.dbConnectionName,
+    email,
+  });
+}
 
 export async function deleteShortList(params) {
   const { selectedRows } = params;
