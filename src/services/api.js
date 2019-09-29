@@ -181,9 +181,14 @@ export async function resetPassword(email) {
     clientID: AUTH_CONFIG.clientId,
   });
 
-  return webAuth.changePassword({
-    connection: AUTH_CONFIG.dbConnectionName,
-    email,
+  return new Promise((resolve, reject) => {
+    webAuth.changePassword(
+      {
+        connection: AUTH_CONFIG.dbConnectionName,
+        email,
+      },
+      (err, result) => (err ? reject(err) : resolve(result))
+    );
   });
 }
 

@@ -14,7 +14,7 @@ const auth = new Auth();
 
 const ForgotPassScreen = Form.create()(props => {
   const { setForgotPass, form } = props;
-  const [resetRequested, setResetRequested] = useState(false);
+  const [resetResult, setResetResult] = useState();
 
   const returnToLoginButton = (
     <Button style={{ float: 'right' }} onClick={() => setForgotPass(false)} type="link">
@@ -24,21 +24,16 @@ const ForgotPassScreen = Form.create()(props => {
   const submitResetPassword = event => {
     event.preventDefault();
 
-    form.validateFields((err, fieldsValue) => {
+    form.validateFields(async (err, fieldsValue) => {
       if (err) return;
       form.resetFields();
-      setResetRequested(true);
-      resetPassword(fieldsValue.email);
+      setResetResult(await resetPassword(fieldsValue.email));
     });
   };
   return (
     <div>
-      {resetRequested ? (
-        <Alert
-          style={{ marginBottom: 20 }}
-          message="Recovery email sent. Check your mail inbox."
-          type="success"
-        />
+      {resetResult ? (
+        <Alert style={{ marginBottom: 20 }} message={resetResult} type="success" />
       ) : (
         <div style={{ paddingBottom: 20, textAlign: 'center' }}>
           {`Enter your email below and we'll send you a link to reset your password.`}
