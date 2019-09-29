@@ -25,7 +25,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2018
+    Copyright <Icon type="copyright" /> {new Date().getFullYear()}
   </Fragment>
 );
 
