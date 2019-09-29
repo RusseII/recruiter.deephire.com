@@ -1,10 +1,11 @@
 import Login from '@/components/Login';
 import { sendEmail, resetPassword } from '@/services/api';
-import { Alert, Button, Form, Input } from 'antd';
+import { Alert, Button, Form, Input, Divider } from 'antd';
 import { connect } from 'dva';
 import React, { Component, useState } from 'react';
 import Auth from '../../Auth/Auth';
 import styles from './Login.less';
+import { LinkedInLoginButton } from 'react-social-login-buttons';
 
 const FormItem = Form.Item;
 
@@ -18,7 +19,7 @@ const ForgotPassScreen = Form.create()(props => {
 
   const returnToLoginButton = (
     <Button style={{ float: 'right' }} onClick={() => setForgotPass(false)} type="link">
-      Return to Log In
+      Return to Login
     </Button>
   );
   const submitResetPassword = event => {
@@ -116,22 +117,24 @@ class LoginPage extends Component {
               this.loginForm = form;
             }}
           >
-            <Tab key="account" tab="Log In">
+            <Tab key="account" tab="Login">
+              <LinkedInLoginButton align="center" size={40} onClick={auth.loginWithLinkedin}>
+                <span style={{ marginLeft: -18 }}>Login with Linkedin</span>
+              </LinkedInLoginButton>
+              <Divider>or</Divider>
+
               <UserName name="email" placeholder="email" />
               <Password
                 name="password"
                 placeholder="password"
                 onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
               />
-              <Button
-                style={{ float: 'right' }}
-                onClick={() => this.setForgotPass(true)}
-                type="link"
-              >
-                Forgot Password
-              </Button>
             </Tab>
-            <Tab key="signUp" tab="Sign Up">
+            <Tab key="signUp" tab="Sign up">
+              <LinkedInLoginButton align="center" size={40} onClick={auth.loginWithLinkedin}>
+                <span style={{ marginLeft: -18 }}>Sign up with Linkedin</span>
+              </LinkedInLoginButton>
+              <Divider>or</Divider>
               <UserName name="email" placeholder="email" />
               <Password
                 name="password"
@@ -140,30 +143,39 @@ class LoginPage extends Component {
               />
             </Tab>
 
-            <Submit loading={submitting}>{type === 'account' ? 'Log in' : 'Sign up'}</Submit>
+            <Submit style={{ marginTop: -24 }} loading={submitting}>
+              {type === 'account' ? 'Login' : 'Sign up'}
+            </Submit>
             <div className={styles.other}>
               {type === 'account' ? 'Or Login With' : 'Or Signup With'}
               <Button
                 onClick={auth.loginWithGoogle}
                 shape="circle"
-                size="large"
+                size="medium"
                 icon="google"
                 style={{ marginLeft: 16 }}
               />
-              <Button
+              {/* <Button
                 onClick={auth.loginWithLinkedin}
                 shape="circle"
-                size="large"
+                size="medium"
                 icon="linkedin"
                 style={{ marginLeft: 16 }}
-              />
+              /> */}
               <Button
                 onClick={auth.loginWithFacebook}
                 shape="circle"
-                size="large"
+                size="medium"
                 icon="facebook"
                 style={{ marginLeft: 16 }}
               />
+              <Button
+                style={{ float: 'right' }}
+                onClick={() => this.setForgotPass(true)}
+                type="link"
+              >
+                Forgot Password
+              </Button>
             </div>
           </Login>
         ) : (
