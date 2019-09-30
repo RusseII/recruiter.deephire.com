@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Upload, Button, Card, Row, Icon, List, Popconfirm } from 'antd';
+import { Upload, Button, Card, Row, Icon, List, Popconfirm, Tooltip } from 'antd';
 
 import styles from './index.less';
 import AddYTModal from './AddYTModal';
@@ -75,7 +75,12 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
         <Icon type="insurance" /> {interviewName}
       </Row>
       <Row>
-        <Icon type="mail" /> {email}
+        <Icon type="mail" />
+        <Tooltip title="Click to email">
+          <a target="_blank" rel="noopener noreferrer" href={`mailto:${email}`}>
+            {` ${email}`}
+          </a>
+        </Tooltip>
       </Row>
 
       <List
@@ -108,7 +113,7 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
 
       <Row>
         <Button style={{ marginRight: '20px' }} type="dashed" onClick={toggleModalVisible}>
-          <Icon type="plus" /> Add Youtube Link
+          <Icon type="plus" /> Add YT Video
         </Button>
         <Upload key={key} {...props}>
           <Button>
