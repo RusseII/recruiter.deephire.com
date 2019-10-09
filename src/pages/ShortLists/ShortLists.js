@@ -22,17 +22,18 @@ const columns = [
       const { name, email, description } = data;
       return (
         <>
-          <div>{description}</div>
           <div>{name}</div>
+          <div>{description}</div>
           <div>{email}</div>
+          <a onClick={() => openShortListAnalytics(data)}>View Analytics </a>
         </>
       );
     },
   },
-  {
-    title: 'Analytics',
-    render: data => <a onClick={() => openShortListAnalytics(data)}>View</a>,
-  },
+  // {
+  //   title: 'Analytics',
+  //   render: data => <a onClick={() => openShortListAnalytics(data)}>View</a>,
+  // },
   {
     title: 'Last Viewed',
     render: data => {

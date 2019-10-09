@@ -1,15 +1,15 @@
 export default {
   'menu.Interviews': 'Interviews',
-  'menu.Interviews.View Created Interviews': 'View Created Interviews',
-  'menu.Interviews.Create New Interview': 'Create New Interview',
-  'menu.Interviews.Create New Interview.Create': 'Create',
-  'menu.Interviews.Create New Interview.Success': 'Success',
+  'menu.View Created Interviews': 'View Created Interviews',
+  'menu.Create New Interview': 'Create New Interview',
+  'menu.Create New Interview.Create': 'Create',
+  'menu.Create New Interview.Success': 'Success',
 
   'menu.Candidates': 'Candidates',
-  'menu.Candidates.Candidate Videos': 'Candidate Videos',
-  'menu.Short Lists': 'Short Lists',
-  'menu.Short Lists.Short Lists': 'All',
-  'menu.Short Lists.shortListAnalytics': 'Analytics',
+  'menu.Candidate Videos': 'Candidate Videos',
+  'menu.Share Links': 'Share Links',
+  // 'menu.Share Links.Share Links': 'All',
+  'menu.shortListAnalytics': 'Analytics',
   'menu.Account.Profile': 'Profile',
 
   'navbar.lang': '中文',
