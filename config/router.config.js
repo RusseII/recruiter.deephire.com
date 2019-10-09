@@ -53,7 +53,7 @@ export default [
         component: './Candidates/ViewInterviews',
       },
       {
-        path: '/candidates',
+        path: '/candidates/candidates',
         icon: 'team',
         name: 'Candidate Videos',
         component: './Candidates/Candidates',

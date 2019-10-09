@@ -8,8 +8,8 @@ export default {
   'menu.Candidates': 'Candidates',
   'menu.Candidate Videos': 'Candidate Videos',
   'menu.Share Links': 'Share Links',
-  'menu.Share Links.Share Links': 'All',
-  'menu.Share Links.shortListAnalytics': 'Analytics',
+  // 'menu.Share Links.Share Links': 'All',
+  'menu.shortListAnalytics': 'Analytics',
   'menu.Account.Profile': 'Profile',
 
   'navbar.lang': '中文',
