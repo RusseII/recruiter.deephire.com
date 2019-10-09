@@ -1,5 +1,5 @@
-import React, { PureComponent, Fragment } from 'react';
-import { Table, Alert } from 'antd';
+import React, { PureComponent } from 'react';
+import { Table } from 'antd';
 import styles from './index.less';
 
 function initTotalList(columns) {
@@ -62,6 +62,7 @@ class StandardTable extends PureComponent {
   };
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const { selectedRowKeys, needTotalList } = this.state;
     const {
       data: { list, pagination },
@@ -86,7 +87,7 @@ class StandardTable extends PureComponent {
 
     return (
       <div className={styles.standardTable}>
-        <div className={styles.tableAlert}>
+        {/* <div className={styles.tableAlert}>
           <Alert
             message={
               <Fragment>
@@ -100,15 +101,13 @@ class StandardTable extends PureComponent {
                     </span>
                   </span>
                 ))}
-                {/* <a onClick={this.cleanSelectedKeys} style={{ marginLeft: 24 }}>
-                  清空
-                </a> */}
+            
               </Fragment>
             }
             type="info"
             showIcon
           />
-        </div>
+        </div> */}
         <Table
           scroll={{ x: true }}
           loading={loading}
