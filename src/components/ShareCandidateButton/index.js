@@ -93,14 +93,15 @@ class ShareCandidateButton extends React.Component {
           okText="Create Link"
           onCancel={() => this.handleModalVisible()}
         >
+          <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
+            {form.getFieldDecorator('name', {})(<Input placeholder="Client Name" />)}
+          </FormItem>
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Description">
             {form.getFieldDecorator('description', {})(
               <Input placeholder="Descriptive Share Link Name" />
             )}
           </FormItem>
-          <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
-            {form.getFieldDecorator('name', {})(<Input placeholder="Client Name" />)}
-          </FormItem>
+
           {/* <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Email">
             {form.getFieldDecorator('email', {})(
               <Input placeholder="Who do you want to share this with?" />
