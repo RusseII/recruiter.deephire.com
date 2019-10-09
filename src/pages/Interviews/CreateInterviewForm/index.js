@@ -26,7 +26,7 @@ export default class CreateInterviewForm extends PureComponent {
       <PageHeaderWrapper
         title="Create Interview"
         tabActiveKey={location.pathname}
-        content="Create a new interview here!"
+        // content="Create a new interview here!"
       >
         <Card bordered={false}>
           <Fragment>
