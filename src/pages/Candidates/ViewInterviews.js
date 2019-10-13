@@ -1,15 +1,37 @@
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import StandardTable from '@/components/StandardTable';
-import { getInterviews, getArchivedInterviews, updateInterviews } from '@/services/api';
-import { message, Row, Col, Card, Tooltip, Modal } from 'antd';
+import { message, Row, Col, Card, Tooltip, Modal, Upload, Icon } from 'antd';
 import React, { Fragment, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
+import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import StandardTable from '@/components/StandardTable';
+import { getInterviews, getArchivedInterviews, updateInterviews } from '@/services/api';
 import ArchiveButton from '@/components/ArchiveButton';
 import CloneButton from '@/components/CloneButton';
 
 import Step1 from '@/pages/Interviews/CreateInterviewForm/Step1';
 import { getHttpUrl } from '@/utils/utils';
+
+const { Dragger } = Upload;
+
+const props = {
+  name: 'file',
+  multiple: true,
+  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  onChange(info) {
+    const { status } = info.file;
+    if (status !== 'uploading') {
+      // eslint-disable-next-line no-console
+      console.log('uploaded');
+    }
+    if (status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully.`);
+    } else if (status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+};
+const profile = JSON.parse(localStorage.getItem('profile'));
+const { email } = profile;
 
 const TableList = () => {
   const [selectedRows, setSelectedRows] = useState([]);
@@ -17,6 +39,7 @@ const TableList = () => {
   const [data, setData] = useState([]);
   const [archives, setArchives] = useState(false);
   const [editInterview, setEditInterview] = useState(null);
+  const [inviteCandidates, setInviteCandidates] = useState(null);
 
   const updateInterview = async cleanedValueData => {
     await updateInterviews(editInterview._id, cleanedValueData);
@@ -72,6 +95,13 @@ const TableList = () => {
         </Fragment>
       ),
     },
+    {
+      title: email === 'demo@deephire.com' ? 'Invite' : null,
+      render: () =>
+        email === 'demo@deephire.com' ? (
+          <a onClick={() => setInviteCandidates(true)}>Invite</a>
+        ) : null,
+    },
 
     {
       title: 'Edit',
@@ -97,6 +127,26 @@ const TableList = () => {
 
   return (
     <PageHeaderWrapper title="Interviews">
+      <Modal
+        title="Invite Candidates"
+        visible={Boolean(inviteCandidates)}
+        onCancel={() => setInviteCandidates(false)}
+        onOk={() => setInviteCandidates(false)}
+
+        // width={window.innerWidth > 500 ? '60vw' : null}
+      >
+        <Dragger {...props}>
+          <p className="ant-upload-drag-icon">
+            <Icon type="inbox" />
+          </p>
+          <p className="ant-upload-text">Click or drag file to this area to upload</p>
+          <p className="ant-upload-hint">
+            Support for a single or bulk upload. Upload a CSV or excel file that contains your
+            candidate&apos;s email addresses.
+          </p>
+        </Dragger>
+        ,
+      </Modal>
       {editInterview && (
         <Modal
           title="Edit Interview"
