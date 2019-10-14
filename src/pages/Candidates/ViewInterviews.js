@@ -1,4 +1,4 @@
-import { message, Row, Col, Card, Tooltip, Modal, Upload, Icon } from 'antd';
+import { message, Row, Col, Card, Tooltip, Modal, Upload, Icon, Result } from 'antd';
 import React, { Fragment, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
@@ -40,6 +40,7 @@ const TableList = () => {
   const [archives, setArchives] = useState(false);
   const [editInterview, setEditInterview] = useState(null);
   const [inviteCandidates, setInviteCandidates] = useState(null);
+  const [finished, setFinished] = useState(false);
 
   const updateInterview = async cleanedValueData => {
     await updateInterviews(editInterview._id, cleanedValueData);
@@ -125,27 +126,40 @@ const TableList = () => {
     getData();
   }, []);
 
+  const reset = () => {
+    setInviteCandidates(false);
+    setFinished(false);
+  };
   return (
     <PageHeaderWrapper title="Interviews">
       <Modal
         title="Invite Candidates"
         visible={Boolean(inviteCandidates)}
-        onCancel={() => setInviteCandidates(false)}
-        onOk={() => setInviteCandidates(false)}
+        onCancel={() => reset()}
+        onOk={() => (!finished ? setFinished(true) : reset())}
+        okText={!finished ? 'Invite Candidates' : 'Finish'}
+        // footer={(!finished)}
 
         // width={window.innerWidth > 500 ? '60vw' : null}
       >
-        <Dragger {...props}>
-          <p className="ant-upload-drag-icon">
-            <Icon type="inbox" />
-          </p>
-          <p className="ant-upload-text">Click or drag file to this area to upload</p>
-          <p className="ant-upload-hint">
-            Support for a single or bulk upload. Upload a CSV or excel file that contains your
-            candidate&apos;s email addresses.
-          </p>
-        </Dragger>
-        ,
+        {!finished ? (
+          <Dragger {...props}>
+            <p className="ant-upload-drag-icon">
+              <Icon type="inbox" />
+            </p>
+            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+            <p className="ant-upload-hint">
+              Support for a single or bulk upload. Upload a CSV or excel file that contains your
+              candidate&apos;s email addresses.
+            </p>
+          </Dragger>
+        ) : (
+          <Result
+            status="success"
+            title="Successfully Invited Candidates"
+            subTitle="Check with your account manager to view progress and analytics"
+          />
+        )}
       </Modal>
       {editInterview && (
         <Modal
