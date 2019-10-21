@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 
 import { Card, Col, Row, Icon, Table, Button } from 'antd';
+import router from 'umi/router';
+import qs from 'qs';
 
 import InfoCardEditable from '@/components/InfoCardEditable';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 
-import router from 'umi/router';
-import qs from 'qs';
 import styles from './ViewCandidate.less';
 import { getVideo } from '@/services/api';
 import ArchiveButton from '@/components/ArchiveButton';
@@ -89,6 +89,15 @@ const ViewCandidate = ({ location }) => {
   }
   const titleData = () => <span>Questions</span>;
 
+  const buttonEnabled = (archives, candidateData) => {
+    if (candidateData) {
+      if (archives) {
+        return candidateData.archivedResponses ? candidateData.archivedResponses.length : false;
+      }
+      return candidateData.responses ? candidateData.responses.length : false;
+    }
+    return null;
+  };
   const extraData = () => (
     <>
       <ArchiveButton
@@ -98,6 +107,7 @@ const ViewCandidate = ({ location }) => {
         route={`videos/${candidateData._id}`}
         archiveData={[{ _id: activeQuestion }]}
         onClick={() => null}
+        active={buttonEnabled(archives, candidateData)}
       />
       <a onClick={() => setArchives(!archives)}>
         {archives
