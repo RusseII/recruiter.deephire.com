@@ -19,6 +19,7 @@ const columns = [
     key: 'question',
   },
 ];
+const getWidth = () => Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
 const ViewCandidate = ({ location }) => {
   const id = qs.parse(location.search)['?id'];
@@ -125,7 +126,7 @@ const ViewCandidate = ({ location }) => {
     <div>
       <Button style={{ marginBottom: '20px' }} onClick={goToCandidates} type="secondary">
         <Icon type="left" />
-        Back to Candidates
+        {getWidth() < 400 ? 'Back' : 'Back to Candidates'}
       </Button>
       <div style={{ float: 'right', marginBottom: '20px' }}>
         <ShareCandidateButton candidateData={[candidateData]} />
