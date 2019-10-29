@@ -17,6 +17,19 @@ const formItemLayout = {
   },
 };
 
+const formItemLayoutHidden = {
+  style: { display: 'none' },
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 14 },
+    md: { span: 10 },
+  },
+};
+
 const formItemLayoutWithOutLabel = {
   wrapperCol: {
     xs: { span: 24, offset: 0 },
@@ -151,7 +164,7 @@ class Step1 extends React.PureComponent {
           layout="horizontal"
           hideRequiredMark
           onSubmit={this.onValidateForm}
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 40 }}
         >
           <FormItem {...formItemLayout} label="Name">
             {getFieldDecorator('interviewName', {
@@ -163,16 +176,21 @@ class Step1 extends React.PureComponent {
                   whitespace: true,
                 },
               ],
-            })(<Input style={{ width: '90%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="What job is this interview for?"
+                style={{ width: '90%', marginRight: 8 }}
+              />
+            )}
           </FormItem>
-          <FormItem {...formItemLayout} label="Retakes">
+          <FormItem {...formItemLayoutHidden} label="Retakes">
             {getFieldDecorator('retakesAllowed', {
               initialValue: interviewConfig.retakesAllowed || 8,
             })(<InputNumber min={0} max={100} />)}
             <span className="ant-form-text"> per interview</span>
           </FormItem>
 
-          <FormItem {...formItemLayout} label="Prep Time">
+          <FormItem {...formItemLayoutHidden} label="Prep Time">
             {getFieldDecorator('prepTime', {
               initialValue: interviewConfig.prepTime || 45,
             })(<InputNumber min={15} max={1000} />)}
@@ -186,7 +204,6 @@ class Step1 extends React.PureComponent {
             <span className="ant-form-text"> seconds per question</span>
           </FormItem>
           {createFormItems(this.props)}
-
           <FormItem {...formItemLayoutWithOutLabel}>
             <Button type="dashed" onClick={this.add}>
               <Icon type="plus" /> Add Interview Question
@@ -200,20 +217,18 @@ class Step1 extends React.PureComponent {
         </Form>
         {!data && (
           <Fragment>
-            <Divider style={{ margin: '40px 0 24px' }} />
+            <Divider style={{ margin: '100px 0 24px' }} />
 
             <div className={styles.desc}>
-              <h3>Other Info</h3>
-              <h4>The Process</h4>
+              <h3>Next Steps</h3>
+              <h4>Recieve Link</h4>
+              <p>Once you click Create Interview, you will recieve a link.</p>
+              <h4>Send to Candidates</h4>
+              <p>Put the link you recieve in your job posting, or send it to candidates.</p>
+              {/* <h4>Need Help Crafting the Emails?</h4>
               <p>
-                Use this page to create an interview. After you submit, you will receive an
-                interview link.
-              </p>
-              <h4>Next</h4>
-              <p>
-                Send the link out to candidates, once they complete their interview, you will
-                receive an email with their videos.
-              </p>
+                <a>See example emails</a>
+              </p> */}
             </div>
           </Fragment>
         )}

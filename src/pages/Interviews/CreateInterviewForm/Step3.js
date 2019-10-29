@@ -2,8 +2,9 @@ import React, { Fragment } from 'react';
 import { connect } from 'dva';
 import { Tooltip, message, Button, Row, Col } from 'antd';
 import router from 'umi/router';
-import Result from '@/components/Result';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+
+import Result from '@/components/Result';
 import styles from './style.less';
 import { getHttpUrl } from '@/utils/utils';
 
@@ -13,7 +14,7 @@ import { getHttpUrl } from '@/utils/utils';
 }))
 class Step3 extends React.PureComponent {
   render() {
-    const { shortLink, currentUser } = this.props;
+    const { shortLink } = this.props;
     const { link } = shortLink;
     const onFinish = () => {
       router.push('/interview/create-interview/info');
@@ -41,14 +42,14 @@ class Step3 extends React.PureComponent {
             </Tooltip>
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col xs={24} sm={8} className={styles.label}>
             Email：
           </Col>
           <Col xs={24} sm={16}>
             {currentUser.email}
           </Col>
-        </Row>
+        </Row> */}
       </div>
     );
     const actions = (
