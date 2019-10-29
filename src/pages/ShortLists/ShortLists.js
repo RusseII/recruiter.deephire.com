@@ -18,7 +18,6 @@ const openShortListAnalytics = data => {
 const columns = [
   {
     title: 'Shared With',
-    width: 1000,
     render: data => {
       const { name, email, description } = data;
       return (
