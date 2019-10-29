@@ -81,8 +81,23 @@ const TableList = () => {
         }
       },
     },
+
     {
-      title: 'Interview Link (send this to candidates)',
+      title: email === 'demo@deephire.com' ? 'Invite' : null,
+      render: () =>
+        email === 'demo@deephire.com' ? (
+          <a onClick={() => setInviteCandidates(true)}>Invite</a>
+        ) : null,
+    },
+
+    {
+      title: 'Edit',
+      render: (text, data) => <a onClick={() => setEditInterview(data)}>Edit</a>,
+    },
+    {
+      title: 'Interview Link',
+      fixed: 'right',
+      width: 20,
       render: (text, data) => (
         <Fragment>
           <Tooltip title="Click to copy">
@@ -95,18 +110,6 @@ const TableList = () => {
           </Tooltip>
         </Fragment>
       ),
-    },
-    {
-      title: email === 'demo@deephire.com' ? 'Invite' : null,
-      render: () =>
-        email === 'demo@deephire.com' ? (
-          <a onClick={() => setInviteCandidates(true)}>Invite</a>
-        ) : null,
-    },
-
-    {
-      title: 'Edit',
-      render: (text, data) => <a onClick={() => setEditInterview(data)}>Edit</a>,
     },
   ];
 

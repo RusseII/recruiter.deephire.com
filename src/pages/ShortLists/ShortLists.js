@@ -1,14 +1,14 @@
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import StandardTable from '@/components/StandardTable';
-import { getArchivedShortlists, getShortLists } from '@/services/api';
+import router from 'umi/router';
 import { AutoComplete, Card, Col, message, Row, Tooltip } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
-import router from 'umi/router';
 import styles from './ShortLists.less';
 import ArchiveButton from '@/components/ArchiveButton';
 import { getHttpUrl } from '@/utils/utils';
+import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import StandardTable from '@/components/StandardTable';
+import { getArchivedShortlists, getShortLists } from '@/services/api';
 
 const openShortListAnalytics = data => {
   const { _id } = data;
@@ -54,6 +54,7 @@ const columns = [
   },
   {
     title: 'Share Link',
+    fixed: 'right',
     render: data => {
       const { shortUrl } = data;
 
