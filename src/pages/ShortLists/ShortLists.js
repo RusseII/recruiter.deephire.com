@@ -18,6 +18,7 @@ const openShortListAnalytics = data => {
 const columns = [
   {
     title: 'Shared With',
+    width: 1000,
     render: data => {
       const { name, email, description } = data;
       return (
@@ -50,6 +51,24 @@ const columns = [
       const { clicks } = data;
       const clickCount = clicks ? clicks.length : 0;
       return <div className={styles.clickCount}>{clickCount || '-'}</div>;
+    },
+  },
+  {
+    title: 'Created By',
+    render(test, data) {
+      const { createdBy } = data;
+      try {
+        const dateObj = new Date(data.timestamp);
+        const displayTime = readableTime(dateObj);
+        return (
+          <>
+            <div>{createdBy}</div>
+            <div>{displayTime}</div>
+          </>
+        );
+      } catch {
+        return createdBy;
+      }
     },
   },
   {
@@ -149,7 +168,6 @@ const ShortLists = () => {
           selectedRows={selectedRows}
           loading={loading}
           data={{ list: filteredData }}
-          size="small"
           columns={columns}
           onSelectRow={rows => setSelectedRows(rows)}
         />

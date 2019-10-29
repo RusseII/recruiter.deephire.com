@@ -54,6 +54,7 @@ const TableList = () => {
     },
     {
       title: 'Interview Questions',
+      width: 1000,
       render(x, data) {
         try {
           const listItems = data.interviewQuestions.map(d => (
@@ -69,15 +70,20 @@ const TableList = () => {
       },
     },
     {
-      title: 'Created',
-      sorter: true,
+      title: 'Created By',
       render(test, data) {
+        const { createdBy } = data;
         try {
           const dateObj = new Date(data.timestamp);
           const displayTime = readableTime(dateObj);
-          return <div>{displayTime}</div>;
+          return (
+            <>
+              <div>{createdBy}</div>
+              <div>{displayTime}</div>
+            </>
+          );
         } catch {
-          return null;
+          return createdBy;
         }
       },
     },
@@ -97,7 +103,6 @@ const TableList = () => {
     {
       title: 'Interview Link',
       fixed: 'right',
-      width: 20,
       render: (text, data) => (
         <Fragment>
           <Tooltip title="Click to copy">
@@ -204,7 +209,7 @@ const TableList = () => {
           selectedRows={selectedRows}
           loading={loading}
           data={{ list: data }}
-          size="small"
+          // size="small"
           columns={columns}
           onSelectRow={rows => setSelectedRows(rows)}
         />
