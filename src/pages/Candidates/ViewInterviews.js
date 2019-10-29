@@ -54,7 +54,6 @@ const TableList = () => {
     },
     {
       title: 'Interview Questions',
-      width: 1000,
       render(x, data) {
         try {
           const listItems = data.interviewQuestions.map(d => (
@@ -70,39 +69,20 @@ const TableList = () => {
       },
     },
     {
-      title: 'Created By',
+      title: 'Created',
+      sorter: true,
       render(test, data) {
-        const { createdBy } = data;
         try {
           const dateObj = new Date(data.timestamp);
           const displayTime = readableTime(dateObj);
-          return (
-            <>
-              <div>{createdBy}</div>
-              <div>{displayTime}</div>
-            </>
-          );
+          return <div>{displayTime}</div>;
         } catch {
-          return createdBy;
+          return null;
         }
       },
     },
-
     {
-      title: email === 'demo@deephire.com' ? 'Invite' : null,
-      render: () =>
-        email === 'demo@deephire.com' ? (
-          <a onClick={() => setInviteCandidates(true)}>Invite</a>
-        ) : null,
-    },
-
-    {
-      title: 'Edit',
-      render: (text, data) => <a onClick={() => setEditInterview(data)}>Edit</a>,
-    },
-    {
-      title: 'Interview Link',
-      fixed: 'right',
+      title: 'Interview Link (send this to candidates)',
       render: (text, data) => (
         <Fragment>
           <Tooltip title="Click to copy">
@@ -115,6 +95,18 @@ const TableList = () => {
           </Tooltip>
         </Fragment>
       ),
+    },
+    {
+      title: email === 'demo@deephire.com' ? 'Invite' : null,
+      render: () =>
+        email === 'demo@deephire.com' ? (
+          <a onClick={() => setInviteCandidates(true)}>Invite</a>
+        ) : null,
+    },
+
+    {
+      title: 'Edit',
+      render: (text, data) => <a onClick={() => setEditInterview(data)}>Edit</a>,
     },
   ];
 
@@ -209,7 +201,7 @@ const TableList = () => {
           selectedRows={selectedRows}
           loading={loading}
           data={{ list: data }}
-          // size="small"
+          size="small"
           columns={columns}
           onSelectRow={rows => setSelectedRows(rows)}
         />
