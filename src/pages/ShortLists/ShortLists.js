@@ -18,7 +18,6 @@ const openShortListAnalytics = data => {
 const columns = [
   {
     title: 'Shared With',
-    width: 1000,
     render: data => {
       const { name, email, description } = data;
       return (
@@ -135,7 +134,7 @@ const ShortLists = () => {
   };
 
   return (
-    <PageHeaderWrapper title="Short Lists">
+    <PageHeaderWrapper title="Share Links">
       <Card>
         <Row align="middle" type="flex" justify="space-between">
           <Col>
