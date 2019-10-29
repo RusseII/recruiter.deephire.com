@@ -1,14 +1,14 @@
-import router from 'umi/router';
+import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import StandardTable from '@/components/StandardTable';
+import { getArchivedShortlists, getShortLists } from '@/services/api';
 import { AutoComplete, Card, Col, message, Row, Tooltip } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
+import router from 'umi/router';
 import styles from './ShortLists.less';
 import ArchiveButton from '@/components/ArchiveButton';
 import { getHttpUrl } from '@/utils/utils';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import StandardTable from '@/components/StandardTable';
-import { getArchivedShortlists, getShortLists } from '@/services/api';
 
 const openShortListAnalytics = data => {
   const { _id } = data;
@@ -18,7 +18,6 @@ const openShortListAnalytics = data => {
 const columns = [
   {
     title: 'Shared With',
-    width: 1000,
     render: data => {
       const { name, email, description } = data;
       return (
@@ -54,26 +53,7 @@ const columns = [
     },
   },
   {
-    title: 'Created By',
-    render(test, data) {
-      const { createdBy } = data;
-      try {
-        const dateObj = new Date(data.timestamp);
-        const displayTime = readableTime(dateObj);
-        return (
-          <>
-            <div>{createdBy}</div>
-            <div>{displayTime}</div>
-          </>
-        );
-      } catch {
-        return createdBy;
-      }
-    },
-  },
-  {
     title: 'Share Link',
-    fixed: 'right',
     render: data => {
       const { shortUrl } = data;
 
@@ -168,6 +148,7 @@ const ShortLists = () => {
           selectedRows={selectedRows}
           loading={loading}
           data={{ list: filteredData }}
+          size="small"
           columns={columns}
           onSelectRow={rows => setSelectedRows(rows)}
         />
