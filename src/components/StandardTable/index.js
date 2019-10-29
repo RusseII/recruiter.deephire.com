@@ -12,6 +12,22 @@ function initTotalList(columns) {
   return totalList;
 }
 
+function debounce(fn, ms) {
+  let timer;
+  return _ => {
+    clearTimeout(timer);
+    timer = setTimeout(_ => {
+      timer = null;
+      // eslint-disable-next-line prefer-rest-params
+      fn.apply(this, arguments);
+    }, ms);
+  };
+}
+
+const getWidth = () => {
+  return Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+};
+
 class StandardTable extends PureComponent {
   constructor(props) {
     super(props);
@@ -21,7 +37,16 @@ class StandardTable extends PureComponent {
     this.state = {
       selectedRowKeys: selectedRows,
       needTotalList,
+      width: getWidth(),
     };
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', debounce(() => this.handleResize(), 500));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', debounce(() => this.handleResize(), 500));
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -61,9 +86,13 @@ class StandardTable extends PureComponent {
     this.handleRowSelectChange([], []);
   };
 
+  handleResize() {
+    this.setState({ width: getWidth() });
+  }
+
   render() {
     // eslint-disable-next-line no-unused-vars
-    const { selectedRowKeys, needTotalList } = this.state;
+    const { selectedRowKeys, needTotalList, width } = this.state;
     const {
       data: { list, pagination },
       loading,
@@ -109,7 +138,7 @@ class StandardTable extends PureComponent {
           />
         </div> */}
         <Table
-          scroll={{ x: true }}
+          scroll={{ x: width < 1100 }}
           loading={loading}
           rowKey={rowKey || 'key'}
           rowSelection={rowSelection}
