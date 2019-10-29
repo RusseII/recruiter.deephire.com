@@ -53,7 +53,10 @@
     "react-router-dom": "^4.3.1",
     "react-social-login-buttons": "3.0.0",
     "readable-timestamp": "0.2.0",
-    "semantic-ui-react": "0.85.0"
+    "semantic-ui-react": "0.85.0",
+    "umi": "^2.0.3",
+    "umi-plugin-ga": "^1.0.3",
+    "umi-plugin-react": "^1.0.3"
   },
   "devDependencies": {
     "@types/react": "^16.4.11",
@@ -86,10 +89,7 @@
     "pro-download": "^1.0.1",
     "stylelint": "^9.4.0",
     "stylelint-config-prettier": "^4.0.0",
-    "stylelint-config-standard": "^18.0.0",
-    "umi": "^2.0.3",
-    "umi-plugin-ga": "^1.0.3",
-    "umi-plugin-react": "^1.0.3"
+    "stylelint-config-standard": "^18.0.0"
   },
   "optionalDependencies": {
     "puppeteer": "1.13.0"
