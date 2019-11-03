@@ -11,7 +11,7 @@ import styles from './Login.less';
 
 const FormItem = Form.Item;
 
-const { Tab, UserName, Password, Submit } = Login;
+const { Tab, Email, Password, Submit, Company, Name } = Login;
 
 const auth = new Auth();
 
@@ -54,7 +54,6 @@ const ForgotPassScreen = Form.create()(props => {
             ],
           })(<Input placeholder="Email Address" />)}
         </FormItem>
-        {/* <UserName name="email"   placeholder="email" /> */}
         <Button style={{ width: '100%' }} type="primary" onClick={submitResetPassword}>
           Send Reset Link
         </Button>
@@ -118,7 +117,7 @@ class LoginPage extends Component {
               </LinkedInLoginButton>
               <Divider>or</Divider>
 
-              <UserName name="email" placeholder="email" />
+              <Email name="email" placeholder="email" />
               <Password
                 name="password"
                 placeholder="password"
@@ -126,7 +125,9 @@ class LoginPage extends Component {
               />
             </Tab>
             <Tab key="signUp" tab="Sign up">
-              <UserName name="email" placeholder="email" />
+              <Name name="name" placeholder="name" />
+              <Company name="company" placeholder="company" />
+              <Email name="email" placeholder="email" />
               <Password
                 name="password"
                 placeholder="password"
