@@ -1,4 +1,5 @@
 import auth0 from 'auth0-js';
+import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
@@ -35,7 +36,7 @@ export default class Auth {
       (err, authResult) => {
         if (err) {
           console.error('authResult', authResult);
-          alert(`Invalid password or username`);
+          message.error('Incorrect Email or Password', 10);
         }
       }
     );
