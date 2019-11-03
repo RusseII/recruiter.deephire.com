@@ -1,11 +1,13 @@
-import Login from '@/components/Login';
-import { sendEmail, resetPassword } from '@/services/api';
 import { Alert, Button, Form, Input, Divider } from 'antd';
+import { LinkedInLoginButton } from 'react-social-login-buttons';
 import { connect } from 'dva';
 import React, { Component, useState } from 'react';
+
+import Login from '@/components/Login';
+import { resetPassword } from '@/services/api';
+
 import Auth from '../../Auth/Auth';
 import styles from './Login.less';
-import { LinkedInLoginButton } from 'react-social-login-buttons';
 
 const FormItem = Form.Item;
 
@@ -37,7 +39,7 @@ const ForgotPassScreen = Form.create()(props => {
         <Alert style={{ marginBottom: 20 }} message={resetResult} type="success" />
       ) : (
         <div style={{ paddingBottom: 20, textAlign: 'center' }}>
-          {`Enter your email below and we'll send you a link to reset your password.`}
+          Enter your email below and we will send you a link to reset your password.
         </div>
       )}
       <Form onSubmit={submitResetPassword}>
@@ -78,14 +80,7 @@ class LoginPage extends Component {
     this.setState({ forgotPassword: forgot });
   }
 
-  handleSubmit = (err, values) => {
-    if (values.email !== 'demo@deephire.com') {
-      sendEmail({
-        recipients: ['russell@deephire.com'],
-        subject: `${values.email} tried to login`,
-        message: values.email,
-      });
-    }
+  handleSubmit = () => {
     this.loginForm.validateFields((err, values) => {
       if (!err) {
         const { type } = this.state;
@@ -131,10 +126,6 @@ class LoginPage extends Component {
               />
             </Tab>
             <Tab key="signUp" tab="Sign up">
-              <LinkedInLoginButton align="center" size={40} onClick={auth.loginWithLinkedin}>
-                <span style={{ marginLeft: -18 }}>Sign up with Linkedin</span>
-              </LinkedInLoginButton>
-              <Divider>or</Divider>
               <UserName name="email" placeholder="email" />
               <Password
                 name="password"
@@ -147,28 +138,25 @@ class LoginPage extends Component {
               {type === 'account' ? 'Login' : 'Sign up'}
             </Submit>
             <div className={styles.other}>
-              {type === 'account' ? 'Or Login With' : 'Or Signup With'}
-              <Button
-                onClick={auth.loginWithGoogle}
-                shape="circle"
-                size="medium"
-                icon="google"
-                style={{ marginLeft: 16 }}
-              />
-              {/* <Button
-                onClick={auth.loginWithLinkedin}
-                shape="circle"
-                size="medium"
-                icon="linkedin"
-                style={{ marginLeft: 16 }}
-              /> */}
-              <Button
-                onClick={auth.loginWithFacebook}
-                shape="circle"
-                size="medium"
-                icon="facebook"
-                style={{ marginLeft: 16 }}
-              />
+              {type === 'account' && (
+                <>
+                  Or Login With
+                  <Button
+                    onClick={auth.loginWithGoogle}
+                    shape="circle"
+                    size="medium"
+                    icon="google"
+                    style={{ marginLeft: 16 }}
+                  />
+                  <Button
+                    onClick={auth.loginWithFacebook}
+                    shape="circle"
+                    size="medium"
+                    icon="facebook"
+                    style={{ marginLeft: 16 }}
+                  />
+                </>
+              )}
               <Button
                 style={{ float: 'right' }}
                 onClick={() => this.setForgotPass(true)}
