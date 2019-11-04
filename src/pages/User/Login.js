@@ -87,7 +87,7 @@ class LoginPage extends Component {
         if (type === 'account') {
           auth.login(values.email, values.password);
         } else {
-          auth.signup(values.email, values.password);
+          auth.signup(values.email, values.password, values.name, values.company);
         }
       }
     });

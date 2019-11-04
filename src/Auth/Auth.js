@@ -56,28 +56,37 @@ export default class Auth {
     return this.auth0.client.userInfo(accessToken, cb);
   };
 
-  signup = (email, password) => {
-    this.auth0.signup({ connection: AUTH_CONFIG.dbConnectionName, email, password }, err => {
-      if (err) {
-        console.error('error', err);
-        alert(`Error: ${err.description}. Check the console for further details.`);
-        return;
-      }
-
-      this.auth0.login(
-        {
-          realm: AUTH_CONFIG.dbConnectionName,
-          username: email,
-          password,
-        },
-        (err, authResult) => {
-          if (err) {
-            console.error(err, authResult);
-            alert(`Error: ${err.description}. Check the console for further details.`);
-          }
+  signup = (email, password, name, company) => {
+    this.auth0.signup(
+      {
+        connection: AUTH_CONFIG.dbConnectionName,
+        email,
+        password,
+        name,
+        user_metadata: { company },
+      },
+      err => {
+        if (err) {
+          console.error('error', err);
+          alert(`Error: ${err.description}. Check the console for further details.`);
+          return;
         }
-      );
-    });
+
+        this.auth0.login(
+          {
+            realm: AUTH_CONFIG.dbConnectionName,
+            username: email,
+            password,
+          },
+          (err, authResult) => {
+            if (err) {
+              console.error(err, authResult);
+              alert(`Error: ${err.description}. Check the console for further details.`);
+            }
+          }
+        );
+      }
+    );
   };
 
   loginWithGoogle = () => {
