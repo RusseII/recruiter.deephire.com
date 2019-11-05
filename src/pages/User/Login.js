@@ -4,10 +4,12 @@ import { connect } from 'dva';
 import React, { Component, useState } from 'react';
 
 import Login from '@/components/Login';
-import { resetPassword } from '@/services/api';
+import { resetPassword, createCompany } from '@/services/api';
 
 import Auth from '../../Auth/Auth';
 import styles from './Login.less';
+
+const ObjectID = require('bson-objectid');
 
 const FormItem = Form.Item;
 
@@ -87,7 +89,10 @@ class LoginPage extends Component {
         if (type === 'account') {
           auth.login(values.email, values.password);
         } else {
-          auth.signup(values.email, values.password, values.name, values.company);
+          const _id = ObjectID();
+          const companyData = { _id, owner: values.email, companyName: values.company };
+          auth.signup(values.email, values.password, values.name, values.company, _id);
+          createCompany(companyData);
         }
       }
     });
