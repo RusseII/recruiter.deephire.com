@@ -3,18 +3,18 @@ import { Icon } from 'antd';
 import styles from './index.less';
 
 export default {
-  UserName: {
+  Email: {
     props: {
       size: 'large',
       type: 'email',
-      prefix: <Icon type="user" className={styles.prefixIcon} />,
+      prefix: <Icon type="mail" className={styles.prefixIcon} />,
     },
     rules: [
       {
         required: true,
         message: 'Please enter email!',
       },
-      // { type: 'email', message: 'The input is not valid E-mail!' },
+      { type: 'email', message: 'The input is not valid E-mail!' },
     ],
   },
   Password: {
@@ -30,33 +30,31 @@ export default {
       },
     ],
   },
-  Mobile: {
+
+  Name: {
     props: {
       size: 'large',
-      prefix: <Icon type="mobile" className={styles.prefixIcon} />,
-      placeholder: 'mobile number',
+      prefix: <Icon type="user" className={styles.prefixIcon} />,
+      // type: 'password',
     },
     rules: [
       {
         required: true,
-        message: 'Please enter mobile number!',
-      },
-      {
-        pattern: /^1\d{10}$/,
-        message: 'Wrong mobile number format!',
+        message: 'Please enter your full name!',
       },
     ],
   },
-  Captcha: {
+
+  Company: {
     props: {
       size: 'large',
-      prefix: <Icon type="mail" className={styles.prefixIcon} />,
-      placeholder: 'captcha',
+      prefix: <Icon type="bank" className={styles.prefixIcon} />,
+      // type: 'password',
     },
     rules: [
       {
         required: true,
-        message: 'Please enter Captcha!',
+        message: 'Please enter your company name!',
       },
     ],
   },

@@ -1,7 +1,7 @@
 import { stringify } from 'qs';
+import auth0 from 'auth0-js';
 import request from '@/utils/request';
 import AUTH_CONFIG from '@/Auth/auth0-variables';
-import auth0 from 'auth0-js';
 
 // const newApi = 'http://localhost:3000/v1';
 const newApi = 'https://a.deephire.com/v1';
@@ -69,6 +69,14 @@ export async function getShortListData(id) {
 
 export async function sendEmail(data) {
   return request(`${newApi}/emails`, {
+    method: 'POST',
+    headers: setHeaders(),
+    body: data,
+  });
+}
+
+export async function createCompany(data) {
+  return request(`${newApi}/companies`, {
     method: 'POST',
     headers: setHeaders(),
     body: data,
