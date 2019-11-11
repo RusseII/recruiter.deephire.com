@@ -83,6 +83,13 @@ export async function createCompany(data) {
   });
 }
 
+export async function getCompany() {
+  return request(`${newApi}/companies`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
 // get profile from id
 export async function getCandidateProfile(id) {
   return request(`${newApi}/candidates/${id}`, {
