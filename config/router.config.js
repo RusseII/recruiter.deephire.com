@@ -82,32 +82,25 @@ export default [
       {
         name: 'Account',
         icon: 'user',
-        path: '/account',
-        hideInMenu: true,
+        path: '/account/settings',
+        component: './Account/Settings/Info',
 
         routes: [
           {
             path: '/account/settings',
-            name: 'Profile',
-            component: './Account/Settings/Info',
-            routes: [
-              {
-                path: '/account/settings',
-                redirect: '/account/settings/base',
-              },
-              {
-                path: '/account/settings/base',
-                component: './Account/Settings/CompanyView',
-              },
-              {
-                path: '/account/settings/notification',
-                component: './Account/Settings/NotificationView',
-              },
-              {
-                path: '/account/settings/basic',
-                component: './Account/Settings/BaseView',
-              },
-            ],
+            redirect: '/account/settings/base',
+          },
+          {
+            path: '/account/settings/base',
+            component: './Account/Settings/CompanyView',
+          },
+          {
+            path: '/account/settings/notification',
+            component: './Account/Settings/NotificationView',
+          },
+          {
+            path: '/account/settings/basic',
+            component: './Account/Settings/BaseView',
           },
         ],
       },
