@@ -32,7 +32,7 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
 
   const props = {
     name: 'upfile',
-    action: `https://dev-a.deephire.com/v1/candidates/${email}/documents/`,
+    action: `https://a.deephire.com/v1/candidates/${email}/documents/`,
     headers: { authorization: `Bearer ${localStorage.getItem('access_token')}` },
     onChange({ file }) {
       if (file.status === 'done') {
