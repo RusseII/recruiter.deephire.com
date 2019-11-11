@@ -97,6 +97,14 @@ export default [
               },
               {
                 path: '/account/settings/base',
+                component: './Account/Settings/CompanyView',
+              },
+              {
+                path: '/account/settings/notification',
+                component: './Account/Settings/NotificationView',
+              },
+              {
+                path: '/account/settings/basic',
                 component: './Account/Settings/BaseView',
               },
             ],

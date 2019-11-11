@@ -16,19 +16,19 @@ class Info extends Component {
     super(props);
     const { match, location } = props;
     const menuMap = {
-      base: <FormattedMessage id="app.settings.menuMap.basic" defaultMessage="Basic Settings" />,
       // security: (
       //   <FormattedMessage id="app.settings.menuMap.security" defaultMessage="Security Settings" />
       // ),
-      // binding: (
-      //   <FormattedMessage id="app.settings.menuMap.binding" defaultMessage="Account Binding" />
-      // ),
+      base: (
+        <FormattedMessage id="app.settings.menuMap.binding" defaultMessage="Company Settings" />
+      ),
       // notification: (
       //   <FormattedMessage
       //     id="app.settings.menuMap.notification"
-      //     defaultMessage="New Message Notification"
+      //     defaultMessage="Notifications"
       //   />
       // ),
+      basic: <FormattedMessage id="app.settings.menuMap.basic" defaultMessage="Basic Settings" />,
     };
     const key = location.pathname.replace(`${match.path}/`, '');
     this.state = {
