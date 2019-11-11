@@ -1,30 +1,9 @@
 import React from 'react';
-import { Upload, Icon, message } from 'antd';
-
-// const props = {
-//     name: 'upfile',
-//     action: `https://a.deephire.com/v1/candidates/${email}/documents/`,
-//     headers: { authorization: `Bearer ${localStorage.getItem('access_token')}` },
-//     onChange({ file }) {
-//       if (file.status === 'done') {
-//         setKey(file.status);
-//       }
-//     },
-//     // defaultFileList: candidateProfileData.files,
-//     // key: candidateProfileData.files,
-//     // onRemove(file) {
-//     //   removeCandidateDocument(email, file.uid);
-//     // },
-//   };
-
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
+import { Upload, Icon, message, Spin } from 'antd';
 
 function beforeUpload(file) {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  const isJpgOrPng =
+    file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/png';
   if (!isJpgOrPng) {
     message.error('You can only upload JPG/PNG file!');
   }
@@ -41,30 +20,27 @@ class Avatar extends React.Component {
   };
 
   handleChange = info => {
+    const { reload } = this.props;
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
       return;
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          imageUrl,
-          loading: false,
-        })
-      );
+      reload();
+      this.setState({ loading: false });
     }
   };
 
   render() {
     const { loading } = this.state;
+    const { logo } = this.props;
+
     const uploadButton = (
       <div>
         <Icon type={loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">Upload</div>
+        <div className="ant-upload-text">Upload Logo</div>
       </div>
     );
-    const { imageUrl } = this.state;
     return (
       <Upload
         name="upfile"
@@ -77,7 +53,9 @@ class Avatar extends React.Component {
         beforeUpload={beforeUpload}
         onChange={this.handleChange}
       >
-        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+        <Spin spinning={loading}>
+          {logo ? <img src={logo} alt="avatar" style={{ height: 50 }} /> : uploadButton}
+        </Spin>
       </Upload>
     );
   }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getCompany } from './api';
 
-const useCompanyInfo = () => {
-  const [companyData, setCompanyData] = useState({});
+const useCompanyInfo = update => {
+  const [companyData, setCompanyData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -10,7 +10,7 @@ const useCompanyInfo = () => {
       setCompanyData(data);
     };
     fetchData();
-  }, []);
+  }, [update]);
   return companyData;
 };
 
