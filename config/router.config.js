@@ -92,7 +92,11 @@ export default [
           },
           {
             path: '/account/settings/base',
-            component: './Account/Settings/CompanyView',
+            component: './Account/Settings/CompanyBranding',
+          },
+          {
+            path: '/account/settings/team',
+            component: './Account/Settings/TeamSettings',
           },
           {
             path: '/account/settings/notification',

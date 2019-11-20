@@ -1,0 +1,39 @@
+diff a/config/router.config.js b/config/router.config.js	(rejected hunks)
+@@ -88,20 +88,17 @@ export default [
+-
+-   
+-            routes: [
+-              {
+-                path: '/account/settings',
+-                redirect: '/account/settings/base',
+-              },
+-              {
+-                path: '/account/settings/base',
+-                component: './Account/Settings/CompanyView',
+-              },
+-              {
+-                path: '/account/settings/notification',
+-                component: './Account/Settings/NotificationView',
+-              },
+-              {
+-                path: '/account/settings/basic',
+-                component: './Account/Settings/BaseView',
+-              },
+-  
++        routes: [
++          {
++            path: '/account/settings',
++            redirect: '/account/settings/base',
++          },
++          {
++            path: '/account/settings/base',
++            component: './Account/Settings/CompanyView',
++          },
++          {
++            path: '/account/settings/notification',
++            component: './Account/Settings/NotificationView',
++          },
++          {
++            path: '/account/settings/basic',
++            component: './Account/Settings/BaseView',
++          },

@@ -25,6 +25,7 @@ const BaseView = Form.create()(props => {
 
   return (
     <div className={styles.baseView}>
+      <br />
       <div className={styles.left}>
         <Form layout="vertical" onSubmit={() => {}} hideRequiredMark>
           <FormItem label="Company Name">
@@ -38,6 +39,12 @@ const BaseView = Form.create()(props => {
             })(<Input disabled />)}
           </FormItem>
         </Form>
+        {/* <StandardTable
+          selectedRows={[]}
+          data={{ list: testData }}
+          // size="small"
+          columns={columns}
+        /> */}
       </div>
       <div className={styles.right}>
         <Spin spinning={!companyData}>

@@ -51,10 +51,14 @@ export async function updateInterviews(id, params) {
   return request(`${newApi}/interviews/${id}`, { method: 'PUT', body, headers: setHeaders() });
 }
 export async function getShortLists() {
-  return request(`${newApi}/shortlists`, {
+  const shortlists = request(`${newApi}/shortlists`, {
     method: 'GET',
     headers: setHeaders(),
   });
+  return shortlists.then(r =>
+    r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1))
+  );
+
   // return new Promise(resolve => resolve({ list: shortLists }));
 }
 
@@ -187,7 +191,11 @@ export async function shareShortLink(data) {
 }
 
 export async function getInterviews() {
-  return request(`${newApi}/interviews`, { method: 'GET', headers: setHeaders() });
+  const interviews = request(`${newApi}/interviews`, { method: 'GET', headers: setHeaders() });
+
+  return interviews.then(r =>
+    r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1))
+  );
 }
 
 export async function resetPassword(email) {
