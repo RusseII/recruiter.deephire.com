@@ -22,7 +22,7 @@ class Info extends Component {
       base: (
         <FormattedMessage id="app.settings.menuMap.binding" defaultMessage="Company Branding" />
       ),
-      // team: "Team",
+      team: 'Team',
       // notification: (
       //   <FormattedMessage
       //     id="app.settings.menuMap.notification"
@@ -30,6 +30,7 @@ class Info extends Component {
       //   />
       // ),
       basic: <FormattedMessage id="app.settings.menuMap.basic" defaultMessage="Basic Settings" />,
+      integrations: 'Integrations',
     };
     const key = location.pathname.replace(`${match.path}/`, '');
     this.state = {

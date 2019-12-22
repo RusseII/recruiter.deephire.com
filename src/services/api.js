@@ -50,6 +50,11 @@ export async function updateInterviews(id, params) {
 
   return request(`${newApi}/interviews/${id}`, { method: 'PUT', body, headers: setHeaders() });
 }
+
+export async function updateCompany(body) {
+  return request(`${newApi}/companies`, { method: 'PUT', body, headers: setHeaders() });
+}
+
 export async function getShortLists() {
   const shortlists = request(`${newApi}/shortlists`, {
     method: 'GET',
@@ -185,6 +190,32 @@ export async function shareShortLink(data) {
   const x = request(`${newApi}/shortlists`, {
     method: 'POST',
     body: data,
+    headers: setHeaders(),
+  });
+  return x;
+}
+
+export async function sendInvites(invitedEmail, role) {
+  const data = { invitedEmail, role };
+  const x = request(`${newApi}/companies/invites`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: setHeaders(),
+  });
+  return x;
+}
+
+export async function getInvites() {
+  const x = request(`${newApi}/companies/invites`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  return x;
+}
+
+export async function getTeam() {
+  const x = request(`${newApi}/companies/team`, {
+    method: 'GET',
     headers: setHeaders(),
   });
   return x;

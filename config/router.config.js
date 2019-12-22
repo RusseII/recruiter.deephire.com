@@ -99,6 +99,10 @@ export default [
             component: './Account/Settings/TeamSettings',
           },
           {
+            path: '/account/settings/integrations',
+            component: './Account/Settings/integrationSettings',
+          },
+          {
             path: '/account/settings/notification',
             component: './Account/Settings/NotificationView',
           },
