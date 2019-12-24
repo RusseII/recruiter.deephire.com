@@ -100,7 +100,7 @@ export default [
           },
           {
             path: '/account/settings/integrations',
-            component: './Account/Settings/integrationSettings',
+            component: './Account/Settings/IntegrationSettings',
           },
           {
             path: '/account/settings/notification',
