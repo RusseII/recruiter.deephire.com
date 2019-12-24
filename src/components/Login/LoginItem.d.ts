@@ -6,6 +6,7 @@ export interface ILoginItemProps {
   onGetCaptcha?: () => void;
   placeholder?: string;
   buttonText?: React.ReactNode;
+  disabled?: boolean;
 }
 
 export class LoginItem extends React.Component<ILoginItemProps, any> {}

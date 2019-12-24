@@ -11,6 +11,7 @@ export default {
   // 'menu.Share Links.Share Links': 'All',
   'menu.shortListAnalytics': 'Analytics',
   'menu.Account.Profile': 'Profile',
+  'menu.Account': 'Account',
 
   'navbar.lang': '中文',
   'component.globalHeader.search': 'Search',
@@ -98,7 +99,7 @@ export default {
   'app.analysis.table.weekly-range': 'Weekly Range',
   'app.settings.menuMap.basic': 'Basic Settings',
   'app.settings.menuMap.security': 'Security Settings',
-  'app.settings.menuMap.binding': 'Company Settings',
+  'app.settings.menuMap.binding': 'Company Branding',
   'app.settings.menuMap.notification': 'Notification Settings',
   'app.settings.basic.avatar': 'Change avatar',
   'app.settings.basic.email': 'Email',

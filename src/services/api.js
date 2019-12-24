@@ -50,11 +50,20 @@ export async function updateInterviews(id, params) {
 
   return request(`${newApi}/interviews/${id}`, { method: 'PUT', body, headers: setHeaders() });
 }
+
+export async function updateCompany(body) {
+  return request(`${newApi}/companies`, { method: 'PUT', body, headers: setHeaders() });
+}
+
 export async function getShortLists() {
-  return request(`${newApi}/shortlists`, {
+  const shortlists = request(`${newApi}/shortlists`, {
     method: 'GET',
     headers: setHeaders(),
   });
+  return shortlists.then(r =>
+    r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1))
+  );
+
   // return new Promise(resolve => resolve({ list: shortLists }));
 }
 
@@ -186,8 +195,85 @@ export async function shareShortLink(data) {
   return x;
 }
 
+export async function sendInvites(invitedEmail, role, successMessage) {
+  const data = { invitedEmail, role };
+  const x = request(
+    `${newApi}/companies/invites`,
+    {
+      method: 'POST',
+      body: data,
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+  return x;
+}
+
+export async function deleteInvites(inviteId, successMessage) {
+  const x = request(
+    `${newApi}/companies/invites/${inviteId}`,
+    {
+      method: 'DELETE',
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+  return x;
+}
+
+export async function putInvites(inviteId, successMessage) {
+  const x = request(
+    `${newApi}/companies/invites/${inviteId}`,
+    {
+      method: 'PUT',
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+  return x;
+}
+
+export async function getInviteById(inviteId) {
+  return request(`${newApi}/companies/invites/${inviteId}`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
+export async function deleteUsers(auth0UserId, successMessage) {
+  const x = request(
+    `${newApi}/companies/team/${auth0UserId}`,
+    {
+      method: 'DELETE',
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+  return x;
+}
+
+export async function getInvites() {
+  const x = request(`${newApi}/companies/invites`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  return x;
+}
+
+export async function getTeam() {
+  const x = request(`${newApi}/companies/team`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  return x;
+}
+
 export async function getInterviews() {
-  return request(`${newApi}/interviews`, { method: 'GET', headers: setHeaders() });
+  const interviews = request(`${newApi}/interviews`, { method: 'GET', headers: setHeaders() });
+
+  return interviews.then(r =>
+    r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1))
+  );
 }
 
 export async function resetPassword(email) {

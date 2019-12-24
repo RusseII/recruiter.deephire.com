@@ -88,6 +88,7 @@ class WrapFormItem extends Component {
       getCaptchaSecondText,
       updateActive,
       type,
+      disabled,
       ...restProps
     } = this.props;
 
@@ -119,7 +120,9 @@ class WrapFormItem extends Component {
     }
     return (
       <FormItem>
-        {getFieldDecorator(name, options)(<Input {...customprops} {...otherProps} />)}
+        {getFieldDecorator(name, options)(
+          <Input disabled={disabled} {...customprops} {...otherProps} />
+        )}
       </FormItem>
     );
   }
