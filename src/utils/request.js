@@ -1,5 +1,5 @@
 import fetch from 'dva/fetch';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 import router from 'umi/router';
 import hash from 'hash.js';
 import { isAntdPro } from './utils';
@@ -63,7 +63,7 @@ const cachedSave = (response, hashcode) => {
  * @param  {object} [option] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, option) {
+export default function request(url, option, successMessage = null) {
   const options = {
     expirys: isAntdPro(),
     ...option,
@@ -122,6 +122,9 @@ export default function request(url, option) {
     .then(checkStatus)
     .then(response => cachedSave(response, hashcode))
     .then(response => {
+      if (successMessage) {
+        message.success(successMessage);
+      }
       // DELETE and 204 do not return data by default
       // using .json will report an error.
       if (newOptions.method === 'DELETE' || response.status === 204) {
@@ -129,7 +132,6 @@ export default function request(url, option) {
       }
       // const data = response.json().then(data => console.log(data));
       // console.log(data)
-
       return response.json();
     })
     .catch(e => {

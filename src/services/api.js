@@ -195,13 +195,60 @@ export async function shareShortLink(data) {
   return x;
 }
 
-export async function sendInvites(invitedEmail, role) {
+export async function sendInvites(invitedEmail, role, successMessage) {
   const data = { invitedEmail, role };
-  const x = request(`${newApi}/companies/invites`, {
-    method: 'POST',
-    body: JSON.stringify(data),
+  const x = request(
+    `${newApi}/companies/invites`,
+    {
+      method: 'POST',
+      body: data,
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+  return x;
+}
+
+export async function deleteInvites(inviteId, successMessage) {
+  const x = request(
+    `${newApi}/companies/invites/${inviteId}`,
+    {
+      method: 'DELETE',
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+  return x;
+}
+
+export async function putInvites(inviteId, successMessage) {
+  const x = request(
+    `${newApi}/companies/invites/${inviteId}`,
+    {
+      method: 'PUT',
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+  return x;
+}
+
+export async function getInviteById(inviteId) {
+  return request(`${newApi}/companies/invites/${inviteId}`, {
+    method: 'GET',
     headers: setHeaders(),
   });
+}
+
+export async function deleteUsers(auth0UserId, successMessage) {
+  const x = request(
+    `${newApi}/companies/team/${auth0UserId}`,
+    {
+      method: 'DELETE',
+      headers: setHeaders(),
+    },
+    successMessage
+  );
   return x;
 }
 

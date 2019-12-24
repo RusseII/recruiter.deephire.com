@@ -1,13 +1,15 @@
-import { Alert, Button, Form, Input, Divider } from 'antd';
+import { Alert, Button, Form, Input, Divider, Typography } from 'antd';
 import { LinkedInLoginButton } from 'react-social-login-buttons';
 import { connect } from 'dva';
 import React, { Component, useState } from 'react';
 
 import Login from '@/components/Login';
-import { resetPassword, createCompany } from '@/services/api';
-
+import { resetPassword, createCompany, getInviteById } from '@/services/api';
+import { lowerCaseQueryParams } from '@/utils/utils';
 import Auth from '../../Auth/Auth';
 import styles from './Login.less';
+
+const { Paragraph, Title } = Typography;
 
 const ObjectID = require('bson-objectid');
 
@@ -64,13 +66,35 @@ const ForgotPassScreen = Form.create()(props => {
     </div>
   );
 });
+const { invited } = lowerCaseQueryParams(window.location.search);
 @connect(({ loading }) => ({
   submitting: loading.effects['login/login'],
 }))
 class LoginPage extends Component {
   state = {
-    type: 'account',
+    type: invited ? 'signUp' : 'account',
     forgotPassword: false,
+    inviteData: null,
+  };
+
+  async componentDidMount() {
+    // change this to get invite by ID
+    if (invited) {
+      const inviteData = await getInviteById(invited);
+      this.setState({ inviteData });
+      inviteData.company = inviteData.companyName;
+      inviteData.email = inviteData.invitedEmail;
+
+      this.setBaseInfo(inviteData);
+    }
+  }
+
+  setBaseInfo = inviteData => {
+    Object.keys(this.loginForm.getFieldsValue()).forEach(key => {
+      const obj = {};
+      obj[key] = inviteData[key] || null;
+      this.loginForm.setFieldsValue(obj);
+    });
   };
 
   onTabChange = type => {
@@ -89,10 +113,17 @@ class LoginPage extends Component {
         if (type === 'account') {
           auth.login(values.email, values.password);
         } else {
-          const _id = ObjectID();
-          const companyData = { _id, owner: values.email, companyName: values.company };
+          const { inviteData } = this.state;
+          let _id;
+          if (inviteData) {
+            _id = ObjectID(inviteData.companyId);
+          } else {
+            _id = ObjectID();
+            const companyData = { _id, owner: values.email, companyName: values.company };
+            createCompany(companyData);
+          }
+
           auth.signup(values.email, values.password, values.name, values.company, _id);
-          createCompany(companyData);
         }
       }
     });
@@ -130,9 +161,10 @@ class LoginPage extends Component {
               />
             </Tab>
             <Tab key="signUp" tab="Sign up">
-              <Name name="name" placeholder="name" />
-              <Company name="company" placeholder="company" />
-              <Email name="email" placeholder="email" />
+              {invited && <InvitedText createdByName="Russell Ratcliffe" companyName="DeepHire" />}
+              <Name name="name" placeholder="full name" />
+              <Company disabled={Boolean(invited)} name="company" placeholder="company" />
+              <Email disabled={Boolean(invited)} name="email" placeholder="email" />
               <Password
                 name="password"
                 placeholder="password"
@@ -180,4 +212,14 @@ class LoginPage extends Component {
   }
 }
 
+const InvitedText = ({ createdByName, companyName }) => (
+  <>
+    <Title style={{ textAlign: 'center' }} level={3}>
+      You&apos;ve Been Invited
+    </Title>
+    <Paragraph style={{ textAlign: 'center', paddingBottom: 10 }}>
+      {`${createdByName} has invited you to join ${companyName}`}
+    </Paragraph>
+  </>
+);
 export default LoginPage;

@@ -231,3 +231,22 @@ export const getHttpUrl = url => {
   }
   return 'Loading ...';
 };
+
+export const lowerCaseObj = obj => {
+  let key;
+  const keys = Object.keys(obj);
+  let n = keys.length;
+  const newobj = {};
+  // eslint-disable-next-line no-plusplus
+  while (n--) {
+    key = keys[n];
+    newobj[key.toLowerCase()] = obj[key];
+  }
+
+  return newobj;
+};
+
+export const lowerCaseQueryParams = urlPath => {
+  const queryParams = parse(urlPath, { ignoreQueryPrefix: true });
+  return lowerCaseObj(queryParams);
+};
