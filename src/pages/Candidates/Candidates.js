@@ -1,12 +1,13 @@
+import { AutoComplete, Card, Checkbox, Col, List, Row, ConfigProvider } from 'antd';
+import React, { useEffect, useState } from 'react';
 import CandidateCard from '@/components/CandidateCard';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 import ArchiveButton from '@/components/ArchiveButton';
 
 import { getArchivedVideos, getVideos } from '@/services/api';
-import { AutoComplete, Card, Checkbox, Col, List, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
 import styles from './Candidates.less';
+import customEmpty from '@/components/CustomEmpty';
 
 const Candidates = () => {
   const [selectedCards, setSelectedCards] = useState([]);
@@ -96,18 +97,24 @@ const Candidates = () => {
         onChange={checked => setSelectedCards(checked)}
         value={selectedCards}
       >
-        <List
-          rowKey="id"
-          style={{ marginTop: 24 }}
-          grid={{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
-          loading={loading}
-          dataSource={filteredData}
-          renderItem={item => (
-            <List.Item key={item.id}>
-              <CandidateCard item={item} />
-            </List.Item>
-          )}
-        />
+        <ConfigProvider
+          renderEmpty={() =>
+            customEmpty('No Candidate Videos', '/interview/view', 'View Interviews')
+          }
+        >
+          <List
+            rowKey="id"
+            style={{ marginTop: 24 }}
+            grid={{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
+            loading={loading}
+            dataSource={filteredData}
+            renderItem={item => (
+              <List.Item key={item.id}>
+                <CandidateCard item={item} />
+              </List.Item>
+            )}
+          />
+        </ConfigProvider>
       </Checkbox.Group>
     </PageHeaderWrapper>
   );

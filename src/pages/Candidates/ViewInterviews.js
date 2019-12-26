@@ -1,4 +1,15 @@
-import { message, Row, Col, Card, Tooltip, Modal, Upload, Icon, Result } from 'antd';
+import {
+  message,
+  Row,
+  Col,
+  Card,
+  Tooltip,
+  Modal,
+  Upload,
+  Icon,
+  Result,
+  ConfigProvider,
+} from 'antd';
 import React, { Fragment, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
@@ -6,6 +17,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import StandardTable from '@/components/StandardTable';
 import { getInterviews, getArchivedInterviews, updateInterviews } from '@/services/api';
 import ArchiveButton from '@/components/ArchiveButton';
+import customEmpty from '@/components/CustomEmpty';
 
 import CloneButton from '@/components/CloneButton';
 
@@ -53,6 +65,7 @@ const TableList = () => {
       title: 'Interview Name',
       dataIndex: 'interviewName',
     },
+
     {
       title: 'Interview Questions',
       render(x, data) {
@@ -205,14 +218,20 @@ const TableList = () => {
       </Card>
 
       <Card bordered={false}>
-        <StandardTable
-          selectedRows={selectedRows}
-          loading={loading}
-          data={{ list: data }}
-          // size="small"
-          columns={columns}
-          onSelectRow={rows => setSelectedRows(rows)}
-        />
+        <ConfigProvider
+          renderEmpty={() =>
+            customEmpty('No Interviews', '/interview/create-interview/info', 'Create Interview Now')
+          }
+        >
+          <StandardTable
+            selectedRows={selectedRows}
+            loading={loading}
+            data={{ list: data }}
+            // size="small"
+            columns={columns}
+            onSelectRow={rows => setSelectedRows(rows)}
+          />
+        </ConfigProvider>
       </Card>
     </PageHeaderWrapper>
   );

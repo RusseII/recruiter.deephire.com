@@ -1,5 +1,5 @@
 import router from 'umi/router';
-import { AutoComplete, Card, Col, message, Row, Tooltip } from 'antd';
+import { AutoComplete, Card, Col, message, Row, Tooltip, ConfigProvider } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
@@ -9,6 +9,7 @@ import { getHttpUrl } from '@/utils/utils';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import StandardTable from '@/components/StandardTable';
 import { getArchivedShortlists, getShortLists } from '@/services/api';
+import customEmpty from '@/components/CustomEmpty';
 
 const openShortListAnalytics = data => {
   const { _id } = data;
@@ -163,13 +164,19 @@ const ShortLists = () => {
       </Card>
 
       <Card bordered={false}>
-        <StandardTable
-          selectedRows={selectedRows}
-          loading={loading}
-          data={{ list: filteredData }}
-          columns={columns}
-          onSelectRow={rows => setSelectedRows(rows)}
-        />
+        <ConfigProvider
+          renderEmpty={() =>
+            customEmpty('No Share Links', '/candidates/candidates', 'View Candidates')
+          }
+        >
+          <StandardTable
+            selectedRows={selectedRows}
+            loading={loading}
+            data={{ list: filteredData }}
+            columns={columns}
+            onSelectRow={rows => setSelectedRows(rows)}
+          />
+        </ConfigProvider>
       </Card>
     </PageHeaderWrapper>
   );
