@@ -56,13 +56,15 @@ export async function updateCompany(body) {
 }
 
 export async function getShortLists() {
-  const shortlists = request(`${newApi}/shortlists`, {
+  const shortlists = await request(`${newApi}/shortlists`, {
     method: 'GET',
     headers: setHeaders(),
   });
-  return shortlists.then(r =>
-    r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1))
-  );
+
+  if (shortlists) {
+    return shortlists.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1));
+  }
+  return [];
 
   // return new Promise(resolve => resolve({ list: shortLists }));
 }
@@ -269,11 +271,14 @@ export async function getTeam() {
 }
 
 export async function getInterviews() {
-  const interviews = request(`${newApi}/interviews`, { method: 'GET', headers: setHeaders() });
-
-  return interviews.then(r =>
-    r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1))
-  );
+  const interviews = await request(`${newApi}/interviews`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  if (interviews) {
+    return interviews.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1));
+  }
+  return [];
 }
 
 export async function resetPassword(email) {
