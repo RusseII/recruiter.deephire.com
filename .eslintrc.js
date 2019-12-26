@@ -1,7 +1,7 @@
 module.exports = {
   parser: 'babel-eslint',
-  extends: ['airbnb', 'prettier', 'plugin:compat/recommended'],
-  plugins: ['jest'],
+  extends: ['airbnb', 'prettier', 'plugin:compat/recommended', 'stylelint-config-prettier'],
+  plugins: ['jest', 'prettier'],
   env: {
     browser: true,
     node: true,
@@ -19,7 +19,7 @@ module.exports = {
     'no-shadow': 0,
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
     'no-alert': 0,
-
+    'prettier/prettier': ['error'],
     'react/jsx-filename-extension': [1, { extensions: ['.js'] }],
     'react/jsx-wrap-multilines': 0,
     'react/prop-types': 0,
