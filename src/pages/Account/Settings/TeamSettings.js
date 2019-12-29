@@ -204,7 +204,9 @@ const Team = () => {
 const InviteForm = Form.create()(props => {
   const { visible, form, toggleVisible, reload } = props;
 
-  const okHandle = async () => {
+  const okHandle = async e => {
+    e.preventDefault();
+
     form.validateFields(async (err, fieldsValue) => {
       if (err) return;
       form.resetFields();
@@ -225,17 +227,19 @@ const InviteForm = Form.create()(props => {
       okText="Invite"
       onCancel={() => toggleVisible(false)}
     >
-      <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 15 }} label="Invitation Email">
-        {form.getFieldDecorator('invitedEmail', {
-          rules: [
-            { type: 'email', message: 'The input is not valid E-mail!' },
-            {
-              required: true,
-              message: 'Please input your email address!',
-            },
-          ],
-        })(<Input placeholder="email" />)}
-      </FormItem>
+      <Form onSubmit={okHandle}>
+        <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 15 }} label="Invitation Email">
+          {form.getFieldDecorator('invitedEmail', {
+            rules: [
+              { type: 'email', message: 'The input is not valid E-mail!' },
+              {
+                required: true,
+                message: 'Please input your email address!',
+              },
+            ],
+          })(<Input placeholder="email" />)}
+        </FormItem>
+      </Form>
     </Modal>
   );
 });
