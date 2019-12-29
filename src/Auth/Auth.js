@@ -105,10 +105,10 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        this.dispatch(routerRedux.push('/'));
+        // this.dispatch(routerRedux.push('/'));
       } else if (err) {
         console.error(err);
-        this.dispatch(routerRedux.push('/'));
+        // this.dispatch(routerRedux.push('/'));
         alert(`Error: ${err.error}. Check the console for further details.`);
       }
     });
@@ -134,7 +134,11 @@ export default class Auth {
 
       setAuthority('user');
       reloadAuthorized();
-      this.dispatch(routerRedux.push('/'));
+      if (window.location.pathname === '/user/callback') {
+        const origin = localStorage.getItem('origin');
+        localStorage.removeItem('origin');
+        this.dispatch(routerRedux.push(origin || '/'));
+      }
       return null;
     });
   }
