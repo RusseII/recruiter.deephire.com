@@ -1,5 +1,13 @@
 // use localStorage to store the authority info, which might be sent from server in actual project.
+const setOrigin = () => {
+  if (!window.location.pathname.includes('user')) {
+    const origin = window.location.pathname + window.location.search;
+    localStorage.setItem('origin', origin);
+  }
+};
+
 export function getAuthority(str) {
+  setOrigin();
   // return localStorage.getItem('antd-pro-authority') || ['admin', 'user'];
   const authorityString =
     typeof str === 'undefined' ? localStorage.getItem('antd-pro-authority') : str;

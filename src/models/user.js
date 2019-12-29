@@ -1,3 +1,4 @@
+import router from 'umi/router';
 import { query as queryUsers, queryCurrent } from '@/services/user';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
@@ -36,8 +37,7 @@ export default {
 
         setAuthority('guest');
         reloadAuthorized();
-        // TODO could do this better
-        window.location.reload(true);
+        router.push('/');
       }
     },
   },
