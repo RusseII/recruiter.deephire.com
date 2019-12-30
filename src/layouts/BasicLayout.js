@@ -20,7 +20,7 @@ import Exception403 from '../pages/Exception/403';
 
 const { Content } = Layout;
 
-GlobalContext.displayName = 'Gobal Context';
+GlobalContext.displayName = 'Global Context';
 
 // Conversion router to menu.
 function formatter(data, parentPath = '', parentAuthority, parentName) {
