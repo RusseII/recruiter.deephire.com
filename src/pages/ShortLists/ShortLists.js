@@ -126,12 +126,12 @@ const ShortLists = () => {
 
   const shouldClear = value => {
     if (!value) {
-      setFilteredData(globalData.shortLinks);
+      setFilteredData(globalData.shareLinks);
     }
   };
 
   const filter = searchTerm => {
-    const filteredData = globalData.shortLinks.filter(
+    const filteredData = globalData.shareLinks.filter(
       candidate => candidate.email === searchTerm || candidate.name === searchTerm
     );
     setFilteredData(filteredData);
