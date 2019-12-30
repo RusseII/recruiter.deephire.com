@@ -1,6 +1,6 @@
 import router from 'umi/router';
 import { AutoComplete, Card, Col, message, Row, Tooltip, ConfigProvider } from 'antd';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
 import styles from './ShortLists.less';
@@ -10,6 +10,8 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import StandardTable from '@/components/StandardTable';
 import { getArchivedShortlists, getShortLists } from '@/services/api';
 import customEmpty from '@/components/CustomEmpty';
+
+import GlobalContext from '@/layouts/MenuContext';
 
 const openShortListAnalytics = data => {
   const { _id } = data;
@@ -93,10 +95,11 @@ const columns = [
 const ShortLists = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [archives, setArchives] = useState(false);
+
+  const globalData = useContext(GlobalContext);
+  const [filteredData, setFilteredData] = useState(globalData.shareLinks);
 
   const createDataSource = data => {
     const searchDataSource = [];
@@ -112,7 +115,7 @@ const ShortLists = () => {
     setLoading(true);
     const data = await (archives ? getArchivedShortlists() : getShortLists());
     createDataSource(data || []);
-    setData(data || []);
+    globalData.setShareLinks(data || []);
     setFilteredData(data || []);
     setLoading(false);
   };
@@ -123,12 +126,12 @@ const ShortLists = () => {
 
   const shouldClear = value => {
     if (!value) {
-      setFilteredData(data);
+      setFilteredData(globalData.shortLinks);
     }
   };
 
   const filter = searchTerm => {
-    const filteredData = data.filter(
+    const filteredData = globalData.shortLinks.filter(
       candidate => candidate.email === searchTerm || candidate.name === searchTerm
     );
     setFilteredData(filteredData);

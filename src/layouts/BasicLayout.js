@@ -86,6 +86,8 @@ class BasicLayout extends React.PureComponent {
     rendering: true,
     isMobile: false,
     interviews: [],
+    videos: [],
+    shareLinks: [],
   };
 
   componentDidMount() {
@@ -129,15 +131,28 @@ class BasicLayout extends React.PureComponent {
 
   getContext() {
     const { location } = this.props;
-    const { interviews } = this.state;
+    const { interviews, videos, shareLinks } = this.state;
     const setInterviews = interviews => {
       this.setState({ interviews });
     };
+
+    const setVideos = videos => {
+      this.setState({ videos });
+    };
+
+    const setShareLinks = shareLinks => {
+      this.setState({ shareLinks });
+    };
+
     return {
       location,
       breadcrumbNameMap: this.breadcrumbNameMap,
       interviews,
       setInterviews,
+      videos,
+      setVideos,
+      shareLinks,
+      setShareLinks,
     };
   }
 
