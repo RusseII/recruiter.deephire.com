@@ -15,10 +15,12 @@ import SettingDrawer from '@/components/SettingDrawer';
 import logo from '../assets/logo.svg';
 import Footer from './Footer';
 import Header from './Header';
-import Context from './MenuContext';
+import GlobalContext from './MenuContext';
 import Exception403 from '../pages/Exception/403';
 
 const { Content } = Layout;
+
+GlobalContext.displayName = 'Gobal Context';
 
 // Conversion router to menu.
 function formatter(data, parentPath = '', parentAuthority, parentName) {
@@ -83,6 +85,7 @@ class BasicLayout extends React.PureComponent {
   state = {
     rendering: true,
     isMobile: false,
+    interviews: [],
   };
 
   componentDidMount() {
@@ -126,9 +129,15 @@ class BasicLayout extends React.PureComponent {
 
   getContext() {
     const { location } = this.props;
+    const { interviews } = this.state;
+    const setInterviews = interviews => {
+      this.setState({ interviews });
+    };
     return {
       location,
       breadcrumbNameMap: this.breadcrumbNameMap,
+      interviews,
+      setInterviews,
     };
   }
 
@@ -266,9 +275,9 @@ class BasicLayout extends React.PureComponent {
         <DocumentTitle title={this.getPageTitle(pathname)}>
           <ContainerQuery query={query}>
             {params => (
-              <Context.Provider value={this.getContext()}>
+              <GlobalContext.Provider value={this.getContext()}>
                 <div className={classNames(params)}>{layout}</div>
-              </Context.Provider>
+              </GlobalContext.Provider>
             )}
           </ContainerQuery>
         </DocumentTitle>

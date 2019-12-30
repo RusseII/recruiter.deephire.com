@@ -10,7 +10,7 @@ import {
   Result,
   ConfigProvider,
 } from 'antd';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -23,6 +23,7 @@ import CloneButton from '@/components/CloneButton';
 
 import Step1 from '@/pages/Interviews/CreateInterviewForm/Step1';
 import { getHttpUrl } from '@/utils/utils';
+import GlobalContext from '@/layouts/MenuContext';
 
 const { Dragger } = Upload;
 
@@ -49,11 +50,12 @@ const { email } = profile;
 const TableList = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
   const [archives, setArchives] = useState(false);
   const [editInterview, setEditInterview] = useState(null);
   const [inviteCandidates, setInviteCandidates] = useState(null);
   const [finished, setFinished] = useState(false);
+
+  const globalData = useContext(GlobalContext);
 
   const updateInterview = async cleanedValueData => {
     await updateInterviews(editInterview._id, cleanedValueData);
@@ -136,7 +138,7 @@ const TableList = () => {
     const profile = JSON.parse(localStorage.getItem('profile'));
     const { email } = profile;
     const data = await (archives ? getArchivedInterviews(email) : getInterviews(email));
-    setData(data || []);
+    globalData.setInterviews(data || []);
     setLoading(false);
   };
   useEffect(() => {
@@ -226,7 +228,7 @@ const TableList = () => {
           <StandardTable
             selectedRows={selectedRows}
             loading={loading}
-            data={{ list: data }}
+            data={{ list: globalData.interviews }}
             // size="small"
             columns={columns}
             onSelectRow={rows => setSelectedRows(rows)}
