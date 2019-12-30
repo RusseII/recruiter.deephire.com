@@ -1,5 +1,5 @@
 import { AutoComplete, Card, Checkbox, Col, List, Row, ConfigProvider } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import CandidateCard from '@/components/CandidateCard';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
@@ -9,13 +9,18 @@ import { getArchivedVideos, getVideos } from '@/services/api';
 import styles from './Candidates.less';
 import customEmpty from '@/components/CustomEmpty';
 
+import GlobalContext from '@/layouts/MenuContext';
+
 const Candidates = () => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [archives, setArchives] = useState(false);
+
+  const globalData = useContext(GlobalContext);
+  const { videos, setVideos } = globalData;
+
+  const [filteredData, setFilteredData] = useState(videos);
 
   const createDataSource = data => {
     const searchDataSource = [];
@@ -32,7 +37,7 @@ const Candidates = () => {
     setLoading(true);
     const data = await (archives ? getArchivedVideos() : getVideos());
     createDataSource(data || []);
-    setData(data || []);
+    setVideos(data || []);
     setFilteredData(data || []);
     setLoading(false);
   };
@@ -43,12 +48,12 @@ const Candidates = () => {
 
   const shouldClear = value => {
     if (!value) {
-      setFilteredData(data);
+      setFilteredData(videos);
     }
   };
 
   const filter = searchTerm => {
-    const filteredData = data.filter(
+    const filteredData = videos.filter(
       candidate =>
         candidate.candidateEmail === searchTerm ||
         candidate.interviewName === searchTerm ||
