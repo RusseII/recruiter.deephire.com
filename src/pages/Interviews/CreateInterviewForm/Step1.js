@@ -1,7 +1,11 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Divider, InputNumber, Icon } from 'antd';
+
+import { Form, Input, Button, Divider, InputNumber, Icon, Result } from 'antd';
+import router from 'umi/router';
 import styles from './style.less';
+import GlobalContext from '@/layouts/MenuContext';
+import { getInterviews } from '@/services/api';
 
 const FormItem = Form.Item;
 
@@ -106,6 +110,11 @@ class Step1 extends React.PureComponent {
   state = { loading: false };
   // this.props.data
 
+  async componentDidMount() {
+    const { setInterviews } = this.context;
+    setInterviews(await getInterviews());
+  }
+
   enterLoading = () => {
     this.setState({ loading: true });
   };
@@ -121,8 +130,7 @@ class Step1 extends React.PureComponent {
   };
 
   onValidateForm = e => {
-    const { form, dispatch, currentUser, data, onClick } = this.props;
-    const { email } = currentUser;
+    const { form, dispatch, data, onClick } = this.props;
     const { validateFields } = form;
 
     e.preventDefault();
@@ -144,7 +152,6 @@ class Step1 extends React.PureComponent {
             type: 'form/submitStepForm',
             payload: {
               ...cleanedValueData,
-              createdBy: email,
             },
           });
         }
@@ -152,12 +159,19 @@ class Step1 extends React.PureComponent {
     });
   };
 
+  static contextType = GlobalContext;
+
   render() {
     const { form, data } = this.props;
     const { interviewConfig = {}, interviewName } = data || {};
     const { loading } = this.state;
     const { getFieldDecorator } = form;
+    const { interviews, stripeProduct } = this.context;
+    const { allowedInterviews } = stripeProduct.metadata;
 
+    if (interviews.length >= allowedInterviews) {
+      return <CantCreateInterview />;
+    }
     return (
       <Fragment>
         <Form
@@ -236,5 +250,21 @@ class Step1 extends React.PureComponent {
     );
   }
 }
+
+// Step1.contextType =
+
+const CantCreateInterview = () => (
+  <Result
+    status="error"
+    title="Interview Cap Exceeded"
+    subTitle="You have used all of your alloted interview slots. To get more interview slots either upgrade, or archive some of your active interviews."
+    extra={[
+      <Button type="primary" key="console">
+        Upgrade Plan
+      </Button>,
+      <Button onClick={() => router.push('/interview/view')}>Remove Interviews</Button>,
+    ]}
+  />
+);
 
 export default Step1;
