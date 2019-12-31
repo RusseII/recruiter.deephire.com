@@ -56,6 +56,7 @@ const TableList = () => {
   const [editInterview, setEditInterview] = useState(null);
   const [inviteCandidates, setInviteCandidates] = useState(null);
   const [finished, setFinished] = useState(false);
+  const [unArchivedInterviewCount, setUnArchivedInterviewCount] = useState(' ');
 
   const globalData = useContext(GlobalContext);
   const { interviews, setInterviews, stripeProduct } = globalData;
@@ -138,9 +139,15 @@ const TableList = () => {
 
   const getData = async () => {
     setLoading(true);
-    const profile = JSON.parse(localStorage.getItem('profile'));
-    const { email } = profile;
-    const data = await (archives ? getArchivedInterviews(email) : getInterviews(email));
+    let data;
+    if (archives) {
+      data = await getArchivedInterviews();
+      const interviewDataForLength = await getInterviews();
+      setUnArchivedInterviewCount(interviewDataForLength.length || 0);
+    } else {
+      data = await getInterviews();
+      setUnArchivedInterviewCount(data.length || 0);
+    }
     setInterviews(data || []);
     setLoading(false);
   };
@@ -198,7 +205,7 @@ const TableList = () => {
           <Step1 onClick={updateInterview} data={editInterview} />
         </Modal>
       )}
-      {interviews.length > allowedInterviews && (
+      {unArchivedInterviewCount > allowedInterviews && (
         <Alert
           style={{ marginBottom: 20 }}
           message="Interview Cap Exceeded"
@@ -213,7 +220,7 @@ const TableList = () => {
             <Row align="middle" type="flex">
               <AllowedInterviews
                 allowedInterviews={allowedInterviews}
-                totalInterviews={interviews.length}
+                totalInterviews={unArchivedInterviewCount}
               />
               {selectedRows.length !== 0 && (
                 <>

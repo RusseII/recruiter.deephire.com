@@ -111,7 +111,7 @@ class BasicLayout extends React.PureComponent {
       images: [],
       livemode: false,
       metadata: {
-        allowedInterviews: '5',
+        allowedInterviews: '15',
       },
       name: 'basic DH',
       package_dimensions: null,
