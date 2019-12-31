@@ -1,3 +1,4 @@
+/* global $crisp */
 import {
   message,
   Row,
@@ -9,6 +10,8 @@ import {
   Icon,
   Result,
   ConfigProvider,
+  Statistic,
+  Alert,
 } from 'antd';
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -54,9 +57,11 @@ const TableList = () => {
   const [editInterview, setEditInterview] = useState(null);
   const [inviteCandidates, setInviteCandidates] = useState(null);
   const [finished, setFinished] = useState(false);
+  const [unArchivedInterviewCount, setUnArchivedInterviewCount] = useState(' ');
 
   const globalData = useContext(GlobalContext);
-
+  const { interviews, setInterviews, stripeProduct } = globalData;
+  const { allowedInterviews } = stripeProduct.metadata || {};
   const updateInterview = async cleanedValueData => {
     await updateInterviews(editInterview._id, cleanedValueData);
     setEditInterview(null);
@@ -135,10 +140,16 @@ const TableList = () => {
 
   const getData = async () => {
     setLoading(true);
-    const profile = JSON.parse(localStorage.getItem('profile'));
-    const { email } = profile;
-    const data = await (archives ? getArchivedInterviews(email) : getInterviews(email));
-    globalData.setInterviews(data || []);
+    let data;
+    if (archives) {
+      data = await getArchivedInterviews();
+      const interviewDataForLength = await getInterviews();
+      setUnArchivedInterviewCount(interviewDataForLength.length || 0);
+    } else {
+      data = await getInterviews();
+      setUnArchivedInterviewCount(data.length || 0);
+    }
+    setInterviews(data || []);
     setLoading(false);
   };
   useEffect(() => {
@@ -195,27 +206,61 @@ const TableList = () => {
           <Step1 onClick={updateInterview} data={editInterview} />
         </Modal>
       )}
+      {unArchivedInterviewCount > allowedInterviews && (
+        <Alert
+          style={{ marginBottom: 20 }}
+          message="Interview Cap Exceeded"
+          description={
+            <div>
+              You have more interviews than allowed on your plan. Some of your interviews may be
+              removed. Please archive unused interviews, or{' '}
+              <a
+                onClick={() => {
+                  $crisp.push([
+                    'do',
+                    'message:send',
+                    ['text', "Hi, I'm interested in upgrading my plan!"],
+                  ]);
+                  $crisp.push(['do', 'chat:open']);
+                }}
+              >
+                message our support to upgrade.
+              </a>
+            </div>
+          }
+          type="error"
+          showIcon
+        />
+      )}
       <Card>
         <Row align="middle" type="flex" justify="space-between">
           <Col>
-            {selectedRows.length !== 0 && (
-              <>
-                <ArchiveButton
-                  onClick={() => setSelectedRows([])}
-                  reload={getData}
-                  archives={archives}
-                  route="interviews"
-                  archiveData={selectedRows}
-                />
-                <CloneButton
-                  onClick={() => setSelectedRows([])}
-                  reload={getData}
-                  cloneData={selectedRows}
-                />
-              </>
-            )}
+            <Row align="middle" type="flex">
+              <AllowedInterviews
+                allowedInterviews={allowedInterviews}
+                totalInterviews={unArchivedInterviewCount}
+              />
+              {selectedRows.length !== 0 && (
+                <>
+                  <ArchiveButton
+                    onClick={() => setSelectedRows([])}
+                    reload={getData}
+                    archives={archives}
+                    route="interviews"
+                    archiveData={selectedRows}
+                  />
+                  <CloneButton
+                    onClick={() => setSelectedRows([])}
+                    reload={getData}
+                    cloneData={selectedRows}
+                  />
+                </>
+              )}
+            </Row>
           </Col>
-          <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
+          <Col>
+            <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
+          </Col>
         </Row>
       </Card>
 
@@ -228,7 +273,7 @@ const TableList = () => {
           <StandardTable
             selectedRows={selectedRows}
             loading={loading}
-            data={{ list: globalData.interviews }}
+            data={{ list: interviews }}
             // size="small"
             columns={columns}
             onSelectRow={rows => setSelectedRows(rows)}
@@ -238,5 +283,18 @@ const TableList = () => {
     </PageHeaderWrapper>
   );
 };
+
+const AllowedInterviews = ({ totalInterviews, allowedInterviews }) => (
+  <Tooltip title="Total interviews used">
+    <div>
+      <Statistic
+        style={{ marginRight: 16 }}
+        valueStyle={totalInterviews > allowedInterviews ? { color: 'red' } : null}
+        value={totalInterviews}
+        suffix={`/ ${allowedInterviews}`}
+      />
+    </div>
+  </Tooltip>
+);
 
 export default TableList;

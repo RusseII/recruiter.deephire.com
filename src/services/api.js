@@ -14,21 +14,13 @@ const setHeaders = () => ({
 });
 
 export async function createInterview(params) {
-  const {
-    prepTime,
-    retakesAllowed,
-    answerTime,
-    interviewName,
-    interviewQuestions,
-    createdBy,
-  } = params;
+  const { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions } = params;
   const questions = interviewQuestions.map(a => ({
     question: a,
   }));
 
   const body = {
     interviewName,
-    createdBy,
     interviewQuestions: questions,
     interviewConfig: { retakesAllowed, prepTime, answerTime },
   };
@@ -256,6 +248,14 @@ export async function deleteUsers(auth0UserId, successMessage) {
 
 export async function getInvites() {
   const x = request(`${newApi}/companies/invites`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  return x;
+}
+
+export async function getProduct() {
+  const x = request(`${newApi}/companies/product`, {
     method: 'GET',
     headers: setHeaders(),
   });
