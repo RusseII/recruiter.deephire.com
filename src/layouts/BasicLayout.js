@@ -98,6 +98,31 @@ class BasicLayout extends React.PureComponent {
     dispatch({
       type: 'setting/getSetting',
     });
+
+    const stripeProduct = {
+      id: 'prod_FfA2YYfOeVAkmL',
+      object: 'product',
+      active: true,
+      attributes: [],
+      caption: null,
+      created: 1566378153,
+      deactivate_on: [],
+      description: null,
+      images: [],
+      livemode: false,
+      metadata: {
+        allowedInterviews: '5',
+      },
+      name: 'basic DH',
+      package_dimensions: null,
+      shippable: null,
+      statement_descriptor: null,
+      type: 'service',
+      unit_label: null,
+      updated: 1577722579,
+      url: null,
+    };
+    this.setState({ stripeProduct });
     this.renderRef = requestAnimationFrame(() => {
       this.setState({
         rendering: false,
@@ -131,7 +156,7 @@ class BasicLayout extends React.PureComponent {
 
   getContext() {
     const { location } = this.props;
-    const { interviews, videos, shareLinks } = this.state;
+    const { interviews, videos, shareLinks, stripeProduct } = this.state;
     const setInterviews = interviews => {
       this.setState({ interviews });
     };
@@ -144,6 +169,10 @@ class BasicLayout extends React.PureComponent {
       this.setState({ shareLinks });
     };
 
+    const setStripeProduct = stripeProduct => {
+      this.setState({ stripeProduct });
+    };
+
     return {
       location,
       breadcrumbNameMap: this.breadcrumbNameMap,
@@ -153,6 +182,8 @@ class BasicLayout extends React.PureComponent {
       setVideos,
       shareLinks,
       setShareLinks,
+      stripeProduct,
+      setStripeProduct,
     };
   }
 
