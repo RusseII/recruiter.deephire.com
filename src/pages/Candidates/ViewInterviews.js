@@ -1,3 +1,4 @@
+/* global $crisp */
 import {
   message,
   Row,
@@ -60,7 +61,7 @@ const TableList = () => {
 
   const globalData = useContext(GlobalContext);
   const { interviews, setInterviews, stripeProduct } = globalData;
-  const { allowedInterviews } = stripeProduct.metadata;
+  const { allowedInterviews } = stripeProduct.metadata || {};
   const updateInterview = async cleanedValueData => {
     await updateInterviews(editInterview._id, cleanedValueData);
     setEditInterview(null);
@@ -209,7 +210,24 @@ const TableList = () => {
         <Alert
           style={{ marginBottom: 20 }}
           message="Interview Cap Exceeded"
-          description="You have more interviews than allowed on your plan. Some of your interviews may be removed. Please archive unused interviews, or message our support to upgrade."
+          description={
+            <div>
+              You have more interviews than allowed on your plan. Some of your interviews may be
+              removed. Please archive unused interviews, or{' '}
+              <a
+                onClick={() => {
+                  $crisp.push([
+                    'do',
+                    'message:send',
+                    ['text', "Hi, I'm interested in upgrading my plan!"],
+                  ]);
+                  $crisp.push(['do', 'chat:open']);
+                }}
+              >
+                message our support to upgrade.
+              </a>
+            </div>
+          }
           type="error"
           showIcon
         />

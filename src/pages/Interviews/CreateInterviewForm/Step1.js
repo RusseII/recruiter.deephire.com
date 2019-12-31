@@ -1,3 +1,4 @@
+/* global $crisp */
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
 
@@ -167,7 +168,7 @@ class Step1 extends React.PureComponent {
     const { loading } = this.state;
     const { getFieldDecorator } = form;
     const { interviews, stripeProduct } = this.context;
-    const { allowedInterviews } = stripeProduct.metadata;
+    const { allowedInterviews } = stripeProduct.metadata || {};
 
     if (interviews.length >= allowedInterviews) {
       return <CantCreateInterview />;
@@ -259,7 +260,17 @@ const CantCreateInterview = () => (
     title="Interview Cap Exceeded"
     subTitle="You have used all of your alloted interview slots. To get more interview slots either upgrade, or archive some of your active interviews."
     extra={[
-      <Button type="primary" key="console">
+      <Button
+        type="primary"
+        onClick={() => {
+          $crisp.push([
+            'do',
+            'message:send',
+            ['text', "Hello, I'm interested in upgrading my plan!"],
+          ]);
+          $crisp.push(['do', 'chat:open']);
+        }}
+      >
         Upgrade Plan
       </Button>,
       <Button onClick={() => router.push('/interview/view')}>Remove Interviews</Button>,
