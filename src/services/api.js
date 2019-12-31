@@ -254,6 +254,14 @@ export async function getInvites() {
   return x;
 }
 
+export async function getProduct() {
+  const x = request(`${newApi}/companies/product`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  return x;
+}
+
 export async function getTeam() {
   const x = request(`${newApi}/companies/team`, {
     method: 'GET',

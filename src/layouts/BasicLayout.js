@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { Layout, Alert } from 'antd';
 import DocumentTitle from 'react-document-title';
 import isEqual from 'lodash/isEqual';
 import memoizeOne from 'memoize-one';
@@ -17,6 +17,7 @@ import Footer from './Footer';
 import Header from './Header';
 import GlobalContext from './MenuContext';
 import Exception403 from '../pages/Exception/403';
+import { getProduct } from '@/services/api';
 
 const { Content } = Layout;
 
@@ -88,6 +89,7 @@ class BasicLayout extends React.PureComponent {
     interviews: [],
     videos: [],
     shareLinks: [],
+    stripeProduct: { metadata: { allowedInterviews: '200' } },
   };
 
   componentDidMount() {
@@ -99,30 +101,8 @@ class BasicLayout extends React.PureComponent {
       type: 'setting/getSetting',
     });
 
-    const stripeProduct = {
-      id: 'prod_FfA2YYfOeVAkmL',
-      object: 'product',
-      active: true,
-      attributes: [],
-      caption: null,
-      created: 1566378153,
-      deactivate_on: [],
-      description: null,
-      images: [],
-      livemode: false,
-      metadata: {
-        allowedInterviews: '15',
-      },
-      name: 'basic DH',
-      package_dimensions: null,
-      shippable: null,
-      statement_descriptor: null,
-      type: 'service',
-      unit_label: null,
-      updated: 1577722579,
-      url: null,
-    };
-    this.setState({ stripeProduct });
+    this.setStripeProduct();
+
     this.renderRef = requestAnimationFrame(() => {
       this.setState({
         rendering: false,
@@ -169,10 +149,6 @@ class BasicLayout extends React.PureComponent {
       this.setState({ shareLinks });
     };
 
-    const setStripeProduct = stripeProduct => {
-      this.setState({ stripeProduct });
-    };
-
     return {
       location,
       breadcrumbNameMap: this.breadcrumbNameMap,
@@ -183,8 +159,17 @@ class BasicLayout extends React.PureComponent {
       shareLinks,
       setShareLinks,
       stripeProduct,
-      setStripeProduct,
     };
+  }
+
+  async setStripeProduct() {
+    const stripeProduct = await getProduct();
+    if (stripeProduct) {
+      this.setState({ stripeProduct });
+    } else {
+      const noStripe = { trial: true, metadata: { allowedInterviews: '1' } };
+      this.setState({ stripeProduct: noStripe });
+    }
   }
 
   getMenuData() {
@@ -277,7 +262,8 @@ class BasicLayout extends React.PureComponent {
       children,
       location: { pathname },
     } = this.props;
-    const { isMobile } = this.state;
+    const { isMobile, stripeProduct } = this.state;
+    const { trial } = stripeProduct;
     const isTop = PropsLayout === 'topmenu';
     const menuData = this.getMenuData();
     const routerConfig = this.matchParamsPath(pathname);
@@ -300,6 +286,14 @@ class BasicLayout extends React.PureComponent {
             minHeight: '100vh',
           }}
         >
+          {trial && (
+            <Alert
+              style={{ textAlign: 'center' }}
+              message="You are currently on a trail account, please message our support to upgrade"
+              banner
+              closable
+            />
+          )}
           <Header
             menuData={menuData}
             handleMenuCollapse={this.handleMenuCollapse}
