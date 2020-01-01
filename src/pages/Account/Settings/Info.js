@@ -31,6 +31,7 @@ class Info extends Component {
       // ),
       basic: <FormattedMessage id="app.settings.menuMap.basic" defaultMessage="Basic Settings" />,
       integrations: 'Integrations',
+      billing: 'Billing',
     };
     const key = location.pathname.replace(`${match.path}/`, '');
     this.state = {

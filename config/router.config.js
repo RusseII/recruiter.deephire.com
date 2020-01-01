@@ -103,6 +103,10 @@ export default [
             component: './Account/Settings/IntegrationSettings',
           },
           {
+            path: '/account/settings/billing',
+            component: './Account/Settings/BillingSettings',
+          },
+          {
             path: '/account/settings/notification',
             component: './Account/Settings/NotificationView',
           },

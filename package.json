@@ -22,6 +22,7 @@
     "prettier": "prettier --write ./src/**/**/**/*"
   },
   "dependencies": {
+    "@ant-design/colors": "^3.2.2",
     "@antv/data-set": "^0.10.1",
     "@babel/runtime": "^7.0.0",
     "antd": "^3.25.1",
