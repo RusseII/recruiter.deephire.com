@@ -180,6 +180,13 @@ export async function getVideo(id) {
   });
 }
 
+export async function getInvoices() {
+  return request(`${newApi}/companies/invoices`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
 export async function shareShortLink(data) {
   const x = request(`${newApi}/shortlists`, {
     method: 'POST',
