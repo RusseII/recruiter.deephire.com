@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import pathToRegexp from 'path-to-regexp';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
 import { formatMessage } from 'umi/locale';
+import { StripeProvider } from 'react-stripe-elements';
 import SiderMenu from '@/components/SiderMenu';
 import Authorized from '@/utils/Authorized';
 import SettingDrawer from '@/components/SettingDrawer';
@@ -311,18 +312,20 @@ class BasicLayout extends React.PureComponent {
       </Layout>
     );
     return (
-      <React.Fragment>
-        <DocumentTitle title={this.getPageTitle(pathname)}>
-          <ContainerQuery query={query}>
-            {params => (
-              <GlobalContext.Provider value={this.getContext()}>
-                <div className={classNames(params)}>{layout}</div>
-              </GlobalContext.Provider>
-            )}
-          </ContainerQuery>
-        </DocumentTitle>
-        {this.renderSettingDrawer()}
-      </React.Fragment>
+      <StripeProvider apiKey="pk_test_2s52mn2laRq6R1G70JHccRd5">
+        <>
+          <DocumentTitle title={this.getPageTitle(pathname)}>
+            <ContainerQuery query={query}>
+              {params => (
+                <GlobalContext.Provider value={this.getContext()}>
+                  <div className={classNames(params)}>{layout}</div>
+                </GlobalContext.Provider>
+              )}
+            </ContainerQuery>
+          </DocumentTitle>
+          {this.renderSettingDrawer()}
+        </>
+      </StripeProvider>
     );
   }
 }

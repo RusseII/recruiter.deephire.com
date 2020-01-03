@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Icon, Table } from 'antd';
+import { Icon, Table, Spin } from 'antd';
 import readableTime from 'readable-timestamp';
 import { gold } from '@ant-design/colors';
+import { Elements } from 'react-stripe-elements';
+import CurrentPaymentMethod from '@/components/CurrentPaymentMethod';
+
 import { getInvoices } from '@/services/api';
 
-const Team = () => {
-  const [team, setTeam] = useState(null);
+const Billing = () => {
+  const [invoices, setInvoices] = useState(null);
 
   // eslint-disable-next-line no-unused-vars
   const [reload, setReload] = useState(false);
@@ -79,18 +82,25 @@ const Team = () => {
   ];
 
   useEffect(() => {
-    const getTeamData = async () => {
+    const getInvoiceData = async () => {
       const invoices = await getInvoices();
-      setTeam(invoices.data);
+      setInvoices(invoices);
     };
-    getTeamData();
+    getInvoiceData();
   }, [reload]);
-
   return (
     <div style={{ paddingTop: 12 }}>
-      <Table dataSource={team} pagination={false} columns={columnsTeam} />
+      <Stripey />
+      <Spin spinning={!invoices}>
+        <Table size="small" dataSource={invoices} pagination={false} columns={columnsTeam} />
+      </Spin>
     </div>
   );
 };
 
-export default Team;
+const Stripey = () => (
+  <Elements>
+    <CurrentPaymentMethod />
+  </Elements>
+);
+export default Billing;
