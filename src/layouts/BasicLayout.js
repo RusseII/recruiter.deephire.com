@@ -289,7 +289,7 @@ class BasicLayout extends React.PureComponent {
           {trial && (
             <Alert
               style={{ textAlign: 'center' }}
-              message="You are currently on a trail account, please message our support to upgrade"
+              message="You are currently on a trial account, please message our support to upgrade"
               banner
               closable
             />
