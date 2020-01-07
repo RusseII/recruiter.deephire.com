@@ -12,14 +12,11 @@ Automated Video Interviews Built for Recruiters
 [![blog.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fbadge%3Dhttps%3A%2F%2Fblog.deephire.com)](https://blog.deephire.com)
 [![blog.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fuptimes%3D1%26badge%3Dhttps%3A%2F%2Fblog.deephire.com)](https://blog.deephire.com)
 
-[![deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fbadge%3Dhttps%3A%2F%2Fdogs)](https://deephire.com)
-[![deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fuptimes%3D1%26badge%3Dhttps%3A%2F%2Fdogs)](https://deephire.com)
+[![deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fbadge%3Dhttps%3A%2F%2Fdeephire.com)](https://deephire.com)
+[![deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fuptimes%3D1%26badge%3Dhttps%3A%2F%2Fdeephire.com)](https://deephire.com)
 
-[![a.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fbadge%3Dhttps%3A%2F%2Fdogs)](https://a.deephire.com)
-[![a.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fuptimes%3D1%26badge%3Dhttps%3A%2F%2Fdogs)](https://a.deephire.com)
-
-
-
+[![a.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fbadge%3Dhttps%3A%2F%2Fa.deephire.com)](https://a.deephire.com)
+[![a.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fuptimes%3D1%26badge%3Dhttps%3A%2F%2Fa.deephire.com)](https://a.deephire.com)
 
 
 ![](https://s3.amazonaws.com/deephire/logos/deephire+shortlists+photo.jpg)
