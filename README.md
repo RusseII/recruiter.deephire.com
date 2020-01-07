@@ -6,8 +6,19 @@
 Automated Video Interviews Built for Recruiters
 
 
-[![CircleCI](https://circleci.com/gh/RusseII/recruiter.deephire.io/tree/master.svg?style=svg&circle-token=8463e824f7adf292e2199d326ae19c1405db6700)](https://circleci.com/gh/RusseII/recruiter.deephire.io/tree/master)
-[![WebsiteStatus](https://img.shields.io/website-up-down-green-red/https/recruiter.deephire.com.svg)](https://recruiter.deephire.com)
+[![recruiter.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fbadge%3Dhttps%3A%2F%2Frecruiter.deephire.com)](https://recruiter.deephire.com)
+[![recruiter.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fuptimes%3D1%26badge%3Dhttps%3A%2F%2Frecruiter.deephire.com)](https://recruiter.deephire.com)
+
+[![blog.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fbadge%3Dhttps%3A%2F%2Fblog.deephire.com)](https://blog.deephire.com)
+[![blog.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fuptimes%3D1%26badge%3Dhttps%3A%2F%2Fblog.deephire.com)](https://blog.deephire.com)
+
+[![deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fbadge%3Dhttps%3A%2F%2Fdogs)](https://deephire.com)
+[![deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fuptimes%3D1%26badge%3Dhttps%3A%2F%2Fdogs)](https://deephire.com)
+
+[![a.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fbadge%3Dhttps%3A%2F%2Fdogs)](https://a.deephire.com)
+[![a.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fuptimes%3D1%26badge%3Dhttps%3A%2F%2Fdogs)](https://a.deephire.com)
+
+
 
 
 
