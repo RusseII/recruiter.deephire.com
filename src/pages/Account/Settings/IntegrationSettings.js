@@ -117,9 +117,9 @@ const GiveApiKey = Form.create()(props => {
 
     props.form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const { apiKey, apiSecret } = fieldsValue;
+      const { apiKey, apiSecret, firmKey, firmName } = fieldsValue;
 
-      updateCompany({ clockworkIntegration: { apiKey, apiSecret } });
+      updateCompany({ clockworkIntegration: { apiKey, apiSecret, firmKey, firmName } });
       message.success('Succesully Integrated with Clockwork');
       setFlag(flag => !flag);
       setDrawer(false);
@@ -150,6 +150,18 @@ const GiveApiKey = Form.create()(props => {
           {getFieldDecorator('apiSecret', {
             rules: [{ required: false, message: 'Please enter API Secret' }],
           })(<Input type="password" />)}
+        </Form.Item>
+
+        <Form.Item label="Firm Service Key">
+          {getFieldDecorator('firmKey', {
+            rules: [{ required: false, message: 'Please enter Firm Service Key' }],
+          })(<Input />)}
+        </Form.Item>
+
+        <Form.Item label="Firm Name">
+          {getFieldDecorator('firmName', {
+            rules: [{ required: false, message: 'Please enter the Firm Name' }],
+          })(<Input />)}
         </Form.Item>
 
         <Form.Item wrapperCol={{ span: 12 }}>
