@@ -312,20 +312,22 @@ class BasicLayout extends React.PureComponent {
       </Layout>
     );
     return (
-      <StripeProvider apiKey="pk_test_2s52mn2laRq6R1G70JHccRd5">
-        <>
-          <DocumentTitle title={this.getPageTitle(pathname)}>
-            <ContainerQuery query={query}>
-              {params => (
-                <GlobalContext.Provider value={this.getContext()}>
-                  <div className={classNames(params)}>{layout}</div>
-                </GlobalContext.Provider>
-              )}
-            </ContainerQuery>
-          </DocumentTitle>
-          {this.renderSettingDrawer()}
-        </>
-      </StripeProvider>
+      <>
+        <StripeProvider apiKey="pk_test_2s52mn2laRq6R1G70JHccRd5">
+          <>
+            <DocumentTitle title={this.getPageTitle(pathname)}>
+              <ContainerQuery query={query}>
+                {params => (
+                  <GlobalContext.Provider value={this.getContext()}>
+                    <div className={classNames(params)}>{layout}</div>
+                  </GlobalContext.Provider>
+                )}
+              </ContainerQuery>
+            </DocumentTitle>
+            {this.renderSettingDrawer()}
+          </>
+        </StripeProvider>
+      </>
     );
   }
 }

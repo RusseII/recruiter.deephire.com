@@ -5,7 +5,7 @@ import { Row, Col } from 'antd';
 import Cards from 'react-credit-cards';
 import readableTime from 'readable-timestamp';
 import { getSubscriptions, getPaymentMethods } from '@/services/api';
-// import CheckoutForm from '@/components/CheckoutForm';
+import CheckoutForm from '@/components/CheckoutForm';
 
 import 'react-credit-cards/es/styles-compiled.css';
 import GlobalContext from '@/layouts/MenuContext';
@@ -54,7 +54,7 @@ const CurrentPaymentMethod = () => {
   const { name } = paymentMethod?.billing_details || {};
   const { brand, exp_month: expMonth = '', exp_year: expYear = '', last4 } =
     paymentMethod?.card || {};
-  const month = expMonth.length === 1 ? `0${expMonth}` : expMonth;
+  const month = expMonth.toString().length === 1 ? `0${expMonth}` : expMonth;
 
   return (
     <Row style={{ marginBottom: 100 }} type="flex" justify="start">
@@ -74,7 +74,7 @@ const CurrentPaymentMethod = () => {
           <div>Your plan:</div>
           <div>Pricing</div>
           <div>Renews on:</div>
-          {/* <CheckoutForm /> */}
+          <CheckoutForm />
         </Col>
         <Col className={styles.spacing} style={{ marginLeft: 16 }}>
           <div>{`${productName || ''}`}</div>
