@@ -33,8 +33,12 @@ const CurrentPaymentMethod = () => {
       const { default_payment_method: defaultPaymentMethod } = singleSubscription;
       let currentMethod = paymentMethods?.data;
       if (currentMethod) {
-        currentMethod = currentMethod.find(method => method.id === defaultPaymentMethod);
-        setPaymentMethod(currentMethod);
+        if (defaultPaymentMethod) {
+          currentMethod = currentMethod.find(method => method.id === defaultPaymentMethod);
+          setPaymentMethod(currentMethod);
+        } else {
+          setPaymentMethod(currentMethod[0]);
+        }
       }
     };
 
