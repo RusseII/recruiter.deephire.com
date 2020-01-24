@@ -126,20 +126,24 @@ export async function updateCandidateProfile(email, data) {
 
 export async function getVideos() {
   // return request(`${hostedURL}/v1.0/get_candidates/${params}`);
-  const videos = request(`${newApi}/videos`, {
+  const videos = await request(`${newApi}/videos`, {
     method: 'GET',
     headers: setHeaders(),
   });
-  videos.then(r => r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1)));
-  return videos;
+  if (videos) {
+    return videos.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1));
+  }
+  return [];
 }
 export async function getArchivedVideos() {
-  const videos = request(`${newApi}/videos/archives`, {
+  const videos = await request(`${newApi}/videos/archives`, {
     method: 'GET',
     headers: setHeaders(),
   });
-  videos.then(r => r.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1)));
-  return videos;
+  if (videos) {
+    return videos.sort((a, b) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1));
+  }
+  return [];
 }
 
 export async function getArchivedInterviews() {
@@ -181,7 +185,41 @@ export async function getVideo(id) {
 }
 
 export async function getInvoices() {
-  return request(`${newApi}/companies/invoices`, {
+  const invoices = await request(`${newApi}/companies/invoices`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+  if (invoices?.data) return invoices.data;
+  return [];
+}
+
+export async function getSubscriptions() {
+  return request(`${newApi}/companies/subscriptions`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
+export async function getPaymentMethods() {
+  return request(`${newApi}/companies/payment_methods`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
+export async function addPaymentMethod(paymentMethodId, successMessage) {
+  return request(
+    `${newApi}/companies/payment_methods/${paymentMethodId}`,
+    {
+      method: 'POST',
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+}
+
+export async function cardWallet() {
+  return request(`${newApi}/companies/card_wallet`, {
     method: 'GET',
     headers: setHeaders(),
   });
@@ -254,11 +292,12 @@ export async function deleteUsers(auth0UserId, successMessage) {
 }
 
 export async function getInvites() {
-  const x = request(`${newApi}/companies/invites`, {
+  const x = await request(`${newApi}/companies/invites`, {
     method: 'GET',
     headers: setHeaders(),
   });
-  return x;
+  if (x) return x;
+  return [];
 }
 
 export async function getProduct() {
