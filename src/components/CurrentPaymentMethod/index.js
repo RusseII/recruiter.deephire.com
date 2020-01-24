@@ -74,7 +74,7 @@ const CurrentPaymentMethod = () => {
           <div>Your plan:</div>
           <div>Pricing</div>
           <div>Renews on:</div>
-          <CheckoutForm />
+          <CheckoutForm setReload={setReload} />
         </Col>
         <Col className={styles.spacing} style={{ marginLeft: 16 }}>
           <div>{`${productName || ''}`}</div>

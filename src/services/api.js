@@ -207,6 +207,17 @@ export async function getPaymentMethods() {
   });
 }
 
+export async function addPaymentMethod(paymentMethodId, successMessage) {
+  return request(
+    `${newApi}/companies/payment_methods/${paymentMethodId}`,
+    {
+      method: 'POST',
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+}
+
 export async function cardWallet() {
   return request(`${newApi}/companies/card_wallet`, {
     method: 'GET',

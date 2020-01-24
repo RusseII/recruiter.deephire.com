@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { injectStripe, CardElement } from 'react-stripe-elements';
 import { Spin, Alert, Modal } from 'antd';
-import { cardWallet } from '@/services/api';
+import { cardWallet, addPaymentMethod } from '@/services/api';
 // import AddressSection from './AddressSection';
 // import CardSection from './CardSection';
 
@@ -12,6 +12,7 @@ const style = {
 };
 
 const CheckoutForm = props => {
+  const { setReload } = props;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -64,16 +65,20 @@ const CheckoutForm = props => {
       .confirmCardSetup(clientSecret, {
         payment_method: {
           card: cardElement,
-          billing_details: { name: 'cardholderName.value' },
+          // billing_details: { name: 'cardholderName.value' },
         },
       })
-      .then(result => {
-        setLoading(false);
+      .then(async result => {
         if (result.error) {
+          setLoading(false);
           setError(result.error.message);
           // Display error.message in your UI.
         } else {
           setError(null);
+          await addPaymentMethod(result.setupIntent.payment_method, 'Card successfully updated');
+          setLoading(false);
+          setReload(flag => !flag);
+          setVisible(false);
 
           // The setup has succeeded. Display a success message.
         }
