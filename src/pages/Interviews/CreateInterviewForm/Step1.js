@@ -1,6 +1,5 @@
 /* global $crisp */
 import React, { Fragment } from 'react';
-import { connect } from 'dva';
 
 import { Form, Input, Button, Divider, InputNumber, Icon, Result } from 'antd';
 import router from 'umi/router';
@@ -42,6 +41,11 @@ const formItemLayoutWithOutLabel = {
     md: { span: 10, offset: 8 },
   },
 };
+
+const drawerLayout = {
+  wrapperCol: 24,
+};
+
 let uuid = 1;
 
 const remove = (form, k) => {
@@ -64,10 +68,17 @@ const createFormItems = props => {
     initialValue: interviewQuestions ? [...Array(interviewQuestions.length).keys()] : [0],
   });
   const keys = getFieldValue('keys');
+
+  const getLayout = index => {
+    if (index === 0) {
+      return data ? drawerLayout : formItemLayout;
+    }
+    return data ? drawerLayout : formItemLayoutWithOutLabel;
+  };
   const formItems = keys.map((k, index) => (
     <FormItem
       style={{ width: '100%' }}
-      {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+      {...getLayout(index)}
       label={index === 0 ? 'Questions' : ''}
       required={false}
       key={k}
@@ -102,18 +113,17 @@ const createFormItems = props => {
   return formItems;
 };
 
-@connect(({ user }) => ({
-  currentUser: user.currentUser,
-  // submitting: loading.effects['form/submitStepForm'],
-}))
 @Form.create()
 class Step1 extends React.PureComponent {
   state = { loading: false };
   // this.props.data
 
   async componentDidMount() {
-    const { setInterviews } = this.context;
-    setInterviews(await getInterviews());
+    const { data } = this.props;
+    if (!data) {
+      const { setInterviews } = this.context;
+      setInterviews(await getInterviews());
+    }
   }
 
   enterLoading = () => {
@@ -131,7 +141,7 @@ class Step1 extends React.PureComponent {
   };
 
   onValidateForm = e => {
-    const { form, dispatch, data, onClick } = this.props;
+    const { form, dispatch, data, onClick, setReload } = this.props;
     const { validateFields } = form;
 
     e.preventDefault();
@@ -147,6 +157,7 @@ class Step1 extends React.PureComponent {
         if (data && onClick) {
           await onClick(cleanedValueData);
           this.setState({ loading: false });
+          setReload(flag => !flag);
         }
         if (!data) {
           dispatch({
@@ -179,9 +190,9 @@ class Step1 extends React.PureComponent {
           layout="horizontal"
           hideRequiredMark
           onSubmit={this.onValidateForm}
-          style={{ marginTop: 40 }}
+          style={{ marginTop: data ? 0 : 24 }}
         >
-          <FormItem {...formItemLayout} label="Name">
+          <FormItem {...(data ? drawerLayout : formItemLayout)} label="Name">
             {getFieldDecorator('interviewName', {
               initialValue: interviewName,
               rules: [
@@ -212,19 +223,19 @@ class Step1 extends React.PureComponent {
             <span className="ant-form-text"> seconds per question</span>
           </FormItem>
 
-          <FormItem {...formItemLayout} label="Record Time">
+          <FormItem {...(data ? drawerLayout : formItemLayoutHidden)} label="Record Time">
             {getFieldDecorator('answerTime', {
               initialValue: interviewConfig.answerTime || 90,
             })(<InputNumber min={15} max={1000} />)}
             <span className="ant-form-text"> seconds per question</span>
           </FormItem>
           {createFormItems(this.props)}
-          <FormItem {...formItemLayoutWithOutLabel}>
+          <FormItem {...(data ? drawerLayout : formItemLayoutWithOutLabel)}>
             <Button type="dashed" onClick={this.add}>
               <Icon type="plus" /> Add Interview Question
             </Button>
           </FormItem>
-          <FormItem {...formItemLayoutWithOutLabel}>
+          <FormItem {...(data ? drawerLayout : formItemLayoutWithOutLabel)}>
             <Button loading={loading} type="primary" htmlType="submit">
               {data ? 'Save & Close' : 'Create Interview'}
             </Button>
@@ -232,7 +243,7 @@ class Step1 extends React.PureComponent {
         </Form>
         {!data && (
           <Fragment>
-            <Divider style={{ margin: '100px 0 24px' }} />
+            <Divider style={{ margin: '24px 0 24px' }} />
 
             <div className={styles.desc}>
               <h3>Next Steps</h3>
@@ -251,8 +262,6 @@ class Step1 extends React.PureComponent {
     );
   }
 }
-
-// Step1.contextType =
 
 const CantCreateInterview = () => (
   <Result
