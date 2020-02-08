@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 
 import { Form, Input, Button, Divider, InputNumber, Icon, Result } from 'antd';
 import router from 'umi/router';
+import { connect } from 'dva';
 import styles from './style.less';
 import GlobalContext from '@/layouts/MenuContext';
 import { getInterviews } from '@/services/api';
@@ -247,7 +248,7 @@ class Step1 extends React.PureComponent {
 
             <div className={styles.desc}>
               <h3>Next Steps</h3>
-              <h4>Recieve Link</h4>
+              <h4>Recieve Link</h4>x{' '}
               <p>Once you click Create Interview, you will recieve a link.</p>
               <h4>Send to Candidates</h4>
               <p>Put the link you recieve in your job posting, or send it to candidates.</p>
@@ -286,5 +287,5 @@ const CantCreateInterview = () => (
     ]}
   />
 );
-
-export default Step1;
+// allows use of dispatch
+export default connect()(Step1);

@@ -22,7 +22,6 @@ import customEmpty from '@/components/CustomEmpty';
 import CloneButton from '@/components/CloneButton';
 
 import Step1 from '@/pages/Interviews/CreateInterviewForm/Step1';
-import { getHttpUrl } from '@/utils/utils';
 import GlobalContext from '@/layouts/MenuContext';
 import InviteCandidates from '@/components/InviteCandidates';
 
@@ -33,10 +32,14 @@ const TableList = () => {
   const [editInterview, setEditInterview] = useState(null);
   const [inviteCandidates, setInviteCandidates] = useState(null);
   const [reload, setReload] = useState(false);
+
   const [unArchivedInterviewCount, setUnArchivedInterviewCount] = useState(' ');
 
   const globalData = useContext(GlobalContext);
   const { interviews, setInterviews, stripeProduct } = globalData;
+  // if (interviews) {
+  //   interviews = interviews.map((interview, i) => ({ key: `interview-${i}`, ...interview }));
+  // }
   const { allowedInterviews } = stripeProduct.metadata || {};
   const updateInterview = async cleanedValueData => {
     await updateInterviews(editInterview._id, cleanedValueData);
@@ -84,61 +87,41 @@ const TableList = () => {
       },
     },
 
-    // {
-    //   title: email === 'demo@deephire.com' ? 'Invite' : null,
-    //   render: () =>
-    //     email === 'demo@deephire.com' ? (
-    //       <a onClick={() => setInviteCandidates(true)}>Invite</a>
-    //     ) : null,
-    // },
-
-    // {
-    //   title: 'Edit',
-    //   render: (text, data) => <a onClick={() => setEditInterview(data)}>Edit</a>,
-    // },
-    // {
-    //   title: 'Interview Link',
-    //   fixed: 'right',
-    //   render: (text, data) => (
-    //     <Fragment>
-    //       <Tooltip title="Click to copy">
-    //         <CopyToClipboard
-    //           text={getHttpUrl(data.shortUrl)}
-    //           onCopy={() => message.success('Link Copied')}
-    //         >
-    //           <a>{data.shortUrl || '-'}</a>
-    //         </CopyToClipboard>
-    //       </Tooltip>
-    //     </Fragment>
-    //   ),
-    // },
-
     {
       title: '',
       fixed: 'right',
-      render: (text, data) => (
-        <Fragment>
-          <Tooltip title="Invite candidates">
-            <Button
-              onClick={() => setInviteCandidates(true)}
-              style={{ marginLeft: 8 }}
-              shape="circle"
-              icon="user-add"
-            />
-          </Tooltip>
-          <Tooltip title="Edit interview">
-            <Button
-              onClick={() => setEditInterview(data)}
-              style={{ marginLeft: 8 }}
-              shape="circle"
-              icon="edit"
-            />
-          </Tooltip>
-          <Tooltip title="View interview share link">
-            <Button style={{ marginLeft: 8 }} shape="circle" icon="link" />
-          </Tooltip>
-        </Fragment>
-      ),
+      render: data => {
+        return (
+          <Fragment>
+            <Tooltip title="Invite candidates">
+              <Button
+                onClick={() => setInviteCandidates({ activeTab: '1', ...data })}
+                style={{ marginLeft: 8 }}
+                shape="circle"
+                icon="user-add"
+              />
+            </Tooltip>
+
+            <Tooltip title="View direct interview link">
+              <Button
+                onClick={() => setInviteCandidates({ activeTab: '2', ...data })}
+                style={{ marginLeft: 8 }}
+                shape="circle"
+                icon="link"
+              />
+            </Tooltip>
+
+            <Tooltip title="Edit interview">
+              <Button
+                onClick={() => setEditInterview(data)}
+                style={{ marginLeft: 8 }}
+                shape="circle"
+                icon="edit"
+              />
+            </Tooltip>
+          </Fragment>
+        );
+      },
     },
   ];
 
@@ -160,15 +143,12 @@ const TableList = () => {
     getData();
   }, [archives, reload]);
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
   return (
     <PageHeaderWrapper title="Interviews">
       <InviteCandidates
         setInviteCandidates={setInviteCandidates}
         inviteCandidates={inviteCandidates}
+        data={inviteCandidates}
       />
 
       <Drawer
