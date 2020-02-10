@@ -148,7 +148,6 @@ const TableList = () => {
       <InviteCandidates
         setInviteCandidates={setInviteCandidates}
         inviteCandidates={inviteCandidates}
-        data={inviteCandidates}
       />
 
       <Drawer

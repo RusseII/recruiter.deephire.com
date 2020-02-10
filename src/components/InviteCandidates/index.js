@@ -50,7 +50,7 @@ Due to the high number of applications we receive for our roles, video interview
 const directLinkMessage =
   'This is the Direct Link for candidates to take this interview. If you navigate to this URL, you will see the introductory page to begin the video interview. You can send this link out via email to invite individual candidates, or it can be saved as part of an email template in your ATS/CRM to bulk invite candidates. Please note, we cannot track the invite status for candidates who have been invited this way.';
 
-const messagesTemp = [
+const basicMessages = [
   { followUp: 0, message: message1 },
   { followUp: 0, message: message2 },
   { followUp: 0, message: message3 },
@@ -137,13 +137,14 @@ const customPanelStyle = {
   border: 'none',
 };
 
-const InviteCandidates = Form.create()(({ data, form, inviteCandidates, setInviteCandidates }) => {
+const InviteCandidates = Form.create()(({ form, inviteCandidates, setInviteCandidates }) => {
   const [messages, setMessages] = useState(null);
-
   useEffect(() => {
-    if (data?.messages) {
-      setMessages(data.messages);
-    } else setMessages(messagesTemp);
+    if (inviteCandidates?.messages) {
+      setMessages(inviteCandidates.messages);
+    } else {
+      setMessages(basicMessages);
+    }
   }, [inviteCandidates]);
   const handleSubmit = e => {
     e.preventDefault();
@@ -157,11 +158,10 @@ const InviteCandidates = Form.create()(({ data, form, inviteCandidates, setInvit
         return { email: email.toLowerCase(), fullName: cleanedValueData.fullName[i] };
       });
       cleanedValueData.messages = messages;
-      await inviteCandidatesToInterview(cleanedValueData, data._id, 'Invites Sent');
+      await inviteCandidatesToInterview(cleanedValueData, inviteCandidates._id, 'Invites Sent');
       setInviteCandidates(flag => !flag);
     });
   };
-
   const change = ({ target: { value } }, i) =>
     setMessages(messagesArray => {
       messagesArray[i] = { ...messagesArray[i], message: value };
@@ -186,9 +186,9 @@ const InviteCandidates = Form.create()(({ data, form, inviteCandidates, setInvit
       onClose={() => setInviteCandidates(flag => !flag)}
       //   onOk={() => (!finished ? setFinished(true) : reset())}
     >
-      <Title level={3}>{data?.interviewName}</Title>
-      {data && (
-        <Tabs defaultActiveKey={data && data.activeTab}>
+      <Title level={3}>{inviteCandidates?.interviewName}</Title>
+      {inviteCandidates && (
+        <Tabs defaultActiveKey={inviteCandidates && inviteCandidates.activeTab}>
           <TabPane
             tab={
               <span>
@@ -206,10 +206,13 @@ const InviteCandidates = Form.create()(({ data, form, inviteCandidates, setInvit
               <Title level={4} style={{ marginTop: 24 }}>
                 Message to Candidates
               </Title>
-
               <TextArea
                 onChange={e => change(e, 0)}
-                defaultValue={messages[0]?.message}
+                defaultValue={
+                  inviteCandidates.messages
+                    ? inviteCandidates.messages[0]?.message
+                    : messages?.[0]?.message
+                }
                 autoSize={{ minRows: 5 }}
               />
 
@@ -243,13 +246,21 @@ const InviteCandidates = Form.create()(({ data, form, inviteCandidates, setInvit
                   <div style={{ marginTop: 16, marginBottom: 8 }}> Send after 2 days</div>
                   <TextArea
                     onChange={e => change(e, 1)}
-                    defaultValue={messages[1]?.message}
+                    defaultValue={
+                      inviteCandidates.messages
+                        ? inviteCandidates.messages[1]?.message
+                        : messages?.[1]?.message
+                    }
                     autoSize={{ minRows: 20 }}
                   />
                   <div style={{ marginTop: 16, marginBottom: 8 }}> Send after 5 days </div>
                   <TextArea
                     onChange={e => change(e, 2)}
-                    defaultValue={messages[2]?.message}
+                    defaultValue={
+                      inviteCandidates.messages
+                        ? inviteCandidates.messages[2]?.message
+                        : messages?.[2]?.message
+                    }
                     autoSize={{ minRows: 20 }}
                   />
                 </Panel>
@@ -281,7 +292,7 @@ const InviteCandidates = Form.create()(({ data, form, inviteCandidates, setInvit
               strong
               copyable
             >
-              {getHttpUrl(data.shortUrl)}
+              {getHttpUrl(inviteCandidates.shortUrl)}
             </Paragraph>
           </TabPane>
         </Tabs>
