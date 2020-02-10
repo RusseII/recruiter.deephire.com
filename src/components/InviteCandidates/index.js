@@ -75,7 +75,11 @@ const createFormItems = form => {
   const keys = getFieldValue('keys');
   const formItems = keys.map(k => {
     return (
-      <Card hoverable style={{ height: 90, marginBottom: 8, marginRight: 5 }}>
+      <Card
+        hoverable
+        bodyStyle={{ paddingLeft: 16, paddingRight: 16 }}
+        style={{ height: 90, marginBottom: 8, marginRight: 5 }}
+      >
         <Row gutter={8} type="flex">
           <Col span={12}>
             <FormItem required key={k}>
@@ -103,6 +107,7 @@ const createFormItems = form => {
                     whitespace: true,
                     message: 'Email required.',
                   },
+                  { type: 'email', message: 'Email invalid' },
                 ],
               })(<Input placeholder="Email" />)}
             </FormItem>
