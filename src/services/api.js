@@ -260,6 +260,19 @@ export async function deleteInvites(inviteId, successMessage) {
   return x;
 }
 
+export async function inviteCandidatesToInterview(body, id, successMessage) {
+  const x = request(
+    `${newApi}/interviews/${id}/invites`,
+    {
+      method: 'POST',
+      headers: setHeaders(),
+      body,
+    },
+    successMessage
+  );
+  return x;
+}
+
 export async function putInvites(inviteId, successMessage) {
   const x = request(
     `${newApi}/companies/invites/${inviteId}`,

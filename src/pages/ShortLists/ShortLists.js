@@ -1,7 +1,16 @@
 import router from 'umi/router';
-import { AutoComplete, Card, Col, message, Row, Tooltip, ConfigProvider } from 'antd';
+import {
+  AutoComplete,
+  Card,
+  Col,
+  Row,
+  Tooltip,
+  ConfigProvider,
+  Button,
+  Typography,
+  Popover,
+} from 'antd';
 import React, { useState, useEffect, useContext } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import readableTime from 'readable-timestamp';
 import styles from './ShortLists.less';
 import ArchiveButton from '@/components/ArchiveButton';
@@ -13,6 +22,7 @@ import customEmpty from '@/components/CustomEmpty';
 
 import GlobalContext from '@/layouts/MenuContext';
 
+const { Text } = Typography;
 const openShortListAnalytics = data => {
   const { _id } = data;
   router.push(`/shortlists/shortlistanalytics/?id=${_id}`);
@@ -28,7 +38,6 @@ const columns = [
           <div>{name}</div>
           <div>{description}</div>
           <div>{email}</div>
-          <a onClick={() => openShortListAnalytics(data)}>View Analytics </a>
         </>
       );
     },
@@ -73,25 +82,45 @@ const columns = [
       }
     },
   },
-  {
-    title: 'Share Link',
-    fixed: 'right',
-    render: data => {
-      const { shortUrl } = data;
 
-      return (
-        <Tooltip title="Click to copy">
-          <CopyToClipboard
-            text={getHttpUrl(shortUrl)}
-            onCopy={() => message.success('Link Copied')}
-          >
-            <a>{shortUrl || '-'}</a>
-          </CopyToClipboard>
-        </Tooltip>
-      );
-    },
+  {
+    title: '',
+    fixed: 'right',
+    render: data => <Actions data={data} />,
   },
 ];
+
+const Actions = ({ data }) => {
+  const [visibility, setVisibility] = useState({ hovered: false, clicked: false });
+  return (
+    <>
+      <Tooltip
+        title="View share link"
+        trigger="hover"
+        visible={visibility.hovered}
+        onVisibleChange={visible => setVisibility({ hovered: visible, clicked: false })}
+      >
+        <Popover
+          title="Share this link with your client"
+          content={<Text copyable>{getHttpUrl(data.shortUrl)}</Text>}
+          trigger="click"
+          visible={visibility.clicked}
+          onVisibleChange={visible => setVisibility({ hovered: false, clicked: visible })}
+        >
+          <Button style={{ marginLeft: 8 }} shape="circle" icon="link" />
+        </Popover>
+      </Tooltip>
+      <Tooltip title="View share link analytics">
+        <Button
+          onClick={() => openShortListAnalytics(data)}
+          style={{ marginLeft: 8 }}
+          shape="circle"
+          icon="pie-chart"
+        />
+      </Tooltip>
+    </>
+  );
+};
 const ShortLists = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(true);
