@@ -103,7 +103,13 @@ const description = (
     <br />
     <div>
       You need to get an API key from Clockwork to configure this. -{' '}
-      <a>Check the tutorial to setup DeepHire with Clockwork</a>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://help.deephire.com/en/article/deephire-clockwork-integration-tt2laq/"
+      >
+        Check the tutorial to setup DeepHire with Clockwork
+      </a>
     </div>
   </div>
 );
