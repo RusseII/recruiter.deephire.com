@@ -107,7 +107,10 @@ const createFormItems = form => {
                     whitespace: true,
                     message: 'Email required.',
                   },
-                  { type: 'email', message: 'Email invalid' },
+                  {
+                    type: 'email',
+                    message: 'Email invalid',
+                  },
                 ],
               })(<Input placeholder="Email" />)}
             </FormItem>
@@ -151,7 +154,7 @@ const InviteCandidates = Form.create()(({ data, form, inviteCandidates, setInvit
       cleanedValueData.fullName = values.fullName.filter(value => value != null);
       cleanedValueData.candidateEmail = values.candidateEmail.filter(value => value != null);
       cleanedValueData.recipients = cleanedValueData.candidateEmail.map((email, i) => {
-        return { email, fullName: cleanedValueData.fullName[i] };
+        return { email: email.toLowerCase(), fullName: cleanedValueData.fullName[i] };
       });
       cleanedValueData.messages = messages;
       await inviteCandidatesToInterview(cleanedValueData, data._id, 'Invites Sent');
