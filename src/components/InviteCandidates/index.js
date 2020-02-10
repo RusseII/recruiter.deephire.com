@@ -16,8 +16,10 @@ import {
   message,
 } from 'antd';
 
-import { getHttpUrl } from '@/utils/utils';
+// import { getHttpUrl } from '@/utils/utils';
 import { inviteCandidatesToInterview } from '@/services/api';
+
+import DirectLink from './DirectLink';
 
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
@@ -278,20 +280,7 @@ const InviteCandidates = Form.create()(({ form, inviteCandidates, setInviteCandi
             }
             key="2"
           >
-            <div style={{ marginTop: 24 }}>{directLinkMessage}</div>
-
-            <Paragraph
-              style={{
-                marginTop: 24,
-                padding: 16,
-                backgroundColor: 'white',
-                fontSize: 15,
-              }}
-              strong
-              copyable
-            >
-              {getHttpUrl(inviteCandidates.shortUrl)}
-            </Paragraph>
+            <DirectLink link={inviteCandidates.shortUrl} message={directLinkMessage} />
           </TabPane>
         </Tabs>
       )}
