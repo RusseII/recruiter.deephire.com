@@ -13,6 +13,7 @@ import {
   Tabs,
   DatePicker,
   Collapse,
+  message,
 } from 'antd';
 
 import { getHttpUrl } from '@/utils/utils';
@@ -28,24 +29,17 @@ const FormItem = Form.Item;
 
 let uuid = 1;
 
-const message1 =
-  'Thank you for your application.  We would like to invite you to complete a video introduction so that we can get to know you a little better.';
-
-const message2 = `We hope that you are well!
-
-We are checking in to make sure that you received our invitation to the video interview. This is an opportunity to get to know you beyond the resume.
-
-We take every application seriously and the videos help us to shortlist for face-to-face interviews. We have included the link again [jobLink].
-
-We are closing applications on the [jobDeadline] and hope that we will hear from you.
+const message1 = `Thank you for your application.  We would like to invite you to complete a video introduction so that we can get to know you a little better.
 `;
 
-const message3 = `Hoping you are well!
+const message2 = `We are checking in to make sure that you received our invitation to the video interview. This is an opportunity to get to know you beyond the resume.
 
-This is a reminder that applications for the [jobTitle] position are closing in [numberOfDays] days. We were excited by your initial interest and hope to receive your interview.
+We take every application seriously and the videos help us to shortlist for face-to-face interviews.
+`;
 
-Due to the high number of applications we receive for our roles, video interviews give us a more accurate assessment of who we progress to the next stages, beyond the resume. Thank you for your understanding and we look forward to your response. We have included a link to the interview [jobLink].
+const message3 = `This is a reminder that applications are closing soon. We were excited by your initial interest and hope to receive your interview.
 
+Thank you, have a great day!
 `;
 const directLinkMessage =
   'This is the Direct Link for candidates to take this interview. If you navigate to this URL, you will see the introductory page to begin the video interview. You can send this link out via email to invite individual candidates, or it can be saved as part of an email template in your ATS/CRM to bulk invite candidates. Please note, we cannot track the invite status for candidates who have been invited this way.';
@@ -150,7 +144,11 @@ const InviteCandidates = Form.create()(({ form, inviteCandidates, setInviteCandi
     e.preventDefault();
     const { validateFields } = form;
     validateFields(async (err, values) => {
-      if (err) return;
+      if (err) {
+        message.error('Fix errors and try again');
+        document.getElementsByClassName('ant-drawer-wrapper-body')[1].scrollTo(0, 0);
+        return;
+      }
       const cleanedValueData = values;
       cleanedValueData.fullName = values.fullName.filter(value => value != null);
       cleanedValueData.candidateEmail = values.candidateEmail.filter(value => value != null);
@@ -251,7 +249,7 @@ const InviteCandidates = Form.create()(({ form, inviteCandidates, setInviteCandi
                         ? inviteCandidates.messages[1]?.message
                         : messages?.[1]?.message
                     }
-                    autoSize={{ minRows: 20 }}
+                    autoSize
                   />
                   <div style={{ marginTop: 16, marginBottom: 8 }}> Send after 5 days </div>
                   <TextArea
@@ -261,7 +259,7 @@ const InviteCandidates = Form.create()(({ form, inviteCandidates, setInviteCandi
                         ? inviteCandidates.messages[2]?.message
                         : messages?.[2]?.message
                     }
-                    autoSize={{ minRows: 20 }}
+                    autoSize
                   />
                 </Panel>
               </Collapse>
