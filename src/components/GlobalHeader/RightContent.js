@@ -1,10 +1,23 @@
+/* global $crisp */
 import React, { PureComponent } from 'react';
 import { FormattedMessage, setLocale, getLocale } from 'umi/locale';
-import { Spin, Tag, Menu, Icon, Dropdown, Avatar } from 'antd';
+import { Spin, Tag, Menu, Icon, Dropdown, Avatar, Tooltip, Badge } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import styles from './index.less';
 
+const bugEvent = () => {
+  $crisp.push(['do', 'chat:open']);
+  $crisp.push(['do', 'message:send', ['text', "I'd like to report a bug."]]);
+};
+
+const ReportBug = () => (
+  <Tooltip title="Report a bug">
+    <Badge style={{ marginRight: 8 }} dot>
+      <Icon onClick={bugEvent} style={{ marginRight: 8 }} type="bug" />
+    </Badge>
+  </Tooltip>
+);
 export default class GlobalHeaderRight extends PureComponent {
   getNoticeData() {
     const { notices = [] } = this.props;
@@ -73,6 +86,7 @@ export default class GlobalHeaderRight extends PureComponent {
     }
     return (
       <div className={className}>
+        <ReportBug />
         {currentUser.name ? (
           <Dropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
