@@ -40,12 +40,12 @@ window.addEventListener('sw.updated', e => {
         reloadSW();
       }}
     >
-      Reload
+      Refresh
     </Button>
   );
   notification.open({
-    message: 'There has been an update',
-    description: 'Please reload for the latest changes',
+    message: 'New Update',
+    description: 'A new version of DeepHire is avaliable.',
     btn,
     key,
     onClose: async () => {},
