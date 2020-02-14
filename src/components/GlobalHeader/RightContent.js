@@ -13,7 +13,7 @@ const bugEvent = () => {
 
 const ReportBug = () => (
   <Tooltip title="Report a bug">
-    <Badge style={{ marginRight: 8 }}>
+    <Badge style={{ marginRight: 8 }} dot>
       <Icon onClick={bugEvent} style={{ marginRight: 8 }} type="bug" />
     </Badge>
   </Tooltip>
