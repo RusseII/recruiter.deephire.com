@@ -48,6 +48,7 @@ window.addEventListener('sw.updated', e => {
     description: 'A new version of DeepHire is avaliable.',
     btn,
     key,
+    duration: null,
     onClose: async () => {},
   });
 });
