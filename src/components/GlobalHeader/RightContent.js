@@ -1,7 +1,7 @@
 /* global $crisp */
 import React, { PureComponent } from 'react';
 import { FormattedMessage, setLocale, getLocale } from 'umi/locale';
-import { Spin, Tag, Menu, Icon, Dropdown, Avatar, Tooltip, Badge } from 'antd';
+import { Spin, Tag, Menu, Icon, Dropdown, Avatar, Tooltip } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import styles from './index.less';
@@ -13,9 +13,7 @@ const bugEvent = () => {
 
 const ReportBug = () => (
   <Tooltip title="Report a bug">
-    <Badge style={{ marginRight: 8 }} dot>
-      <Icon onClick={bugEvent} style={{ marginRight: 8 }} type="bug" />
-    </Badge>
+    <Icon onClick={bugEvent} style={{ marginRight: 8 }} type="bug" />
   </Tooltip>
 );
 export default class GlobalHeaderRight extends PureComponent {
