@@ -41,6 +41,7 @@ const CandidateCard = ({ item }) => (
           shape="circle"
           size="large"
           icon="user"
+          key={item.responses[0] ? item.responses[0].thumbnail100x100 : null}
           src={item.responses[0] ? item.responses[0].thumbnail100x100 : null}
         />
       }
