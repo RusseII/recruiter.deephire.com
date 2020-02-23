@@ -13,6 +13,7 @@ import {
   Form,
   Tooltip,
   Popconfirm,
+  Select,
 } from 'antd';
 import readableTime from 'readable-timestamp';
 import { connect } from 'dva';
@@ -24,6 +25,8 @@ import {
   putInvites,
   deleteUsers,
 } from '@/services/api';
+
+const { Option } = Select;
 
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
@@ -210,9 +213,9 @@ const InviteForm = Form.create()(props => {
     form.validateFields(async (err, fieldsValue) => {
       if (err) return;
       form.resetFields();
-      const { invitedEmail } = fieldsValue;
+      const { invitedEmail, role } = fieldsValue;
       const successMessage = `Invited ${invitedEmail}`;
-      sendInvites(invitedEmail, 'admin', successMessage);
+      sendInvites(invitedEmail, role, successMessage);
 
       toggleVisible(false);
       reload(flag => !flag);
@@ -234,10 +237,18 @@ const InviteForm = Form.create()(props => {
               { type: 'email', message: 'The input is not valid E-mail!' },
               {
                 required: true,
-                message: 'Please input your email address!',
+                message: 'Please input the email address to invite',
               },
             ],
           })(<Input placeholder="email" />)}
+        </FormItem>
+        <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 15 }} label="Role">
+          {form.getFieldDecorator('role', { initialValue: 'user' })(
+            <Select style={{ width: 120 }}>
+              <Option value="user">user</Option>
+              <Option value="admin">admin</Option>
+            </Select>
+          )}
         </FormItem>
       </Form>
     </Modal>
