@@ -199,7 +199,6 @@ const Team = () => {
           </Spin>
         </TabPane>
       </Tabs>
-      ,
     </div>
   );
 };
