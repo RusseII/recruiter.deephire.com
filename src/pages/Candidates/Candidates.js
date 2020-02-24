@@ -1,11 +1,21 @@
-import { AutoComplete, Card, Checkbox, Col, List, Row, ConfigProvider } from 'antd';
+import {
+  AutoComplete,
+  Card,
+  Checkbox,
+  Col,
+  List,
+  Row,
+  ConfigProvider,
+  Popconfirm,
+  Button,
+} from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import CandidateCard from '@/components/CandidateCard';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 import ArchiveButton from '@/components/ArchiveButton';
 
-import { getArchivedVideos, getVideos } from '@/services/api';
+import { getArchivedVideos, getVideos, removeCandidates } from '@/services/api';
 import styles from './Candidates.less';
 import customEmpty from '@/components/CustomEmpty';
 
@@ -62,6 +72,12 @@ const Candidates = () => {
     setFilteredData(filteredData);
   };
 
+  const handleDelete = () => {
+    // removes multiple candidates
+    removeCandidates(selectedCards, 'Deleted candidate ata');
+    setSelectedCards([]);
+    getData();
+  };
   return (
     <PageHeaderWrapper title="Candidates">
       <Card>
@@ -73,13 +89,25 @@ const Candidates = () => {
               candidateData={selectedCards}
             />
             {selectedCards.length !== 0 && (
-              <ArchiveButton
-                onClick={() => setSelectedCards([])}
-                reload={getData}
-                archives={archives}
-                route="videos"
-                archiveData={selectedCards}
-              />
+              <span>
+                <ArchiveButton
+                  onClick={() => setSelectedCards([])}
+                  reload={getData}
+                  archives={archives}
+                  route="videos"
+                  archiveData={selectedCards}
+                />
+
+                <Popconfirm
+                  title="Permanently delete selected videos?"
+                  onConfirm={handleDelete}
+                  // onCancel={cancel}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button style={{ marginRight: 16 }}>Delete</Button>
+                </Popconfirm>
+              </span>
             )}
 
             <AutoComplete

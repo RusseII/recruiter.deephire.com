@@ -374,8 +374,8 @@ export async function deleteShortList(params) {
   return getShortLists();
 }
 
-export async function removeCandidate(params) {
-  const { selectedRows } = params;
+export async function removeCandidates(selectedRows, successMessage) {
+  // const { selectedRows } = params;
 
   await Promise.all(
     selectedRows.map(async value => {
@@ -387,10 +387,14 @@ export async function removeCandidate(params) {
       return res;
     })
   );
-  return request(`${newApi}/videos`, {
-    method: 'GET',
-    headers: setHeaders(),
-  });
+  return request(
+    `${newApi}/videos`,
+    {
+      method: 'GET',
+      headers: setHeaders(),
+    },
+    successMessage
+  );
 }
 
 export async function updateRule(params = {}) {
