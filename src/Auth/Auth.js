@@ -56,14 +56,14 @@ export default class Auth {
     return this.auth0.client.userInfo(accessToken, cb);
   };
 
-  signup = (email, password, name, company, companyId) => {
+  signup = (email, password, name, userMetadata) => {
     this.auth0.signup(
       {
         connection: AUTH_CONFIG.dbConnectionName,
         email,
         password,
         name,
-        user_metadata: { company, companyId },
+        user_metadata: userMetadata,
       },
       err => {
         if (err) {

@@ -115,15 +115,22 @@ class LoginPage extends Component {
         } else {
           const { inviteData } = this.state;
           let _id;
+          let role;
           if (inviteData) {
             _id = ObjectID(inviteData.companyId);
+            // eslint-disable-next-line prefer-destructuring
+            role = inviteData.role;
           } else {
             _id = ObjectID();
             const companyData = { _id, owner: values.email, companyName: values.company };
             createCompany(companyData);
           }
 
-          auth.signup(values.email, values.password, values.name, values.company, _id);
+          auth.signup(values.email, values.password, values.name, {
+            company: values.company,
+            companyId: _id,
+            role,
+          });
         }
       }
     });
