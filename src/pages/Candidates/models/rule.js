@@ -6,7 +6,6 @@ import {
   updateRule,
   shareShortLink,
   removeInterview,
-  removeCandidate,
 } from '@/services/api';
 
 export default {
@@ -42,6 +41,7 @@ export default {
       if (callback) callback();
     },
 
+    // eslint-disable-next-line no-unused-vars
     *view_interviews({ thisVariableDoesNothingButErrorsOnRemove }, { call, put }) {
       let response = yield call(getInterviews);
       response = { list: response };
@@ -60,19 +60,19 @@ export default {
       if (callback) callback();
     },
 
-    *removeCandidate({ payload, callback }, { call, put }) {
-      let response = yield call(removeCandidate, payload);
-      response.forEach((resp, index) => {
-        response[index].key = index;
-      });
-      response = { list: response };
+    // *removeCandidate({ payload, callback }, { call, put }) {
+    //   let response = yield call(removeCandidate, payload);
+    //   response.forEach((resp, index) => {
+    //     response[index].key = index;
+    //   });
+    //   response = { list: response };
 
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
+    //   yield put({
+    //     type: 'save',
+    //     payload: response,
+    //   });
+    //   if (callback) callback();
+    // },
 
     *removeInterview({ payload, callback }, { call, put }) {
       let response = yield call(removeInterview, payload);
