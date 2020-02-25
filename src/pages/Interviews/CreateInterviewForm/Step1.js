@@ -248,7 +248,7 @@ class Step1 extends React.PureComponent {
 
             <div className={styles.desc}>
               <h3>Next Steps</h3>
-              <h4>Receive Link</h4>x{' '}
+              <h4>Receive Link</h4>
               <p>Once you click Create Interview, you will receive a link.</p>
               <h4>Send to Candidates</h4>
               <p>Put the link you receive in your job posting, or send it to candidates.</p>
