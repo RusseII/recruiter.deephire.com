@@ -74,7 +74,7 @@ const Candidates = () => {
 
   const handleDelete = () => {
     // removes multiple candidates
-    removeCandidates(selectedCards, 'Deleted candidate ata');
+    removeCandidates(selectedCards, 'Deleted candidate data');
     setSelectedCards([]);
     getData();
   };
