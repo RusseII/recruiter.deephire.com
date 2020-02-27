@@ -25,7 +25,9 @@ import {
   putInvites,
   deleteUsers,
 } from '@/services/api';
+import { getAuthority } from '@/utils/authority';
 
+const isAdmin = getAuthority === ['admin'];
 const { Option } = Select;
 
 const FormItem = Form.Item;
@@ -79,27 +81,29 @@ const Team = () => {
         return displayTime;
       },
     },
-    {
-      title: 'Actions',
-      render(test, data) {
-        const { name, user_id: userId } = data;
-        return (
-          <Popconfirm
-            title={`Are you sure you want to delete ${name}?`}
-            onConfirm={() => deleteUser(userId, name)}
-            okText="Delete User"
-            okType="danger"
-            cancelText="Cancel"
-          >
-            <Tooltip placement="left" title="Delete User">
-              <Button shape="circle">
-                <Icon type="delete" />
-              </Button>
-            </Tooltip>
-          </Popconfirm>
-        );
-      },
-    },
+    isAdmin
+      ? {
+          title: 'Actions',
+          render(test, data) {
+            const { name, user_id: userId } = data;
+            return (
+              <Popconfirm
+                title={`Are you sure you want to delete ${name}?`}
+                onConfirm={() => deleteUser(userId, name)}
+                okText="Delete User"
+                okType="danger"
+                cancelText="Cancel"
+              >
+                <Tooltip placement="left" title="Delete User">
+                  <Button shape="circle">
+                    <Icon type="delete" />
+                  </Button>
+                </Tooltip>
+              </Popconfirm>
+            );
+          },
+        }
+      : {},
   ];
 
   const columnsInvites = [
@@ -120,42 +124,44 @@ const Team = () => {
       title: 'Invited By',
       dataIndex: 'createdBy',
     },
-    {
-      title: 'Actions',
-      render(test, data) {
-        const { invitedEmail, _id } = data;
-        return (
-          <>
-            <Popconfirm
-              title={`Resend an invite to ${invitedEmail}?`}
-              onConfirm={() => resendInvite(_id, invitedEmail)}
-              okText="Resend Invite"
-              cancelText="Cancel"
-            >
-              <Tooltip placement="left" title="Resend Invite">
-                <Button shape="circle">
-                  <Icon type="reload" />
-                </Button>
-              </Tooltip>
-            </Popconfirm>
+    isAdmin
+      ? {
+          title: 'Actions',
+          render(test, data) {
+            const { invitedEmail, _id } = data;
+            return (
+              <>
+                <Popconfirm
+                  title={`Resend an invite to ${invitedEmail}?`}
+                  onConfirm={() => resendInvite(_id, invitedEmail)}
+                  okText="Resend Invite"
+                  cancelText="Cancel"
+                >
+                  <Tooltip placement="left" title="Resend Invite">
+                    <Button shape="circle">
+                      <Icon type="reload" />
+                    </Button>
+                  </Tooltip>
+                </Popconfirm>
 
-            <Popconfirm
-              title={`Are you sure you want to delete ${invitedEmail}'s invite?`}
-              onConfirm={() => deleteInvite(_id, invitedEmail)}
-              okText="Delete Invite"
-              okType="danger"
-              cancelText="Cancel"
-            >
-              <Tooltip placement="left" title="Delete Invite">
-                <Button style={{ marginLeft: 5 }} shape="circle">
-                  <Icon type="delete" />
-                </Button>
-              </Tooltip>
-            </Popconfirm>
-          </>
-        );
-      },
-    },
+                <Popconfirm
+                  title={`Are you sure you want to delete ${invitedEmail}'s invite?`}
+                  onConfirm={() => deleteInvite(_id, invitedEmail)}
+                  okText="Delete Invite"
+                  okType="danger"
+                  cancelText="Cancel"
+                >
+                  <Tooltip placement="left" title="Delete Invite">
+                    <Button style={{ marginLeft: 5 }} shape="circle">
+                      <Icon type="delete" />
+                    </Button>
+                  </Tooltip>
+                </Popconfirm>
+              </>
+            );
+          },
+        }
+      : {},
   ];
 
   useEffect(() => {
@@ -176,15 +182,17 @@ const Team = () => {
       </Row>
       <Tabs
         tabBarExtraContent={
-          <Button
-            type="primary"
-            ghost
-            onClick={() => setInviteUsers(true)}
-            style={{ marginBottom: 12 }}
-            icon="plus"
-          >
-            Invite Users
-          </Button>
+          isAdmin ? (
+            <Button
+              type="primary"
+              ghost
+              onClick={() => setInviteUsers(true)}
+              style={{ marginBottom: 12 }}
+              icon="plus"
+            >
+              Invite Users
+            </Button>
+          ) : null
         }
         defaultActiveKey="1"
       >
