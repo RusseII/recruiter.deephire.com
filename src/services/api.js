@@ -241,8 +241,8 @@ export async function shareShortLink(data) {
   return x;
 }
 
-export async function sendInvites(invitedEmail, role, successMessage) {
-  const data = { invitedEmail, role };
+export async function sendInvites(invitedEmail, role, team, successMessage) {
+  const data = { invitedEmail, role, team };
   const x = request(
     `${newApi}/companies/invites`,
     {

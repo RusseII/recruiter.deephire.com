@@ -28,7 +28,7 @@ import {
 } from '@/services/api';
 import { getAuthority } from '@/utils/authority';
 
-const isAdmin = getAuthority === ['admin'];
+const isAdmin = JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 const { Option } = Select;
 
 const FormItem = Form.Item;
@@ -76,7 +76,7 @@ const Team = () => {
     },
     {
       title: 'Role',
-      dataIndex: 'app_metadata.role',
+      // dataIndex: 'app_metadata.role',
       render(test, data) {
         const {
           app_metadata: { role },
@@ -93,6 +93,17 @@ const Team = () => {
         return displayTime;
       },
     },
+    {
+      title: 'Team',
+      // dataIndex: 'app_metadata.role',
+      render(test, data) {
+        const {
+          app_metadata: { team },
+        } = data;
+        return <Tag>{team}</Tag>;
+      },
+    },
+
     isAdmin
       ? {
           title: 'Actions',
@@ -232,9 +243,9 @@ const InviteForm = Form.create()(props => {
     form.validateFields(async (err, fieldsValue) => {
       if (err) return;
       form.resetFields();
-      const { invitedEmail, role } = fieldsValue;
+      const { invitedEmail, role, team } = fieldsValue;
       const successMessage = `Invited ${invitedEmail}`;
-      sendInvites(invitedEmail, role, successMessage);
+      sendInvites(invitedEmail, role, team, successMessage);
 
       toggleVisible(false);
       reload(flag => !flag);
@@ -268,6 +279,9 @@ const InviteForm = Form.create()(props => {
               <Option value="admin">admin</Option>
             </Select>
           )}
+        </FormItem>
+        <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 15 }} label="Team">
+          {form.getFieldDecorator('team')(<Input placeholder="team" />)}
         </FormItem>
       </Form>
     </Modal>

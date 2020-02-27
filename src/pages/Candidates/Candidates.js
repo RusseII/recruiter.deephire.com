@@ -22,7 +22,7 @@ import customEmpty from '@/components/CustomEmpty';
 import GlobalContext from '@/layouts/MenuContext';
 import { getAuthority } from '@/utils/authority';
 
-const isAdmin = getAuthority === ['admin'];
+const isAdmin = JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const Candidates = () => {
   const [selectedCards, setSelectedCards] = useState([]);
