@@ -14,6 +14,7 @@ import {
   Tooltip,
   Popconfirm,
   Select,
+  Tag,
 } from 'antd';
 import readableTime from 'readable-timestamp';
 import { connect } from 'dva';
@@ -68,9 +69,20 @@ const Team = () => {
         );
       },
     },
+
     {
       title: 'Email',
       dataIndex: 'email',
+    },
+    {
+      title: 'Role',
+      dataIndex: 'app_metadata.role',
+      render(test, data) {
+        const {
+          app_metadata: { role },
+        } = data;
+        return <Tag>{role}</Tag>;
+      },
     },
     {
       title: 'Last Login',
