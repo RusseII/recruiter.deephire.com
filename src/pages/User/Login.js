@@ -115,11 +115,14 @@ class LoginPage extends Component {
         } else {
           const { inviteData } = this.state;
           let _id;
-          let role;
+          let role = 'admin';
+          let team;
           if (inviteData) {
             _id = ObjectID(inviteData.companyId);
             // eslint-disable-next-line prefer-destructuring
             role = inviteData.role;
+            // eslint-disable-next-line prefer-destructuring
+            team = inviteData.team;
           } else {
             _id = ObjectID();
             const companyData = { _id, owner: values.email, companyName: values.company };
@@ -130,6 +133,7 @@ class LoginPage extends Component {
             company: values.company,
             companyId: _id,
             role,
+            team,
           });
         }
       }

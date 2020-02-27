@@ -101,6 +101,13 @@ export async function getCandidateProfile(id) {
   });
 }
 
+export async function getRecruiterProfile() {
+  return request(`${newApi}/profiles`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
 export async function removeCandidateDocument(email, id) {
   return request(`${newApi}/candidates/${email}/documents/${id}`, {
     method: 'DELETE',
@@ -234,8 +241,8 @@ export async function shareShortLink(data) {
   return x;
 }
 
-export async function sendInvites(invitedEmail, role, successMessage) {
-  const data = { invitedEmail, role };
+export async function sendInvites(invitedEmail, role, team, successMessage) {
+  const data = { invitedEmail, role, team };
   const x = request(
     `${newApi}/companies/invites`,
     {

@@ -18,7 +18,9 @@ import Footer from './Footer';
 import Header from './Header';
 import GlobalContext from './MenuContext';
 import Exception403 from '../pages/Exception/403';
-import { getProduct } from '@/services/api';
+import { getProduct, getRecruiterProfile } from '@/services/api';
+import { setAuthority } from '../utils/authority';
+import { reloadAuthorized } from '../utils/Authorized';
 
 const { Content } = Layout;
 
@@ -91,9 +93,21 @@ class BasicLayout extends React.PureComponent {
     videos: [],
     shareLinks: [],
     stripeProduct: { metadata: { allowedInterviews: '200' } },
+    recruiterProfile: {},
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+    const recruiterProfile = await getRecruiterProfile();
+    // eslint-disable-next-line camelcase
+    if (recruiterProfile?.app_metadata) {
+      const { role } = recruiterProfile.app_metadata;
+      if (role === 'admin' || role === 'user') {
+        setAuthority(role);
+        reloadAuthorized();
+      }
+      this.setState({ recruiterProfile });
+    }
+
     const { dispatch } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
@@ -137,7 +151,7 @@ class BasicLayout extends React.PureComponent {
 
   getContext() {
     const { location } = this.props;
-    const { interviews, videos, shareLinks, stripeProduct } = this.state;
+    const { interviews, videos, shareLinks, stripeProduct, recruiterProfile } = this.state;
     const setInterviews = interviews => {
       this.setState({ interviews });
     };
@@ -160,6 +174,7 @@ class BasicLayout extends React.PureComponent {
       shareLinks,
       setShareLinks,
       stripeProduct,
+      recruiterProfile,
     };
   }
 
