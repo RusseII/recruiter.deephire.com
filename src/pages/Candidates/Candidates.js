@@ -20,6 +20,9 @@ import styles from './Candidates.less';
 import customEmpty from '@/components/CustomEmpty';
 
 import GlobalContext from '@/layouts/MenuContext';
+import { getAuthority } from '@/utils/authority';
+
+const isAdmin = getAuthority === ['admin'];
 
 const Candidates = () => {
   const [selectedCards, setSelectedCards] = useState([]);
@@ -98,15 +101,19 @@ const Candidates = () => {
                   archiveData={selectedCards}
                 />
 
-                <Popconfirm
-                  title="Permanently delete selected videos?"
-                  onConfirm={handleDelete}
-                  // onCancel={cancel}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Button style={{ marginRight: 16 }}>Delete</Button>
-                </Popconfirm>
+                {isAdmin ? (
+                  <Popconfirm
+                    title="Permanently delete selected videos? All data will be deleted from our servers & unrecoverable."
+                    onConfirm={handleDelete}
+                    // onCancel={cancel}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button type="danger" style={{ marginRight: 16 }}>
+                      Delete
+                    </Button>
+                  </Popconfirm>
+                ) : null}
               </span>
             )}
 
