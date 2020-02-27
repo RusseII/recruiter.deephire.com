@@ -15,7 +15,7 @@ export default [
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
-    authority: ['user'],
+    authority: ['admin', 'user'],
     routes: [
       { path: '/', redirect: 'candidates/candidates' },
 
@@ -49,7 +49,7 @@ export default [
         path: '/interview/view',
         icon: 'read',
         name: 'View Created Interviews',
-        authority: ['user'],
+        authority: ['admin', 'user'],
         component: './Candidates/ViewInterviews',
       },
       {
@@ -61,7 +61,7 @@ export default [
       {
         path: '/candidates/view-candidate',
         name: 'viewCandidate',
-        authority: ['user'],
+        authority: ['admin', 'user'],
         component: './Candidates/ViewCandidate',
         hideInMenu: true,
       },
@@ -74,7 +74,7 @@ export default [
       {
         path: '/shortlists/shortlistanalytics',
         name: 'shortListAnalytics',
-        authority: ['user'],
+        authority: ['admin', 'user'],
         component: './ShortLists/ShortListAnalytics',
         hideInMenu: true,
       },
@@ -103,6 +103,7 @@ export default [
             component: './Account/Settings/IntegrationSettings',
           },
           {
+            authority: ['admin'],
             path: '/account/settings/billing',
             component: './Account/Settings/BillingSettings',
           },

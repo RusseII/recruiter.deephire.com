@@ -101,6 +101,13 @@ export async function getCandidateProfile(id) {
   });
 }
 
+export async function getRecruiterProfile() {
+  return request(`${newApi}/profiles`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
 export async function removeCandidateDocument(email, id) {
   return request(`${newApi}/candidates/${email}/documents/${id}`, {
     method: 'DELETE',
