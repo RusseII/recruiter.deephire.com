@@ -143,6 +143,12 @@ const ShortLists = () => {
   const getData = async () => {
     setLoading(true);
     const data = await (archives ? getArchivedShortlists() : getShortLists());
+    // eslint-disable-next-line camelcase
+    const team = globalData?.recruiterProfile?.app_metadata?.team;
+    if (team) {
+      // TODO ADD BACK IN FILTER FOR SHARE LISTS
+      // data = data.filter(shareLink => shareLink.createdByTeam === team);
+    }
     createDataSource(data || []);
     globalData.setShareLinks(data || []);
     setFilteredData(data || []);
