@@ -36,7 +36,9 @@ const TableList = () => {
   const [unArchivedInterviewCount, setUnArchivedInterviewCount] = useState(' ');
 
   const globalData = useContext(GlobalContext);
-  const { interviews, setInterviews, stripeProduct } = globalData;
+  const { interviews, setInterviews, stripeProduct, recruiterProfile } = globalData;
+  // eslint-disable-next-line camelcase
+  const team = recruiterProfile?.app_metadata?.team;
   // if (interviews) {
   //   interviews = interviews.map((interview, i) => ({ key: `interview-${i}`, ...interview }));
   // }
@@ -135,6 +137,10 @@ const TableList = () => {
     } else {
       data = await getInterviews();
       setUnArchivedInterviewCount(data.length || 0);
+    }
+    if (team) {
+      // TODO ADD THIS BACK IN TO SEPERATE INTO TEAMS
+      // data = data.filter(interview => interview.createdByTeam === team);
     }
     setInterviews(data || []);
     setLoading(false);
