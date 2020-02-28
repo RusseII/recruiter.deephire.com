@@ -144,12 +144,17 @@ class Step1 extends React.PureComponent {
   onValidateForm = e => {
     const { form, dispatch, data, onClick, setReload } = this.props;
     const { validateFields } = form;
+    const {
+      recruiterProfile: {
+        app_metadata: { team },
+      },
+    } = this.context;
 
     e.preventDefault();
     validateFields(async (err, values) => {
       if (!err) {
         // sometimes there was null values inside the array, which broke everything
-        const cleanedValueData = values;
+        const cleanedValueData = { ...values, createdByTeam: team };
         cleanedValueData.interviewQuestions = values.interviewQuestions.filter(
           value => value != null
         );

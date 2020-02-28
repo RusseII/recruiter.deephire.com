@@ -14,12 +14,20 @@ const setHeaders = () => ({
 });
 
 export async function createInterview(params) {
-  const { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions } = params;
+  const {
+    prepTime,
+    retakesAllowed,
+    answerTime,
+    interviewName,
+    interviewQuestions,
+    createdByTeam,
+  } = params;
   const questions = interviewQuestions.map(a => ({
     question: a,
   }));
 
   const body = {
+    createdByTeam,
     interviewName,
     interviewQuestions: questions,
     interviewConfig: { retakesAllowed, prepTime, answerTime },
