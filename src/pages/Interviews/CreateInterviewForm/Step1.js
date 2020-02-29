@@ -229,7 +229,7 @@ class Step1 extends React.PureComponent {
             <span className="ant-form-text"> seconds per question</span>
           </FormItem>
 
-          <FormItem {...(data ? drawerLayout : formItemLayoutHidden)} label="Record Time">
+          <FormItem {...(data ? drawerLayout : formItemLayout)} label="Record Time">
             {getFieldDecorator('answerTime', {
               initialValue: interviewConfig.answerTime || 90,
             })(<InputNumber min={15} max={1000} />)}
