@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { Tooltip, Icon, Button, Row, Modal, Form, Input, Col, Checkbox, message } from 'antd';
-import Result from '@/components/Result';
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { connect } from 'dva';
+import Result from '@/components/Result';
 import { getHttpUrl } from '@/utils/utils';
+import GlobalContext from '@/layouts/MenuContext';
 
 const FormItem = Form.Item;
 
@@ -59,11 +60,22 @@ class ShareCandidateButton extends React.Component {
   createLinkButton = () => {
     const { candidateData, form } = this.props;
     const { currentStep, hideInfo } = this.state;
+    const {
+      recruiterProfile: {
+        app_metadata: { team },
+      },
+    } = this.context;
     form.validateFields((err, data) => {
       if (err) return;
       const { description, name } = data;
       form.resetFields();
-      const shortList = { description, name, hideInfo, interviews: candidateData };
+      const shortList = {
+        description,
+        name,
+        hideInfo,
+        interviews: candidateData,
+        createdByTeam: team,
+      };
       this.createLink(shortList);
       this.setState({ shareName: name, currentStep: currentStep + 1 });
     });
@@ -140,6 +152,8 @@ class ShareCandidateButton extends React.Component {
     }
     return null;
   };
+
+  static contextType = GlobalContext;
 
   render() {
     const { currentStep } = this.state;
