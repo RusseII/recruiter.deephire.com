@@ -129,7 +129,10 @@ const ShortLists = () => {
 
   const globalData = useContext(GlobalContext);
   const [filteredData, setFilteredData] = useState(globalData.shareLinks);
+  const recruiterProfile = globalData?.recruiterProfile;
 
+  // eslint-disable-next-line camelcase
+  const team = recruiterProfile?.app_metadata?.team;
   const createDataSource = data => {
     const searchDataSource = [];
     data.forEach(shortList => {
@@ -140,14 +143,14 @@ const ShortLists = () => {
     setDataSource(unique);
   };
 
+  useEffect(() => {});
   const getData = async () => {
     setLoading(true);
-    const data = await (archives ? getArchivedShortlists() : getShortLists());
+    let data = await (archives ? getArchivedShortlists() : getShortLists());
     // eslint-disable-next-line camelcase
-    const team = globalData?.recruiterProfile?.app_metadata?.team;
+
     if (team) {
-      // TODO ADD BACK IN FILTER FOR SHARE LISTS
-      // data = data.filter(shareLink => shareLink.createdByTeam === team);
+      data = data.filter(shareLink => shareLink.createdByTeam === team);
     }
     createDataSource(data || []);
     globalData.setShareLinks(data || []);
@@ -156,8 +159,10 @@ const ShortLists = () => {
   };
 
   useEffect(() => {
-    getData();
-  }, [archives]);
+    if (recruiterProfile) {
+      getData();
+    }
+  }, [archives, recruiterProfile]);
 
   const shouldClear = value => {
     if (!value) {

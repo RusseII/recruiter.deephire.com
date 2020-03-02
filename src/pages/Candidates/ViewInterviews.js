@@ -139,15 +139,16 @@ const TableList = () => {
       setUnArchivedInterviewCount(data.length || 0);
     }
     if (team) {
-      // TODO ADD THIS BACK IN TO SEPERATE INTO TEAMS
-      // data = data.filter(interview => interview.createdByTeam === team);
+      data = data.filter(interview => interview.createdByTeam === team);
     }
     setInterviews(data || []);
     setLoading(false);
   };
   useEffect(() => {
-    getData();
-  }, [archives, reload]);
+    if (recruiterProfile) {
+      getData();
+    }
+  }, [archives, reload, recruiterProfile]);
 
   return (
     <PageHeaderWrapper title="Interviews">
