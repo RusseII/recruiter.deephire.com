@@ -93,11 +93,13 @@ class BasicLayout extends React.PureComponent {
     videos: [],
     shareLinks: [],
     stripeProduct: { metadata: { allowedInterviews: '200' } },
-    recruiterProfile: {},
+    recruiterProfile: undefined,
   };
 
   async componentDidMount() {
     const recruiterProfile = await getRecruiterProfile();
+    this.setState({ recruiterProfile });
+
     // eslint-disable-next-line camelcase
     if (recruiterProfile?.app_metadata) {
       const { role } = recruiterProfile.app_metadata;
@@ -105,7 +107,6 @@ class BasicLayout extends React.PureComponent {
         setAuthority(role);
         reloadAuthorized();
       }
-      this.setState({ recruiterProfile });
     }
 
     const { dispatch } = this.props;

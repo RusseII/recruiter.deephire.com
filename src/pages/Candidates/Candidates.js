@@ -31,7 +31,10 @@ const Candidates = () => {
   const [archives, setArchives] = useState(false);
 
   const globalData = useContext(GlobalContext);
-  const { videos, setVideos } = globalData;
+  const { videos, setVideos, recruiterProfile } = globalData;
+
+  // eslint-disable-next-line camelcase
+  const team = recruiterProfile?.app_metadata?.team;
 
   const [filteredData, setFilteredData] = useState(videos);
 
@@ -48,7 +51,12 @@ const Candidates = () => {
 
   const getData = async () => {
     setLoading(true);
-    const data = await (archives ? getArchivedVideos() : getVideos());
+    let data = await (archives ? getArchivedVideos() : getVideos());
+    if (team) {
+      data = data.filter(
+        video => video.completeInterviewData?.interviewData?.createdByTeam === team
+      );
+    }
     createDataSource(data || []);
     setVideos(data || []);
     setFilteredData(data || []);
@@ -56,8 +64,10 @@ const Candidates = () => {
   };
 
   useEffect(() => {
-    getData();
-  }, [archives]);
+    if (recruiterProfile) {
+      getData();
+    }
+  }, [archives, recruiterProfile]);
 
   const shouldClear = value => {
     if (!value) {
