@@ -4,8 +4,6 @@ import {
   Input,
   Table,
   Button,
-  Row,
-  Col,
   Modal,
   Tabs,
   Avatar,
@@ -76,7 +74,6 @@ const Team = () => {
     },
     {
       title: 'Role',
-      // dataIndex: 'app_metadata.role',
       render(test, data) {
         const {
           app_metadata: { role },
@@ -135,6 +132,13 @@ const Team = () => {
       dataIndex: 'invitedEmail',
     },
     {
+      title: 'Role',
+      render(test, data) {
+        const { role } = data;
+        return <Tag>{role}</Tag>;
+      },
+    },
+    {
       title: 'Invited At',
       render(test, data) {
         const { timestamp } = data;
@@ -146,6 +150,15 @@ const Team = () => {
     {
       title: 'Invited By',
       dataIndex: 'createdBy',
+    },
+
+    {
+      title: 'Team',
+      // dataIndex: 'app_metadata.role',
+      render(test, data) {
+        const { team } = data;
+        return <Tag>{team}</Tag>;
+      },
     },
     isAdmin
       ? {
@@ -200,9 +213,7 @@ const Team = () => {
   return (
     <div style={{ paddingTop: 12 }}>
       <InviteForm reload={setReload} visible={inviteUsers} toggleVisible={setInviteUsers} />
-      <Row justify="end" type="flex">
-        <Col />
-      </Row>
+
       <Tabs
         tabBarExtraContent={
           isAdmin ? (
