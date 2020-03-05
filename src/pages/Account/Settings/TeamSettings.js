@@ -4,8 +4,6 @@ import {
   Input,
   Table,
   Button,
-  Row,
-  Col,
   Modal,
   Tabs,
   Avatar,
@@ -200,9 +198,7 @@ const Team = () => {
   return (
     <div style={{ paddingTop: 12 }}>
       <InviteForm reload={setReload} visible={inviteUsers} toggleVisible={setInviteUsers} />
-      <Row justify="end" type="flex">
-        <Col />
-      </Row>
+
       <Tabs
         tabBarExtraContent={
           isAdmin ? (
