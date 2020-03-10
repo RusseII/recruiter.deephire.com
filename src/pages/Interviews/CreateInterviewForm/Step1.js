@@ -187,7 +187,8 @@ class Step1 extends React.PureComponent {
     const { interviews, stripeProduct } = this.context;
     const { allowedInterviews } = stripeProduct.metadata || {};
 
-    if (interviews.length >= allowedInterviews) {
+    // TODO fix bug where the "cant create interview" is shown for a second in edit interview
+    if (interviews.length >= allowedInterviews && !data) {
       return <CantCreateInterview />;
     }
     return (
