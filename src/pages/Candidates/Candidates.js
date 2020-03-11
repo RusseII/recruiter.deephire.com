@@ -22,7 +22,7 @@ import customEmpty from '@/components/CustomEmpty';
 import GlobalContext from '@/layouts/MenuContext';
 import { getAuthority } from '@/utils/authority';
 
-const isAdmin = JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
+const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const Candidates = () => {
   const [selectedCards, setSelectedCards] = useState([]);
@@ -111,7 +111,7 @@ const Candidates = () => {
                   archiveData={selectedCards}
                 />
 
-                {isAdmin ? (
+                {isAdmin() ? (
                   <Popconfirm
                     title="Permanently delete selected videos? All data will be deleted from our servers & unrecoverable."
                     onConfirm={handleDelete}

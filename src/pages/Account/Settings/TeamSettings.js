@@ -26,7 +26,7 @@ import {
 } from '@/services/api';
 import { getAuthority } from '@/utils/authority';
 
-const isAdmin = JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
+const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 const { Option } = Select;
 
 const FormItem = Form.Item;
@@ -101,7 +101,7 @@ const Team = () => {
       },
     },
 
-    isAdmin
+    isAdmin()
       ? {
           title: 'Actions',
           render(test, data) {
@@ -160,7 +160,7 @@ const Team = () => {
         return <Tag>{team}</Tag>;
       },
     },
-    isAdmin
+    isAdmin()
       ? {
           title: 'Actions',
           render(test, data) {
@@ -216,7 +216,7 @@ const Team = () => {
 
       <Tabs
         tabBarExtraContent={
-          isAdmin ? (
+          isAdmin() ? (
             <Button
               type="primary"
               ghost
