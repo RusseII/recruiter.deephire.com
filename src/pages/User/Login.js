@@ -1,3 +1,4 @@
+/* global $crisp */
 import { Alert, Button, Form, Input, Divider, Typography } from 'antd';
 import { LinkedInLoginButton } from 'react-social-login-buttons';
 import { connect } from 'dva';
@@ -128,6 +129,12 @@ class LoginPage extends Component {
             const companyData = { _id, owner: values.email, companyName: values.company };
             createCompany(companyData);
           }
+
+          $crisp.push([
+            'set',
+            'session:event',
+            [[['user-signup', { time: new Date().toString() }, 'green']]],
+          ]);
 
           auth.signup(values.email, values.password, values.name, {
             company: values.company,
