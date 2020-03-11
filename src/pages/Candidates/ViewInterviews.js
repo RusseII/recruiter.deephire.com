@@ -10,6 +10,7 @@ import {
   Alert,
   Button,
   Drawer,
+  Tag,
 } from 'antd';
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import readableTime from 'readable-timestamp';
@@ -24,6 +25,9 @@ import CloneButton from '@/components/CloneButton';
 import Step1 from '@/pages/Interviews/CreateInterviewForm/Step1';
 import GlobalContext from '@/layouts/MenuContext';
 import InviteCandidates from '@/components/InviteCandidates';
+import { getAuthority } from '@/utils/authority';
+
+const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const TableList = () => {
   const [selectedRows, setSelectedRows] = useState([]);
@@ -70,6 +74,16 @@ const TableList = () => {
         }
       },
     },
+    // TODO - make this only visable if there are teamas
+    isAdmin()
+      ? {
+          title: 'Team',
+          render(test, data) {
+            const { createdByTeam } = data;
+            return <Tag>{createdByTeam}</Tag>;
+          },
+        }
+      : {},
     {
       title: 'Created By',
       render(test, data) {
