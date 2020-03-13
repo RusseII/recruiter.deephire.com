@@ -139,7 +139,8 @@ const InviteCandidates = Form.create()(({ form, inviteCandidates, setInviteCandi
     if (inviteCandidates?.messages) {
       setMessages(inviteCandidates.messages);
     } else {
-      setMessages(basicMessages);
+      // without destructuring this, there is a weird bug where react does not rerender with the new messages
+      setMessages([...basicMessages]);
     }
   }, [inviteCandidates]);
   const handleSubmit = e => {
