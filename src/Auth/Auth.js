@@ -1,3 +1,4 @@
+/* global $crisp */
 import auth0 from 'auth0-js';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
@@ -57,6 +58,11 @@ export default class Auth {
   };
 
   signup = (email, password, name, userMetadata) => {
+    $crisp.push([
+      'set',
+      'session:event',
+      [[['user-signup', { time: new Date().toString() }, 'green']]],
+    ]);
     this.auth0.signup(
       {
         connection: AUTH_CONFIG.dbConnectionName,
