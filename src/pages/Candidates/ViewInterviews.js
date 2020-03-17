@@ -169,6 +169,7 @@ const TableList = () => {
       <InviteCandidates
         setInviteCandidates={setInviteCandidates}
         inviteCandidates={inviteCandidates}
+        setReload={setReload}
       />
 
       <Drawer
