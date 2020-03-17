@@ -133,160 +133,163 @@ const customPanelStyle = {
   border: 'none',
 };
 
-const InviteCandidates = Form.create()(({ form, inviteCandidates, setInviteCandidates }) => {
-  const [messages, setMessages] = useState(null);
-  useEffect(() => {
-    if (inviteCandidates?.messages) {
-      setMessages(inviteCandidates.messages);
-    } else {
-      // without destructuring this, there is a weird bug where react does not rerender with the new messages
-      setMessages([...basicMessages]);
-    }
-  }, [inviteCandidates]);
-  const handleSubmit = e => {
-    e.preventDefault();
-    const { validateFields } = form;
-    validateFields(async (err, values) => {
-      if (err) {
-        message.error('Fix errors and try again');
-        document.getElementsByClassName('ant-drawer-wrapper-body')[1].scrollTo(0, 0);
-        return;
+const InviteCandidates = Form.create()(
+  ({ form, inviteCandidates, setInviteCandidates, setReload }) => {
+    const [messages, setMessages] = useState(null);
+    useEffect(() => {
+      if (inviteCandidates?.messages) {
+        setMessages(inviteCandidates.messages);
+      } else {
+        // without destructuring this, there is a weird bug where react does not rerender with the new messages
+        setMessages([...basicMessages]);
       }
-      const cleanedValueData = values;
-      cleanedValueData.fullName = values.fullName.filter(value => value != null);
-      cleanedValueData.candidateEmail = values.candidateEmail.filter(value => value != null);
-      cleanedValueData.recipients = cleanedValueData.candidateEmail.map((email, i) => {
-        return { email: email.toLowerCase(), fullName: cleanedValueData.fullName[i] };
+    }, [inviteCandidates]);
+    const handleSubmit = e => {
+      e.preventDefault();
+      const { validateFields } = form;
+      validateFields(async (err, values) => {
+        if (err) {
+          message.error('Fix errors and try again');
+          document.getElementsByClassName('ant-drawer-wrapper-body')[1].scrollTo(0, 0);
+          return;
+        }
+        const cleanedValueData = values;
+        cleanedValueData.fullName = values.fullName.filter(value => value != null);
+        cleanedValueData.candidateEmail = values.candidateEmail.filter(value => value != null);
+        cleanedValueData.recipients = cleanedValueData.candidateEmail.map((email, i) => {
+          return { email: email.toLowerCase(), fullName: cleanedValueData.fullName[i] };
+        });
+        cleanedValueData.messages = messages;
+        await inviteCandidatesToInterview(cleanedValueData, inviteCandidates._id, 'Invites Sent');
+        setInviteCandidates(flag => !flag);
+        setReload(flag => !flag);
       });
-      cleanedValueData.messages = messages;
-      await inviteCandidatesToInterview(cleanedValueData, inviteCandidates._id, 'Invites Sent');
-      setInviteCandidates(flag => !flag);
-    });
-  };
-  const change = ({ target: { value } }, i) =>
-    setMessages(messagesArray => {
-      messagesArray[i] = { ...messagesArray[i], message: value };
-      return messagesArray;
-    });
-  const add = () => {
-    const keys = form.getFieldValue('keys');
-    const nextKeys = keys.concat(uuid);
-    uuid += 1;
-    form.setFieldsValue({
-      keys: nextKeys,
-    });
-  };
-  const { getFieldDecorator } = form;
-  return (
-    <Drawer
-      width={window.innerWidth > 720 ? 378 : null}
-      title="Invite Candidates"
-      visible={inviteCandidates}
-      drawerStyle={{ backgroundColor: '#f0f2f5', overflowY: 'scroll' }}
-      //   visible={Boolean(inviteCandidates)}
-      onClose={() => setInviteCandidates(flag => !flag)}
-      //   onOk={() => (!finished ? setFinished(true) : reset())}
-    >
-      <Title level={3}>{inviteCandidates?.interviewName}</Title>
-      {inviteCandidates && (
-        <Tabs defaultActiveKey={inviteCandidates && inviteCandidates.activeTab}>
-          <TabPane
-            tab={
-              <span>
-                <Icon type="user-add" />
-                Individual
-              </span>
-            }
-            key="1"
-          >
-            <Form onSubmit={handleSubmit}>
-              {createFormItems(form)}
-              <Button type="link" onClick={add}>
-                <Icon type="plus" /> Add Candidate
-              </Button>
-              <Title level={4} style={{ marginTop: 24 }}>
-                Message to Candidates
-              </Title>
-              <TextArea
-                onChange={e => change(e, 0)}
-                defaultValue={
-                  inviteCandidates.messages
-                    ? inviteCandidates.messages[0]?.message
-                    : messages?.[0]?.message
-                }
-                autoSize={{ minRows: 5 }}
-              />
+    };
+    const change = ({ target: { value } }, i) =>
+      setMessages(messagesArray => {
+        messagesArray[i] = { ...messagesArray[i], message: value };
+        return messagesArray;
+      });
+    const add = () => {
+      const keys = form.getFieldValue('keys');
+      const nextKeys = keys.concat(uuid);
+      uuid += 1;
+      form.setFieldsValue({
+        keys: nextKeys,
+      });
+    };
+    const { getFieldDecorator } = form;
+    return (
+      <Drawer
+        width={window.innerWidth > 720 ? 378 : null}
+        title="Invite Candidates"
+        visible={inviteCandidates}
+        drawerStyle={{ backgroundColor: '#f0f2f5', overflowY: 'scroll' }}
+        //   visible={Boolean(inviteCandidates)}
+        onClose={() => setInviteCandidates(flag => !flag)}
+        //   onOk={() => (!finished ? setFinished(true) : reset())}
+      >
+        <Title level={3}>{inviteCandidates?.interviewName}</Title>
+        {inviteCandidates && (
+          <Tabs defaultActiveKey={inviteCandidates && inviteCandidates.activeTab}>
+            <TabPane
+              tab={
+                <span>
+                  <Icon type="user-add" />
+                  Individual
+                </span>
+              }
+              key="1"
+            >
+              <Form onSubmit={handleSubmit}>
+                {createFormItems(form)}
+                <Button type="link" onClick={add}>
+                  <Icon type="plus" /> Add Candidate
+                </Button>
+                <Title level={4} style={{ marginTop: 24 }}>
+                  Message to Candidates
+                </Title>
+                <TextArea
+                  onChange={e => change(e, 0)}
+                  defaultValue={
+                    inviteCandidates.messages
+                      ? inviteCandidates.messages[0]?.message
+                      : messages?.[0]?.message
+                  }
+                  autoSize={{ minRows: 5 }}
+                />
 
-              <Row style={{ marginTop: 16 }} type="flex">
-                <Col>
-                  <Paragraph strong style={{ lineHeight: '40px' }}>
-                    Deadline
-                  </Paragraph>
-                </Col>
-                <Col style={{ flexGrow: 1, marginLeft: 8 }}>
-                  <FormItem key="deadline">
-                    {getFieldDecorator('deadlineDate', {
-                      rules: [
-                        {
-                          required: false,
-                        },
-                      ],
-                    })(<DatePicker style={{ width: '100%' }} />)}
-                  </FormItem>
-                </Col>
-              </Row>
-              {/* <Paragraph editable>{message1}</Paragraph> */}
+                <Row style={{ marginTop: 16 }} type="flex">
+                  <Col>
+                    <Paragraph strong style={{ lineHeight: '40px' }}>
+                      Deadline
+                    </Paragraph>
+                  </Col>
+                  <Col style={{ flexGrow: 1, marginLeft: 8 }}>
+                    <FormItem key="deadline">
+                      {getFieldDecorator('deadlineDate', {
+                        rules: [
+                          {
+                            required: false,
+                          },
+                        ],
+                      })(<DatePicker style={{ width: '100%' }} />)}
+                    </FormItem>
+                  </Col>
+                </Row>
+                {/* <Paragraph editable>{message1}</Paragraph> */}
 
-              <Collapse className="collapse" bordered={false}>
-                <Panel
-                  style={customPanelStyle}
-                  className="removeCollapsePadding"
-                  header="Configure Candidate Reminders"
-                  key="1"
-                >
-                  <div style={{ marginTop: 16, marginBottom: 8 }}> Send after 2 days</div>
-                  <TextArea
-                    onChange={e => change(e, 1)}
-                    defaultValue={
-                      inviteCandidates.messages
-                        ? inviteCandidates.messages[1]?.message
-                        : messages?.[1]?.message
-                    }
-                    autoSize
-                  />
-                  <div style={{ marginTop: 16, marginBottom: 8 }}> Send after 5 days </div>
-                  <TextArea
-                    onChange={e => change(e, 2)}
-                    defaultValue={
-                      inviteCandidates.messages
-                        ? inviteCandidates.messages[2]?.message
-                        : messages?.[2]?.message
-                    }
-                    autoSize
-                  />
-                </Panel>
-              </Collapse>
+                <Collapse className="collapse" bordered={false}>
+                  <Panel
+                    style={customPanelStyle}
+                    className="removeCollapsePadding"
+                    header="Configure Candidate Reminders"
+                    key="1"
+                  >
+                    <div style={{ marginTop: 16, marginBottom: 8 }}> Send after 2 days</div>
+                    <TextArea
+                      onChange={e => change(e, 1)}
+                      defaultValue={
+                        inviteCandidates.messages
+                          ? inviteCandidates.messages[1]?.message
+                          : messages?.[1]?.message
+                      }
+                      autoSize
+                    />
+                    <div style={{ marginTop: 16, marginBottom: 8 }}> Send after 5 days </div>
+                    <TextArea
+                      onChange={e => change(e, 2)}
+                      defaultValue={
+                        inviteCandidates.messages
+                          ? inviteCandidates.messages[2]?.message
+                          : messages?.[2]?.message
+                      }
+                      autoSize
+                    />
+                  </Panel>
+                </Collapse>
 
-              <Button htmlType="submit" type="primary" style={{ marginTop: 24, width: '100%' }}>
-                Save and send invitations
-              </Button>
-            </Form>
-          </TabPane>
-          <TabPane
-            tab={
-              <span>
-                <Icon type="link" />
-                Direct Link
-              </span>
-            }
-            key="2"
-          >
-            <DirectLink link={inviteCandidates.shortUrl} message={directLinkMessage} />
-          </TabPane>
-        </Tabs>
-      )}
-    </Drawer>
-  );
-});
+                <Button htmlType="submit" type="primary" style={{ marginTop: 24, width: '100%' }}>
+                  Save and send invitations
+                </Button>
+              </Form>
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                  <Icon type="link" />
+                  Direct Link
+                </span>
+              }
+              key="2"
+            >
+              <DirectLink link={inviteCandidates.shortUrl} message={directLinkMessage} />
+            </TabPane>
+          </Tabs>
+        )}
+      </Drawer>
+    );
+  }
+);
 
 export default InviteCandidates;
