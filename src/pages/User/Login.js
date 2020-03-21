@@ -153,7 +153,8 @@ class LoginPage extends Component {
 
   render() {
     const { submitting } = this.props;
-    const { type, forgotPassword } = this.state;
+    const { type, forgotPassword, inviteData } = this.state;
+    const { createdByName = '', companyName = '' } = inviteData || {};
     return (
       <div className={styles.main}>
         {!forgotPassword ? (
@@ -179,7 +180,7 @@ class LoginPage extends Component {
               />
             </Tab>
             <Tab key="signUp" tab="Sign up">
-              {invited && <InvitedText createdByName="Russell Ratcliffe" companyName="DeepHire" />}
+              {invited && <InvitedText createdByName={createdByName} companyName={companyName} />}
               <Name name="name" placeholder="full name" />
               <Company disabled={Boolean(invited)} name="company" placeholder="company" />
               <Email disabled={Boolean(invited)} name="email" placeholder="email" />
