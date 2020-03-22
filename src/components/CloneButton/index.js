@@ -11,7 +11,11 @@ const CloneButton = ({ onClick, cloneData, reload }) => {
     onClick();
     message.success('Clone Successful');
   };
-  return <Button onClick={clone}>Clone</Button>;
+  return (
+    <Button style={{ marginRight: 16 }} onClick={clone}>
+      Clone
+    </Button>
+  );
 };
 
 export default CloneButton;

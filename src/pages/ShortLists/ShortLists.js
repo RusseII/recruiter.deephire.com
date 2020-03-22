@@ -195,6 +195,7 @@ const ShortLists = () => {
               />
             )}
             <AutoComplete
+              style={{ width: 350 }}
               allowClear
               dataSource={dataSource}
               onSelect={filter}
