@@ -216,7 +216,7 @@ class Step1 extends React.PureComponent {
                   },
                 ],
               })(
-                <Select style={{ width: 120 }}>
+                <Select placeholder="Please select" mode="multiple" style={{ maxWidth: 250 }}>
                   {companyTeams.map(team => (
                     <Option value={team.team}>{team.team}</Option>
                   ))}

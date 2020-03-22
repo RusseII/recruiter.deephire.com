@@ -80,7 +80,14 @@ const TableList = () => {
           title: 'Team',
           render(test, data) {
             const { createdByTeam } = data;
-            return <Tag>{createdByTeam}</Tag>;
+            if (createdByTeam) {
+              return Array.isArray(createdByTeam) ? (
+                createdByTeam.map(team => <Tag>{team}</Tag>)
+              ) : (
+                <Tag>{createdByTeam}</Tag>
+              );
+            }
+            return null;
           },
         }
       : {},
@@ -153,7 +160,10 @@ const TableList = () => {
       setUnArchivedInterviewCount(data.length || 0);
     }
     if (team) {
-      data = data.filter(interview => interview.createdByTeam === team);
+      data = data.filter(interview => {
+        if (!interview.createdByTeam) return null;
+        return interview.createdByTeam.includes(team);
+      });
     }
     setInterviews(data || []);
     setLoading(false);

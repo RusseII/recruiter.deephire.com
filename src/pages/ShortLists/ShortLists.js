@@ -150,7 +150,10 @@ const ShortLists = () => {
     // eslint-disable-next-line camelcase
 
     if (team) {
-      data = data.filter(shareLink => shareLink.createdByTeam === team);
+      data = data.filter(shareLink => {
+        if (!shareLink.createdByTeam) return null;
+        return shareLink.createdByTeam.includes(team);
+      });
     }
     createDataSource(data || []);
     globalData.setShareLinks(data || []);
