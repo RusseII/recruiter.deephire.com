@@ -11,6 +11,7 @@ import {
   Button,
   Drawer,
   Tag,
+  AutoComplete,
 } from 'antd';
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import readableTime from 'readable-timestamp';
@@ -30,6 +31,8 @@ import { getAuthority } from '@/utils/authority';
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const TableList = () => {
+  const globalData = useContext(GlobalContext);
+
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [archives, setArchives] = useState(false);
@@ -37,10 +40,21 @@ const TableList = () => {
   const [inviteCandidates, setInviteCandidates] = useState(null);
   const [reload, setReload] = useState(false);
 
+  const { interviews, setInterviews, stripeProduct, recruiterProfile } = globalData;
+
+  const [dataSource, setDataSource] = useState([]);
+  const [filteredData, setFilteredData] = useState(interviews);
+
   const [unArchivedInterviewCount, setUnArchivedInterviewCount] = useState(' ');
 
-  const globalData = useContext(GlobalContext);
-  const { interviews, setInterviews, stripeProduct, recruiterProfile } = globalData;
+  const createDataSource = data => {
+    const searchDataSource = [];
+    data.forEach(interview => {
+      if (interview.interviewName) searchDataSource.push(interview.interviewName);
+    });
+    const unique = [...new Set(searchDataSource)];
+    setDataSource(unique);
+  };
   // eslint-disable-next-line camelcase
   const team = recruiterProfile?.app_metadata?.team;
   // if (interviews) {
@@ -165,7 +179,10 @@ const TableList = () => {
         return interview.createdByTeam.includes(team);
       });
     }
+    createDataSource(data || []);
     setInterviews(data || []);
+    setFilteredData(data || []);
+
     setLoading(false);
   };
   useEffect(() => {
@@ -173,6 +190,19 @@ const TableList = () => {
       getData();
     }
   }, [archives, reload, recruiterProfile]);
+
+  const shouldClear = value => {
+    if (!value) {
+      setFilteredData(interviews);
+    }
+  };
+
+  const filter = searchTerm => {
+    const filteredData = globalData.interviews.filter(
+      interview => interview.interviewName === searchTerm
+    );
+    setFilteredData(filteredData);
+  };
 
   return (
     <PageHeaderWrapper title="Interviews">
@@ -227,6 +257,16 @@ const TableList = () => {
                 allowedInterviews={allowedInterviews}
                 totalInterviews={unArchivedInterviewCount}
               />
+              <AutoComplete
+                style={{ marginRight: 16 }}
+                allowClear
+                dataSource={dataSource}
+                onSelect={filter}
+                onSearch={shouldClear}
+                filterOption={(inputValue, option) =>
+                  option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                }
+              />
               {selectedRows.length !== 0 && (
                 <>
                   <ArchiveButton
@@ -260,7 +300,7 @@ const TableList = () => {
           <StandardTable
             selectedRows={selectedRows}
             loading={loading}
-            data={{ list: interviews }}
+            data={{ list: filteredData }}
             // size="small"
             columns={columns}
             onSelectRow={rows => setSelectedRows(rows)}
