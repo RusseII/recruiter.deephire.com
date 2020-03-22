@@ -257,16 +257,7 @@ const TableList = () => {
                 allowedInterviews={allowedInterviews}
                 totalInterviews={unArchivedInterviewCount}
               />
-              <AutoComplete
-                style={{ marginRight: 16 }}
-                allowClear
-                dataSource={dataSource}
-                onSelect={filter}
-                onSearch={shouldClear}
-                filterOption={(inputValue, option) =>
-                  option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                }
-              />
+
               {selectedRows.length !== 0 && (
                 <>
                   <ArchiveButton
@@ -283,6 +274,17 @@ const TableList = () => {
                   />
                 </>
               )}
+              <AutoComplete
+                style={{ width: 350 }}
+                allowClear
+                dataSource={dataSource}
+                onSelect={filter}
+                onSearch={shouldClear}
+                filterOption={(inputValue, option) =>
+                  option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                }
+                placeholder="Filter"
+              />
             </Row>
           </Col>
           <Col>
