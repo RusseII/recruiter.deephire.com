@@ -23,6 +23,7 @@ import {
   deleteInvites,
   putInvites,
   deleteUsers,
+  getCompany,
 } from '@/services/api';
 import { getAuthority } from '@/utils/authority';
 
@@ -34,6 +35,7 @@ const { TabPane } = Tabs;
 
 const Team = () => {
   const [team, setTeam] = useState(null);
+  const [companyTeams, setCompanyTeams] = useState(null);
   const [invites, setInvites] = useState(null);
   const [inviteUsers, setInviteUsers] = useState(false);
   const [reload, setReload] = useState(false);
@@ -204,15 +206,22 @@ const Team = () => {
     const getTeamData = async () => {
       const teamMembers = await getTeam();
       const users = await getInvites();
+      const companyData = await getCompany();
       setTeam(teamMembers);
       setInvites(users);
+      setCompanyTeams(companyData?.teams);
     };
     getTeamData();
   }, [reload]);
 
   return (
     <div style={{ paddingTop: 12 }}>
-      <InviteForm reload={setReload} visible={inviteUsers} toggleVisible={setInviteUsers} />
+      <InviteForm
+        companyTeams={companyTeams}
+        reload={setReload}
+        visible={inviteUsers}
+        toggleVisible={setInviteUsers}
+      />
 
       <Tabs
         tabBarExtraContent={
@@ -246,7 +255,7 @@ const Team = () => {
 };
 
 const InviteForm = Form.create()(props => {
-  const { visible, form, toggleVisible, reload } = props;
+  const { visible, form, toggleVisible, reload, companyTeams } = props;
 
   const okHandle = async e => {
     e.preventDefault();
@@ -291,9 +300,17 @@ const InviteForm = Form.create()(props => {
             </Select>
           )}
         </FormItem>
-        <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 15 }} label="Team">
-          {form.getFieldDecorator('team')(<Input placeholder="team" />)}
-        </FormItem>
+        {companyTeams && (
+          <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 15 }} label="Team">
+            {form.getFieldDecorator('team')(
+              <Select placeholder="Please select" style={{ maxWidth: 250 }}>
+                {companyTeams.map(team => (
+                  <Option value={team.team}>{team.team}</Option>
+                ))}
+              </Select>
+            )}
+          </FormItem>
+        )}
       </Form>
     </Modal>
   );
