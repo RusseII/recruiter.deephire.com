@@ -37,7 +37,14 @@ export async function createInterview(params) {
 }
 
 export async function updateInterviews(id, params) {
-  const { prepTime, retakesAllowed, answerTime, interviewName, interviewQuestions } = params;
+  const {
+    prepTime,
+    retakesAllowed,
+    answerTime,
+    interviewName,
+    interviewQuestions,
+    createdByTeam,
+  } = params;
   const questions = interviewQuestions.map(a => ({
     question: a,
   }));
@@ -46,6 +53,7 @@ export async function updateInterviews(id, params) {
     interviewName,
     interviewQuestions: questions,
     interviewConfig: { retakesAllowed, prepTime, answerTime },
+    createdByTeam,
   };
 
   return request(`${newApi}/interviews/${id}`, { method: 'PUT', body, headers: setHeaders() });

@@ -1,14 +1,18 @@
 /* global $crisp */
 import React, { Fragment } from 'react';
 
-import { Form, Input, Button, Divider, InputNumber, Icon, Result } from 'antd';
+import { Form, Input, Button, Divider, InputNumber, Icon, Result, Select } from 'antd';
 import router from 'umi/router';
 import { connect } from 'dva';
 import styles from './style.less';
 import GlobalContext from '@/layouts/MenuContext';
-import { getInterviews } from '@/services/api';
+import { getInterviews, getCompany } from '@/services/api';
+import { getAuthority } from '@/utils/authority';
+
+const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const FormItem = Form.Item;
+const { Option } = Select;
 
 const formItemLayout = {
   labelCol: {
@@ -121,6 +125,8 @@ class Step1 extends React.PureComponent {
 
   async componentDidMount() {
     const { data } = this.props;
+    const companyData = await getCompany();
+    this.setState({ companyTeams: companyData?.teams });
     if (!data) {
       const { setInterviews } = this.context;
       setInterviews(await getInterviews());
@@ -154,7 +160,7 @@ class Step1 extends React.PureComponent {
     validateFields(async (err, values) => {
       if (!err) {
         // sometimes there was null values inside the array, which broke everything
-        const cleanedValueData = { ...values, createdByTeam: team };
+        const cleanedValueData = { createdByTeam: team, ...values };
         cleanedValueData.interviewQuestions = values.interviewQuestions.filter(
           value => value != null
         );
@@ -181,13 +187,14 @@ class Step1 extends React.PureComponent {
 
   render() {
     const { form, data } = this.props;
-    const { interviewConfig = {}, interviewName } = data || {};
-    const { loading } = this.state;
+    const { interviewConfig = {}, interviewName, createdByTeam } = data || {};
+    const { loading, companyTeams } = this.state;
     const { getFieldDecorator } = form;
     const { interviews, stripeProduct } = this.context;
     const { allowedInterviews } = stripeProduct.metadata || {};
 
-    if (interviews.length >= allowedInterviews) {
+    // TODO fix bug where the "cant create interview" is shown for a second in edit interview
+    if (interviews.length >= allowedInterviews && !data) {
       return <CantCreateInterview />;
     }
     return (
@@ -198,6 +205,26 @@ class Step1 extends React.PureComponent {
           onSubmit={this.onValidateForm}
           style={{ marginTop: data ? 0 : 24 }}
         >
+          {companyTeams && isAdmin() && (
+            <FormItem {...(data ? drawerLayout : formItemLayout)} label="Hiring Team">
+              {getFieldDecorator('createdByTeam', {
+                initialValue: createdByTeam,
+                rules: [
+                  {
+                    required: true,
+                    message: 'What team should this interview belong to?',
+                  },
+                ],
+              })(
+                <Select style={{ width: 120 }}>
+                  {companyTeams.map(team => (
+                    <Option value={team.team}>{team.team}</Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+          )}
+
           <FormItem {...(data ? drawerLayout : formItemLayout)} label="Name">
             {getFieldDecorator('interviewName', {
               initialValue: interviewName,
