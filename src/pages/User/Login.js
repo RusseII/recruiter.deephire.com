@@ -180,7 +180,11 @@ class LoginPage extends Component {
               />
             </Tab>
             <Tab key="signUp" tab="Sign up">
-              {invited && <InvitedText createdByName={createdByName} companyName={companyName} />}
+              {invited ? (
+                <InvitedText createdByName={createdByName} companyName={companyName} />
+              ) : (
+                <DefaultText />
+              )}
               <Name name="name" placeholder="full name" />
               <Company disabled={Boolean(invited)} name="company" placeholder="company" />
               <Email disabled={Boolean(invited)} name="email" placeholder="email" />
@@ -238,6 +242,17 @@ const InvitedText = ({ createdByName, companyName }) => (
     </Title>
     <Paragraph style={{ textAlign: 'center', paddingBottom: 10 }}>
       {`${createdByName} has invited you to join ${companyName}`}
+    </Paragraph>
+  </>
+);
+
+const DefaultText = () => (
+  <>
+    <Title style={{ textAlign: 'center' }} level={3}>
+      Create Your Account & Start Interviewing
+    </Title>
+    <Paragraph style={{ textAlign: 'center', paddingBottom: 10 }}>
+      You are a few clicks away from creating your first interview
     </Paragraph>
   </>
 );

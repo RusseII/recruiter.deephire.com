@@ -53,9 +53,10 @@ const Candidates = () => {
     setLoading(true);
     let data = await (archives ? getArchivedVideos() : getVideos());
     if (team) {
-      data = data.filter(
-        video => video.completeInterviewData?.interviewData?.createdByTeam === team
-      );
+      data = data.filter(video => {
+        if (!video.completeInterviewData?.interviewData?.createdByTeam) return null;
+        return video.completeInterviewData?.interviewData?.createdByTeam.includes(team);
+      });
     }
     createDataSource(data || []);
     setVideos(data || []);
