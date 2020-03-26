@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import { Layout, Alert, Button, Modal } from 'antd';
+import { Layout, Alert, Modal } from 'antd';
 import DocumentTitle from 'react-document-title';
 import isEqual from 'lodash/isEqual';
 import memoizeOne from 'memoize-one';
@@ -23,6 +23,7 @@ import { getProduct, getRecruiterProfile, getSubscriptions } from '@/services/ap
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 import UpgradeButton from '@/components/Upgrade/UpgradeButton';
+import BillingCards from '@/pages/Billing/BillingCards';
 
 const { Content } = Layout;
 
@@ -395,20 +396,19 @@ class BasicLayout extends React.PureComponent {
   }
 }
 
-const ExpiredModal = ({ visible }) => (
-  <Modal
-    closable={false}
-    visible={visible}
-    footer={
-      <div style={{ textAlign: 'cer' }}>
-        <Button type="primary">Purchase Plan</Button>
-      </div>
-    }
-    title="DeepHire Trial Ended"
-  >
-    Please pick a plan to continue using DeepHire
-  </Modal>
-);
+const ExpiredModal = ({ visible }) => {
+  return (
+    <Modal
+      width={800}
+      closable={false}
+      visible={visible}
+      footer={null}
+      title="Trial Ended, please pick a plan to continue using DeepHire"
+    >
+      <BillingCards />
+    </Modal>
+  );
+};
 
 export default connect(({ global, setting }) => ({
   collapsed: global.collapsed,
