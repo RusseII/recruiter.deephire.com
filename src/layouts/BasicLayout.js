@@ -22,6 +22,7 @@ import Exception403 from '../pages/Exception/403';
 import { getProduct, getRecruiterProfile, getSubscriptions } from '@/services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
+import UpgradeButton from '@/components/Upgrade/UpgradeButton';
 
 const { Content } = Layout;
 
@@ -300,7 +301,11 @@ class BasicLayout extends React.PureComponent {
     } = this.props;
     const { isMobile, stripeSubscription, stripeProduct } = this.state;
     const { trialExpired } = stripeProduct;
-    const currentSubscriptionStatus = stripeSubscription?.data?.[0]?.status;
+    const {
+      status: currentSubscriptionStatus,
+      default_payment_method: defaultPaymentMethod,
+      customer,
+    } = stripeSubscription?.data?.[0] || {};
     let trialExpiresIn = null;
     if (stripeSubscription?.data?.[0]?.trial_end) {
       const trialEnd = stripeSubscription?.data?.[0]?.trial_end;
@@ -310,7 +315,12 @@ class BasicLayout extends React.PureComponent {
       trialExpiresIn = days;
     }
 
-    const trial = currentSubscriptionStatus === 'trialing';
+    // TODO - REMOVE customer !== 'cus_GlZ9vXy9AyWrSW' on May 24 2020
+    // This is added because they were on a 'trial' in stripe, which is incorrect
+    const trial =
+      currentSubscriptionStatus === 'trialing' &&
+      !defaultPaymentMethod &&
+      customer !== 'cus_GlZ9vXy9AyWrSW';
     const isTop = PropsLayout === 'topmenu';
     const menuData = this.getMenuData();
     const routerConfig = this.matchParamsPath(pathname);
@@ -340,7 +350,8 @@ class BasicLayout extends React.PureComponent {
               message={
                 <div>
                   {`Your trial ends in ${trialExpiresIn} days`}
-                  <Button type="link">Upgrade Now</Button>
+
+                  <UpgradeButton style={{ marginLeft: 8 }} size="small" text="Upgrade Now" />
                 </div>
               }
               banner

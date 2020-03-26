@@ -1,4 +1,3 @@
-/* global $crisp */
 import React, { Fragment } from 'react';
 
 import { Form, Input, Button, Divider, InputNumber, Icon, Result, Select } from 'antd';
@@ -8,6 +7,7 @@ import styles from './style.less';
 import GlobalContext from '@/layouts/MenuContext';
 import { getInterviews, getCompany } from '@/services/api';
 import { getAuthority } from '@/utils/authority';
+import UpgradeButton from '@/components/Upgrade/UpgradeButton';
 
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
@@ -302,19 +302,7 @@ const CantCreateInterview = () => (
     title="Interview Cap Exceeded"
     subTitle="You have used all of your alloted interview slots. To get more interview slots either upgrade, or archive some of your active interviews."
     extra={[
-      <Button
-        type="primary"
-        onClick={() => {
-          $crisp.push([
-            'do',
-            'message:send',
-            ['text', "Hello, I'm interested in upgrading my plan!"],
-          ]);
-          $crisp.push(['do', 'chat:open']);
-        }}
-      >
-        Upgrade Plan
-      </Button>,
+      <UpgradeButton text="Upgrade Plan" />,
       <Button onClick={() => router.push('/interview/view')}>Remove Interviews</Button>,
     ]}
   />

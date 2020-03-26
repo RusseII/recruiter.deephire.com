@@ -6,14 +6,16 @@ import router from 'umi/router';
 const customEmpty = (description, route, buttonText) => {
   return (
     <Empty description={<span>{description}</span>}>
-      <Button
-        onClick={() => {
-          router.push(route);
-        }}
-        type="primary"
-      >
-        {buttonText}
-      </Button>
+      {buttonText && (
+        <Button
+          onClick={() => {
+            router.push(route);
+          }}
+          type="primary"
+        >
+          {buttonText}
+        </Button>
+      )}
     </Empty>
   );
 };

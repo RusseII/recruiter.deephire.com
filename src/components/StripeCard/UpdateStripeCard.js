@@ -12,10 +12,10 @@ const style = {
 };
 
 const CheckoutForm = props => {
-  const { setReload } = props;
+  const { setReload, title, body, okText, visible, setVisible } = props;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
 
   const handleSubmit = async ev => {
     // We don't want to let default form submission happen here, which would refresh the page.
@@ -77,8 +77,10 @@ const CheckoutForm = props => {
           setError(null);
           await addPaymentMethod(result.setupIntent.payment_method, 'Card successfully updated');
           setLoading(false);
-          setReload(flag => !flag);
           setVisible(false);
+          if (setReload) {
+            setReload(flag => !flag);
+          }
 
           // The setup has succeeded. Display a success message.
         }
@@ -110,17 +112,15 @@ const CheckoutForm = props => {
   return (
     <>
       <Modal
-        title="Enter new card"
-        okText="Update card"
+        title={title}
+        okText={okText}
         onOk={handleSubmit}
         onCancel={() => setVisible(false)}
         visible={visible}
       >
-        <div style={{ marginBottom: 20 }}> Update your billing method with a new card.</div>
+        <div style={{ marginBottom: 20 }}> {body}</div>
 
         <form onSubmit={handleSubmit}>
-          {/* <AddressSection />
-        <CardSection /> */}
           <Spin spinning={loading}>
             <div className="ant-input" style={{ paddingTop: 6 }}>
               <CardElement style={style} />
@@ -131,7 +131,7 @@ const CheckoutForm = props => {
           )}
         </form>
       </Modal>
-      <a onClick={() => setVisible(true)}>Change Card</a>
+      {/* <a onClick={() => setVisible(true)}>Change Card</a> */}
     </>
   );
 };
