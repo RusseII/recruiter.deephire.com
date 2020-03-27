@@ -1,10 +1,10 @@
 /* global $crisp */
-
 import React from 'react';
 
 import { CheckCircleTwoTone, QuestionCircleFilled } from '@ant-design/icons';
 
 import { Card, Button, Typography, List, Row, Col, Tooltip } from 'antd';
+import { StartButton } from '@bit/russeii.deephire.index';
 
 const { Title } = Typography;
 
@@ -33,11 +33,45 @@ const contact = () => {
   $crisp.push(['do', 'message:send', ['text', "Hi, I'm interested in other plans."]]);
 };
 
-const Cards = ({ data, onClick }) => {
+const buttonProps = {
+  style: { marginBottom: 48 },
+  shape: 'round',
+  block: 'true',
+  size: 'large',
+  type: 'primary',
+};
+
+const renderButton = (startTrial, plan, onClick) => {
+  const { buttonLabel, type } = plan;
+  if (startTrial) {
+    if (type === 'contact') {
+      return (
+        <Button {...buttonProps} onClick={contact}>
+          {buttonLabel}
+        </Button>
+      );
+    }
+    return <StartButton {...buttonProps} />;
+  }
+  if (type === 'contact') {
+    return (
+      <Button {...buttonProps} onClick={contact}>
+        {buttonLabel}
+      </Button>
+    );
+  }
+  return (
+    <Button {...buttonProps} onClick={() => onClick(plan)}>
+      {buttonLabel}
+    </Button>
+  );
+};
+
+const Cards = ({ data, onClick, startTrial }) => {
   return (
     <Row type="flex" gutter={[24, 8]} justify="center">
       {data.map(plan => {
-        const { name, price, priceLabel, buttonLabel, description, listItems, type } = plan;
+        const { name, price, priceLabel, description, listItems } = plan;
         return (
           <Col>
             <Card style={{ textAlign: 'center', width: 300 }}>
@@ -45,16 +79,7 @@ const Cards = ({ data, onClick }) => {
               <p>{description}</p>
               <Title level={2}>{price}</Title>
               <p>{priceLabel}</p>
-              <Button
-                style={{ marginBottom: 48 }}
-                shape="round"
-                block
-                size="large"
-                type="primary"
-                onClick={type === 'contact' ? contact : () => onClick(plan)}
-              >
-                {buttonLabel}
-              </Button>
+              {renderButton(startTrial, plan, onClick)}
               <Items listItems={listItems} />
             </Card>
           </Col>

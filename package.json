@@ -27,6 +27,7 @@
     "@ant-design/icons": "^4.0.3",
     "@antv/data-set": "^0.10.1",
     "@babel/runtime": "^7.0.0",
+    "@bit/russeii.deephire.index": "^1.0.1",
     "antd": "^4.0.4",
     "auth0-js": "^9.11.3",
     "bizcharts": "^3.2.2",
