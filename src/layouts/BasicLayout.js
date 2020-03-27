@@ -176,6 +176,11 @@ class BasicLayout extends React.PureComponent {
       this.setState({ shareLinks });
     };
 
+    const reloadProductAndSubscriptions = () => {
+      this.setStripeProduct();
+      this.setStripeSubscription();
+    };
+
     return {
       location,
       breadcrumbNameMap: this.breadcrumbNameMap,
@@ -188,6 +193,7 @@ class BasicLayout extends React.PureComponent {
       stripeProduct,
       stripeSubscription,
       recruiterProfile,
+      reloadProductAndSubscriptions,
     };
   }
 

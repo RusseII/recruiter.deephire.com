@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Elements } from 'react-stripe-elements';
 import PricingCards from '@/components/Upgrade/PricingCards';
-import CheckoutForm from '@/components/StripeCard/UpdateStripeCard';
+import UpdateStripeCard from '@/components/StripeCard/UpdateStripeCard';
+import GlobalContext from '@/layouts/MenuContext';
 
 const data = [
   {
@@ -73,10 +74,12 @@ const data = [
 const Upgrade = () => {
   const [visible, setVisible] = useState(false);
   const [plan, setPlan] = useState('');
+  const globalData = useContext(GlobalContext);
+
   return (
     <div>
       <Elements>
-        <CheckoutForm
+        <UpdateStripeCard
           title={`Purchase ${plan.name} Plan`}
           okText="Purchase Now"
           body={
@@ -86,6 +89,7 @@ const Upgrade = () => {
           }
           visible={visible}
           setVisible={setVisible}
+          setReload={globalData.reloadProductAndSubscriptions}
         />
       </Elements>
       <PricingCards
