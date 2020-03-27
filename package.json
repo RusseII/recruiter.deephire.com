@@ -22,7 +22,7 @@
     "prettier": "prettier --write ./src/**/**/**/*"
   },
   "dependencies": {
-    "@ant-design/colors": "^3.2.2",
+    "@ant-design/colors": "^4.0.0",
     "@ant-design/compatible": "^1.0.1",
     "@ant-design/icons": "^4.0.3",
     "@antv/data-set": "^0.10.1",
