@@ -67,13 +67,14 @@ const ForgotPassScreen = Form.create()(props => {
     </div>
   );
 });
-const { invited } = lowerCaseQueryParams(window.location.search);
+const { invited, signupemail: signupEmail } = lowerCaseQueryParams(window.location.search);
+
 @connect(({ loading }) => ({
   submitting: loading.effects['login/login'],
 }))
 class LoginPage extends Component {
   state = {
-    type: invited ? 'signUp' : 'account',
+    type: invited || signupEmail ? 'signUp' : 'account',
     forgotPassword: false,
     inviteData: null,
   };
@@ -172,7 +173,7 @@ class LoginPage extends Component {
               </LinkedInLoginButton>
               <Divider>or</Divider>
 
-              <Email name="email" placeholder="email" />
+              <Email name="email" placeholder="company email" defaultValue={signupEmail} />
               <Password
                 name="password"
                 placeholder="password"
@@ -187,7 +188,12 @@ class LoginPage extends Component {
               )}
               <Name name="name" placeholder="full name" />
               <Company disabled={Boolean(invited)} name="company" placeholder="company" />
-              <Email disabled={Boolean(invited)} name="email" placeholder="email" />
+              <Email
+                disabled={Boolean(invited)}
+                name="email"
+                placeholder="company email"
+                defaultValue={signupEmail}
+              />
               <Password
                 name="password"
                 placeholder="password"
