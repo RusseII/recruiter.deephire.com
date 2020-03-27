@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Button, Row, Col, Icon, Steps, Card } from 'antd';
+import { DingdingOutlined } from '@ant-design/icons';
+import { Button, Row, Col, Steps, Card } from 'antd';
 import Result from '@/components/Result';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -18,7 +19,7 @@ const desc1 = (
   >
     <div style={{ margin: '8px 0 4px' }}>
       <FormattedMessage id="app.result.success.step1-operator" defaultMessage="Qu Lili" />
-      <Icon style={{ marginLeft: 8 }} type="dingding-o" />
+      <DingdingOutlined style={{ marginLeft: 8 }} />
     </div>
     <div>2016-12-12 12:32</div>
   </div>
@@ -28,7 +29,7 @@ const desc2 = (
   <div style={{ fontSize: 12, position: 'relative', left: 42, textAlign: 'left' }}>
     <div style={{ margin: '8px 0 4px' }}>
       <FormattedMessage id="app.result.success.step2-operator" defaultMessage="Zhou Maomao" />
-      <Icon type="dingding-o" style={{ color: '#00A0E9', marginLeft: 8 }} />
+      <DingdingOutlined style={{ color: '#00A0E9', marginLeft: 8 }} />
     </div>
     <div>
       <a href="">

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Spin } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Spin } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
 import useCompanyInfo from '@/services/hooks';

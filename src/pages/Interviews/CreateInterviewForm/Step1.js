@@ -1,6 +1,11 @@
 import React, { Fragment } from 'react';
 
-import { Form, Input, Button, Divider, InputNumber, Icon, Result, Select } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+
+import { Input, Button, Divider, InputNumber, Result, Select } from 'antd';
 import router from 'umi/router';
 import { connect } from 'dva';
 import styles from './style.less';
@@ -106,9 +111,8 @@ const createFormItems = props => {
         />
       )}
       {keys.length > 1 ? (
-        <Icon
+        <MinusCircleOutlined
           className="dynamic-delete-button"
-          type="minus-circle-o"
           disabled={keys.length === 1}
           onClick={() => remove(form, k)}
         />
@@ -265,7 +269,7 @@ class Step1 extends React.PureComponent {
           {createFormItems(this.props)}
           <FormItem {...(data ? drawerLayout : formItemLayoutWithOutLabel)}>
             <Button type="dashed" onClick={this.add}>
-              <Icon type="plus" /> Add Interview Question
+              <PlusOutlined /> Add Interview Question
             </Button>
           </FormItem>
           <FormItem {...(data ? drawerLayout : formItemLayoutWithOutLabel)}>

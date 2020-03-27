@@ -1,5 +1,6 @@
 import React from 'react';
-import { Upload, Icon, message, Spin } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Upload, message, Spin } from 'antd';
 
 function beforeUpload(file) {
   const isJpgOrPng =
@@ -37,7 +38,7 @@ class Avatar extends React.Component {
 
     const uploadButton = (
       <div>
-        <Icon type={loading ? 'loading' : 'plus'} />
+        <LegacyIcon type={loading ? 'loading' : 'plus'} />
         <div className="ant-upload-text">Upload Logo</div>
       </div>
     );

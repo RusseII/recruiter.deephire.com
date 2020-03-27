@@ -1,5 +1,8 @@
 /* global $crisp */
-import { Alert, Button, Form, Input, Divider, Typography } from 'antd';
+import { FacebookOutlined, GoogleOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Alert, Button, Input, Divider, Typography } from 'antd';
 import { LinkedInLoginButton } from 'react-social-login-buttons';
 import { connect } from 'dva';
 import React, { Component, useState } from 'react';
@@ -212,14 +215,14 @@ class LoginPage extends Component {
                     onClick={auth.loginWithGoogle}
                     shape="circle"
                     size="medium"
-                    icon="google"
+                    icon={<GoogleOutlined />}
                     style={{ marginLeft: 16 }}
                   />
                   <Button
                     onClick={auth.loginWithFacebook}
                     shape="circle"
                     size="medium"
-                    icon="facebook"
+                    icon={<FacebookOutlined />}
                     style={{ marginLeft: 16 }}
                   />
                 </>

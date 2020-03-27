@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'antd';
+import { BankOutlined, LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import styles from './index.less';
 
 export default {
@@ -7,7 +7,7 @@ export default {
     props: {
       size: 'large',
       type: 'email',
-      prefix: <Icon type="mail" className={styles.prefixIcon} />,
+      prefix: <MailOutlined className={styles.prefixIcon} />,
     },
     rules: [
       {
@@ -20,7 +20,7 @@ export default {
   Password: {
     props: {
       size: 'large',
-      prefix: <Icon type="lock" className={styles.prefixIcon} />,
+      prefix: <LockOutlined className={styles.prefixIcon} />,
       type: 'password',
     },
     rules: [
@@ -34,7 +34,7 @@ export default {
   Name: {
     props: {
       size: 'large',
-      prefix: <Icon type="user" className={styles.prefixIcon} />,
+      prefix: <UserOutlined className={styles.prefixIcon} />,
       // type: 'password',
     },
     rules: [
@@ -48,7 +48,7 @@ export default {
   Company: {
     props: {
       size: 'large',
-      prefix: <Icon type="bank" className={styles.prefixIcon} />,
+      prefix: <BankOutlined className={styles.prefixIcon} />,
       // type: 'password',
     },
     rules: [

@@ -1,6 +1,11 @@
 import React from 'react';
 
-import { Tooltip, Icon, Button, Row, Modal, Form, Input, Col, Checkbox, message } from 'antd';
+import { CopyOutlined, ShareAltOutlined } from '@ant-design/icons';
+
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+
+import { Tooltip, Button, Row, Modal, Input, Col, Checkbox, message } from 'antd';
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { connect } from 'dva';
@@ -34,7 +39,7 @@ class ShareCandidateButton extends React.Component {
               text={getHttpUrl(shareLink)}
               onCopy={() => message.success('Link Copied')}
             >
-              <Button size="small" icon="copy" />
+              <Button size="small" icon={<CopyOutlined />} />
             </CopyToClipboard>
           </Tooltip>
         </Col>
@@ -168,7 +173,7 @@ class ShareCandidateButton extends React.Component {
           type="primary"
         >
           Share Candidates
-          <Icon type="share-alt" />
+          <ShareAltOutlined />
         </Button>
       </>
     );

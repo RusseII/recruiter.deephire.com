@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Icon, Table, Spin, Row, Col, Card, ConfigProvider } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Table, Spin, Row, Col, Card, ConfigProvider } from 'antd';
 import readableTime from 'readable-timestamp';
 import { gold } from '@ant-design/colors';
 import { Elements } from 'react-stripe-elements';
@@ -51,7 +52,7 @@ const Billing = () => {
 
         return (
           <>
-            <Icon type={icon} theme="twoTone" twoToneColor={iconColor} />
+            <LegacyIcon type={icon} theme="twoTone" twoToneColor={iconColor} />
             <span style={{ marginLeft: 8, color: iconColor }}>{status.toUpperCase()}</span>
           </>
         );

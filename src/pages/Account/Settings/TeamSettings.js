@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { DeleteOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
 import {
-  Icon,
   Input,
   Table,
   Button,
@@ -8,7 +10,6 @@ import {
   Tabs,
   Avatar,
   Spin,
-  Form,
   Tooltip,
   Popconfirm,
   Select,
@@ -118,7 +119,7 @@ const Team = () => {
               >
                 <Tooltip placement="left" title="Delete User">
                   <Button shape="circle">
-                    <Icon type="delete" />
+                    <DeleteOutlined />
                   </Button>
                 </Tooltip>
               </Popconfirm>
@@ -177,7 +178,7 @@ const Team = () => {
                 >
                   <Tooltip placement="left" title="Resend Invite">
                     <Button shape="circle">
-                      <Icon type="reload" />
+                      <ReloadOutlined />
                     </Button>
                   </Tooltip>
                 </Popconfirm>
@@ -191,7 +192,7 @@ const Team = () => {
                 >
                   <Tooltip placement="left" title="Delete Invite">
                     <Button style={{ marginLeft: 5 }} shape="circle">
-                      <Icon type="delete" />
+                      <DeleteOutlined />
                     </Button>
                   </Tooltip>
                 </Popconfirm>
@@ -231,7 +232,7 @@ const Team = () => {
               ghost
               onClick={() => setInviteUsers(true)}
               style={{ marginBottom: 12 }}
-              icon="plus"
+              icon={<PlusOutlined />}
             >
               Invite Users
             </Button>

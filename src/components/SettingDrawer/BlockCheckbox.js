@@ -1,5 +1,6 @@
 import React from 'react';
-import { Tooltip, Icon } from 'antd';
+import { CheckOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import style from './index.less';
 
 const BlockChecbox = ({ value, onChange, list }) => (
@@ -14,7 +15,7 @@ const BlockChecbox = ({ value, onChange, list }) => (
               display: value === item.key ? 'block' : 'none',
             }}
           >
-            <Icon type="check" />
+            <CheckOutlined />
           </div>
         </div>
       </Tooltip>

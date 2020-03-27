@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Icon } from 'antd';
+import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styles from './index.less';
 
 export default function Result({
@@ -14,8 +14,8 @@ export default function Result({
   ...restProps
 }) {
   const iconMap = {
-    error: <Icon className={styles.error} type="close-circle" theme="filled" />,
-    success: <Icon className={styles.success} type="check-circle" theme="filled" />,
+    error: <CloseCircleFilled className={styles.error} />,
+    success: <CheckCircleFilled className={styles.success} />,
   };
   const clsString = classNames(styles.result, className);
   return (
