@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Link from 'umi/link';
-import { Icon } from 'antd';
+import { CopyrightOutlined } from '@ant-design/icons';
 import GlobalFooter from '@/components/GlobalFooter';
 import styles from './UserLayout.less';
 import logo from '../assets/logo.svg';
@@ -25,7 +25,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> {new Date().getFullYear()}
+    Copyright <CopyrightOutlined /> {new Date().getFullYear()}
   </Fragment>
 );
 

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
+import { CopyOutlined } from '@ant-design/icons';
 import { Tooltip, message, Button, Row, Col } from 'antd';
 import router from 'umi/router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -37,7 +38,7 @@ class Step3 extends React.PureComponent {
                 text={getHttpUrl(link)}
                 onCopy={() => message.success('Link Copied')}
               >
-                <Button size="small" icon="copy" />
+                <Button size="small" icon={<CopyOutlined />} />
               </CopyToClipboard>
             </Tooltip>
           </Col>

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Input, Icon } from 'antd';
+import { CheckOutlined, EditOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
 import styles from './index.less';
 
 export default class EditableItem extends PureComponent {
@@ -36,12 +37,12 @@ export default class EditableItem extends PureComponent {
         {editable ? (
           <div className={styles.wrapper}>
             <Input value={value} onChange={this.handleChange} onPressEnter={this.check} />
-            <Icon type="check" className={styles.icon} onClick={this.check} />
+            <CheckOutlined className={styles.icon} onClick={this.check} />
           </div>
         ) : (
           <div className={styles.wrapper}>
             <span>{value || ' '}</span>
-            <Icon type="edit" className={styles.icon} onClick={this.edit} />
+            <EditOutlined className={styles.icon} onClick={this.edit} />
           </div>
         )}
       </div>

@@ -1,3 +1,4 @@
+import { EditOutlined, LinkOutlined, UserAddOutlined } from '@ant-design/icons';
 import {
   message,
   Row,
@@ -135,7 +136,7 @@ const TableList = () => {
                 onClick={() => setInviteCandidates({ activeTab: '1', ...data })}
                 style={{ marginLeft: 8 }}
                 shape="circle"
-                icon="user-add"
+                icon={<UserAddOutlined />}
               />
             </Tooltip>
 
@@ -144,7 +145,7 @@ const TableList = () => {
                 onClick={() => setInviteCandidates({ activeTab: '2', ...data })}
                 style={{ marginLeft: 8 }}
                 shape="circle"
-                icon="link"
+                icon={<LinkOutlined />}
               />
             </Tooltip>
 
@@ -153,7 +154,7 @@ const TableList = () => {
                 onClick={() => setEditInterview(data)}
                 style={{ marginLeft: 8 }}
                 shape="circle"
-                icon="edit"
+                icon={<EditOutlined />}
               />
             </Tooltip>
           </Fragment>

@@ -1,13 +1,14 @@
 /* eslint-disable no-param-reassign */
 import React, { useState, useEffect } from 'react';
+import { LinkOutlined, MinusCircleTwoTone, PlusOutlined, UserAddOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
 import {
   Col,
   Row,
   Button,
   Drawer,
   Input,
-  Icon,
-  Form,
   Card,
   Typography,
   Tabs,
@@ -113,10 +114,8 @@ const createFormItems = form => {
           </Col>
         </Row>
         {keys.length > 1 && (
-          <Icon
+          <MinusCircleTwoTone
             style={{ position: 'absolute', right: -5, top: -5, overflow: 'visible' }}
-            type="minus-circle-o"
-            theme="twoTone"
             twoToneColor="#f5222d"
             disabled={keys.length === 1}
             onClick={() => remove(form, k)}
@@ -195,7 +194,7 @@ const InviteCandidates = Form.create()(
             <TabPane
               tab={
                 <span>
-                  <Icon type="user-add" />
+                  <UserAddOutlined />
                   Individual
                 </span>
               }
@@ -204,7 +203,7 @@ const InviteCandidates = Form.create()(
               <Form onSubmit={handleSubmit}>
                 {createFormItems(form)}
                 <Button type="link" onClick={add}>
-                  <Icon type="plus" /> Add Candidate
+                  <PlusOutlined /> Add Candidate
                 </Button>
                 <Title level={4} style={{ marginTop: 24 }}>
                   Message to Candidates
@@ -277,7 +276,7 @@ const InviteCandidates = Form.create()(
             <TabPane
               tab={
                 <span>
-                  <Icon type="link" />
+                  <LinkOutlined />
                   Direct Link
                 </span>
               }

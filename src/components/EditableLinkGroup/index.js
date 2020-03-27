@@ -1,5 +1,6 @@
 import React, { PureComponent, createElement } from 'react';
 import PropTypes from 'prop-types';
+import { PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import styles from './index.less';
 
@@ -34,7 +35,7 @@ class EditableLinkGroup extends PureComponent {
           )
         )}
         {
-          <Button size="small" type="primary" ghost onClick={onAdd} icon="plus">
+          <Button size="small" type="primary" ghost onClick={onAdd} icon={<PlusOutlined />}>
             添加
           </Button>
         }

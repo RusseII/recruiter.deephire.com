@@ -39,11 +39,6 @@ ol {
   padding-right: 0;
 }
 
-// .removeCollapsePadding > .ant-collapse-header {
-//   padding-left: 24px;
-//   color: @primary-color
-// }
-
 .collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
   left: 0 !important;
 }
@@ -58,4 +53,9 @@ ol {
 // the invite table in team settings
 .antd-pro-pages-account-settings-info-right {
   width: 500px;
+}
+
+// Fixes a bug where the legacy forms don't take up 100% of the space after upgrading to antd 4.0
+.ant-legacy-form-item-control-wrapper {
+  width: 100%;
 }

@@ -2,7 +2,9 @@
 
 import React from 'react';
 
-import { Card, Button, Typography, List, Row, Col, Icon, Tooltip } from 'antd';
+import { CheckCircleTwoTone, QuestionCircleFilled } from '@ant-design/icons';
+
+import { Card, Button, Typography, List, Row, Col, Tooltip } from 'antd';
 
 const { Title } = Typography;
 
@@ -14,11 +16,11 @@ const Items = ({ listItems }) => (
     dataSource={listItems}
     renderItem={item => (
       <li style={{ marginTop: 8 }}>
-        <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" style={{ margin: 8 }} />
+        <CheckCircleTwoTone twoToneColor="#52c41a" style={{ margin: 8 }} />
         {item.content}
         {item.tooltip ? (
           <Tooltip title={item.tooltip}>
-            <Icon style={{ margin: 8 }} type="question-circle" theme="filled" />
+            <QuestionCircleFilled style={{ margin: 8 }} />
           </Tooltip>
         ) : null}
       </li>

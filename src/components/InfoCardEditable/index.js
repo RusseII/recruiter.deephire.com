@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-import { Upload, Button, Card, Row, Icon, List, Popconfirm, Tooltip } from 'antd';
+import {
+  InsuranceOutlined,
+  MailOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+  UploadOutlined,
+  YoutubeOutlined,
+} from '@ant-design/icons';
+
+import { Upload, Button, Card, Row, List, Popconfirm, Tooltip } from 'antd';
 
 import styles from './index.less';
 import AddYTModal from './AddYTModal';
@@ -72,10 +81,10 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
   return (
     <Card style={{ marginBottom: '20px' }} hoverable title={userName}>
       <Row>
-        <Icon type="insurance" /> {interviewName}
+        <InsuranceOutlined /> {interviewName}
       </Row>
       <Row>
-        <Icon type="mail" />
+        <MailOutlined />
         <Tooltip title="Click to email">
           <a target="_blank" rel="noopener noreferrer" href={`mailto:${email}`}>
             {` ${email}`}
@@ -91,7 +100,7 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
         dataSource={youtubeLinks}
         renderItem={(item, index) => (
           <div>
-            <Icon type="youtube" />{' '}
+            <YoutubeOutlined />{' '}
             <a
               onClick={() => setVideoData({ videoUrl: item, currentQuestionText: 'YouTube Video' })}
             >
@@ -105,7 +114,7 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
               okText="Delete"
               cancelText="No"
             >
-              <Icon className={styles.dynamicDeleteButton} type="minus-circle-o" />
+              <MinusCircleOutlined className={styles.dynamicDeleteButton} />
             </Popconfirm>
           </div>
         )}
@@ -113,11 +122,11 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
 
       <Row>
         <Button style={{ marginRight: '20px' }} type="dashed" onClick={toggleModalVisible}>
-          <Icon type="plus" /> Add YT Video
+          <PlusOutlined /> Add YT Video
         </Button>
         <Upload key={key} {...props}>
           <Button>
-            <Icon type="upload" /> Add Document
+            <UploadOutlined /> Add Document
           </Button>
         </Upload>
       </Row>

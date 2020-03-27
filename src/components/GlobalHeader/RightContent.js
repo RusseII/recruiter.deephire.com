@@ -1,7 +1,8 @@
 /* global $crisp */
 import React, { PureComponent } from 'react';
 import { FormattedMessage, setLocale, getLocale } from 'umi/locale';
-import { Spin, Tag, Menu, Icon, Dropdown, Avatar, Tooltip } from 'antd';
+import { BugOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { Spin, Tag, Menu, Dropdown, Avatar, Tooltip } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import styles from './index.less';
@@ -13,7 +14,7 @@ const bugEvent = () => {
 
 const ReportBug = () => (
   <Tooltip title="Report a bug">
-    <Icon onClick={bugEvent} style={{ marginRight: 8 }} type="bug" />
+    <BugOutlined onClick={bugEvent} style={{ marginRight: 8 }} />
   </Tooltip>
 );
 export default class GlobalHeaderRight extends PureComponent {
@@ -67,13 +68,13 @@ export default class GlobalHeaderRight extends PureComponent {
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item key="userinfo">
-          <Icon type="setting" />
+          <SettingOutlined />
           <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
         </Menu.Item>
 
         <Menu.Divider />
         <Menu.Item key="logout">
-          <Icon type="logout" />
+          <LogoutOutlined />
           <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
         </Menu.Item>
       </Menu>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Tooltip, Icon } from 'antd';
+import { CheckOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import { formatMessage } from 'umi/locale';
 import styles from './ThemeColor.less';
 
@@ -10,7 +11,7 @@ const Tag = ({ color, check, ...rest }) => (
       backgroundColor: color,
     }}
   >
-    {check ? <Icon type="check" /> : ''}
+    {check ? <CheckOutlined /> : ''}
   </div>
 );
 

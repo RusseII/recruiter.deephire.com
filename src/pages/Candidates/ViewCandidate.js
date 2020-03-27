@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 
-import { Card, Col, Row, Icon, Table, Button } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+
+import { Card, Col, Row, Table, Button } from 'antd';
 import router from 'umi/router';
 import qs from 'qs';
 
@@ -125,7 +127,7 @@ const ViewCandidate = ({ location }) => {
   return (
     <div>
       <Button style={{ marginBottom: '20px' }} onClick={goToCandidates} type="secondary">
-        <Icon type="left" />
+        <LeftOutlined />
         {getWidth() < 400 ? 'Back' : 'Back to Candidates'}
       </Button>
       <div style={{ float: 'right', marginBottom: '20px' }}>
@@ -174,8 +176,8 @@ const ViewCandidate = ({ location }) => {
             style={{ marginBottom: 20 }}
             title={videoData.currentQuestionText}
             actions={[
-              <Button shape="circle" icon="left" onClick={() => previousQuestion()} />,
-              <Button onClick={nextQuestion} shape="circle" icon="right" />,
+              <Button shape="circle" icon={<LeftOutlined />} onClick={() => previousQuestion()} />,
+              <Button onClick={nextQuestion} shape="circle" icon={<RightOutlined />} />,
             ]}
           >
             <div className={styles.playerWrapper}>

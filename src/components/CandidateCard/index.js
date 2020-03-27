@@ -1,3 +1,4 @@
+import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Card, Checkbox } from 'antd';
 import React from 'react';
 import router from 'umi/router';
@@ -40,7 +41,7 @@ const CandidateCard = ({ item }) => (
         <Avatar
           shape="circle"
           size="large"
-          icon="user"
+          icon={<UserOutlined />}
           key={item.responses[0] ? item.responses[0].thumbnail100x100 : null}
           src={item.responses[0] ? item.responses[0].thumbnail100x100 : null}
         />

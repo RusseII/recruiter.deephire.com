@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
+
 import {
-  Form,
-  Input,
-  Card,
-  Icon,
-  Button,
-  Alert,
-  Col,
-  Drawer,
-  Popconfirm,
-  Skeleton,
-  message,
-} from 'antd';
+  CheckCircleTwoTone,
+  DeleteOutlined,
+  QuestionCircleOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
+
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+
+import { Input, Card, Button, Alert, Col, Drawer, Popconfirm, Skeleton, message } from 'antd';
 import { connect } from 'dva';
 import { updateCompany } from '@/services/api';
 import useCompanyInfo from '@/services/hooks';
@@ -29,15 +28,15 @@ const BaseView = () => {
     setFlag(flag => !flag);
   };
 
-  const actions = [<Icon type="setting" key="setting" onClick={() => setDrawer('clockwork')} />];
+  const actions = [<SettingOutlined key="setting" onClick={() => setDrawer('clockwork')} />];
   if (clockworkIntegration) {
     actions.push(
       <Popconfirm
         title="Delete Integration? "
-        icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
         onConfirm={() => deleteClockworkIntegration()}
       >
-        <Icon type="delete" key="delete" />
+        <DeleteOutlined key="delete" />
       </Popconfirm>
     );
   }
@@ -74,7 +73,7 @@ const BaseView = () => {
             title={
               clockworkIntegration ? (
                 <div style={{ color: '#52c41a' }}>
-                  <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> Clockwork
+                  <CheckCircleTwoTone twoToneColor="#52c41a" /> Clockwork
                 </div>
               ) : (
                 'Clockwork'

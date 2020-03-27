@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Card, Select, List, Tag, Icon, Row, Col, Button } from 'antd';
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Card, Select, List, Tag, Row, Col, Button } from 'antd';
 
 import TagSelect from '@/components/TagSelect';
 import StandardFormRow from '@/components/StandardFormRow';
@@ -91,7 +94,7 @@ class SearchList extends Component {
 
     const IconText = ({ type, text }) => (
       <span>
-        <Icon type={type} style={{ marginRight: 8 }} />
+        <LegacyIcon type={type} style={{ marginRight: 8 }} />
         {text}
       </span>
     );
@@ -110,7 +113,7 @@ class SearchList extends Component {
           <Button onClick={this.fetchMore} style={{ paddingLeft: 48, paddingRight: 48 }}>
             {loading ? (
               <span>
-                <Icon type="loading" /> 加载中...
+                <LoadingOutlined /> 加载中...
               </span>
             ) : (
               '加载更多'

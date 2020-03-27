@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { formatMessage } from 'umi/locale';
-import { Form, Input, Upload } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Upload } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
 

@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import { Select, message, Drawer, List, Switch, Divider, Icon, Button, Alert, Tooltip } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { CopyOutlined } from '@ant-design/icons';
+import { Select, message, Drawer, List, Switch, Divider, Button, Alert, Tooltip } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { connect } from 'dva';
@@ -138,7 +140,7 @@ class SettingDrawer extends PureComponent {
         placement="right"
         handler={
           <div className={styles.handle}>
-            <Icon
+            <LegacyIcon
               type={collapse ? 'close' : 'setting'}
               style={{
                 color: '#fff',
@@ -225,7 +227,7 @@ class SettingDrawer extends PureComponent {
             text={JSON.stringify(omit(setting, ['colorWeak']), null, 2)}
             onCopy={() => message.success(formatMessage({ id: 'app.setting.copyinfo' }))}
           >
-            <Button block icon="copy">
+            <Button block icon={<CopyOutlined />}>
               {formatMessage({ id: 'app.setting.copy' })}
             </Button>
           </CopyToClipboard>

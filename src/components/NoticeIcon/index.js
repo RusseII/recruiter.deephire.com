@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import { Icon, Tabs, Badge, Spin } from 'antd';
+import { BellOutlined } from '@ant-design/icons';
+import { Tabs, Badge, Spin } from 'antd';
 import classNames from 'classnames';
 import HeaderDropdown from '../HeaderDropdown';
 import List from './NoticeList';
@@ -9,8 +10,6 @@ import styles from './index.less';
 const { TabPane } = Tabs;
 
 export default class NoticeIcon extends PureComponent {
-  static Tab = TabPane;
-
   static defaultProps = {
     onItemClick: () => {},
     onPopupVisibleChange: () => {},
@@ -121,12 +120,14 @@ export default class NoticeIcon extends PureComponent {
     onPopupVisibleChange(visible);
   };
 
+  static Tab = TabPane;
+
   render() {
     const { className, count, popupVisible, bell } = this.props;
     const { visible } = this.state;
     const noticeButtonClass = classNames(className, styles.noticeButton);
     const notificationBox = this.getNotificationBox();
-    const NoticeBellIcon = bell || <Icon type="bell" className={styles.icon} />;
+    const NoticeBellIcon = bell || <BellOutlined className={styles.icon} />;
     const trigger = (
       <span className={classNames(noticeButtonClass, { opened: visible })}>
         <Badge count={count} style={{ boxShadow: 'none' }} className={styles.badge}>
