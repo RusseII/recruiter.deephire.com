@@ -78,12 +78,23 @@ export default [
         component: './ShortLists/ShortListAnalytics',
         hideInMenu: true,
       },
-
+      {
+        path: '/billing/',
+        icon: 'credit-card',
+        name: 'Billing',
+        component: './Billing/index',
+        authority: ['admin'],
+      },
+      {
+        path: '/billing/plans',
+        component: './Billing/BillingCards',
+      },
       {
         name: 'Account',
         icon: 'user',
         path: '/account/settings',
         component: './Account/Settings/Info',
+        authority: ['admin'],
 
         routes: [
           {
@@ -102,11 +113,11 @@ export default [
             path: '/account/settings/integrations',
             component: './Account/Settings/IntegrationSettings',
           },
-          {
-            authority: ['admin'],
-            path: '/account/settings/billing',
-            component: './Account/Settings/BillingSettings',
-          },
+          // {
+          //   authority: ['admin'],
+          //   path: '/account/settings/billing',
+          //   component: './Account/Settings/BillingSettings',
+          // },
           {
             path: '/account/settings/notification',
             component: './Account/Settings/NotificationView',
@@ -117,6 +128,7 @@ export default [
           },
         ],
       },
+
       {
         component: '404',
       },

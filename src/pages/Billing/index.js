@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Icon, Table, Spin } from 'antd';
+import { Icon, Table, Spin, Row, Col, Card, ConfigProvider } from 'antd';
 import readableTime from 'readable-timestamp';
 import { gold } from '@ant-design/colors';
 import { Elements } from 'react-stripe-elements';
 import CurrentPaymentMethod from '@/components/CurrentPaymentMethod';
-
+import customEmpty from '@/components/CustomEmpty';
+import UpgradeButton from '@/components/Upgrade/UpgradeButton';
 import { getInvoices } from '@/services/api';
 
 const Billing = () => {
@@ -84,17 +85,26 @@ const Billing = () => {
   useEffect(() => {
     const getInvoiceData = async () => {
       const invoices = await getInvoices();
-      setInvoices(invoices);
+      const nonZeroInvoices = invoices.filter(invoice => invoice.total !== 0);
+      setInvoices(nonZeroInvoices);
     };
     getInvoiceData();
   }, [reload]);
   return (
-    <div style={{ paddingTop: 12 }}>
-      <Stripey />
-      <Spin spinning={!invoices}>
-        <Table size="small" dataSource={invoices} pagination={false} columns={columnsTeam} />
-      </Spin>
-    </div>
+    <Row type="flex" justify="center">
+      <Col span={24}>
+        <Card title="DeepHire Basic" extra={<UpgradeButton text="Upgrade Package" />}>
+          <Stripey />
+          <Spin spinning={!invoices}>
+            <ConfigProvider
+              renderEmpty={() => customEmpty('No Invoices', '/interview/create-interview/info')}
+            >
+              <Table size="small" dataSource={invoices} pagination={false} columns={columnsTeam} />
+            </ConfigProvider>
+          </Spin>
+        </Card>
+      </Col>
+    </Row>
   );
 };
 

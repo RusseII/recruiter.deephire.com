@@ -1,4 +1,3 @@
-/* global $crisp */
 import {
   message,
   Row,
@@ -27,6 +26,7 @@ import Step1 from '@/pages/Interviews/CreateInterviewForm/Step1';
 import GlobalContext from '@/layouts/MenuContext';
 import InviteCandidates from '@/components/InviteCandidates';
 import { getAuthority } from '@/utils/authority';
+import UpgradeButton from '@/components/Upgrade/UpgradeButton';
 
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
@@ -229,20 +229,9 @@ const TableList = () => {
           message="Interview Cap Exceeded"
           description={
             <div>
-              You have more interviews than allowed on your plan. Some of your interviews may be
-              removed. Please archive unused interviews, or{' '}
-              <a
-                onClick={() => {
-                  $crisp.push([
-                    'do',
-                    'message:send',
-                    ['text', "Hi, I'm interested in upgrading my plan!"],
-                  ]);
-                  $crisp.push(['do', 'chat:open']);
-                }}
-              >
-                message our support to upgrade.
-              </a>
+              {`You have more interviews than allowed on your plan. Some of your interviews may be
+              removed. Please archive unused interviews, or `}
+              <UpgradeButton text="upgrade your plan" type="link" style={{ padding: 0 }} />
             </div>
           }
           type="error"

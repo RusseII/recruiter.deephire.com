@@ -1,22 +1,28 @@
-// CheckoutForm.js
+/* global $crisp */
 import React, { useState, useEffect, useContext } from 'react';
 // import { injectStripe, CardElement } from 'react-stripe-elements';
 import { Row, Col } from 'antd';
 import Cards from 'react-credit-cards';
 import readableTime from 'readable-timestamp';
 import { getSubscriptions, getPaymentMethods } from '@/services/api';
-import CheckoutForm from '@/components/CheckoutForm';
+import CheckoutForm from '@/components/StripeCard/UpdateStripeCard';
 
 import 'react-credit-cards/es/styles-compiled.css';
 import GlobalContext from '@/layouts/MenuContext';
 
 import styles from './index.less';
 
+const cancelSubscription = () => {
+  $crisp.push(['do', 'chat:open']);
+  $crisp.push(['do', 'message:send', ['text', "Hi, I'm interested in canceling my subscription."]]);
+};
+
 const mockPaymentData = {
   billing_details: { name: '' },
   card: { brand: '', exp_month: '', exp_year: '', last4: '' },
 };
 const CurrentPaymentMethod = () => {
+  const [visible, setVisible] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(mockPaymentData);
   const [subscription, setSubscription] = useState(null);
   // eslint-disable-next-line no-unused-vars
@@ -63,7 +69,29 @@ const CurrentPaymentMethod = () => {
   return (
     <Row style={{ marginBottom: 100 }} type="flex" justify="start">
       <>
-        <Col style={{ width: 290 }}>
+        <Col className={styles.spacing} style={{ fontWeight: 500 }}>
+          <div>Your plan:</div>
+          <div>Pricing</div>
+          <div>Renews on:</div>
+          <a onClick={() => setVisible(true)}>{last4 ? 'Update Card' : 'Add Card'}</a>
+          <div>
+            <CheckoutForm
+              title="Enter new card"
+              body="Update your billing method with a new card"
+              okText="Update card"
+              setReload={setReload}
+              visible={visible}
+              setVisible={setVisible}
+            />
+          </div>
+          <a onClick={cancelSubscription}>Cancel Subscription</a>
+        </Col>
+        <Col className={styles.spacing} style={{ marginLeft: 16 }}>
+          <div>{`${productName || 'DeepHire Trial'}`}</div>
+          <div>{amount ? `$${amount / 100}/${interval}` : ''}</div>
+          <div>{`${renewsOn}`}</div>
+        </Col>
+        <Col style={{ width: 290, marginLeft: 64 }}>
           <Cards
             issuer={brand}
             preview
@@ -73,17 +101,6 @@ const CurrentPaymentMethod = () => {
             name={name}
             number={`************${last4}`}
           />
-        </Col>
-        <Col className={styles.spacing} style={{ fontWeight: 500, marginLeft: 32 }}>
-          <div>Your plan:</div>
-          <div>Pricing</div>
-          <div>Renews on:</div>
-          <CheckoutForm setReload={setReload} />
-        </Col>
-        <Col className={styles.spacing} style={{ marginLeft: 16 }}>
-          <div>{`${productName || ''}`}</div>
-          <div>{amount ? `$${amount / 100}/${interval}` : ''}</div>
-          <div>{`${renewsOn}`}</div>
         </Col>
       </>
     </Row>

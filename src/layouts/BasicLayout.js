@@ -1,5 +1,6 @@
+/* eslint-disable camelcase */
 import React from 'react';
-import { Layout, Alert } from 'antd';
+import { Layout, Alert, Modal } from 'antd';
 import DocumentTitle from 'react-document-title';
 import isEqual from 'lodash/isEqual';
 import memoizeOne from 'memoize-one';
@@ -18,9 +19,11 @@ import Footer from './Footer';
 import Header from './Header';
 import GlobalContext from './MenuContext';
 import Exception403 from '../pages/Exception/403';
-import { getProduct, getRecruiterProfile } from '@/services/api';
+import { getProduct, getRecruiterProfile, getSubscriptions } from '@/services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
+import UpgradeButton from '@/components/Upgrade/UpgradeButton';
+import BillingCards from '@/pages/Billing/BillingCards';
 
 const { Content } = Layout;
 
@@ -118,6 +121,7 @@ class BasicLayout extends React.PureComponent {
     });
 
     this.setStripeProduct();
+    this.setStripeSubscription();
 
     this.renderRef = requestAnimationFrame(() => {
       this.setState({
@@ -152,7 +156,14 @@ class BasicLayout extends React.PureComponent {
 
   getContext() {
     const { location } = this.props;
-    const { interviews, videos, shareLinks, stripeProduct, recruiterProfile } = this.state;
+    const {
+      interviews,
+      videos,
+      shareLinks,
+      stripeProduct,
+      recruiterProfile,
+      stripeSubscription,
+    } = this.state;
     const setInterviews = interviews => {
       this.setState({ interviews });
     };
@@ -165,6 +176,11 @@ class BasicLayout extends React.PureComponent {
       this.setState({ shareLinks });
     };
 
+    const reloadProductAndSubscriptions = () => {
+      this.setStripeProduct();
+      this.setStripeSubscription();
+    };
+
     return {
       location,
       breadcrumbNameMap: this.breadcrumbNameMap,
@@ -175,7 +191,9 @@ class BasicLayout extends React.PureComponent {
       shareLinks,
       setShareLinks,
       stripeProduct,
+      stripeSubscription,
       recruiterProfile,
+      reloadProductAndSubscriptions,
     };
   }
 
@@ -184,8 +202,17 @@ class BasicLayout extends React.PureComponent {
     if (stripeProduct) {
       this.setState({ stripeProduct });
     } else {
-      const noStripe = { trial: true, metadata: { allowedInterviews: '1' } };
+      const noStripe = { trialExpired: true, metadata: { allowedInterviews: '1' } };
       this.setState({ stripeProduct: noStripe });
+    }
+  }
+
+  async setStripeSubscription() {
+    const stripeSubscription = await getSubscriptions();
+    if (stripeSubscription) {
+      this.setState({ stripeSubscription });
+    } else {
+      this.setState({ stripeSubscription: null });
     }
   }
 
@@ -279,8 +306,28 @@ class BasicLayout extends React.PureComponent {
       children,
       location: { pathname },
     } = this.props;
-    const { isMobile, stripeProduct } = this.state;
-    const { trial } = stripeProduct;
+    const { isMobile, stripeSubscription, stripeProduct } = this.state;
+    const { trialExpired } = stripeProduct;
+    const {
+      status: currentSubscriptionStatus,
+      default_payment_method: defaultPaymentMethod,
+      customer,
+    } = stripeSubscription?.data?.[0] || {};
+    let trialExpiresIn = null;
+    if (stripeSubscription?.data?.[0]?.trial_end) {
+      const trialEnd = stripeSubscription?.data?.[0]?.trial_end;
+      const time = trialEnd - Date.now() / 1000;
+
+      const days = Math.floor(time / 86400);
+      trialExpiresIn = days;
+    }
+
+    // TODO - REMOVE customer !== 'cus_GlZ9vXy9AyWrSW' on May 24 2020
+    // This is added because they were on a 'trial' in stripe, which is incorrect
+    const trial =
+      currentSubscriptionStatus === 'trialing' &&
+      !defaultPaymentMethod &&
+      customer !== 'cus_GlZ9vXy9AyWrSW';
     const isTop = PropsLayout === 'topmenu';
     const menuData = this.getMenuData();
     const routerConfig = this.matchParamsPath(pathname);
@@ -303,10 +350,17 @@ class BasicLayout extends React.PureComponent {
             minHeight: '100vh',
           }}
         >
+          <ExpiredModal visible={trialExpired} />
           {trial && (
             <Alert
               style={{ textAlign: 'center' }}
-              message="You are currently on a trial account, please message our support to upgrade"
+              message={
+                <div>
+                  {`Your trial ends in ${trialExpiresIn} days`}
+
+                  <UpgradeButton style={{ marginLeft: 8 }} size="small" text="Upgrade Now" />
+                </div>
+              }
               banner
               closable
             />
@@ -347,6 +401,20 @@ class BasicLayout extends React.PureComponent {
     );
   }
 }
+
+const ExpiredModal = ({ visible }) => {
+  return (
+    <Modal
+      width={800}
+      closable={false}
+      visible={visible}
+      footer={null}
+      title="Trial Ended, please pick a plan to continue using DeepHire"
+    >
+      <BillingCards />
+    </Modal>
+  );
+};
 
 export default connect(({ global, setting }) => ({
   collapsed: global.collapsed,
