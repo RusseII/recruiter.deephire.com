@@ -200,6 +200,25 @@ export async function cloneInterview(data) {
   });
 }
 
+export async function scheduleInterview(data, successMessage) {
+  return request(
+    `${newApi}/live`,
+    {
+      method: 'POST',
+      body: data,
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+}
+
+export async function getLiveInterviews() {
+  return request(`${newApi}/live`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
 export async function getVideo(id) {
   return request(`${newApi}/videos/${id}`, {
     method: 'GET',

@@ -1,5 +1,5 @@
 import router from 'umi/router';
-import { LinkOutlined, PieChartOutlined } from '@ant-design/icons';
+import { ShareAltOutlined, PieChartOutlined } from '@ant-design/icons';
 import {
   AutoComplete,
   Card,
@@ -108,7 +108,7 @@ const Actions = ({ data }) => {
           visible={visibility.clicked}
           onVisibleChange={visible => setVisibility({ hovered: false, clicked: visible })}
         >
-          <Button style={{ marginLeft: 8 }} shape="circle" icon={<LinkOutlined />} />
+          <Button style={{ marginLeft: 8 }} shape="circle" icon={<ShareAltOutlined />} />
         </Popover>
       </Tooltip>
       <Tooltip title="View share link analytics">
