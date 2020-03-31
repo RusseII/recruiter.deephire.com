@@ -63,8 +63,8 @@ const InfoCardEditable = ({ userName, interviewName, editable, email }) => {
       setLoading(true);
       if (email) {
         await loadInfo();
+        setLoading(false);
       }
-      setLoading(false);
     };
     initialDataLoad();
   }, [email]);
