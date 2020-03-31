@@ -81,10 +81,10 @@ const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
   return (
     <Card style={{ marginBottom: '20px' }} hoverable title={userName}>
       <Row>
-        <InsuranceOutlined /> {interviewName}
+        <InsuranceOutlined style={{ padding: 4 }} /> {interviewName}
       </Row>
       <Row>
-        <MailOutlined />
+        <MailOutlined style={{ padding: 4 }} />
         <Tooltip title="Click to email">
           <a target="_blank" rel="noopener noreferrer" href={`mailto:${email}`}>
             {` ${email}`}
