@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
 
-import { Card, Col, Row, Table, Button } from 'antd';
+import { Card, Col, Row, Table, Button, Space } from 'antd';
 import router from 'umi/router';
-import qs from 'qs';
 
 import InfoCardEditable from '@/components/InfoCardEditable';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 
 import styles from './ViewCandidate.less';
-import { getVideo } from '@/services/api';
+import { getVideo, getLiveInterview } from '@/services/api';
 import ArchiveButton from '@/components/ArchiveButton';
+import { lowerCaseQueryParams } from '@/utils/utils';
 
 const columns = [
   {
@@ -24,9 +24,11 @@ const columns = [
 const getWidth = () => Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
 const ViewCandidate = ({ location }) => {
-  const id = qs.parse(location.search)['?id'];
+  const { id, liveid: liveId } = lowerCaseQueryParams(location.search);
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [candidateData, setCandidateData] = useState(null);
+  const [liveInterviewData, setLiveInterviewData] = useState(null);
+
   const [videoData, setVideoData] = useState({ videoUrl: null, currentQuestionText: null });
   const [archives, setArchives] = useState(false);
 
@@ -52,8 +54,24 @@ const ViewCandidate = ({ location }) => {
     });
   };
 
+  const liveInterviews = async () => {
+    const liveData = await getLiveInterview(liveId);
+    const { recordingUrl } = liveData;
+    const lastRecording = recordingUrl.splice(-1)[0];
+    setLiveInterviewData(liveData);
+    setVideoData({
+      videoUrl: lastRecording,
+      currentQuestionText: 'Live Interview Recording',
+    });
+  };
+
   useEffect(() => {
-    getData();
+    if (id) {
+      getData();
+    }
+    if (liveId) {
+      liveInterviews();
+    }
   }, [archives]);
 
   // const rowSelection = {
@@ -66,28 +84,28 @@ const ViewCandidate = ({ location }) => {
     router.push(`/candidates/candidates`);
   };
 
-  const nextQuestion = () => {
-    if (activeQuestion + 1 < candidateData.responses.length) {
-      const videoUrl = candidateData.responses[activeQuestion + 1].response;
-      const currentQuestionText = candidateData.responses[activeQuestion + 1].question;
-      setVideoData({ videoUrl, currentQuestionText });
+  // const nextQuestion = () => {
+  //   if (activeQuestion + 1 < candidateData.responses.length) {
+  //     const videoUrl = candidateData.responses[activeQuestion + 1].response;
+  //     const currentQuestionText = candidateData.responses[activeQuestion + 1].question;
+  //     setVideoData({ videoUrl, currentQuestionText });
 
-      setActiveQuestion(activeQuestion + 1);
-    }
-  };
+  //     setActiveQuestion(activeQuestion + 1);
+  //   }
+  // };
 
-  const previousQuestion = () => {
-    if (activeQuestion > 0) {
-      const videoUrl = candidateData.responses[activeQuestion - 1].response;
-      const currentQuestionText = candidateData.responses[activeQuestion - 1].question;
-      setVideoData({ videoUrl, currentQuestionText });
-      setActiveQuestion(activeQuestion - 1);
-    }
-  };
+  // const previousQuestion = () => {
+  //   if (activeQuestion > 0) {
+  //     const videoUrl = candidateData.responses[activeQuestion - 1].response;
+  //     const currentQuestionText = candidateData.responses[activeQuestion - 1].question;
+  //     setVideoData({ videoUrl, currentQuestionText });
+  //     setActiveQuestion(activeQuestion - 1);
+  //   }
+  // };
 
-  if (!candidateData) return <p>Loading...</p>;
+  // if (!candidateData) return <p>Loading...</p>;
   if (activeQuestion === null) return <p> Loading questions... </p>;
-  if (candidateData.length === 0) {
+  if (candidateData && candidateData.length === 0) {
     return <p>There is no data for this user, please message our support</p>;
   }
   const titleData = () => <span>Questions</span>;
@@ -95,9 +113,9 @@ const ViewCandidate = ({ location }) => {
   const buttonEnabled = (archives, candidateData) => {
     if (candidateData) {
       if (archives) {
-        return candidateData.archivedResponses ? candidateData.archivedResponses.length : false;
+        return candidateData?.archivedResponses ? candidateData.archivedResponses.length : false;
       }
-      return candidateData.responses ? candidateData.responses.length : false;
+      return candidateData?.responses ? candidateData.responses.length : false;
     }
     return null;
   };
@@ -107,22 +125,25 @@ const ViewCandidate = ({ location }) => {
         style={{ marginRight: 20 }}
         reload={getData}
         archives={archives}
-        route={`videos/${candidateData._id}`}
+        route={`videos/${candidateData?._id}`}
         archiveData={[{ _id: activeQuestion }]}
         onClick={() => null}
         active={buttonEnabled(archives, candidateData)}
       />
       <a onClick={() => setArchives(!archives)}>
         {archives
-          ? `View All (${candidateData.responses ? candidateData.responses.length : 0})`
+          ? `View All (${candidateData?.responses ? candidateData.responses.length : 0})`
           : `View Archived (${
-              candidateData.archivedResponses ? candidateData.archivedResponses.length : 0
+              candidateData?.archivedResponses ? candidateData.archivedResponses.length : 0
             })`}
       </a>
     </>
   );
 
-  const { candidateEmail, interviewName, userName, userId } = candidateData;
+  const { candidateEmail, interviewName, userName, userId, candidateName } = {
+    ...liveInterviewData,
+    ...candidateData,
+  };
 
   return (
     <div>
@@ -136,33 +157,41 @@ const ViewCandidate = ({ location }) => {
 
       <Row type="flex" gutter={24}>
         <Col xs={{ span: 24, order: 2 }} sm={24} md={10} lg={12} xl={10} xxl={10}>
-          <InfoCardEditable
-            userId={userId}
-            userName={userName}
-            interviewName={interviewName}
-            email={candidateEmail}
-            setVideoData={setVideoData}
-          />
-
-          <Card hoverable title={titleData()} extra={extraData()}>
-            <Table
-              showHeader={false}
-              onRow={(record, index) => ({
-                onClick: () => {
-                  const videoUrl = candidateData.responses[index].response;
-                  const currentQuestionText = candidateData.responses[index].question;
-                  setVideoData({ videoUrl, currentQuestionText });
-                  setActiveQuestion(index);
-                },
-              })}
-              rowClassName={(record, index) => (index === activeQuestion ? styles.selected : '')}
-              pagination={false}
-              bordered
-              dataSource={!archives ? candidateData.responses : candidateData.archivedResponses}
-              columns={columns}
-              // rowSelection={rowSelection}
+          <Space size="large" direction="vertical">
+            <InfoCardEditable
+              userId={userId}
+              userName={userName || candidateName}
+              interviewName={interviewName}
+              email={candidateEmail}
+              editable
+              setVideoData={setVideoData}
             />
-          </Card>
+            {id && (
+              <Card hoverable title={titleData()} extra={extraData()}>
+                <Table
+                  showHeader={false}
+                  onRow={(record, index) => ({
+                    onClick: () => {
+                      const videoUrl = candidateData?.responses[index].response;
+                      const currentQuestionText = candidateData?.responses[index].question;
+                      setVideoData({ videoUrl, currentQuestionText });
+                      setActiveQuestion(index);
+                    },
+                  })}
+                  rowClassName={(record, index) =>
+                    index === activeQuestion ? styles.selected : ''
+                  }
+                  pagination={false}
+                  bordered
+                  dataSource={
+                    !archives ? candidateData?.responses : candidateData?.archivedResponses
+                  }
+                  columns={columns}
+                  // rowSelection={rowSelection}
+                />
+              </Card>
+            )}
+          </Space>
         </Col>
         <Col
           xs={{ span: 24, order: 1 }}
@@ -175,10 +204,12 @@ const ViewCandidate = ({ location }) => {
           <Card
             style={{ marginBottom: 20 }}
             title={videoData.currentQuestionText}
-            actions={[
-              <Button shape="circle" icon={<LeftOutlined />} onClick={() => previousQuestion()} />,
-              <Button onClick={nextQuestion} shape="circle" icon={<RightOutlined />} />,
-            ]}
+            actions={
+              [
+                // <Button shape="circle" icon={<LeftOutlined />} onClick={() => previousQuestion()} />,
+                // <Button onClick={nextQuestion} shape="circle" icon={<RightOutlined />} />,
+              ]
+            }
           >
             <div className={styles.playerWrapper}>
               <ReactPlayer

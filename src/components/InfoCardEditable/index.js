@@ -1,143 +1,121 @@
 import React, { useState, useEffect } from 'react';
 
-import {
-  InsuranceOutlined,
-  MailOutlined,
-  MinusCircleOutlined,
-  PlusOutlined,
-  UploadOutlined,
-  YoutubeOutlined,
-} from '@ant-design/icons';
+import { InsuranceOutlined, MailOutlined, UploadOutlined } from '@ant-design/icons';
 
-import { Upload, Button, Card, Row, List, Popconfirm, Tooltip } from 'antd';
+import { Upload, Button, Card, Row, Tooltip, Skeleton } from 'antd';
 
-import styles from './index.less';
-import AddYTModal from './AddYTModal';
-import {
-  updateCandidateProfile,
-  getCandidateProfile,
-  removeCandidateDocument,
-} from '@/services/api';
+import PropTypes from 'prop-types';
 
-const InfoCardEditable = ({ setVideoData, userName, interviewName, email }) => {
-  const [modalVisible, setmodalVisible] = useState(false);
-  const [candidateProfileData, setCandidateProfileData] = useState({});
+import { getCandidateProfile, removeCandidateDocument } from '@/services/api';
+
+const url = 'https://a.deephire.com/v1/candidates';
+
+const EditableCard = ({ interviewName, email, key, documentProps }) => (
+  <>
+    {interviewName && (
+      <Row>
+        <InsuranceOutlined style={{ padding: 4 }} /> {interviewName}
+      </Row>
+    )}
+
+    {email && (
+      <Row>
+        <MailOutlined style={{ padding: 4 }} />
+        <Tooltip title="Click to email">
+          <a target="_blank" rel="noopener noreferrer" href={`mailto:${email}`}>
+            {email}
+          </a>
+        </Tooltip>
+      </Row>
+    )}
+
+    <Upload key={key} {...documentProps}>
+      <Button style={{ marginTop: 24 }}>
+        <UploadOutlined /> Add Document
+      </Button>
+    </Upload>
+  </>
+);
+
+const ViewCard = ({ key, documentProps }) => <Upload key={key} {...documentProps} />;
+
+const InfoCardEditable = ({ userName, interviewName, editable, email }) => {
+  const [candidateProfileData, setCandidateProfileData] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [key, setKey] = useState(1);
 
-  useEffect(() => {
+  const loadInfo = async () =>
     getCandidateProfile(email).then(r => {
       const candidateProfile = r;
       if (r) {
         if (candidateProfile.files) {
           candidateProfile.files = r.files.map(r => ({
             ...r,
-            url: `https://a.deephire.com/v1/candidates/${email}/documents/${r.uid}`,
+            url: `${url}/${email}/documents/${r.uid}`,
           }));
         }
         setCandidateProfileData(candidateProfile);
       }
     });
+
+  useEffect(() => {
+    const initialDataLoad = async () => {
+      setLoading(true);
+      if (email) {
+        await loadInfo();
+      }
+      setLoading(false);
+    };
+    initialDataLoad();
+  }, [email]);
+
+  useEffect(() => {
+    loadInfo();
   }, [key]);
 
-  const props = {
+  const documentUploadProps = {
     name: 'upfile',
-    action: `https://a.deephire.com/v1/candidates/${email}/documents/`,
+    action: `${url}/${email}/documents/`,
     headers: { authorization: `Bearer ${localStorage.getItem('access_token')}` },
     onChange({ file }) {
       if (file.status === 'done') {
-        setKey(file.status);
+        setKey(key + 1);
       }
     },
-    defaultFileList: candidateProfileData.files,
-    key: candidateProfileData.files,
+    defaultFileList: candidateProfileData?.files,
+    key: candidateProfileData?.files,
     onRemove(file) {
       removeCandidateDocument(email, file.uid);
     },
   };
 
-  const toggleModalVisible = () => {
-    setmodalVisible(!modalVisible);
+  const documentViewProps = {
+    defaultFileList: candidateProfileData?.files,
+    key: candidateProfileData?.files,
   };
 
-  const remove = i => {
-    candidateProfileData.youtubeLinks.splice(i, 1);
-    // setCandidateProfileData(candidateProfileData);
-    updateCandidateProfile(email, candidateProfileData).then(r => setCandidateProfileData(r));
-  };
-
-  const addYouTubeLink = link => {
-    const { youtubeLinks } = candidateProfileData;
-    if (!youtubeLinks) {
-      candidateProfileData.youtubeLinks = [link];
-    } else {
-      candidateProfileData.youtubeLinks.push(link);
-    }
-    updateCandidateProfile(email, candidateProfileData).then(r => setCandidateProfileData(r));
-  };
-
-  if (!candidateProfileData) return null;
-  const { youtubeLinks } = candidateProfileData;
-
+  const editProps = { interviewName, email, key, documentProps: documentUploadProps };
+  const viewProps = { key, documentProps: documentViewProps };
   return (
-    <Card style={{ marginBottom: '20px' }} hoverable title={userName}>
-      <Row>
-        <InsuranceOutlined style={{ padding: 4 }} /> {interviewName}
-      </Row>
-      <Row>
-        <MailOutlined style={{ padding: 4 }} />
-        <Tooltip title="Click to email">
-          <a target="_blank" rel="noopener noreferrer" href={`mailto:${email}`}>
-            {` ${email}`}
-          </a>
-        </Tooltip>
-      </Row>
-
-      <List
-        locale={{ emptyText: ' ' }}
-        // locale=""
-
-        size="small"
-        dataSource={youtubeLinks}
-        renderItem={(item, index) => (
-          <div>
-            <YoutubeOutlined />{' '}
-            <a
-              onClick={() => setVideoData({ videoUrl: item, currentQuestionText: 'YouTube Video' })}
-            >
-              {' '}
-              {item.replace('www.youtube.com/watch?v=', 'youtu.be/')}{' '}
-            </a>
-            <Popconfirm
-              placement="rightTop"
-              title="Are you sure you want to delete this?"
-              onConfirm={() => remove(index)}
-              okText="Delete"
-              cancelText="No"
-            >
-              <MinusCircleOutlined className={styles.dynamicDeleteButton} />
-            </Popconfirm>
-          </div>
-        )}
-      />
-
-      <Row>
-        <Button style={{ marginRight: '20px' }} type="dashed" onClick={toggleModalVisible}>
-          <PlusOutlined /> Add YT Video
-        </Button>
-        <Upload key={key} {...props}>
-          <Button>
-            <UploadOutlined /> Add Document
-          </Button>
-        </Upload>
-      </Row>
-
-      <AddYTModal
-        visable={modalVisible}
-        toggle={toggleModalVisible}
-        addYouTubeLink={addYouTubeLink}
-      />
+    <Card hoverable title={userName}>
+      <Skeleton loading={loading} active>
+        {editable ? <EditableCard {...editProps} /> : <ViewCard {...viewProps} />}
+      </Skeleton>
     </Card>
   );
+};
+
+InfoCardEditable.propTypes = {
+  userName: PropTypes.string,
+  interviewName: PropTypes.string,
+  email: PropTypes.string.isRequired,
+  editable: PropTypes.bool,
+};
+
+InfoCardEditable.defaultProps = {
+  userName: '',
+  interviewName: '',
+  editable: false,
 };
 
 export default InfoCardEditable;

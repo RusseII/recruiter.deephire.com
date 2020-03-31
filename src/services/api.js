@@ -219,6 +219,13 @@ export async function getLiveInterviews() {
   });
 }
 
+export async function getLiveInterview(id) {
+  return request(`${newApi}/live/${id}`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
 export async function getVideo(id) {
   return request(`${newApi}/videos/${id}`, {
     method: 'GET',
