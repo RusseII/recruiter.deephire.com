@@ -183,14 +183,19 @@ class LoginPage extends Component {
                 onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
               />
             </Tab>
+
             <Tab key="signUp" tab="Sign up">
               {invited ? (
                 <InvitedText createdByName={createdByName} companyName={companyName} />
               ) : (
                 <DefaultText />
               )}
-              <Name name="name" placeholder="full name" />
-              <Company disabled={Boolean(invited)} name="company" placeholder="company" />
+              {type === 'signUp' && (
+                <>
+                  <Name name="name" placeholder="full name" />
+                  <Company disabled={Boolean(invited)} name="company" placeholder="company" />
+                </>
+              )}
               <Email
                 disabled={Boolean(invited)}
                 name="email"
