@@ -146,10 +146,7 @@ const LiveInterviews = () => {
     setInterviews();
   }, [reload]);
 
-  if (
-    recruiterProfile?.email !== 'russell@deephire.com' ||
-    recruiterProfile?.email !== 'demo@deephire.com'
-  ) {
+  if (recruiterProfile?.email !== 'demo@deephire.com') {
     return (
       <Title style={{ textAlign: 'center', verticalAlign: 'center', lineHeight: 10 }}>
         Coming soon...
