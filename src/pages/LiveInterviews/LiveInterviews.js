@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Card, Table, Typography, Button, Tabs, Spin, Popover, Tooltip } from 'antd';
 import router from 'umi/router';
 import { ShareAltOutlined } from '@ant-design/icons';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import InviteDrawer from './ScheduleInterview';
 import { getLiveInterviews } from '@/services/api';
+import GlobalContext from '@/layouts/MenuContext';
 
 const { TabPane } = Tabs;
-const { Text } = Typography;
+const { Text, Title } = Typography;
 const columns = [
   {
     title: 'Interview Time',
@@ -130,6 +131,9 @@ const Actions = ({ data }) => {
 const LiveInterviews = () => {
   const [liveInterviews, setLiveInterviews] = useState([]);
   const [reload, setReload] = useState(false);
+  const globalData = useContext(GlobalContext);
+
+  const { recruiterProfile } = globalData;
 
   useEffect(() => {
     const setInterviews = async () => {
@@ -142,6 +146,16 @@ const LiveInterviews = () => {
     setInterviews();
   }, [reload]);
 
+  if (
+    recruiterProfile?.email !== 'russell@deephire.com' ||
+    recruiterProfile?.email !== 'demo@deephire.com'
+  ) {
+    return (
+      <Title style={{ textAlign: 'center', verticalAlign: 'center', lineHeight: 10 }}>
+        Coming soon...
+      </Title>
+    );
+  }
   const upcomingInterviews = liveInterviews.filter(liveInterview => {
     return new Date(liveInterview.interviewTime[1]) > new Date();
   });
