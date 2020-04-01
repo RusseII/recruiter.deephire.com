@@ -1,6 +1,11 @@
 /* eslint-disable no-param-reassign */
 import React, { useState, useEffect } from 'react';
-import { LinkOutlined, MinusCircleTwoTone, PlusOutlined, UserAddOutlined } from '@ant-design/icons';
+import {
+  ShareAltOutlined,
+  MinusCircleTwoTone,
+  PlusOutlined,
+  UserAddOutlined,
+} from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import {
@@ -276,7 +281,7 @@ const InviteCandidates = Form.create()(
             <TabPane
               tab={
                 <span>
-                  <LinkOutlined />
+                  <ShareAltOutlined />
                   Direct Link
                 </span>
               }

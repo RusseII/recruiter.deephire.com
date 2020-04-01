@@ -1,4 +1,4 @@
-import { EditOutlined, LinkOutlined, UserAddOutlined } from '@ant-design/icons';
+import { EditOutlined, ShareAltOutlined, UserAddOutlined } from '@ant-design/icons';
 import {
   message,
   Row,
@@ -145,7 +145,7 @@ const TableList = () => {
                 onClick={() => setInviteCandidates({ activeTab: '2', ...data })}
                 style={{ marginLeft: 8 }}
                 shape="circle"
-                icon={<LinkOutlined />}
+                icon={<ShareAltOutlined />}
               />
             </Tooltip>
 

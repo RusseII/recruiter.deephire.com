@@ -28,7 +28,7 @@
     "@antv/data-set": "^0.10.1",
     "@babel/runtime": "^7.0.0",
     "@bit/russeii.deephire.index": "^1.0.1",
-    "antd": "^4.0.4",
+    "antd": "^4.1.0",
     "auth0-js": "^9.11.3",
     "bizcharts": "^3.2.2",
     "bizcharts-plugin-slider": "^2.0.3",
@@ -117,8 +117,5 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 10"
-  ],
-  "resolutions": {
-    "ajv": "6.8.1"
-  }
+  ]
 }

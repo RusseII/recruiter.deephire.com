@@ -14,9 +14,9 @@ function initTotalList(columns) {
 
 function debounce(fn, ms) {
   let timer;
-  return _ => {
+  return () => {
     clearTimeout(timer);
-    timer = setTimeout(_ => {
+    timer = setTimeout(() => {
       timer = null;
       // eslint-disable-next-line prefer-rest-params
       fn.apply(this, arguments);
@@ -140,7 +140,7 @@ class StandardTable extends PureComponent {
         <Table
           scroll={{ x: width < 1100 }}
           loading={loading}
-          rowKey={rowKey || 'key'}
+          rowKey={rowKey || '_id'}
           rowSelection={rowSelection}
           dataSource={list}
           columns={columns}

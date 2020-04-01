@@ -79,6 +79,13 @@ export default [
         hideInMenu: true,
       },
       {
+        path: '/live-interviews',
+        name: 'Live Interviews',
+        authority: ['admin', 'user'],
+        icon: 'video-camera',
+        component: './LiveInterviews/LiveInterviews',
+      },
+      {
         path: '/billing/',
         icon: 'credit-card',
         name: 'Billing',
