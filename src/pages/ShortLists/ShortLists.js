@@ -43,10 +43,6 @@ const columns = [
       );
     },
   },
-  // {
-  //   title: 'Analytics',
-  //   render: data => <a onClick={() => openShortListAnalytics(data)}>View</a>,
-  // },
   {
     title: 'Last Viewed',
     render: data => {

@@ -8,6 +8,7 @@ import {
   ConfigProvider,
   Popconfirm,
   Button,
+  Skeleton,
 } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import CandidateCard from '@/components/CandidateCard';
@@ -38,6 +39,9 @@ const Candidates = () => {
 
   const [filteredData, setFilteredData] = useState(videos);
 
+  const candidateCount = Number(localStorage.getItem('candidateCount'));
+  const countOfCandidates = new Array(candidateCount).fill(5);
+
   const createDataSource = data => {
     const searchDataSource = [];
     data.forEach(candidate => {
@@ -62,6 +66,7 @@ const Candidates = () => {
     setVideos(data || []);
     setFilteredData(data || []);
     setLoading(false);
+    localStorage.setItem('candidateCount', filteredData.length);
   };
 
   useEffect(() => {
@@ -154,18 +159,34 @@ const Candidates = () => {
             customEmpty('No Candidate Videos', '/interview/view', 'View Interviews')
           }
         >
-          <List
-            rowKey="id"
-            style={{ marginTop: 24 }}
-            grid={{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
-            loading={loading}
-            dataSource={filteredData}
-            renderItem={item => (
-              <List.Item key={item.id}>
-                <CandidateCard item={item} />
-              </List.Item>
-            )}
-          />
+          {loading && candidateCount ? (
+            <List
+              rowKey="id"
+              style={{ marginTop: 24 }}
+              grid={{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
+              dataSource={countOfCandidates}
+              renderItem={item => (
+                <List.Item key={item.id}>
+                  <Card style={{ height: 227 }}>
+                    <Skeleton avatar paragraph={{ rows: 4 }} loading active />
+                  </Card>
+                </List.Item>
+              )}
+            />
+          ) : (
+            <List
+              rowKey="id"
+              style={{ marginTop: 24 }}
+              grid={{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
+              loading={loading}
+              dataSource={filteredData}
+              renderItem={item => (
+                <List.Item key={item.id}>
+                  <CandidateCard item={item} />
+                </List.Item>
+              )}
+            />
+          )}
         </ConfigProvider>
       </Checkbox.Group>
     </PageHeaderWrapper>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Table, Typography, Button, Tabs, Spin, Popover, Tooltip } from 'antd';
+import router from 'umi/router';
 import { ShareAltOutlined } from '@ant-design/icons';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import InviteDrawer from './ScheduleInterview';
@@ -51,14 +52,15 @@ const columns = [
     title: 'Recording Status',
     key: 'recording',
     render: (text, data) => {
-      const { recordingStatus, recordingUrl } = data;
+      const { recordingStatus, _id } = data;
       if (recordingStatus === 'composition-available') {
-        const lastestRecording = recordingUrl.splice(-1)[0];
-
         return (
-          <a rel="noopener noreferrer" target="_blank" href={lastestRecording}>
+          <Button
+            type="link"
+            onClick={() => router.push(`/candidates/view-candidate/?liveid=${_id}`)}
+          >
             View Recording
-          </a>
+          </Button>
         );
       }
       if (recordingStatus === 'composition-progress') {

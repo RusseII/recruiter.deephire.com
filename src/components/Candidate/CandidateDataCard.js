@@ -39,7 +39,8 @@ const EditableCard = ({ interviewName, email, key, documentProps }) => (
 
 const ViewCard = ({ key, documentProps }) => <Upload key={key} {...documentProps} />;
 
-const InfoCardEditable = ({ userName, interviewName, editable, email }) => {
+const InfoCardEditable = props => {
+  const { userName, interviewName, editable, email } = props;
   const [candidateProfileData, setCandidateProfileData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [key, setKey] = useState(1);
@@ -97,7 +98,7 @@ const InfoCardEditable = ({ userName, interviewName, editable, email }) => {
   const editProps = { interviewName, email, key, documentProps: documentUploadProps };
   const viewProps = { key, documentProps: documentViewProps };
   return (
-    <Card hoverable title={userName}>
+    <Card hoverable title={userName} {...props}>
       <Skeleton loading={loading} active>
         {editable ? <EditableCard {...editProps} /> : <ViewCard {...viewProps} />}
       </Skeleton>
