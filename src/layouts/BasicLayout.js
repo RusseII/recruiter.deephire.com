@@ -11,6 +11,7 @@ import pathToRegexp from 'path-to-regexp';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
 import { formatMessage } from 'umi/locale';
 import { StripeProvider } from 'react-stripe-elements';
+import * as Sentry from '@sentry/browser';
 import SiderMenu from '@/components/SiderMenu';
 import Authorized from '@/utils/Authorized';
 import SettingDrawer from '@/components/SettingDrawer';
@@ -25,6 +26,7 @@ import { reloadAuthorized } from '../utils/Authorized';
 import UpgradeButton from '@/components/Upgrade/UpgradeButton';
 import BillingCards from '@/pages/Billing/BillingCards';
 
+Sentry.init({ dsn: 'https://ba050977b865461497954ae331877145@sentry.io/5187820' });
 const { Content } = Layout;
 
 GlobalContext.displayName = 'Global Context';
