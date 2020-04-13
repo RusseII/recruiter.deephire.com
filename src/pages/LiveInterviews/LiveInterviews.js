@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Card, Table, Typography, Button, Tabs, Spin, Popover, Tooltip } from 'antd';
+import { Card, Table, Typography, Button, Tabs, Spin, Popover, Tooltip, Empty } from 'antd';
 import router from 'umi/router';
 import { ShareAltOutlined } from '@ant-design/icons';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -8,7 +8,7 @@ import { getLiveInterviews } from '@/services/api';
 import GlobalContext from '@/layouts/MenuContext';
 
 const { TabPane } = Tabs;
-const { Text, Title } = Typography;
+const { Text } = Typography;
 const columns = [
   {
     title: 'Interview Time',
@@ -138,46 +138,77 @@ const LiveInterviews = () => {
   useEffect(() => {
     const setInterviews = async () => {
       const live = await getLiveInterviews();
-      const liveOrdered = live.sort((a, b) => {
-        return new Date(a.interviewTime[0]) - new Date(b.interviewTime[0]);
-      });
-      setLiveInterviews(liveOrdered);
+      if (live) {
+        const liveOrdered = live.sort((a, b) => {
+          return new Date(a.interviewTime[0]) - new Date(b.interviewTime[0]);
+        });
+        setLiveInterviews(liveOrdered);
+      }
     };
     setInterviews();
   }, [reload]);
 
-  if (recruiterProfile?.email !== 'demo@deephire.com') {
+  const { email } = recruiterProfile || {};
+  if (
+    email &&
+    (email === 'demo@deephire.com' ||
+      email === 'russell@deephire.com' ||
+      email.includes('assistinghands') ||
+      email.includes('klingcare'))
+  ) {
+    const upcomingInterviews = liveInterviews.filter(liveInterview => {
+      return new Date(liveInterview.interviewTime[1]) > new Date();
+    });
+
+    const pastInterviews = liveInterviews.filter(liveInterview => {
+      return new Date(liveInterview.interviewTime[1]) < new Date();
+    });
+
     return (
-      <Title style={{ textAlign: 'center', verticalAlign: 'center', lineHeight: 10 }}>
-        Coming soon...
-      </Title>
+      <PageHeaderWrapper title="Live Interview">
+        <Card>
+          <Tabs tabBarExtraContent={<InviteDrawer setReload={setReload} />} defaultActiveKey="1">
+            <TabPane tab="Upcoming Live Interviews" key="1">
+              <Spin spinning={false}>
+                <Table columns={columns} dataSource={upcomingInterviews} pagination={false} />
+              </Spin>
+            </TabPane>
+            <TabPane tab="Completed Live Interviews" key="2">
+              <Spin spinning={false}>
+                <Table columns={columns} dataSource={pastInterviews} />
+              </Spin>
+            </TabPane>
+          </Tabs>
+        </Card>
+      </PageHeaderWrapper>
     );
   }
-  const upcomingInterviews = liveInterviews.filter(liveInterview => {
-    return new Date(liveInterview.interviewTime[1]) > new Date();
-  });
-
-  const pastInterviews = liveInterviews.filter(liveInterview => {
-    return new Date(liveInterview.interviewTime[1]) < new Date();
-  });
 
   return (
-    <PageHeaderWrapper title="Live Interview">
-      <Card>
-        <Tabs tabBarExtraContent={<InviteDrawer setReload={setReload} />} defaultActiveKey="1">
-          <TabPane tab="Upcoming Live Interviews" key="1">
-            <Spin spinning={false}>
-              <Table columns={columns} dataSource={upcomingInterviews} pagination={false} />
-            </Spin>
-          </TabPane>
-          <TabPane tab="Completed Live Interviews" key="2">
-            <Spin spinning={false}>
-              <Table columns={columns} dataSource={pastInterviews} />
-            </Spin>
-          </TabPane>
-        </Tabs>
-      </Card>
-    </PageHeaderWrapper>
+    // <Title level={4}>
+    //   <div>Coming soon...</div>
+    //   <Button
+    //     size="large"
+    //     type="primary"
+    //     onClick={() => window.open('https://russellratcliffe.typeform.com/to/KkTSNU', '_blank')}
+    //   >
+    //     Join Waitlist
+    //   </Button>
+    // </Title>
+
+    <Empty
+      image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+      description="Live interviews coming soon..."
+    >
+      <Button
+        onClick={() => {
+          window.open('https://russellratcliffe.typeform.com/to/KkTSNU', '_blank');
+        }}
+        type="primary"
+      >
+        Join Waitlist
+      </Button>
+    </Empty>
   );
 };
 
