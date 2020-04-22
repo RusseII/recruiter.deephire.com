@@ -6,6 +6,9 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import InviteDrawer from './ScheduleInterview';
 import { getLiveInterviews } from '@/services/api';
 import GlobalContext from '@/layouts/MenuContext';
+import { lowerCaseQueryParams } from '@/utils/utils';
+
+const { tab } = lowerCaseQueryParams(window.location.search);
 
 const { TabPane } = Tabs;
 const { Text } = Typography;
@@ -140,7 +143,7 @@ const LiveInterviews = () => {
       const live = await getLiveInterviews();
       if (live) {
         const liveOrdered = live.sort((a, b) => {
-          return new Date(a.interviewTime[0]) - new Date(b.interviewTime[0]);
+          return new Date(b.interviewTime[0]) - new Date(a.interviewTime[0]);
         });
         setLiveInterviews(liveOrdered);
       }
@@ -167,7 +170,7 @@ const LiveInterviews = () => {
     return (
       <PageHeaderWrapper title="Live Interview">
         <Card>
-          <Tabs tabBarExtraContent={<InviteDrawer setReload={setReload} />} defaultActiveKey="1">
+          <Tabs tabBarExtraContent={<InviteDrawer setReload={setReload} />} defaultActiveKey={tab}>
             <TabPane tab="Upcoming Live Interviews" key="1">
               <Spin spinning={false}>
                 <Table columns={columns} dataSource={upcomingInterviews} pagination={false} />

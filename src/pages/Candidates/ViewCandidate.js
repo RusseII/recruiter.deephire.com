@@ -67,7 +67,7 @@ const ViewCandidate = ({ location }) => {
         style={{ marginBottom: '20px' }}
         onClick={
           liveId
-            ? () => router.push(`/live-interviews`)
+            ? () => router.push(`/live-interviews?tab=2`)
             : () => router.push(`/candidates/candidates`)
         }
         type="secondary"
