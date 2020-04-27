@@ -7,7 +7,7 @@ import { scheduleInterview } from '@/services/api';
 
 const { RangePicker } = DatePicker;
 
-const ScheduleButton = ({ setReload }) => {
+const ScheduleButton = ({ execute }) => {
   const [visible, setVisible] = useState(false);
   const [interviewScheduled, setInterviewScheduled] = useState(false);
   const [linkToInterview, setLinkToInterview] = useState('loading...');
@@ -16,7 +16,7 @@ const ScheduleButton = ({ setReload }) => {
     const { interviewLink } = interviewData;
     setLinkToInterview(interviewLink);
     setInterviewScheduled(true);
-    setReload(flag => !flag);
+    execute();
   };
 
   function disabledDate(current) {

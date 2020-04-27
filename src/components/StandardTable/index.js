@@ -51,7 +51,7 @@ class StandardTable extends PureComponent {
 
   static getDerivedStateFromProps(nextProps) {
     // clean state
-    if (nextProps.selectedRows.length === 0) {
+    if (nextProps.selectedRows && nextProps.selectedRows.length === 0) {
       const needTotalList = initTotalList(nextProps.columns);
       return {
         selectedRowKeys: [],
@@ -98,6 +98,7 @@ class StandardTable extends PureComponent {
       loading,
       columns,
       rowKey,
+      selectedRows,
     } = this.props;
 
     const paginationProps = {
@@ -141,11 +142,12 @@ class StandardTable extends PureComponent {
           scroll={{ x: width < 1100 }}
           loading={loading}
           rowKey={rowKey || '_id'}
-          rowSelection={rowSelection}
+          rowSelection={selectedRows ? rowSelection : null}
           dataSource={list}
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
+          {...this.props}
         />
       </div>
     );

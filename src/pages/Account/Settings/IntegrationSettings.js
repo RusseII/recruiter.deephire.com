@@ -13,7 +13,7 @@ import '@ant-design/compatible/assets/index.css';
 import { Input, Card, Button, Alert, Col, Drawer, Popconfirm, Skeleton, message } from 'antd';
 import { connect } from 'dva';
 import { updateCompany } from '@/services/api';
-import useCompanyInfo from '@/services/hooks';
+import { useCompanyInfo } from '@/services/hooks';
 
 const { Meta } = Card;
 

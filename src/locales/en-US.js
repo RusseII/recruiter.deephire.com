@@ -10,6 +10,7 @@ export default {
   'menu.Share Links': 'Share Links',
   // 'menu.Share Links.Share Links': 'All',
   'menu.shortListAnalytics': 'Analytics',
+  'menu.Live Interviews': 'Live Interviews',
   'menu.Account.Profile': 'Profile',
   'menu.Account': 'Account',
 
