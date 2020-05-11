@@ -9,10 +9,14 @@ const { RangePicker } = DatePicker;
 
 const ScheduleButton = ({ execute }) => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [interviewScheduled, setInterviewScheduled] = useState(false);
   const [linkToInterview, setLinkToInterview] = useState('loading...');
   const onFinish = async values => {
+    setLoading(true);
     const interviewData = await scheduleInterview(values, 'Interview succesfully scheduled');
+    setLoading(false);
     const { interviewLink } = interviewData;
     setLinkToInterview(interviewLink);
     setInterviewScheduled(true);
@@ -107,7 +111,12 @@ const ScheduleButton = ({ execute }) => {
               </Col>
             </Row>
 
-            <Button htmlType="submit" type="primary" style={{ marginTop: 24, width: '100%' }}>
+            <Button
+              loading={loading}
+              htmlType="submit"
+              type="primary"
+              style={{ marginTop: 24, width: '100%' }}
+            >
               Schedule Interview
             </Button>
           </Form>
