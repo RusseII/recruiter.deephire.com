@@ -163,7 +163,7 @@ const Candidates = () => {
             <List
               rowKey="id"
               style={{ marginTop: 24 }}
-              grid={{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
+              grid={{ gutter: 24, xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
               dataSource={countOfCandidates}
               renderItem={item => (
                 <List.Item key={item.id}>
@@ -177,7 +177,7 @@ const Candidates = () => {
             <List
               rowKey="id"
               style={{ marginTop: 24 }}
-              grid={{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
+              grid={{ gutter: 24, xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
               loading={loading}
               dataSource={filteredData}
               renderItem={item => (
