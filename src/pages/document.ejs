@@ -34,15 +34,11 @@
   <div id="root"></div>
 </body>
 <script type="text/javascript">
-  function setEmail(email) {
-    $crisp.push(["set", "user:email", email]);
-  }
 
   function setFullstoryIdentity(id, name, email) {
     FS.identify(id, {
       displayName: name,
       email: email,
-
 
     });
   }
