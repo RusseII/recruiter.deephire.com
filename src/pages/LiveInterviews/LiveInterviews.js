@@ -97,8 +97,11 @@ const LiveInterviews = () => {
     },
     {
       title: 'Interviewer',
-      dataIndex: 'createdBy',
       key: 'createdBy',
+      render: data => {
+        const { createdBy, recruiterName } = data;
+        return recruiterName || createdBy;
+      },
     },
     {
       title: 'Candidate Name',
