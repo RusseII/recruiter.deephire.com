@@ -1,7 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Card, Typography, Button, Tabs, Spin, Popover, Tooltip, Empty, Row, Col } from 'antd';
+import {
+  Card,
+  Typography,
+  Button,
+  Tabs,
+  Spin,
+  Popover,
+  Tooltip,
+  Empty,
+  Row,
+  Col,
+  Space,
+} from 'antd';
 import router from 'umi/router';
-import { ShareAltOutlined } from '@ant-design/icons';
+import { ShareAltOutlined, FileAddOutlined } from '@ant-design/icons';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import InviteDrawer from './ScheduleInterview';
 import { getLiveInterviews } from '@/services/api';
@@ -14,6 +26,7 @@ const { TabPane } = Tabs;
 const { Text } = Typography;
 
 const Actions = ({ data }) => {
+  const { interviewType } = data;
   const [visibility, setVisibility] = useState({ hovered: false, clicked: false });
 
   // const { recordings } = data;
@@ -23,7 +36,7 @@ const Actions = ({ data }) => {
   // }
 
   return (
-    <>
+    <Space>
       <Tooltip
         title="Share with candidate"
         trigger="hover"
@@ -40,7 +53,17 @@ const Actions = ({ data }) => {
           <Button shape="circle" icon={<ShareAltOutlined />} />
         </Popover>
       </Tooltip>
-    </>
+      {interviewType === 'client' && (
+        <InviteDrawer
+          data={data}
+          customButton={onClick => (
+            <Tooltip title="Add candidate documents that will be visible during the interview">
+              <Button onClick={onClick} shape="circle" icon={<FileAddOutlined />} />
+            </Tooltip>
+          )}
+        />
+      )}
+    </Space>
   );
 };
 
@@ -84,22 +107,32 @@ const LiveInterviews = () => {
           month: 'long',
           weekday: 'long',
           day: 'numeric',
+        });
+        const startTime = startDateObj.toLocaleString('default', {
           hour: 'numeric',
           minute: 'numeric',
         });
 
-        const endDate = endDateObj.toLocaleString('default', {
+        const endTime = endDateObj.toLocaleString('default', {
           hour: 'numeric',
           minute: 'numeric',
         });
-        return `${startDate}-${endDate}`;
+        return (
+          <div>
+            <div>{startDate}</div>
+            <div>{`${startTime}-${endTime}`}</div>
+          </div>
+        );
       },
     },
     {
       title: 'Interviewer',
       key: 'createdBy',
       render: data => {
-        const { createdBy, recruiterName } = data;
+        const { createdBy, recruiterName, clientName, interviewType } = data;
+        if (interviewType === 'client') {
+          return clientName;
+        }
         return recruiterName || createdBy;
       },
     },
@@ -173,8 +206,11 @@ const LiveInterviews = () => {
       email.includes('assistinghands') ||
       email.includes('klingcare'))
   ) {
-    const upcomingInterviews = liveInterviews.filter(liveInterview => {
+    const upcomingInterviewsFiltered = liveInterviews.filter(liveInterview => {
       return new Date(liveInterview.interviewTime[1]) > new Date();
+    });
+    const upcomingInterviews = upcomingInterviewsFiltered.sort((a, b) => {
+      return new Date(a.interviewTime[0]) - new Date(b.interviewTime[0]);
     });
 
     const pastInterviews = liveInterviews.filter(liveInterview => {

@@ -10,7 +10,7 @@ import { getCandidateProfile, removeCandidateDocument } from '@/services/api';
 
 const url = 'https://a.deephire.com/v1/candidates';
 
-const EditableCard = ({ interviewName, email, key, documentProps }) => (
+const EditableCard = ({ interviewName, email, key, documentProps, marginTop = 24 }) => (
   <>
     {interviewName && (
       <Row>
@@ -30,7 +30,7 @@ const EditableCard = ({ interviewName, email, key, documentProps }) => (
     )}
 
     <Upload key={key} {...documentProps}>
-      <Button style={{ marginTop: 24 }}>
+      <Button style={{ marginTop }}>
         <UploadOutlined /> Add Document
       </Button>
     </Upload>
@@ -97,6 +97,7 @@ const InfoCardEditable = props => {
 
   const editProps = { interviewName, email, key, documentProps: documentUploadProps };
   const viewProps = { key, documentProps: documentViewProps };
+
   return (
     <Card hoverable title={userName} {...props}>
       <Skeleton loading={loading} active>
@@ -111,12 +112,14 @@ InfoCardEditable.propTypes = {
   interviewName: PropTypes.string,
   email: PropTypes.string.isRequired,
   editable: PropTypes.bool,
+  noStyles: PropTypes.bool,
 };
 
 InfoCardEditable.defaultProps = {
   userName: '',
   interviewName: '',
   editable: false,
+  noStyles: false,
 };
 
 export default InfoCardEditable;
