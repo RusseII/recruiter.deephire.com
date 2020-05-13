@@ -5,7 +5,7 @@ import { LeftOutlined } from '@ant-design/icons';
 import { Col, Row, Button } from 'antd';
 import router from 'umi/router';
 
-import InfoCardEditable from '@/components/Candidate/CandidateDataCard';
+import CandidateDataCard from '@/components/Candidate/CandidateDataCard';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 
 import { getVideo, getLiveInterview } from '@/services/api';
@@ -83,7 +83,7 @@ const ViewCandidate = ({ location }) => {
       <Row type="flex" gutter={24}>
         <Col xs={{ span: 24, order: 2 }} sm={24} md={10} lg={12} xl={10} xxl={10}>
           {/* <Space size="large" direction="vertical"> */}
-          <InfoCardEditable
+          <CandidateDataCard
             style={{ marginBottom: 24 }}
             userId={userId}
             userName={userName || candidateName}
