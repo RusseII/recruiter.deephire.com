@@ -86,7 +86,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
           <Result
             style={{ padding: 0 }}
             status="success"
-            title={data ? 'Succesfully Updated' : 'Successfully Scheduled'}
+            title={data ? 'Successfully Updated' : 'Successfully Scheduled'}
             subTitle="Please share the below link with the candidate, and use that link to join the interview when it is your interview time."
             extra={[
               <DirectLink link={linkToInterview} />,
