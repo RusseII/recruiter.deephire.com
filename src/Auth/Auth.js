@@ -132,7 +132,8 @@ export default class Auth {
       if (!err) {
         const { sub, name, email } = profile;
         window.setFullstoryIdentity(sub, name, email);
-        window.setEmail(email);
+        $crisp.push(['set', 'user:email', [email]]);
+        $crisp.push(['set', 'user:nickname', [name]]);
         localStorage.setItem('profile', JSON.stringify(profile));
       } else {
         return this.logout();
