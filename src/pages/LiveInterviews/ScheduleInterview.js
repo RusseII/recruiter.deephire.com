@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Result, Drawer, Form, Button, Col, Row, Input, DatePicker, Select } from 'antd';
 import { ScheduleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import DirectLink from '@/components/InviteCandidates/DirectLink';
 import { scheduleInterview } from '@/services/api';
 import CandidateDataCard from '@/components/Candidate/CandidateDataCard';
+import GlobalContext from '@/layouts/MenuContext';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const ScheduleButton = ({ execute, data, customButton }) => {
+  const globalData = useContext(GlobalContext);
+  const { recruiterProfile } = globalData;
+  // eslint-disable-next-line camelcase
+  const createdByTeam = recruiterProfile?.app_metadata?.team;
+
   const { candidateEmail, candidateName } = data || {};
   const [values, setValues] = useState({});
   const [visible, setVisible] = useState(false);
@@ -20,7 +26,10 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   const onFinish = async values => {
     const { interviewType } = values;
     setLoading(true);
-    const interviewData = await scheduleInterview(values, 'Interview succesfully scheduled');
+    const interviewData = await scheduleInterview(
+      { ...values, createdByTeam },
+      'Interview succesfully scheduled'
+    );
     setLoading(false);
     const { interviewLink } = interviewData;
     setLinkToInterview(interviewLink);
