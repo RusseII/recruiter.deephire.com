@@ -86,8 +86,18 @@ const LiveInterviews = () => {
   };
 
   const { execute, pending, value } = useAsync(fetchLiveInterviews, false);
-  const liveInterviews = value || [];
+  let liveInterviews = value || [];
+
   const { recruiterProfile } = globalData;
+  // eslint-disable-next-line camelcase
+  const team = recruiterProfile?.app_metadata?.team;
+
+  if (team) {
+    liveInterviews = liveInterviews.filter(liveInterview => {
+      if (!liveInterview.createdByTeam) return null;
+      return liveInterview.createdByTeam.includes(team);
+    });
+  }
 
   useEffect(() => {
     execute();
@@ -204,6 +214,8 @@ const LiveInterviews = () => {
     (email === 'demo@deephire.com' ||
       email === 'russell@deephire.com' ||
       email.includes('assistinghands') ||
+      email.includes('russell') ||
+      email.includes('apple') ||
       email.includes('klingcare'))
   ) {
     const upcomingInterviewsFiltered = liveInterviews.filter(liveInterview => {
