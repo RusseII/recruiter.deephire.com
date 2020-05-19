@@ -197,8 +197,8 @@ const ScheduleButton = ({ execute, data, customButton }) => {
 const JobName = () => (
   <Row gutter={16}>
     <Col span={24}>
-      <Form.Item name="jobName" label="Role Name">
-        <Input placeholder="Name of the Job" />
+      <Form.Item name="jobName" label="Job Title">
+        <Input placeholder="Name of the Role" />
       </Form.Item>
     </Col>
   </Row>
