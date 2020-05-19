@@ -122,9 +122,10 @@ const ScheduleButton = ({ execute, data, customButton }) => {
             >
               <Select defaultValue="recruiter" onChange={type => setType(type)}>
                 <Option value="recruiter">You + Candidate</Option>
-                <Option value="client">Client + Candidate</Option>
+                <Option value="client">Client + Candidate (Send Out)</Option>
               </Select>
             </Form.Item>
+            {type === 'client' && <JobName />}
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
@@ -193,6 +194,15 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   );
 };
 
+const JobName = () => (
+  <Row gutter={16}>
+    <Col span={24}>
+      <Form.Item name="jobName" label="Role Name">
+        <Input placeholder="Name of the Job" />
+      </Form.Item>
+    </Col>
+  </Row>
+);
 const ClientInfo = () => (
   <Row gutter={16}>
     <Col span={12}>
