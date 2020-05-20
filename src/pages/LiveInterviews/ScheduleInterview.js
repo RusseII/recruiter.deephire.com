@@ -113,13 +113,13 @@ const ScheduleButton = ({ execute, data, customButton }) => {
         )}
 
         {scheduleProgress === 'started' && (
-          <Form layout="vertical" onFinish={onFinish} hideRequiredMark>
-            <Form.Item
-              initialValue="recruiter"
-              name="interviewType"
-              label="Interview Type"
-              rules={[{ required: true }]}
-            >
+          <Form
+            layout="vertical"
+            onFinish={onFinish}
+            initialValues={{ interviewType: 'recruiter' }}
+            hideRequiredMark
+          >
+            <Form.Item name="interviewType" label="Interview Type" rules={[{ required: true }]}>
               <Select defaultValue="recruiter" onChange={type => setType(type)}>
                 <Option value="recruiter">You + Candidate</Option>
                 <Option value="client">Client + Candidate (Send Out)</Option>
