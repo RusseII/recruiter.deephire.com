@@ -55,7 +55,7 @@ const Actions = ({ data }) => {
       <InviteDrawer
         data={data}
         customButton={onClick => (
-          <Tooltip title="Add candiate documents that will be visible during the interview">
+          <Tooltip title="Add candidate documents that will be visible during the interview">
             <Button onClick={onClick} shape="circle" icon={<FileAddOutlined />} />
           </Tooltip>
         )}
