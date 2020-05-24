@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Result, Drawer, Form, Button, Col, Row, Input, DatePicker, Select } from 'antd';
+import { Result, Drawer, Form, Button, Col, Row, Input, Select } from 'antd';
 import { ScheduleOutlined } from '@ant-design/icons';
-import moment from 'moment';
 import DirectLink from '@/components/InviteCandidates/DirectLink';
 import { scheduleInterview } from '@/services/api';
 import CandidateDataCard from '@/components/Candidate/CandidateDataCard';
 import GlobalContext from '@/layouts/MenuContext';
+import SchedulePicker from './SchedulePicker';
 
-const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const ScheduleButton = ({ execute, data, customButton }) => {
@@ -23,6 +22,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   const [type, setType] = useState('recruiter');
   const [scheduleProgress, setScheduleProgress] = useState('started');
   const [linkToInterview, setLinkToInterview] = useState('loading...');
+
   const onFinish = async values => {
     const { interviewType } = values;
     setLoading(true);
@@ -46,11 +46,6 @@ const ScheduleButton = ({ execute, data, customButton }) => {
       setLinkToInterview(interviewLink);
     }
   }, [visible]);
-
-  function disabledDate(current) {
-    // Can not select days before today and today
-    return current && current < moment().startOf('day');
-  }
 
   const Documents = props => (
     <>
@@ -120,7 +115,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
             hideRequiredMark
           >
             <Form.Item name="interviewType" label="Interview Type" rules={[{ required: true }]}>
-              <Select defaultValue="recruiter" onChange={type => setType(type)}>
+              <Select onChange={type => setType(type)}>
                 <Option value="recruiter">You + Candidate</Option>
                 <Option value="client">Client + Candidate (Send Out)</Option>
               </Select>
@@ -152,23 +147,11 @@ const ScheduleButton = ({ execute, data, customButton }) => {
             <Row gutter={16}>
               <Col span={24}>
                 <Form.Item
-                  name="interviewTime"
                   label="Interview Time"
+                  name="interviewTime"
                   rules={[{ required: true, message: 'Please choose the Interview Time' }]}
                 >
-                  <RangePicker
-                    style={{ width: '100%' }}
-                    showTime={{
-                      minuteStep: 15,
-                      hideDisabledOptions: true,
-                      use12Hours: true,
-                      format: 'h:mm a',
-                    }}
-                    format="MM-DD h:mm a"
-                    onChange={() => {}}
-                    onOk={() => {}}
-                    disabledDate={disabledDate}
-                  />
+                  <SchedulePicker />
                 </Form.Item>
               </Col>
             </Row>
