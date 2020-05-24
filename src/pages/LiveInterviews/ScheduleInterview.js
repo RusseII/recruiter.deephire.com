@@ -24,7 +24,6 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   const [linkToInterview, setLinkToInterview] = useState('loading...');
 
   const onFinish = async values => {
-    const { interviewType } = values;
     setLoading(true);
     const interviewData = await scheduleInterview(
       { ...values, createdByTeam },
@@ -33,7 +32,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
     setLoading(false);
     const { interviewLink } = interviewData;
     setLinkToInterview(interviewLink);
-    const nextStep = interviewType === 'client' ? 'documents' : 'finished';
+    const nextStep = 'documents';
     setValues(values);
     setScheduleProgress(nextStep);
     execute();
