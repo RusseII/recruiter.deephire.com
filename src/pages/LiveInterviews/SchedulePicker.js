@@ -5,7 +5,7 @@ import { DatePicker } from 'antd';
 
 const { RangePicker } = DatePicker;
 
-const Range = ({ value = {}, onChange }) => {
+const Range = ({ onChange }) => {
   const [dates, setDates] = useState([null, null]);
   function disabledDate(current) {
     const tooEarly = current && current < moment().startOf('day');
@@ -16,14 +16,14 @@ const Range = ({ value = {}, onChange }) => {
 
   const triggerChange = changedValue => {
     if (onChange) {
-      onChange({ interviewTime: dates, ...value, ...changedValue });
+      onChange(changedValue);
     }
   };
 
   const setSecondValue = times => {
     if (!times) {
       setDates([null, null]);
-      triggerChange({ interviewTime: null });
+      triggerChange(null);
       return;
     }
 
@@ -35,7 +35,7 @@ const Range = ({ value = {}, onChange }) => {
       endTime.add(30, 'minutes');
     }
     setDates([startTime, endTime]);
-    triggerChange({ interviewTime: [startTime, endTime] });
+    triggerChange([startTime, endTime]);
   };
   return (
     <RangePicker
