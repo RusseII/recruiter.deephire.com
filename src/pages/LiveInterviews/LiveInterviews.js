@@ -26,7 +26,6 @@ const { TabPane } = Tabs;
 const { Text } = Typography;
 
 const Actions = ({ data }) => {
-  const { interviewType } = data;
   const [visibility, setVisibility] = useState({ hovered: false, clicked: false });
 
   // const { recordings } = data;
@@ -53,16 +52,14 @@ const Actions = ({ data }) => {
           <Button shape="circle" icon={<ShareAltOutlined />} />
         </Popover>
       </Tooltip>
-      {interviewType === 'client' && (
-        <InviteDrawer
-          data={data}
-          customButton={onClick => (
-            <Tooltip title="Add candidate documents that will be visible during the interview">
-              <Button onClick={onClick} shape="circle" icon={<FileAddOutlined />} />
-            </Tooltip>
-          )}
-        />
-      )}
+      <InviteDrawer
+        data={data}
+        customButton={onClick => (
+          <Tooltip title="Add candiate documents that will be visible during the interview">
+            <Button onClick={onClick} shape="circle" icon={<FileAddOutlined />} />
+          </Tooltip>
+        )}
+      />
     </Space>
   );
 };
