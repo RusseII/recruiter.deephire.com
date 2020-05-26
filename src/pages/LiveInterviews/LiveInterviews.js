@@ -209,7 +209,7 @@ const LiveInterviews = () => {
   if (
     email &&
     (email === 'demo@deephire.com' ||
-      email === 'russell@deephire.com' ||
+      email.includes('deephire.com') ||
       email.includes('assistinghands') ||
       email.includes('russell') ||
       email.includes('apple') ||
