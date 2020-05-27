@@ -110,17 +110,17 @@ const LiveInterviews = () => {
         const startDateObj = new Date(start);
         const endDateObj = new Date(end);
 
-        const startDate = startDateObj.toLocaleString('default', {
+        const startDate = startDateObj.toLocaleString('en-US', {
           month: 'long',
           weekday: 'long',
           day: 'numeric',
         });
-        const startTime = startDateObj.toLocaleString('default', {
+        const startTime = startDateObj.toLocaleString('en-US', {
           hour: 'numeric',
           minute: 'numeric',
         });
 
-        const endTime = endDateObj.toLocaleString('default', {
+        const endTime = endDateObj.toLocaleString('en-US', {
           hour: 'numeric',
           minute: 'numeric',
         });
@@ -213,6 +213,7 @@ const LiveInterviews = () => {
       email.includes('assistinghands') ||
       email.includes('russell') ||
       email.includes('apple') ||
+      email.includes('rratcliffe57@gmail.com') ||
       email.includes('klingcare'))
   ) {
     const upcomingInterviewsFiltered = liveInterviews.filter(liveInterview => {
