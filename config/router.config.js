@@ -45,6 +45,15 @@ export default [
           },
         ],
       },
+
+      {
+        path: '/interviews/analytics',
+        name: 'Interview Analytics',
+        authority: ['admin', 'user'],
+        component: './Candidates/CandidateAnalytics',
+        hideInMenu: true,
+      },
+
       {
         path: '/interview/view',
         icon: 'read',
