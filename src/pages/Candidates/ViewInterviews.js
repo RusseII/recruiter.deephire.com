@@ -1,4 +1,11 @@
-import { EditOutlined, ShareAltOutlined, UserAddOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  ShareAltOutlined,
+  UserAddOutlined,
+  PieChartOutlined,
+} from '@ant-design/icons';
+import router from 'umi/router';
+
 import {
   message,
   Row,
@@ -67,6 +74,12 @@ const TableList = () => {
     setEditInterview(null);
     message.success('Interview Updated');
   };
+
+  const openShortListAnalytics = data => {
+    const { _id } = data;
+    router.push(`/interviews/analytics/?id=${_id}`);
+  };
+
   const columns = [
     {
       title: 'Interview Name',
@@ -75,6 +88,7 @@ const TableList = () => {
 
     {
       title: 'Interview Questions',
+      width: '40%',
       render(x, data) {
         try {
           const listItems = data.interviewQuestions.map(d => (
@@ -155,6 +169,15 @@ const TableList = () => {
                 style={{ marginLeft: 8 }}
                 shape="circle"
                 icon={<EditOutlined />}
+              />
+            </Tooltip>
+
+            <Tooltip title="View Analytics">
+              <Button
+                onClick={() => openShortListAnalytics(data)}
+                style={{ marginLeft: 8 }}
+                shape="circle"
+                icon={<PieChartOutlined />}
               />
             </Tooltip>
           </Fragment>

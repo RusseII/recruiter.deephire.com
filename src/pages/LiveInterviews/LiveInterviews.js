@@ -11,6 +11,7 @@ import {
   Row,
   Col,
   Space,
+  ConfigProvider,
 } from 'antd';
 import router from 'umi/router';
 import { ShareAltOutlined, FileAddOutlined } from '@ant-design/icons';
@@ -21,6 +22,7 @@ import GlobalContext from '@/layouts/MenuContext';
 import { lowerCaseQueryParams } from '@/utils/utils';
 import StandardTable from '@/components/StandardTable';
 import { useAsync } from '@/services/hooks';
+import customEmpty from '@/components/CustomEmpty';
 
 const { TabPane } = Tabs;
 const { Text } = Typography;
@@ -229,39 +231,50 @@ const LiveInterviews = () => {
 
     return (
       <PageHeaderWrapper title="Live Interview">
-        <Card>
-          <Tabs
-            tabBarExtraContent={<InviteDrawer execute={execute} />}
-            activeKey={activeTab}
-            onChange={tabKey => setActiveTab(tabKey)}
-          >
-            <TabPane tab="Upcoming Live Interviews" key="1">
-              <Spin spinning={false}>
-                {/* <Table columns={columns} dataSource={upcomingInterviews} pagination={false} /> */}
-                <StandardTable
-                  selectedRows={null}
-                  loading={pending}
-                  data={{ list: upcomingInterviews }}
-                  // size="small"
-                  columns={columns}
-                  pagination={false}
-                />
-              </Spin>
-            </TabPane>
-            <TabPane tab="Completed Live Interviews" key="2">
-              <Spin spinning={false}>
-                {/* <Table columns={columns} dataSource={pastInterviews} /> */}
-                <StandardTable
-                  selectedRows={null}
-                  loading={pending}
-                  data={{ list: pastInterviews }}
-                  // size="small"
-                  columns={columns}
-                />
-              </Spin>
-            </TabPane>
-          </Tabs>
-        </Card>
+        <ConfigProvider
+          renderEmpty={() =>
+            customEmpty(
+              'No Live Interviews Scheduled',
+              null,
+              null,
+              <InviteDrawer execute={execute} />
+            )
+          }
+        >
+          <Card>
+            <Tabs
+              tabBarExtraContent={<InviteDrawer execute={execute} />}
+              activeKey={activeTab}
+              onChange={tabKey => setActiveTab(tabKey)}
+            >
+              <TabPane tab="Upcoming Live Interviews" key="1">
+                <Spin spinning={false}>
+                  {/* <Table columns={columns} dataSource={upcomingInterviews} pagination={false} /> */}
+                  <StandardTable
+                    selectedRows={null}
+                    loading={pending}
+                    data={{ list: upcomingInterviews }}
+                    // size="small"
+                    columns={columns}
+                    pagination={false}
+                  />
+                </Spin>
+              </TabPane>
+              <TabPane tab="Completed Live Interviews" key="2">
+                <Spin spinning={false}>
+                  {/* <Table columns={columns} dataSource={pastInterviews} /> */}
+                  <StandardTable
+                    selectedRows={null}
+                    loading={pending}
+                    data={{ list: pastInterviews }}
+                    // size="small"
+                    columns={columns}
+                  />
+                </Spin>
+              </TabPane>
+            </Tabs>
+          </Card>
+        </ConfigProvider>
       </PageHeaderWrapper>
     );
   }
