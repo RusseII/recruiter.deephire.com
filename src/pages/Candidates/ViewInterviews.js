@@ -88,6 +88,7 @@ const TableList = () => {
 
     {
       title: 'Interview Questions',
+      width: '40%',
       render(x, data) {
         try {
           const listItems = data.interviewQuestions.map(d => (
