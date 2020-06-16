@@ -19,7 +19,7 @@ import 'ant-design-pro/dist/ant-design-pro.css';
 const CandidateAnalytics = () => {
   const { id: interviewId } = lowerCaseQueryParams(window.location.search);
 
-  const [analytics, setAnalytics] = useState({ invited: 0, started: 0, completed: 0 });
+  const [analytics, setAnalytics] = useState({ invited: 0, clicked: 0, started: 0, completed: 0 });
 
   const filterData = async id => {
     const data = await getEventbyId(id);
@@ -32,14 +32,15 @@ const CandidateAnalytics = () => {
         result[item.event][item.candidateEmail] = item;
         return result;
       },
-      { started: {}, invited: {}, completed: {} }
+      { started: {}, clicked: {}, invited: {}, completed: {} }
     );
     // console.log('Cureduced.length);
-    const { started, invited, completed } = reduced;
-    const filteredData = { ...invited, ...started, ...completed };
+    const { invited, clicked, started, completed } = reduced;
+    const filteredData = { ...invited, ...clicked, ...started, ...completed };
     const simplifiedData = Object.keys(filteredData).map(key => filteredData[key]);
     setAnalytics({
       invited: Object.keys(invited).length,
+      clicked: Object.keys(clicked).length,
       started: Object.keys(started).length,
       completed: Object.keys(completed).length,
     });
@@ -73,6 +74,7 @@ const CandidateAnalytics = () => {
       render: event => {
         let color;
         if (event === 'invited') color = 'purple';
+        if (event === 'clicked') color = 'yellow';
         if (event === 'started') color = 'orange';
         if (event === 'completed') color = 'green';
 
@@ -90,6 +92,8 @@ const CandidateAnalytics = () => {
     },
   ];
 
+  const length = events.length ? events.length : 1;
+  const percent = Math.floor((analytics.completed / length) * 100);
   return (
     <>
       <PageHeader
@@ -100,39 +104,39 @@ const CandidateAnalytics = () => {
         subTitle="View completion rates & invited candidates"
       />
       {/* <Row> </Row> */}
-      <Row gutter={[24, 24]}>
-        {events.length > 0 && (
+      {!pending && (
+        <Row gutter={[24, 24]}>
           <>
             <Col span={8}>
               <Card title="Candidate Completion Rate">
                 <div style={{ textAlign: 'center' }}>
-                  <WaterWave
-                    height={161}
-                    title="Completed"
-                    percent={Math.floor((analytics.completed / events.length) * 100)}
-                  />
+                  <WaterWave height={161} title="Completed" percent={percent} />
                 </div>
               </Card>
             </Col>
             <Col span={16}>
               <Card>
                 <Row style={{ textAlign: 'center' }}>
-                  <Col span={8}>
-                    <Statistic title="Total Invited" value={analytics.invited} />
+                  <Col span={6}>
+                    <Statistic title={<div>Total Invited</div>} value={analytics.invited} />
                   </Col>
-                  <Col span={8}>
+
+                  <Col span={6}>
+                    <Statistic title="Total Clicked" value={analytics.clicked} />
+                  </Col>
+                  <Col span={6}>
                     <Statistic title="Total Started" value={analytics.started} />
                   </Col>
 
-                  <Col span={8}>
+                  <Col span={6}>
                     <Statistic title="Total Completed" value={analytics.completed} />
                   </Col>
                 </Row>
               </Card>
             </Col>
           </>
-        )}
-      </Row>
+        </Row>
+      )}
 
       <ConfigProvider renderEmpty={() => customEmpty('No Candidates Have Been Invited')}>
         <StandardTable
