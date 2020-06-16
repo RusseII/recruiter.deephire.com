@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { WaterWave } from 'ant-design-pro/lib/Charts';
-import { Card, Row, Col, Statistic, Tag, ConfigProvider, PageHeader } from 'antd';
+import { Card, Row, Col, Statistic, Tag, ConfigProvider, PageHeader, Tooltip } from 'antd';
 
 import readableTime from 'readable-timestamp';
 import router from 'umi/router';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import StandardTable from '@/components/StandardTable';
 import customEmpty from '@/components/CustomEmpty';
 
@@ -118,18 +119,58 @@ const CandidateAnalytics = () => {
               <Card>
                 <Row style={{ textAlign: 'center' }}>
                   <Col span={6}>
-                    <Statistic title={<div>Total Invited</div>} value={analytics.invited} />
+                    <Statistic
+                      title={
+                        <div>
+                          Total Invited
+                          <Tooltip title="The number of candidates who were invited to an interview through automated invites">
+                            <InfoCircleOutlined style={{ marginLeft: 8 }} />
+                          </Tooltip>
+                        </div>
+                      }
+                      value={analytics.invited}
+                    />
                   </Col>
 
                   <Col span={6}>
-                    <Statistic title="Total Clicked" value={analytics.clicked} />
+                    <Statistic
+                      title={
+                        <div>
+                          Total Clicked
+                          <Tooltip title="The number of candidates who clicked on the interview link">
+                            <InfoCircleOutlined style={{ marginLeft: 8 }} />
+                          </Tooltip>
+                        </div>
+                      }
+                      value={analytics.clicked}
+                    />
                   </Col>
                   <Col span={6}>
-                    <Statistic title="Total Started" value={analytics.started} />
+                    <Statistic
+                      title={
+                        <div>
+                          Total Started
+                          <Tooltip title="The number of candidates who started an interview">
+                            <InfoCircleOutlined style={{ marginLeft: 8 }} />
+                          </Tooltip>
+                        </div>
+                      }
+                      value={analytics.started}
+                    />
                   </Col>
 
                   <Col span={6}>
-                    <Statistic title="Total Completed" value={analytics.completed} />
+                    <Statistic
+                      title={
+                        <div>
+                          Total Completed
+                          <Tooltip title="The number of candidates who submitted a completed interview">
+                            <InfoCircleOutlined style={{ marginLeft: 8 }} />
+                          </Tooltip>
+                        </div>
+                      }
+                      value={analytics.completed}
+                    />
                   </Col>
                 </Row>
               </Card>
