@@ -56,7 +56,7 @@ const drawerLayout = {
   wrapperCol: 24,
 };
 
-let uuid = 1;
+let uuid = 100;
 
 const remove = (form, k) => {
   const keys = form.getFieldValue('keys');
