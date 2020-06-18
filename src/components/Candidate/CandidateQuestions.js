@@ -26,7 +26,7 @@ const buttonEnabled = (archives, candidateData, responses, archivedResponses) =>
   return null;
 };
 
-const QuestionCard = ({ candidateData, setVideoData, id, setCandidateData }) => {
+const QuestionCard = ({ candidateData, setVideoData, id, setCandidateData, style }) => {
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [archives, setArchives] = useState(false);
 
@@ -74,7 +74,7 @@ const QuestionCard = ({ candidateData, setVideoData, id, setCandidateData }) => 
   );
 
   return (
-    <Card hoverable title={titleData()} extra={extraData()}>
+    <Card style={style} hoverable title={titleData()} extra={extraData()}>
       <Skeleton loading={!candidateData} active>
         <Table
           showHeader={false}
