@@ -15,7 +15,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   // eslint-disable-next-line camelcase
   const createdByTeam = recruiterProfile?.app_metadata?.team;
 
-  const { candidateEmail, candidateName } = data || {};
+  const { candidateEmail, candidateName, jobName } = data || {};
   const [values, setValues] = useState({});
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -103,6 +103,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
             editable
             email={candidateEmail || values.candidateEmail}
             userName={candidateName || values.candidateName}
+            interviewName={jobName || values.jobName}
           />
         )}
 
