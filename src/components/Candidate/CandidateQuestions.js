@@ -68,7 +68,7 @@ const QuestionCard = ({ candidateData, setVideoData, id, setCandidateData, style
       <a onClick={() => setArchives(archives => !archives)}>
         {archives
           ? `View All (${responses ? candidateData.responses.length : 0})`
-          : `View Archived (${archivedResponses ? candidateData.archivedResponses.length : 0})`}
+          : `View Hidden (${archivedResponses ? candidateData.archivedResponses.length : 0})`}
       </a>
     </>
   );

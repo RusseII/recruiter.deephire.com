@@ -145,7 +145,7 @@ const Candidates = () => {
               placeholder="Filter"
             />
           </Col>
-          <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Archived'} </a>
+          <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Hidden'} </a>
         </Row>
       </Card>
 

@@ -16,7 +16,7 @@ const Archive = ({ onClick, archiveData, route, archives, reload, active = true 
   };
   return (
     <Button disabled={!active} style={{ marginRight: '16px' }} onClick={shouldArch}>
-      {archives ? 'Unarchive' : 'Archive'}
+      {archives ? 'Unhide' : 'Hide'}
     </Button>
   );
 };
