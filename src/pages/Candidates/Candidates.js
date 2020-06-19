@@ -4,15 +4,16 @@ import {
   Checkbox,
   Col,
   List,
-  Row,
+  Input,
   ConfigProvider,
   Popconfirm,
   Button,
   Skeleton,
+  Tabs,
 } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import CandidateCard from '@/components/CandidateCard';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+// import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 import ArchiveButton from '@/components/ArchiveButton';
 
@@ -22,6 +23,8 @@ import customEmpty from '@/components/CustomEmpty';
 
 import GlobalContext from '@/layouts/MenuContext';
 import { getAuthority } from '@/utils/authority';
+
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
@@ -98,9 +101,67 @@ const Candidates = () => {
     getData();
   };
   return (
-    <PageHeaderWrapper title="Candidates">
-      <Card>
-        <Row align="middle" type="flex" justify="space-between">
+    <>
+      <AntPageHeader
+        title="Candidates"
+        subTitle="View completed one way video interviews"
+        onBack={null}
+        footer={
+          <Tabs defaultActiveKey="1" onChange={() => setArchives(flag => !flag)}>
+            <Tabs.TabPane tab="All Candidates" key="true" />
+            <Tabs.TabPane tab="Hidden Candidates" key="false" />
+          </Tabs>
+        }
+        extra={
+          <Col>
+            {selectedCards.length !== 0 && (
+              <span>
+                <ArchiveButton
+                  onClick={() => setSelectedCards([])}
+                  reload={getData}
+                  archives={archives}
+                  route="videos"
+                  archiveData={selectedCards}
+                />
+
+                {isAdmin() ? (
+                  <Popconfirm
+                    title="Permanently delete selected videos? All data will be deleted from our servers & unrecoverable."
+                    onConfirm={handleDelete}
+                    // onCancel={cancel}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button type="danger" style={{ marginRight: 8 }}>
+                      Delete
+                    </Button>
+                  </Popconfirm>
+                ) : null}
+              </span>
+            )}
+
+            <AutoComplete
+              style={{ width: 200 }}
+              allowClear
+              dataSource={dataSource}
+              onSelect={filter}
+              onSearch={shouldClear}
+              filterOption={(inputValue, option) =>
+                option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+              }
+              // placeholder="Filter"
+            >
+              <Input.Search placeholder="Filter Candidates" />
+            </AutoComplete>
+            <ShareCandidateButton
+              style={{ marginLeft: 8 }}
+              isDisabled={selectedCards.length === 0}
+              candidateData={selectedCards}
+            />
+          </Col>
+        }
+      >
+        {/* <Row align="middle" type="flex" justify="space-between">
           <Col>
             <ShareCandidateButton
               marginRight
@@ -146,8 +207,8 @@ const Candidates = () => {
             />
           </Col>
           <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Hidden'} </a>
-        </Row>
-      </Card>
+        </Row> */}
+      </AntPageHeader>
 
       <Checkbox.Group
         className={styles.filterCardList}
@@ -162,7 +223,6 @@ const Candidates = () => {
           {loading && candidateCount ? (
             <List
               rowKey="id"
-              style={{ marginTop: 24 }}
               grid={{ gutter: 24, xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
               dataSource={countOfCandidates}
               renderItem={item => (
@@ -176,7 +236,6 @@ const Candidates = () => {
           ) : (
             <List
               rowKey="id"
-              style={{ marginTop: 24 }}
               grid={{ gutter: 24, xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
               loading={loading}
               dataSource={filteredData}
@@ -189,7 +248,7 @@ const Candidates = () => {
           )}
         </ConfigProvider>
       </Checkbox.Group>
-    </PageHeaderWrapper>
+    </>
   );
 };
 

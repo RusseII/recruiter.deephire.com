@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Col, Row, PageHeader, Tooltip } from 'antd';
-import router from 'umi/router';
+import { Col, Row, Tooltip, Typography } from 'antd';
 
 import CandidateDataCard from '@/components/Candidate/CandidateDataCard';
 // import CandidateNotes from '@/components/Candidate/CandidateNotes';
@@ -12,6 +11,7 @@ import { getVideo, getLiveInterview } from '@/services/api';
 import { lowerCaseQueryParams } from '@/utils/utils';
 import QuestionsCard from '../../components/Candidate/CandidateQuestions';
 import CandidateVideo from '../../components/Candidate/CandidateVideo';
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
 const ViewCandidate = ({ location }) => {
   const { id, liveid: liveId } = lowerCaseQueryParams(location.search);
@@ -61,18 +61,17 @@ const ViewCandidate = ({ location }) => {
 
   return (
     <div>
-      <PageHeader
-        style={{ width: 'calc(100% + 48px)', marginTop: -22, marginBottom: 24, marginLeft: -24 }}
-        onBack={() => router.goBack()}
+      <AntPageHeader
         title={userName || candidateName}
-        ghost={false}
         subTitle={
           <Row>
-            <Tooltip title="Click to email">
-              <a target="_blank" rel="noopener noreferrer" href={`mailto:${candidateEmail}`}>
-                {candidateEmail}
-              </a>
-            </Tooltip>
+            <Typography.Text copyable={candidateEmail}>
+              <Tooltip title="Click to email">
+                <a target="_blank" rel="noopener noreferrer" href={`mailto:${candidateEmail}`}>
+                  {candidateEmail}
+                </a>
+              </Tooltip>
+            </Typography.Text>
           </Row>
         }
         extra={

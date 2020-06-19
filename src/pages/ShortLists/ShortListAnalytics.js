@@ -1,11 +1,11 @@
 import React, { Component, Suspense } from 'react';
 import { connect } from 'dva';
-import { Row, Col, List, PageHeader, Typography } from 'antd';
+import { Row, Col, List, Typography } from 'antd';
 import qs from 'qs';
 
-import router from 'umi/router';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import ShortListCandidateCard from '@/components/ShortListCandidateCard';
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
 import { getTimeDistance } from '@/utils/utils';
 import { getShortListData } from '@/services/api';
@@ -145,16 +145,8 @@ class ShortListAnalytics extends Component {
 
     return (
       <GridContent>
-        <PageHeader
-          style={{
-            width: 'calc(100% + 100px)',
-            marginTop: -22,
-            marginBottom: 24,
-            marginLeft: -24,
-          }}
-          onBack={() => router.goBack()}
+        <AntPageHeader
           title={analyticsData.name}
-          ghost={false}
           subTitle={<Typography.Text copyable>{shortUrl}</Typography.Text>}
         />
         <Row gutter={16}>

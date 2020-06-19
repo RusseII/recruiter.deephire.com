@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { WaterWave } from 'ant-design-pro/lib/Charts';
-import { Card, Row, Col, Statistic, Tag, ConfigProvider, PageHeader, Tooltip } from 'antd';
+import { Card, Row, Col, Statistic, Tag, ConfigProvider, Tooltip } from 'antd';
 
 import readableTime from 'readable-timestamp';
-import router from 'umi/router';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 import StandardTable from '@/components/StandardTable';
 import customEmpty from '@/components/CustomEmpty';
 
@@ -97,11 +97,8 @@ const CandidateAnalytics = () => {
   const percent = Math.floor((analytics.completed / length) * 100);
   return (
     <>
-      <PageHeader
-        style={{ width: 'calc(100% + 100px)', marginTop: -22, marginBottom: 24, marginLeft: -24 }}
-        onBack={() => router.goBack()}
+      <AntPageHeader
         title="Interview Analytics"
-        ghost={false}
         subTitle="View completion rates & invited candidates"
       />
       {/* <Row> </Row> */}
