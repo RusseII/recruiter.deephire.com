@@ -1,10 +1,10 @@
 import React, { Component, Suspense } from 'react';
 import { connect } from 'dva';
-import { Row, Col, List } from 'antd';
+import { Row, Col, List, PageHeader, Typography } from 'antd';
 import qs from 'qs';
 
+import router from 'umi/router';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ShortListCandidateCard from '@/components/ShortListCandidateCard';
 
 import { getTimeDistance } from '@/utils/utils';
@@ -145,44 +145,54 @@ class ShortListAnalytics extends Component {
 
     return (
       <GridContent>
-        <PageHeaderWrapper title={`Share Link - ${analyticsData.name}`} shortUrl={shortUrl}>
-          <Row gutter={16}>
-            <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-              <Suspense fallback={null}>
-                <ProportionSales
-                  title="Candidate Status"
-                  candidateStatus={candidateStatus}
-                  loading={loading}
-                  salesPieData={salesPieData}
-                  handleChangeSalesType={this.handleChangeCandidateStatusPie}
-                />
-              </Suspense>
-            </Col>
-            <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-              <ShortListStatsCard
-                views={views}
-                lastViewed={lastViewed}
-                acceptedCandidates={acceptedCandidates}
-                totalCandidates={totalCandidates}
+        <PageHeader
+          style={{
+            width: 'calc(100% + 100px)',
+            marginTop: -22,
+            marginBottom: 24,
+            marginLeft: -24,
+          }}
+          onBack={() => router.goBack()}
+          title={analyticsData.name}
+          ghost={false}
+          subTitle={<Typography.Text copyable>{shortUrl}</Typography.Text>}
+        />
+        <Row gutter={16}>
+          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+            <Suspense fallback={null}>
+              <ProportionSales
+                title="Candidate Status"
+                candidateStatus={candidateStatus}
+                loading={loading}
+                salesPieData={salesPieData}
+                handleChangeSalesType={this.handleChangeCandidateStatusPie}
               />
-            </Col>
-          </Row>
-
-          <div className={styles.cardList}>
-            <List
-              rowKey="id"
-              style={{ marginTop: 24 }}
-              grid={{ gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }}
-              loading={loading}
-              dataSource={interviews}
-              renderItem={item => (
-                <List.Item key={item.id}>
-                  <ShortListCandidateCard item={item} />
-                </List.Item>
-              )}
+            </Suspense>
+          </Col>
+          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+            <ShortListStatsCard
+              views={views}
+              lastViewed={lastViewed}
+              acceptedCandidates={acceptedCandidates}
+              totalCandidates={totalCandidates}
             />
-          </div>
-        </PageHeaderWrapper>
+          </Col>
+        </Row>
+
+        <div className={styles.cardList}>
+          <List
+            rowKey="id"
+            style={{ marginTop: 24 }}
+            grid={{ gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }}
+            loading={loading}
+            dataSource={interviews}
+            renderItem={item => (
+              <List.Item key={item.id}>
+                <ShortListCandidateCard item={item} />
+              </List.Item>
+            )}
+          />
+        </div>
       </GridContent>
     );
   }
