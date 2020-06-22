@@ -107,7 +107,7 @@ const Candidates = () => {
         subTitle="View completed one way video interviews"
         onBack={null}
         footer={
-          <Tabs defaultActiveKey="1" onChange={() => setArchives(flag => !flag)}>
+          <Tabs onChange={() => setArchives(flag => !flag)}>
             <Tabs.TabPane tab="All Candidates" key="true" />
             <Tabs.TabPane tab="Hidden Candidates" key="false" />
           </Tabs>

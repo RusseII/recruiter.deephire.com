@@ -4,22 +4,24 @@ import {
   AutoComplete,
   Card,
   Col,
-  Row,
+  Input,
   Tooltip,
   ConfigProvider,
   Button,
   Typography,
   Popover,
+  Tabs,
 } from 'antd';
 import React, { useState, useEffect, useContext } from 'react';
 import readableTime from 'readable-timestamp';
 import styles from './ShortLists.less';
 import ArchiveButton from '@/components/ArchiveButton';
 import { getHttpUrl } from '@/utils/utils';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+// import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import StandardTable from '@/components/StandardTable';
 import { getArchivedShortlists, getShortLists } from '@/services/api';
 import customEmpty from '@/components/CustomEmpty';
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
 import GlobalContext from '@/layouts/MenuContext';
 
@@ -178,34 +180,45 @@ const ShortLists = () => {
   };
 
   return (
-    <PageHeaderWrapper title="Share Links">
-      <Card>
-        <Row align="middle" type="flex" justify="space-between">
-          <Col>
-            {selectedRows.length !== 0 && (
-              <ArchiveButton
-                onClick={() => setSelectedRows([])}
-                reload={getData}
-                archives={archives}
-                route="shortlists"
-                archiveData={selectedRows}
-              />
-            )}
-            <AutoComplete
-              style={{ width: 350 }}
-              allowClear
-              dataSource={dataSource}
-              onSelect={filter}
-              onSearch={shouldClear}
-              filterOption={(inputValue, option) =>
-                option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-              }
-              placeholder="Filter"
-            />
-          </Col>
-          <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Hidden'} </a>
-        </Row>
-      </Card>
+    <>
+      <AntPageHeader
+        title="Share Links"
+        subTitle="Public links that let people outside of your team view candidates"
+        onBack={null}
+        footer={
+          <Tabs defaultActiveKey="1" onChange={() => setArchives(flag => !flag)}>
+            <Tabs.TabPane tab="All Share Link" key="1" />
+            <Tabs.TabPane tab="Hidden Share Links" key="2" />
+          </Tabs>
+        }
+        extra={
+          <>
+            <Col>
+              {selectedRows.length !== 0 && (
+                <ArchiveButton
+                  onClick={() => setSelectedRows([])}
+                  reload={getData}
+                  archives={archives}
+                  route="shortlists"
+                  archiveData={selectedRows}
+                />
+              )}
+              <AutoComplete
+                style={{ width: 200 }}
+                allowClear
+                dataSource={dataSource}
+                onSelect={filter}
+                onSearch={shouldClear}
+                filterOption={(inputValue, option) =>
+                  option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                }
+              >
+                <Input.Search placeholder="Filter Share Links" />
+              </AutoComplete>
+            </Col>
+          </>
+        }
+      />
 
       <Card bordered={false}>
         <ConfigProvider
@@ -222,7 +235,7 @@ const ShortLists = () => {
           />
         </ConfigProvider>
       </Card>
-    </PageHeaderWrapper>
+    </>
   );
 };
 
