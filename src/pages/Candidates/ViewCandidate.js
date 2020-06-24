@@ -41,7 +41,7 @@ const ViewCandidate = ({ location }) => {
     setLiveInterviewData(liveData);
     setVideoData({
       videoUrl: lastRecording,
-      currentQuestionText: 'Live Interview Recording',
+      currentQuestionText: `Live Interview Recording `,
     });
   };
 
@@ -65,7 +65,7 @@ const ViewCandidate = ({ location }) => {
         title={userName || candidateName}
         subTitle={
           <Row>
-            <Typography.Text copyable={candidateEmail}>
+            <Typography.Text copyable={{ text: candidateEmail }}>
               <Tooltip title="Click to email">
                 <a target="_blank" rel="noopener noreferrer" href={`mailto:${candidateEmail}`}>
                   {candidateEmail}

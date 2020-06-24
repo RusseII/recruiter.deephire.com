@@ -67,9 +67,9 @@ const Actions = ({ data }) => {
 };
 
 const LiveInterviews = () => {
-  const { tab = 1, page = 1 } = lowerCaseQueryParams(window.location.search);
+  const { tab = '1', page = '1' } = lowerCaseQueryParams(window.location.search);
 
-  const [activeTab, setActiveTab] = useState(tab || '1');
+  const [activeTab, setActiveTab] = useState(tab);
 
   const globalData = useContext(GlobalContext);
 

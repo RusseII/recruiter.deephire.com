@@ -10,6 +10,7 @@ import {
   Button,
   Skeleton,
   Tabs,
+  Row,
 } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import CandidateCard from '@/components/CandidateCard';
@@ -112,54 +113,6 @@ const Candidates = () => {
             <Tabs.TabPane tab="Hidden Candidates" key="false" />
           </Tabs>
         }
-        extra={
-          <Col>
-            {selectedCards.length !== 0 && (
-              <span>
-                <ArchiveButton
-                  onClick={() => setSelectedCards([])}
-                  reload={getData}
-                  archives={archives}
-                  route="videos"
-                  archiveData={selectedCards}
-                />
-
-                {isAdmin() ? (
-                  <Popconfirm
-                    title="Permanently delete selected videos? All data will be deleted from our servers & unrecoverable."
-                    onConfirm={handleDelete}
-                    // onCancel={cancel}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <Button type="danger" style={{ marginRight: 8 }}>
-                      Delete
-                    </Button>
-                  </Popconfirm>
-                ) : null}
-              </span>
-            )}
-
-            <AutoComplete
-              style={{ width: 200 }}
-              allowClear
-              dataSource={dataSource}
-              onSelect={filter}
-              onSearch={shouldClear}
-              filterOption={(inputValue, option) =>
-                option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-              }
-              // placeholder="Filter"
-            >
-              <Input.Search placeholder="Filter Candidates" />
-            </AutoComplete>
-            <ShareCandidateButton
-              style={{ marginLeft: 8 }}
-              isDisabled={selectedCards.length === 0}
-              candidateData={selectedCards}
-            />
-          </Col>
-        }
       >
         {/* <Row align="middle" type="flex" justify="space-between">
           <Col>
@@ -209,7 +162,57 @@ const Candidates = () => {
           <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Hidden'} </a>
         </Row> */}
       </AntPageHeader>
+      <Row justify="space-between" style={{ marginBottom: 16 }}>
+        <Col>
+          <AutoComplete
+            style={{ width: 200 }}
+            allowClear
+            dataSource={dataSource}
+            onSelect={filter}
+            onSearch={shouldClear}
+            filterOption={(inputValue, option) =>
+              option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+            }
+          >
+            <Input.Search placeholder="Filter Candidates" />
+          </AutoComplete>
+        </Col>
+        <Col>
+          <span>
+            <ArchiveButton
+              style={{ marginRight: 8 }}
+              onClick={() => setSelectedCards([])}
+              reload={getData}
+              archives={archives}
+              route="videos"
+              disabled={selectedCards.length === 0}
+              archiveData={selectedCards}
+            />
 
+            {isAdmin() ? (
+              <Popconfirm
+                title="Permanently delete selected videos? All data will be deleted from our servers & unrecoverable."
+                onConfirm={handleDelete}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button
+                  disabled={selectedCards.length === 0}
+                  type="danger"
+                  style={{ marginRight: 8 }}
+                >
+                  Delete
+                </Button>
+              </Popconfirm>
+            ) : null}
+          </span>
+          <ShareCandidateButton
+            // style={{ marginLeft: 8 }}
+            isDisabled={selectedCards.length === 0}
+            candidateData={selectedCards}
+          />
+        </Col>
+      </Row>
       <Checkbox.Group
         className={styles.filterCardList}
         onChange={checked => setSelectedCards(checked)}

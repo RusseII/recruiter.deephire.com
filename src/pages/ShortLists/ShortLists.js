@@ -1,23 +1,12 @@
+/* eslint-disable camelcase */
 import router from 'umi/router';
 import { ShareAltOutlined, PieChartOutlined } from '@ant-design/icons';
-import {
-  AutoComplete,
-  Card,
-  Col,
-  Input,
-  Tooltip,
-  ConfigProvider,
-  Button,
-  Typography,
-  Popover,
-  Tabs,
-} from 'antd';
+import { Card, Tooltip, ConfigProvider, Button, Typography, Popover, Tabs } from 'antd';
 import React, { useState, useEffect, useContext } from 'react';
 import readableTime from 'readable-timestamp';
 import styles from './ShortLists.less';
 import ArchiveButton from '@/components/ArchiveButton';
 import { getHttpUrl } from '@/utils/utils';
-// import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import StandardTable from '@/components/StandardTable';
 import { getArchivedShortlists, getShortLists } from '@/services/api';
 import customEmpty from '@/components/CustomEmpty';
@@ -31,130 +20,179 @@ const openShortListAnalytics = data => {
   router.push(`/shortlists/shortlistanalytics/?id=${_id}`);
 };
 
-const columns = [
-  {
-    title: 'Shared With',
-    render: data => {
-      const { name, email, description } = data;
-      return (
-        <>
-          <div>{name}</div>
-          <div>{description}</div>
-          <div>{email}</div>
-        </>
-      );
-    },
-  },
-  {
-    title: 'Last Viewed',
-    render: data => {
-      const { clicks } = data;
-      const clickCount = clicks ? clicks.length : 0;
-      const dateObj = clicks ? new Date(clicks[clickCount - 1]) : '-';
-      const displayTime = clicks ? readableTime(dateObj) : '-';
-      return displayTime || '-';
-    },
-  },
-  {
-    title: 'View Count',
-    render: data => {
-      const { clicks } = data;
-      const clickCount = clicks ? clicks.length : 0;
-      return <div className={styles.clickCount}>{clickCount || '-'}</div>;
-    },
-  },
-  {
-    title: 'Created By',
-    render(test, data) {
-      const { createdBy } = data;
-      try {
-        const dateObj = new Date(data.timestamp);
-        const displayTime = readableTime(dateObj);
-        return (
-          <>
-            <div>{createdBy}</div>
-            <div>{displayTime}</div>
-          </>
-        );
-      } catch {
-        return createdBy;
-      }
-    },
-  },
-
-  {
-    title: '',
-    fixed: 'right',
-    render: data => <Actions data={data} />,
-  },
-];
-
-const Actions = ({ data }) => {
-  const [visibility, setVisibility] = useState({ hovered: false, clicked: false });
-  return (
-    <>
-      <Tooltip
-        title="View share link"
-        trigger="hover"
-        visible={visibility.hovered}
-        onVisibleChange={visible => setVisibility({ hovered: visible, clicked: false })}
-      >
-        <Popover
-          title="Share this link with your client"
-          content={<Text copyable>{getHttpUrl(data.shortUrl)}</Text>}
-          trigger="click"
-          visible={visibility.clicked}
-          onVisibleChange={visible => setVisibility({ hovered: false, clicked: visible })}
-        >
-          <Button style={{ marginLeft: 8 }} shape="circle" icon={<ShareAltOutlined />} />
-        </Popover>
-      </Tooltip>
-      <Tooltip title="View share link analytics">
-        <Button
-          onClick={() => openShortListAnalytics(data)}
-          style={{ marginLeft: 8 }}
-          shape="circle"
-          icon={<PieChartOutlined />}
-        />
-      </Tooltip>
-    </>
-  );
-};
 const ShortLists = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [dataSource, setDataSource] = useState([]);
+  // const [dataSource, setDataSource] = useState([]);
+  const [filteredInfo, setFilteredInfo] = useState(null);
+
   const [archives, setArchives] = useState(false);
 
   const globalData = useContext(GlobalContext);
   const [filteredData, setFilteredData] = useState(globalData.shareLinks);
   const recruiterProfile = globalData?.recruiterProfile;
 
-  // eslint-disable-next-line camelcase
-  const team = recruiterProfile?.app_metadata?.team;
-  const createDataSource = data => {
-    const searchDataSource = [];
-    data.forEach(shortList => {
-      if (shortList.email) searchDataSource.push(shortList.email);
-      if (shortList.name) searchDataSource.push(shortList.name);
-    });
-    const unique = [...new Set(searchDataSource)];
-    setDataSource(unique);
+  const handleChange = (pagination, filters) => {
+    setFilteredInfo(filters);
   };
 
-  useEffect(() => {});
+  const columns = [
+    {
+      title: 'Shared With',
+      key: 'sharedWith',
+
+      render: data => {
+        const { name, email, description } = data;
+        return (
+          <>
+            <div>{name}</div>
+            <div>{description}</div>
+            <div>{email}</div>
+          </>
+        );
+      },
+    },
+    {
+      title: 'Last Viewed',
+      key: 'lastViewed',
+      sorter: (a, b) => {
+        const { clicks: clicksA } = a;
+        const { clicks: clicksB } = b;
+        const clickCountA = clicksA ? clicksA.length : 0;
+        const clickCountB = clicksB ? clicksB.length : 0;
+
+        const dateObjA = clicksA ? new Date(clicksA[clickCountA - 1]) : null;
+        const dateObjB = clicksB ? new Date(clicksB[clickCountB - 1]) : null;
+
+        return dateObjA - dateObjB;
+      },
+      render: data => {
+        const { clicks } = data;
+        const clickCount = clicks ? clicks.length : 0;
+        const dateObj = clicks ? new Date(clicks[clickCount - 1]) : '-';
+        const displayTime = clicks ? readableTime(dateObj) : '-';
+        return displayTime || '-';
+      },
+    },
+    {
+      title: 'View Count',
+      key: 'views',
+      sorter: (a, b) => {
+        const { clicks: clicksA } = a;
+        const { clicks: clicksB } = b;
+        const clickCountA = clicksA ? clicksA.length : 0;
+        const clickCountB = clicksB ? clicksB.length : 0;
+        return clickCountA - clickCountB;
+      },
+
+      render: data => {
+        const { clicks } = data;
+        const clickCount = clicks ? clicks.length : 0;
+        return <div className={styles.clickCount}>{clickCount || '-'}</div>;
+      },
+    },
+    {
+      title: 'Created By',
+      key: 'createdBy',
+      filters: [
+        ...new Set(
+          filteredData.map(shareLink => shareLink?.createdBy).filter(value => value !== undefined)
+        ),
+      ].map(createdBy => ({ text: createdBy, value: createdBy })),
+      filteredValue: filteredInfo?.createdBy || null,
+
+      onFilter: (value, record) => record.createdBy.indexOf(value) === 0,
+
+      render(test, data) {
+        const { createdBy } = data;
+        try {
+          const dateObj = new Date(data.timestamp);
+          const displayTime = readableTime(dateObj);
+          return (
+            <>
+              <div>{createdBy}</div>
+              <div>{displayTime}</div>
+            </>
+          );
+        } catch {
+          return createdBy;
+        }
+      },
+    },
+    {
+      title: 'Team',
+      key: 'createdByTeam',
+      // className: styles.hidden,
+      dataIndex: 'createdByTeam',
+      filters: [
+        ...new Set(
+          filteredData
+            .map(shareLink => shareLink?.createdByTeam)
+            .filter(value => value !== undefined)
+        ),
+      ].map(createdByTeam => ({ text: createdByTeam, value: createdByTeam })),
+      filteredValue: filteredInfo?.createdByTeam || null,
+
+      onFilter: (value, record) =>
+        record.createdByTeam ? record.createdByTeam.indexOf(value) === 0 : false,
+      // defaultFilteredValue: [''],
+      // defaultFilteredValue: [recruiterProfile?.app_metadata?.team || ''],
+    },
+
+    {
+      title: '',
+      key: 'actions',
+      fixed: 'right',
+      render: data => <Actions data={data} />,
+    },
+  ];
+
+  const Actions = ({ data }) => {
+    const [visibility, setVisibility] = useState({ hovered: false, clicked: false });
+    return (
+      <>
+        <Tooltip
+          title="View share link"
+          trigger="hover"
+          visible={visibility.hovered}
+          onVisibleChange={visible => setVisibility({ hovered: visible, clicked: false })}
+        >
+          <Popover
+            title="Share this link with your client"
+            content={<Text copyable>{getHttpUrl(data.shortUrl)}</Text>}
+            trigger="click"
+            visible={visibility.clicked}
+            onVisibleChange={visible => setVisibility({ hovered: false, clicked: visible })}
+          >
+            <Button style={{ marginLeft: 8 }} shape="circle" icon={<ShareAltOutlined />} />
+          </Popover>
+        </Tooltip>
+        <Tooltip title="View share link analytics">
+          <Button
+            onClick={() => openShortListAnalytics(data)}
+            style={{ marginLeft: 8 }}
+            shape="circle"
+            icon={<PieChartOutlined />}
+          />
+        </Tooltip>
+      </>
+    );
+  };
+
+  // eslint-disable-next-line camelcase
+  // const team = recruiterProfile?.app_metadata?.team;
+
   const getData = async () => {
     setLoading(true);
-    let data = await (archives ? getArchivedShortlists() : getShortLists());
+    const data = await (archives ? getArchivedShortlists() : getShortLists());
     // eslint-disable-next-line camelcase
 
-    if (team) {
-      data = data.filter(shareLink => {
-        if (!shareLink.createdByTeam) return null;
-        return shareLink.createdByTeam.includes(team);
-      });
-    }
-    createDataSource(data || []);
+    // if (team) {
+    //   data = data.filter(shareLink => {
+    //     if (!shareLink.createdByTeam) return null;
+    //     return shareLink.createdByTeam.includes(team);
+    //   });
+    // }
     globalData.setShareLinks(data || []);
     setFilteredData(data || []);
     setLoading(false);
@@ -166,18 +204,16 @@ const ShortLists = () => {
     }
   }, [archives, recruiterProfile]);
 
-  const shouldClear = value => {
-    if (!value) {
-      setFilteredData(globalData.shareLinks);
+  useEffect(() => {
+    if (recruiterProfile) {
+      setFilteredInfo(values => ({
+        ...values,
+        createdByTeam: recruiterProfile?.app_metadata?.team
+          ? [recruiterProfile?.app_metadata?.team]
+          : null,
+      }));
     }
-  };
-
-  const filter = searchTerm => {
-    const filteredData = globalData.shareLinks.filter(
-      candidate => candidate.email === searchTerm || candidate.name === searchTerm
-    );
-    setFilteredData(filteredData);
-  };
+  }, [recruiterProfile?.app_metadata?.team]);
 
   return (
     <>
@@ -187,39 +223,25 @@ const ShortLists = () => {
         onBack={null}
         footer={
           <Tabs defaultActiveKey="1" onChange={() => setArchives(flag => !flag)}>
-            <Tabs.TabPane tab="All Share Link" key="1" />
+            <Tabs.TabPane tab="All Share Links" key="1" />
             <Tabs.TabPane tab="Hidden Share Links" key="2" />
           </Tabs>
         }
-        extra={
-          <>
-            <Col>
-              {selectedRows.length !== 0 && (
-                <ArchiveButton
-                  onClick={() => setSelectedRows([])}
-                  reload={getData}
-                  archives={archives}
-                  route="shortlists"
-                  archiveData={selectedRows}
-                />
-              )}
-              <AutoComplete
-                style={{ width: 200 }}
-                allowClear
-                dataSource={dataSource}
-                onSelect={filter}
-                onSearch={shouldClear}
-                filterOption={(inputValue, option) =>
-                  option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                }
-              >
-                <Input.Search placeholder="Filter Share Links" />
-              </AutoComplete>
-            </Col>
-          </>
-        }
       />
-
+      {/* <div style={{ marginBottom: 16 }} /> */}
+      <div style={{ marginBottom: 16 }}>
+        <ArchiveButton
+          onClick={() => setSelectedRows([])}
+          reload={getData}
+          archives={archives}
+          route="shortlists"
+          archiveData={selectedRows}
+          disabled={selectedRows.length === 0}
+        />
+        <span style={{ marginLeft: 8 }}>
+          {selectedRows.length !== 0 ? `Selected ${selectedRows.length} Share Links` : ''}
+        </span>
+      </div>
       <Card bordered={false}>
         <ConfigProvider
           renderEmpty={() =>
@@ -227,6 +249,7 @@ const ShortLists = () => {
           }
         >
           <StandardTable
+            onChange={handleChange}
             selectedRows={selectedRows}
             loading={loading}
             data={{ list: filteredData }}

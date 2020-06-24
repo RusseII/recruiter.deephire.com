@@ -99,7 +99,7 @@ class BasicLayout extends React.PureComponent {
     videos: [],
     shareLinks: [],
     stripeProduct: { metadata: { allowedInterviews: '200' } },
-    recruiterProfile: undefined,
+    recruiterProfile: null,
   };
 
   async componentDidMount() {

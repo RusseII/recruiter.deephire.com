@@ -165,7 +165,7 @@ class ShareCandidateButton extends React.Component {
     const { isDisabled, buttonText } = this.props;
     return (
       <>
-        {this.renderCorrectModal(currentStep)}{' '}
+        {this.renderCorrectModal(currentStep)}
         <Button
           disabled={isDisabled}
           onClick={this.handleModalVisible}
