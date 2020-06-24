@@ -95,6 +95,7 @@ class BasicLayout extends React.PureComponent {
     rendering: true,
     isMobile: false,
     interviews: [],
+    liveInterviews: [],
     videos: [],
     shareLinks: [],
     stripeProduct: { metadata: { allowedInterviews: '200' } },
@@ -160,6 +161,7 @@ class BasicLayout extends React.PureComponent {
     const { location } = this.props;
     const {
       interviews,
+      liveInterviews,
       videos,
       shareLinks,
       stripeProduct,
@@ -168,6 +170,10 @@ class BasicLayout extends React.PureComponent {
     } = this.state;
     const setInterviews = interviews => {
       this.setState({ interviews });
+    };
+
+    const setLiveInterviews = liveInterviews => {
+      this.setState({ liveInterviews });
     };
 
     const setVideos = videos => {
@@ -188,6 +194,8 @@ class BasicLayout extends React.PureComponent {
       breadcrumbNameMap: this.breadcrumbNameMap,
       interviews,
       setInterviews,
+      liveInterviews,
+      setLiveInterviews,
       videos,
       setVideos,
       shareLinks,

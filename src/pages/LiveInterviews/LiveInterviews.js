@@ -15,7 +15,6 @@ import {
 } from 'antd';
 import router from 'umi/router';
 import { ShareAltOutlined, FileAddOutlined } from '@ant-design/icons';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import InviteDrawer from './ScheduleInterview';
 import { getLiveInterviews } from '@/services/api';
 import GlobalContext from '@/layouts/MenuContext';
@@ -24,7 +23,8 @@ import StandardTable from '@/components/StandardTable';
 import { useAsync } from '@/services/hooks';
 import customEmpty from '@/components/CustomEmpty';
 
-const { TabPane } = Tabs;
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
+
 const { Text } = Typography;
 
 const Actions = ({ data }) => {
@@ -67,7 +67,7 @@ const Actions = ({ data }) => {
 };
 
 const LiveInterviews = () => {
-  const { tab } = lowerCaseQueryParams(window.location.search);
+  const { tab = 1, page = 1 } = lowerCaseQueryParams(window.location.search);
 
   const [activeTab, setActiveTab] = useState(tab || '1');
 
@@ -85,14 +85,15 @@ const LiveInterviews = () => {
   };
 
   const { execute, pending, value } = useAsync(fetchLiveInterviews, false);
-  let liveInterviews = value || [];
 
-  const { recruiterProfile } = globalData;
+  const { recruiterProfile, liveInterviews, setLiveInterviews } = globalData;
   // eslint-disable-next-line camelcase
   const team = recruiterProfile?.app_metadata?.team;
 
+  let liveInterViewTeamFilter = liveInterviews;
+
   if (team) {
-    liveInterviews = liveInterviews.filter(liveInterview => {
+    liveInterViewTeamFilter = liveInterviews.filter(liveInterview => {
       if (!liveInterview.createdByTeam) return null;
       return liveInterview.createdByTeam.includes(team);
     });
@@ -101,6 +102,10 @@ const LiveInterviews = () => {
   useEffect(() => {
     execute();
   }, []);
+
+  useEffect(() => {
+    if (value) setLiveInterviews(value);
+  }, [value]);
 
   const columns = [
     {
@@ -218,19 +223,37 @@ const LiveInterviews = () => {
       email.includes('rratcliffe57@gmail.com') ||
       email.includes('klingcare'))
   ) {
-    const upcomingInterviewsFiltered = liveInterviews.filter(liveInterview => {
+    const upcomingInterviewsFiltered = liveInterViewTeamFilter.filter(liveInterview => {
       return new Date(liveInterview.interviewTime[1]) > new Date();
     });
     const upcomingInterviews = upcomingInterviewsFiltered.sort((a, b) => {
       return new Date(a.interviewTime[0]) - new Date(b.interviewTime[0]);
     });
 
-    const pastInterviews = liveInterviews.filter(liveInterview => {
+    const pastInterviews = liveInterViewTeamFilter.filter(liveInterview => {
       return new Date(liveInterview.interviewTime[1]) < new Date();
     });
 
     return (
-      <PageHeaderWrapper title="Live Interview">
+      <>
+        <AntPageHeader
+          title="Live Interviews"
+          subTitle="Schedule and view live two-way interviews"
+          onBack={null}
+          footer={
+            <Tabs
+              onChange={tabKey => {
+                router.push(`/live-interviews/?tab=${tabKey}&page=${page}`);
+                setActiveTab(tabKey);
+              }}
+              defaultActiveKey={activeTab}
+              tabBarExtraContent={<InviteDrawer execute={execute} />}
+            >
+              <Tabs.TabPane tab="Upcoming Live Interviews" key="1" />
+              <Tabs.TabPane tab="Completed Live Interviews" key="2" />
+            </Tabs>
+          }
+        />
         <ConfigProvider
           renderEmpty={() =>
             customEmpty(
@@ -242,40 +265,36 @@ const LiveInterviews = () => {
           }
         >
           <Card>
-            <Tabs
-              tabBarExtraContent={<InviteDrawer execute={execute} />}
-              activeKey={activeTab}
-              onChange={tabKey => setActiveTab(tabKey)}
-            >
-              <TabPane tab="Upcoming Live Interviews" key="1">
+            <Spin spinning={false}>
+              {/* <Table columns={columns} dataSource={upcomingInterviews} pagination={false} /> */}
+              <StandardTable
+                selectedRows={null}
+                loading={pending}
+                data={{ list: activeTab === '1' ? upcomingInterviews : pastInterviews }}
+                // size="small"
+                columns={columns}
+                pagination={{
+                  defaultCurrent: Number(page),
+                  // current: page,
+                  onChange: page => {
+                    router.push(`/live-interviews/?tab=${tab}&page=${page}`);
+                  },
+                }}
+              />
+            </Spin>
+            {/* <TabPane tab="Completed Live Interviews" key="2">
                 <Spin spinning={false}>
-                  {/* <Table columns={columns} dataSource={upcomingInterviews} pagination={false} /> */}
-                  <StandardTable
-                    selectedRows={null}
-                    loading={pending}
-                    data={{ list: upcomingInterviews }}
-                    // size="small"
-                    columns={columns}
-                    pagination={false}
-                  />
-                </Spin>
-              </TabPane>
-              <TabPane tab="Completed Live Interviews" key="2">
-                <Spin spinning={false}>
-                  {/* <Table columns={columns} dataSource={pastInterviews} /> */}
                   <StandardTable
                     selectedRows={null}
                     loading={pending}
                     data={{ list: pastInterviews }}
-                    // size="small"
                     columns={columns}
                   />
                 </Spin>
-              </TabPane>
-            </Tabs>
+              </TabPane> */}
           </Card>
         </ConfigProvider>
-      </PageHeaderWrapper>
+      </>
     );
   }
 
