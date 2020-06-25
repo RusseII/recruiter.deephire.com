@@ -94,7 +94,7 @@ const InfoCardEditable = props => {
   const viewProps = { key, documentProps: documentViewProps };
 
   return (
-    <Card hoverable title={userName} extra={interviewName} {...props}>
+    <Card title={userName} extra={interviewName} {...props}>
       <Skeleton loading={loading} active>
         {editable ? <EditableCard {...editProps} /> : <ViewCard {...viewProps} />}
       </Skeleton>

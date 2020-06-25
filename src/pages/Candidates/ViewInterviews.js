@@ -3,7 +3,7 @@ import {
   ShareAltOutlined,
   UserAddOutlined,
   PieChartOutlined,
-  FormOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
 import router from 'umi/router';
 
@@ -81,12 +81,12 @@ const TableList = () => {
 
   const columns = [
     {
-      title: 'Interview Name',
+      title: 'Job Name',
       dataIndex: 'interviewName',
     },
 
     {
-      title: 'Interview Questions',
+      title: 'Job Questions',
       width: '40%',
       render(x, data) {
         try {
@@ -247,7 +247,7 @@ const TableList = () => {
             type="primary"
             onClick={() => router.push('/one-way/jobs/create/info')}
             ghost
-            icon={<FormOutlined />}
+            icon={<PlusOutlined />}
           >
             Create Job
           </Button>
@@ -291,30 +291,6 @@ const TableList = () => {
           showIcon
         />
       )}
-      <Row style={{ marginBottom: 16 }} justify="space-between">
-        {/* <AllowedInterviews
-          allowedInterviews={allowedInterviews}
-          totalInterviews={unArchivedInterviewCount}
-        /> */}
-        <div />
-        <span>
-          <ArchiveButton
-            onClick={() => setSelectedRows([])}
-            reload={getData}
-            archives={archives}
-            route="interviews"
-            archiveData={selectedRows}
-            disabled={selectedRows.length === 0}
-            style={{ marginRight: 8 }}
-          />
-          <CloneButton
-            onClick={() => setSelectedRows([])}
-            reload={getData}
-            cloneData={selectedRows}
-            disabled={selectedRows.length === 0}
-          />
-        </span>
-      </Row>
 
       {/* <AutoComplete
                 style={{ width: 350 }}
@@ -329,10 +305,32 @@ const TableList = () => {
               /> */}
 
       <Card bordered={false}>
+        <Row style={{ marginBottom: 16 }} justify="space-between">
+          {/* <AllowedInterviews
+          allowedInterviews={allowedInterviews}
+          totalInterviews={unArchivedInterviewCount}
+        /> */}
+          <div />
+          <span>
+            <ArchiveButton
+              onClick={() => setSelectedRows([])}
+              reload={getData}
+              archives={archives}
+              route="interviews"
+              archiveData={selectedRows}
+              disabled={selectedRows.length === 0}
+              style={{ marginRight: 8 }}
+            />
+            <CloneButton
+              onClick={() => setSelectedRows([])}
+              reload={getData}
+              cloneData={selectedRows}
+              disabled={selectedRows.length === 0}
+            />
+          </span>
+        </Row>
         <ConfigProvider
-          renderEmpty={() =>
-            customEmpty('No Interviews', '/one-way/jobs/create/info', 'Create Interview Now')
-          }
+          renderEmpty={() => customEmpty('No Jobs', '/one-way/jobs/create/info', 'Create Job')}
         >
           <StandardTable
             selectedRows={selectedRows}

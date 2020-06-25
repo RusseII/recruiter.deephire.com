@@ -29,6 +29,7 @@ const Items = ({ listItems }) => (
 );
 
 const contact = () => {
+  $crisp.push(['do', 'chat:show']);
   $crisp.push(['do', 'chat:open']);
   $crisp.push(['do', 'message:send', ['text', "Hi, I'm interested in other plans."]]);
 };

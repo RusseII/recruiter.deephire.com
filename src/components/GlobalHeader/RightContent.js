@@ -1,21 +1,43 @@
 /* global $crisp */
 import React, { PureComponent } from 'react';
 import { FormattedMessage, setLocale, getLocale } from 'umi/locale';
-import { BugOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
-import { Spin, Tag, Menu, Dropdown, Avatar, Tooltip } from 'antd';
+import {
+  BugOutlined,
+  LogoutOutlined,
+  SettingOutlined,
+  QuestionCircleOutlined,
+} from '@ant-design/icons';
+import { Spin, Tag, Menu, Dropdown, Avatar, Tooltip, Badge } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import styles from './index.less';
 
 const bugEvent = () => {
+  $crisp.push(['do', 'chat:show']);
   $crisp.push(['do', 'chat:open']);
   $crisp.push(['do', 'message:send', ['text', "I'd like to report a bug."]]);
 };
 
+const chatEvent = () => {
+  $crisp.push(['do', 'chat:show']);
+  $crisp.push(['do', 'chat:open']);
+  // $crisp.push(['do', 'message:send', ['text', "I'd like to report a bug."]]);
+};
+
 const ReportBug = () => (
   <Tooltip title="Report a bug">
-    <BugOutlined onClick={bugEvent} style={{ marginRight: 8 }} />
+    <BugOutlined onClick={bugEvent} style={{ marginRight: 24 }} />
   </Tooltip>
+);
+
+const ContactSupport = () => (
+  <span style={{ marginRight: 16 }}>
+    <Tooltip title="Chat with DeepHire support">
+      <Badge dot>
+        <QuestionCircleOutlined onClick={chatEvent} />
+      </Badge>
+    </Tooltip>
+  </span>
 );
 export default class GlobalHeaderRight extends PureComponent {
   getNoticeData() {
@@ -86,6 +108,7 @@ export default class GlobalHeaderRight extends PureComponent {
     return (
       <div className={className}>
         <ReportBug />
+        <ContactSupport />
         {currentUser.name ? (
           <Dropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>

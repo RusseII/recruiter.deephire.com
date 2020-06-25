@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+/* global $crisp */
 import React from 'react';
 import { Layout, Alert, Modal } from 'antd';
 import DocumentTitle from 'react-document-title';
@@ -103,6 +104,7 @@ class BasicLayout extends React.PureComponent {
   };
 
   async componentDidMount() {
+    $crisp.push(['do', 'chat:hide']);
     const recruiterProfile = await getRecruiterProfile();
     this.setState({ recruiterProfile });
 

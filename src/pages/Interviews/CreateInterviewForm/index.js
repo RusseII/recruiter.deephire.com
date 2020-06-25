@@ -25,14 +25,14 @@ export default class CreateInterviewForm extends PureComponent {
     return (
       <>
         <AntPageHeader
-          title="Create Interview Template"
-          subTitle="Interview Templates can later be used to invite candidates to a one way interview"
+          title="Create Job"
+          subTitle="A job is a set of interview questions that you can have your candidates answer"
         />
 
         <Card bordered={false}>
           <Fragment>
             <Steps current={this.getCurrentStep()} className={styles.steps}>
-              <Step title="Create the Interview" />
+              <Step title="Create the Job" />
               <Step title="Complete" />
             </Steps>
             {children}

@@ -212,9 +212,7 @@ const Candidates = () => {
         value={selectedCards}
       >
         <ConfigProvider
-          renderEmpty={() =>
-            customEmpty('No Candidate Videos', '/interview/view', 'View Interviews')
-          }
+          renderEmpty={() => customEmpty('No Candidate Videos', '/one-way/jobs/', 'View Jobs')}
         >
           {loading && candidateCount ? (
             <List

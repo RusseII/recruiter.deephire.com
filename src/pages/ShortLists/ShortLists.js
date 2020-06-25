@@ -229,23 +229,24 @@ const ShortLists = () => {
         }
       />
       {/* <div style={{ marginBottom: 16 }} /> */}
-      <div style={{ marginBottom: 16 }}>
-        <ArchiveButton
-          onClick={() => setSelectedRows([])}
-          reload={getData}
-          archives={archives}
-          route="shortlists"
-          archiveData={selectedRows}
-          disabled={selectedRows.length === 0}
-        />
-        <span style={{ marginLeft: 8 }}>
-          {selectedRows.length !== 0 ? `Selected ${selectedRows.length} Share Links` : ''}
-        </span>
-      </div>
+
       <Card bordered={false}>
+        <div style={{ marginBottom: 16 }}>
+          <ArchiveButton
+            onClick={() => setSelectedRows([])}
+            reload={getData}
+            archives={archives}
+            route="shortlists"
+            archiveData={selectedRows}
+            disabled={selectedRows.length === 0}
+          />
+          <span style={{ marginLeft: 8 }}>
+            {selectedRows.length !== 0 ? `Selected ${selectedRows.length} Share Links` : ''}
+          </span>
+        </div>
         <ConfigProvider
           renderEmpty={() =>
-            customEmpty('No Share Links', '/candidates/candidates', 'View Candidates')
+            customEmpty('No Share Links', 'one-way/candidates/', 'View Candidates')
           }
         >
           <StandardTable

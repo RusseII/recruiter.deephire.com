@@ -13,6 +13,7 @@ import GlobalContext from '@/layouts/MenuContext';
 import styles from './index.less';
 
 const cancelSubscription = () => {
+  $crisp.push(['do', 'chat:show']);
   $crisp.push(['do', 'chat:open']);
   $crisp.push(['do', 'message:send', ['text', "Hi, I'm interested in canceling my subscription."]]);
 };

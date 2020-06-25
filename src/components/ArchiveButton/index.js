@@ -13,7 +13,7 @@ const Archive = props => {
     await new Promise(resolve => setTimeout(resolve, 300));
     await reload();
     onClick();
-    message.success(archives ? 'Succesfully unarchived' : 'Successfully archived');
+    message.success(archives ? 'Succesfully unhidden' : 'Successfully hidden');
   };
   return (
     <Button disabled={!active} {...props} onClick={shouldArch}>
