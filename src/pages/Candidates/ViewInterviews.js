@@ -3,26 +3,24 @@ import {
   ShareAltOutlined,
   UserAddOutlined,
   PieChartOutlined,
+  FormOutlined,
 } from '@ant-design/icons';
 import router from 'umi/router';
 
 import {
   message,
   Row,
-  Col,
   Card,
   Tooltip,
   ConfigProvider,
-  Statistic,
   Alert,
   Button,
   Drawer,
   Tag,
-  AutoComplete,
+  Tabs,
 } from 'antd';
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import readableTime from 'readable-timestamp';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import StandardTable from '@/components/StandardTable';
 import { getInterviews, getArchivedInterviews, updateInterviews } from '@/services/api';
 import ArchiveButton from '@/components/ArchiveButton';
@@ -35,6 +33,7 @@ import GlobalContext from '@/layouts/MenuContext';
 import InviteCandidates from '@/components/InviteCandidates';
 import { getAuthority } from '@/utils/authority';
 import UpgradeButton from '@/components/Upgrade/UpgradeButton';
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
@@ -50,25 +49,25 @@ const TableList = () => {
 
   const { interviews, setInterviews, stripeProduct, recruiterProfile } = globalData;
 
-  const [dataSource, setDataSource] = useState([]);
+  // const [dataSource, setDataSource] = useState([]);
   const [filteredData, setFilteredData] = useState(interviews);
 
-  const [unArchivedInterviewCount, setUnArchivedInterviewCount] = useState(' ');
+  const [unArchivedInterviewCount, setUnArchivedInterviewCount] = useState(null);
 
-  const createDataSource = data => {
-    const searchDataSource = [];
-    data.forEach(interview => {
-      if (interview.interviewName) searchDataSource.push(interview.interviewName);
-    });
-    const unique = [...new Set(searchDataSource)];
-    setDataSource(unique);
-  };
+  // const createDataSource = data => {
+  //   const searchDataSource = [];
+  //   data.forEach(interview => {
+  //     if (interview.interviewName) searchDataSource.push(interview.interviewName);
+  //   });
+  //   const unique = [...new Set(searchDataSource)];
+  //   setDataSource(unique);
+  // };
   // eslint-disable-next-line camelcase
   const team = recruiterProfile?.app_metadata?.team;
   // if (interviews) {
   //   interviews = interviews.map((interview, i) => ({ key: `interview-${i}`, ...interview }));
   // }
-  const { allowedInterviews } = stripeProduct.metadata || {};
+  const { allowedInterviews } = stripeProduct.metadata;
   const updateInterview = async cleanedValueData => {
     await updateInterviews(editInterview._id, cleanedValueData);
     setEditInterview(null);
@@ -203,7 +202,7 @@ const TableList = () => {
         return interview.createdByTeam.includes(team);
       });
     }
-    createDataSource(data || []);
+    // createDataSource(data || []);
     setInterviews(data || []);
     setFilteredData(data || []);
 
@@ -215,21 +214,54 @@ const TableList = () => {
     }
   }, [archives, reload, recruiterProfile]);
 
-  const shouldClear = value => {
-    if (!value) {
-      setFilteredData(interviews);
-    }
-  };
+  // const shouldClear = value => {
+  //   if (!value) {
+  //     setFilteredData(interviews);
+  //   }
+  // };
 
-  const filter = searchTerm => {
-    const filteredData = globalData.interviews.filter(
-      interview => interview.interviewName === searchTerm
-    );
-    setFilteredData(filteredData);
-  };
+  // const filter = searchTerm => {
+  //   const filteredData = globalData.interviews.filter(
+  //     interview => interview.interviewName === searchTerm
+  //   );
+  //   setFilteredData(filteredData);
+  // };
 
   return (
-    <PageHeaderWrapper title="Interviews">
+    <>
+      <AntPageHeader
+        title="One Way Interviews"
+        subTitle="Create One Way Interviews"
+        onBack={null}
+        tags={
+          unArchivedInterviewCount && allowedInterviews ? (
+            <Tooltip title="Total interviews used">
+              <Tag color={unArchivedInterviewCount / allowedInterviews >= 1 ? 'red' : 'blue'}>
+                {`${unArchivedInterviewCount}/${allowedInterviews}`}
+              </Tag>
+            </Tooltip>
+          ) : null
+        }
+        footer={
+          <Tabs
+            tabBarExtraContent={
+              <Button
+                type="primary"
+                onClick={() => router.push('/interview/create-interview/info')}
+                ghost
+                icon={<FormOutlined />}
+              >
+                Create Interview Tempalate
+              </Button>
+            }
+            defaultActiveKey="1"
+            onChange={() => setArchives(flag => !flag)}
+          >
+            <Tabs.TabPane tab="All Interview Templates" key="1" />
+            <Tabs.TabPane tab="Hidden Interview Templates" key="2" />
+          </Tabs>
+        }
+      />
       <InviteCandidates
         setInviteCandidates={setInviteCandidates}
         inviteCandidates={inviteCandidates}
@@ -247,7 +279,7 @@ const TableList = () => {
         <Step1 setReload={setReload} onClick={updateInterview} data={editInterview} />
       </Drawer>
 
-      {unArchivedInterviewCount > allowedInterviews && (
+      {allowedInterviews && unArchivedInterviewCount > allowedInterviews && (
         <Alert
           style={{ marginBottom: 20 }}
           message="Interview Cap Exceeded"
@@ -262,32 +294,32 @@ const TableList = () => {
           showIcon
         />
       )}
-      <Card>
-        <Row align="middle" type="flex" justify="space-between">
-          <Col>
-            <Row align="middle" type="flex">
-              <AllowedInterviews
-                allowedInterviews={allowedInterviews}
-                totalInterviews={unArchivedInterviewCount}
-              />
+      <Row style={{ marginBottom: 16 }} justify="space-between">
+        {/* <AllowedInterviews
+          allowedInterviews={allowedInterviews}
+          totalInterviews={unArchivedInterviewCount}
+        /> */}
+        <div />
+        <span>
+          <ArchiveButton
+            onClick={() => setSelectedRows([])}
+            reload={getData}
+            archives={archives}
+            route="interviews"
+            archiveData={selectedRows}
+            disabled={selectedRows.length === 0}
+            style={{ marginRight: 8 }}
+          />
+          <CloneButton
+            onClick={() => setSelectedRows([])}
+            reload={getData}
+            cloneData={selectedRows}
+            disabled={selectedRows.length === 0}
+          />
+        </span>
+      </Row>
 
-              {selectedRows.length !== 0 && (
-                <>
-                  <ArchiveButton
-                    onClick={() => setSelectedRows([])}
-                    reload={getData}
-                    archives={archives}
-                    route="interviews"
-                    archiveData={selectedRows}
-                  />
-                  <CloneButton
-                    onClick={() => setSelectedRows([])}
-                    reload={getData}
-                    cloneData={selectedRows}
-                  />
-                </>
-              )}
-              <AutoComplete
+      {/* <AutoComplete
                 style={{ width: 350 }}
                 allowClear
                 dataSource={dataSource}
@@ -297,14 +329,7 @@ const TableList = () => {
                   option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                 }
                 placeholder="Filter"
-              />
-            </Row>
-          </Col>
-          <Col>
-            <a onClick={() => setArchives(!archives)}>{archives ? 'View All' : 'View Hidden'} </a>
-          </Col>
-        </Row>
-      </Card>
+              /> */}
 
       <Card bordered={false}>
         <ConfigProvider
@@ -322,21 +347,21 @@ const TableList = () => {
           />
         </ConfigProvider>
       </Card>
-    </PageHeaderWrapper>
+    </>
   );
 };
 
-const AllowedInterviews = ({ totalInterviews, allowedInterviews }) => (
-  <Tooltip title="Total interviews used">
-    <div>
-      <Statistic
-        style={{ marginRight: 16 }}
-        valueStyle={totalInterviews > allowedInterviews ? { color: 'red' } : null}
-        value={totalInterviews}
-        suffix={`/ ${allowedInterviews}`}
-      />
-    </div>
-  </Tooltip>
-);
+// const AllowedInterviews = ({ totalInterviews, allowedInterviews }) => (
+//   <Tooltip title="Total interviews used">
+//     <div>
+//       <Statistic
+//         style={{ marginRight: 16 }}
+//         valueStyle={totalInterviews > allowedInterviews ? { color: 'red' } : null}
+//         value={totalInterviews}
+//         suffix={`/ ${allowedInterviews}`}
+//       />
+//     </div>
+//   </Tooltip>
+// );
 
 export default TableList;

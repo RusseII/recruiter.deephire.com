@@ -25,6 +25,7 @@ export default [
         path: '/interview/create-interview',
         name: 'Create New Interview',
         component: './Interviews/CreateInterviewForm',
+        hideInMenu: true,
         hideChildrenInMenu: true,
         routes: [
           {

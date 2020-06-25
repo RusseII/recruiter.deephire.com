@@ -178,36 +178,29 @@ const Candidates = () => {
           </AutoComplete>
         </Col>
         <Col>
-          <span>
-            <ArchiveButton
-              style={{ marginRight: 8 }}
-              onClick={() => setSelectedCards([])}
-              reload={getData}
-              archives={archives}
-              route="videos"
-              disabled={selectedCards.length === 0}
-              archiveData={selectedCards}
-            />
+          <ArchiveButton
+            style={{ marginRight: 8 }}
+            onClick={() => setSelectedCards([])}
+            reload={getData}
+            archives={archives}
+            route="videos"
+            disabled={selectedCards.length === 0}
+            archiveData={selectedCards}
+          />
 
-            {isAdmin() ? (
-              <Popconfirm
-                title="Permanently delete selected videos? All data will be deleted from our servers & unrecoverable."
-                onConfirm={handleDelete}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button
-                  disabled={selectedCards.length === 0}
-                  type="danger"
-                  style={{ marginRight: 8 }}
-                >
-                  Delete
-                </Button>
-              </Popconfirm>
-            ) : null}
-          </span>
+          {isAdmin() ? (
+            <Popconfirm
+              title="Permanently delete selected videos? All data will be deleted from our servers & unrecoverable."
+              onConfirm={handleDelete}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button disabled={selectedCards.length === 0} danger style={{ marginRight: 8 }}>
+                Delete
+              </Button>
+            </Popconfirm>
+          ) : null}
           <ShareCandidateButton
-            // style={{ marginLeft: 8 }}
             isDisabled={selectedCards.length === 0}
             candidateData={selectedCards}
           />
