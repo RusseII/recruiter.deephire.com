@@ -55,7 +55,7 @@ export default {
       reloadAuthorized();
       yield put(
         routerRedux.push({
-          pathname: '/interview/view-interviews2',
+          pathname: '/one-way/jobs',
           search: stringify({
             redirect: window.location.href,
           }),

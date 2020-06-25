@@ -230,8 +230,8 @@ const TableList = () => {
   return (
     <>
       <AntPageHeader
-        title="One Way Interviews"
-        subTitle="Create One Way Interviews"
+        title="Jobs"
+        subTitle="Invite candidates to a job to have them complete a one-way interview "
         onBack={null}
         tags={
           unArchivedInterviewCount && allowedInterviews ? (
@@ -242,23 +242,20 @@ const TableList = () => {
             </Tooltip>
           ) : null
         }
-        footer={
-          <Tabs
-            tabBarExtraContent={
-              <Button
-                type="primary"
-                onClick={() => router.push('/interview/create-interview/info')}
-                ghost
-                icon={<FormOutlined />}
-              >
-                Create Interview Tempalate
-              </Button>
-            }
-            defaultActiveKey="1"
-            onChange={() => setArchives(flag => !flag)}
+        extra={
+          <Button
+            type="primary"
+            onClick={() => router.push('/one-way/jobs/create/info')}
+            ghost
+            icon={<FormOutlined />}
           >
-            <Tabs.TabPane tab="All Interview Templates" key="1" />
-            <Tabs.TabPane tab="Hidden Interview Templates" key="2" />
+            Create Job
+          </Button>
+        }
+        footer={
+          <Tabs defaultActiveKey="1" onChange={() => setArchives(flag => !flag)}>
+            <Tabs.TabPane tab="Active Jobs" key="1" />
+            <Tabs.TabPane tab="Hidden Jobs" key="2" />
           </Tabs>
         }
       />
@@ -334,7 +331,7 @@ const TableList = () => {
       <Card bordered={false}>
         <ConfigProvider
           renderEmpty={() =>
-            customEmpty('No Interviews', '/interview/create-interview/info', 'Create Interview Now')
+            customEmpty('No Interviews', '/one-way/jobs/create/info', 'Create Interview Now')
           }
         >
           <StandardTable

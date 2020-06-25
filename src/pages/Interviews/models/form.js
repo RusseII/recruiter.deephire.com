@@ -21,7 +21,7 @@ export default {
         link: response.shortUrl,
       });
 
-      yield put(routerRedux.push('/interview/create-interview/result'));
+      yield put(routerRedux.push('/one-way/jobs/create/result'));
     },
 
     *submitviewInterview({ payload }, { call }) {

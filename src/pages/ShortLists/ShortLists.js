@@ -17,7 +17,7 @@ import GlobalContext from '@/layouts/MenuContext';
 const { Text } = Typography;
 const openShortListAnalytics = data => {
   const { _id } = data;
-  router.push(`/shortlists/shortlistanalytics/?id=${_id}`);
+  router.push(`/sharelinks/analytics/?id=${_id}`);
 };
 
 const ShortLists = () => {

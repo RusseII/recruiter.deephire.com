@@ -307,7 +307,7 @@ const CantCreateInterview = () => (
     subTitle="You have used all of your alloted interview slots. To get more interview slots either upgrade, or archive some of your active interviews."
     extra={[
       <UpgradeButton text="Upgrade Plan" />,
-      <Button onClick={() => router.push('/interview/view')}>Remove Interviews</Button>,
+      <Button onClick={() => router.push('/one-way/jobs')}>Remove Interviews</Button>,
     ]}
   />
 );
