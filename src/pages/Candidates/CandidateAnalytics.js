@@ -9,7 +9,7 @@ import StandardTable from '@/components/StandardTable';
 import customEmpty from '@/components/CustomEmpty';
 
 import { useAsync } from '@/services/hooks';
-import { lowerCaseQueryParams } from '@/utils/utils';
+import { lowerCaseQueryParams, handleFilter } from '@/utils/utils';
 
 import { getEventbyId } from '@/services/api';
 import 'antd/dist/antd.css';
@@ -62,16 +62,20 @@ const CandidateAnalytics = () => {
       title: 'Name',
       dataIndex: 'userName',
       key: 'name',
+      sorter: (a, b) => a.userName.localeCompare(b.userName),
     },
     {
       title: 'Candidate Email',
       key: 'candidateEmail',
       dataIndex: 'candidateEmail',
+      sorter: (a, b) => a.candidateEmail.localeCompare(b.candidateEmail),
     },
     {
       title: 'Candidate Status',
       dataIndex: 'event',
       key: 'event',
+      ...handleFilter(events, 'event'),
+      sorter: (a, b) => a.event.localeCompare(b.event),
       render: event => {
         let color;
         if (event === 'invited') color = 'purple';
@@ -85,6 +89,7 @@ const CandidateAnalytics = () => {
     {
       title: 'Last Event Time',
       dataIndex: 'timestamp',
+      sorter: (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
       render: timestamp => {
         const dateObj = new Date(timestamp);
         const displayTime = readableTime(dateObj);

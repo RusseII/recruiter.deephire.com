@@ -26,6 +26,8 @@ import InviteCandidates from '@/components/InviteCandidates';
 import UpgradeButton from '@/components/Upgrade/UpgradeButton';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
+import { handleFilter } from '@/utils/utils';
+
 // const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const TableList = () => {
@@ -104,17 +106,11 @@ const TableList = () => {
       key: 'createdByTeam',
       // className: styles.hidden,
       dataIndex: 'createdByTeam',
-      filters: [
-        ...new Set(
-          filteredData
-            .map(shareLink => shareLink?.createdByTeam)
-            .filter(value => value !== undefined)
-        ),
-      ].map(createdByTeam => ({ text: createdByTeam, value: createdByTeam })),
+      ...handleFilter(filteredData, 'createdByTeam'),
       filteredValue: filteredInfo?.createdByTeam || null,
 
-      onFilter: (value, record) =>
-        record.createdByTeam ? record.createdByTeam.indexOf(value) === 0 : false,
+      // record.createdByTeam ? record.createdByTeam.indexOf(value) === 0 : false,
+      // }
       render: createdByTeam => {
         if (createdByTeam) {
           return Array.isArray(createdByTeam) ? (

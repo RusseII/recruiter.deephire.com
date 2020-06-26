@@ -18,7 +18,7 @@ import { ShareAltOutlined, FileAddOutlined, VideoCameraOutlined } from '@ant-des
 import InviteDrawer from './ScheduleInterview';
 import { getLiveInterviews } from '@/services/api';
 import GlobalContext from '@/layouts/MenuContext';
-import { lowerCaseQueryParams } from '@/utils/utils';
+import { lowerCaseQueryParams, handleFilter } from '@/utils/utils';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
 
@@ -194,17 +194,9 @@ const LiveInterviews = () => {
       key: 'createdByTeam',
       // className: styles.hidden,
       dataIndex: 'createdByTeam',
-      filters: [
-        ...new Set(
-          liveInterviews
-            .map(shareLink => shareLink?.createdByTeam)
-            .filter(value => value !== undefined)
-        ),
-      ].map(createdByTeam => ({ text: createdByTeam, value: createdByTeam })),
+      ...handleFilter(liveInterviews, 'createdByTeam'),
       filteredValue: filteredInfo?.createdByTeam || null,
 
-      onFilter: (value, record) =>
-        record.createdByTeam ? record.createdByTeam.indexOf(value) === 0 : false,
       render: createdByTeam => {
         if (createdByTeam) {
           return Array.isArray(createdByTeam) ? (

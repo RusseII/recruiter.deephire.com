@@ -250,3 +250,38 @@ export const lowerCaseQueryParams = urlPath => {
   const queryParams = parse(urlPath, { ignoreQueryPrefix: true });
   return lowerCaseObj(queryParams);
 };
+
+export const handleFilter = (data, field) => {
+  const filterData = [];
+  data.forEach(row => {
+    if (row[field]) {
+      if (Array.isArray(row[field])) {
+        row[field].forEach(row => {
+          if (row) filterData.push(row);
+        });
+      } else {
+        filterData.push(row[field]);
+      }
+    }
+  });
+  const uniqueData = [...new Set(filterData)];
+
+  const filters = uniqueData.map(text => ({
+    text,
+    value: text,
+  }));
+
+  const onFilter = (value, record) => {
+    if (Array.isArray(record[field])) {
+      let flag = false;
+      record[field].forEach(team => {
+        if (team.indexOf(value) === 0) {
+          flag = true;
+        }
+      });
+      return flag;
+    }
+    return record[field] ? record[field].indexOf(value) === 0 : false;
+  };
+  return { filters, onFilter };
+};

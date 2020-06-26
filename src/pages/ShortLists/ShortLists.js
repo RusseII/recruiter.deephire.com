@@ -6,7 +6,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import readableTime from 'readable-timestamp';
 import styles from './ShortLists.less';
 import ArchiveButton from '@/components/ArchiveButton';
-import { getHttpUrl } from '@/utils/utils';
+import { getHttpUrl, handleFilter } from '@/utils/utils';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
 
@@ -99,14 +99,8 @@ const ShortLists = () => {
       title: 'Created By',
       key: 'createdBy',
       sorter: (a, b) => a.createdBy.localeCompare(b.createdBy),
-      filters: [
-        ...new Set(
-          filteredData.map(shareLink => shareLink?.createdBy).filter(value => value !== undefined)
-        ),
-      ].map(createdBy => ({ text: createdBy, value: createdBy })),
+      ...handleFilter(filteredData, 'createdBy'),
       filteredValue: filteredInfo?.createdBy || null,
-
-      onFilter: (value, record) => record.createdBy.indexOf(value) === 0,
 
       render(test, data) {
         const { createdBy } = data;
@@ -129,17 +123,8 @@ const ShortLists = () => {
       key: 'createdByTeam',
       // className: styles.hidden,
       dataIndex: 'createdByTeam',
-      filters: [
-        ...new Set(
-          filteredData
-            .map(shareLink => shareLink?.createdByTeam)
-            .filter(value => value !== undefined)
-        ),
-      ].map(createdByTeam => ({ text: createdByTeam, value: createdByTeam })),
+      ...handleFilter(filteredData, 'createdByTeam'),
       filteredValue: filteredInfo?.createdByTeam || null,
-
-      onFilter: (value, record) =>
-        record.createdByTeam ? record.createdByTeam.indexOf(value) === 0 : false,
       render: createdByTeam => {
         if (createdByTeam) {
           return Array.isArray(createdByTeam) ? (
