@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   AutoComplete,
   Card,
@@ -14,6 +15,8 @@ import {
   Tooltip,
   Divider,
   BackTop,
+  Select,
+  Space,
 } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import { ReloadOutlined } from '@ant-design/icons';
@@ -22,6 +25,7 @@ import CandidateCard from '@/components/CandidateCard';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 import ArchiveButton from '@/components/ArchiveButton';
 
+import { handleFilter } from '@/utils/utils';
 import { getArchivedVideos, getVideos, removeCandidates } from '@/services/api';
 import styles from './Candidates.less';
 import customEmpty from '@/components/CustomEmpty';
@@ -38,40 +42,55 @@ const Candidates = () => {
   const [loading, setLoading] = useState(true);
   const [dataSource, setDataSource] = useState([]);
   const [archives, setArchives] = useState(false);
+  const [selectFilter, setSelectFilter] = useState([]);
   const [reload, setReload] = useState(false);
+
+  const [filterByTeam, setFilterByTeam] = useState([]);
 
   const globalData = useContext(GlobalContext);
   const { videos, setVideos, recruiterProfile } = globalData;
 
   // eslint-disable-next-line camelcase
-  const team = recruiterProfile?.app_metadata?.team;
+  // const team = recruiterProfile?.app_metadata?.team;
 
   const [filteredData, setFilteredData] = useState(videos);
 
   const candidateCount = Number(localStorage.getItem('candidateCount'));
   const countOfCandidates = new Array(candidateCount).fill(5);
 
-  const createDataSource = data => {
+  // const createDataSource = data => {
+  //   const searchDataSource = [];
+  //   data.forEach(candidate => {
+  //     if (candidate.userName) searchDataSource.push(candidate.userName);
+  //     if (candidate.candidateEmail) searchDataSource.push(candidate.candidateEmail);
+  //     if (candidate.interviewName) searchDataSource.push(candidate.interviewName);
+  //   });
+  //   const unique = [...new Set(searchDataSource)];
+  //   setDataSource(unique);
+  // };
+
+  useEffect(() => {
     const searchDataSource = [];
-    data.forEach(candidate => {
+    filterByTeam.forEach(candidate => {
       if (candidate.userName) searchDataSource.push(candidate.userName);
       if (candidate.candidateEmail) searchDataSource.push(candidate.candidateEmail);
       if (candidate.interviewName) searchDataSource.push(candidate.interviewName);
     });
     const unique = [...new Set(searchDataSource)];
     setDataSource(unique);
-  };
+    setFilteredData(filterByTeam || []);
+  }, [filterByTeam]);
 
   const getData = async () => {
     setLoading(true);
-    let data = await (archives ? getArchivedVideos() : getVideos());
-    if (team) {
-      data = data.filter(video => {
-        if (!video.completeInterviewData?.interviewData?.createdByTeam) return null;
-        return video.completeInterviewData?.interviewData?.createdByTeam.includes(team);
-      });
-    }
-    createDataSource(data || []);
+    const data = await (archives ? getArchivedVideos() : getVideos());
+    // if (team) {
+    //   data = data.filter(video => {
+    //     if (!video.completeInterviewData?.interviewData?.createdByTeam) return null;
+    //     return video.completeInterviewData?.interviewData?.createdByTeam.includes(team);
+    //   });
+    // }
+    // createDataSource(data || []);
     setVideos(data || []);
     setFilteredData(data || []);
     setLoading(false);
@@ -84,9 +103,40 @@ const Candidates = () => {
     }
   }, [archives, recruiterProfile, reload]);
 
+  useEffect(() => {
+    if (recruiterProfile) {
+      setSelectFilter(
+        recruiterProfile?.app_metadata?.team ? [recruiterProfile?.app_metadata?.team] : []
+      );
+    }
+  }, [recruiterProfile?.app_metadata?.team]);
+
+  const { filters: createdByTeamFilters, onFilter } = handleFilter(
+    videos,
+    'completeInterviewData.interviewData.createdByTeam'
+  );
+
+  useEffect(() => {
+    if (videos && selectFilter) {
+      if (selectFilter.length === 0) {
+        setFilterByTeam(videos);
+      } else {
+        const data = videos.filter(record => {
+          let flag = false;
+          selectFilter.forEach(filterValue => {
+            const found = onFilter(filterValue, record);
+            if (found) flag = true;
+          });
+          return flag;
+        });
+        setFilterByTeam(data);
+      }
+    }
+  }, [selectFilter, videos]);
+
   const shouldClear = value => {
     if (!value) {
-      setFilteredData(videos);
+      setFilteredData(filterByTeam);
     }
   };
 
@@ -99,13 +149,13 @@ const Candidates = () => {
     );
     setFilteredData(filteredData);
   };
-
   const handleDelete = () => {
     // removes multiple candidates
     removeCandidates(selectedCards, 'Deleted candidate data');
     setSelectedCards([]);
     getData();
   };
+
   return (
     <>
       <BackTop />
@@ -174,7 +224,7 @@ const Candidates = () => {
         </Row> */}
       </AntPageHeader>
       <Row justify="space-between" style={{ marginBottom: 16 }}>
-        <Col>
+        <Space>
           <AutoComplete
             style={{ width: 200 }}
             allowClear
@@ -187,7 +237,20 @@ const Candidates = () => {
           >
             <Input.Search placeholder="Search Candidates" />
           </AutoComplete>
-        </Col>
+          <Select
+            onChange={value => {
+              setSelectFilter(value);
+            }}
+            mode="multiple"
+            style={{ minWidth: 200 }}
+            placeholder="Filter by Team"
+            value={selectFilter}
+          >
+            {createdByTeamFilters.map(filter => (
+              <Select.Option key={filter.text}>{filter.text}</Select.Option>
+            ))}
+          </Select>
+        </Space>
         <Col>
           <ArchiveButton
             style={{ marginRight: 8 }}

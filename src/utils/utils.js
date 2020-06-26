@@ -3,6 +3,7 @@ import React from 'react';
 import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
 import { Modal } from 'antd';
+import _get from 'lodash.get';
 
 const { confirm } = Modal;
 
@@ -254,13 +255,13 @@ export const lowerCaseQueryParams = urlPath => {
 export const handleFilter = (data, field) => {
   const filterData = [];
   data.forEach(row => {
-    if (row[field]) {
-      if (Array.isArray(row[field])) {
-        row[field].forEach(row => {
+    if (_get(row, field)) {
+      if (Array.isArray(_get(row, field))) {
+        _get(row, field).forEach(row => {
           if (row) filterData.push(row);
         });
       } else {
-        filterData.push(row[field]);
+        filterData.push(_get(row, field));
       }
     }
   });
@@ -272,16 +273,16 @@ export const handleFilter = (data, field) => {
   }));
 
   const onFilter = (value, record) => {
-    if (Array.isArray(record[field])) {
+    if (Array.isArray(_get(record, field))) {
       let flag = false;
-      record[field].forEach(team => {
+      _get(record, field).forEach(team => {
         if (team.indexOf(value) === 0) {
           flag = true;
         }
       });
       return flag;
     }
-    return record[field] ? record[field].indexOf(value) === 0 : false;
+    return _get(record, field) ? _get(record, field).indexOf(value) === 0 : false;
   };
   return { filters, onFilter };
 };
