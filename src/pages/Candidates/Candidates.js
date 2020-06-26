@@ -120,8 +120,8 @@ const Candidates = () => {
               setSelectedCards([]);
             }}
           >
-            <Tabs.TabPane tab="All Candidates" key="true" />
-            <Tabs.TabPane tab="Hidden Candidates" key="false" />
+            <Tabs.TabPane tab="All" key="true" />
+            <Tabs.TabPane tab="Hidden" key="false" />
           </Tabs>
         }
       >
@@ -185,7 +185,7 @@ const Candidates = () => {
               option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
             }
           >
-            <Input.Search placeholder="Filter Candidates" />
+            <Input.Search placeholder="Search Candidates" />
           </AutoComplete>
         </Col>
         <Col>

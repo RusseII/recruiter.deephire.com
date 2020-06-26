@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Divider, Tooltip } from 'antd';
+import { Row, Divider, Tooltip, Space } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 
 const TableToolbar = props => {
@@ -11,18 +11,15 @@ const TableToolbar = props => {
         {selectedInfo ? `Selected ${selectedInfo.count} ${selectedInfo.type}` : null}
       </span>
 
-      <span>
+      <Row align="middle">
         {extra}
-        <>
+        <Space>
           <Divider type="vertical" />
           <Tooltip title="Reload">
-            <ReloadOutlined
-              style={{ fontSize: 16, marginTop: 8, marginLeft: 8 }}
-              onClick={reload}
-            />
+            <ReloadOutlined style={{ fontSize: 16 }} onClick={reload} />
           </Tooltip>
-        </>
-      </span>
+        </Space>
+      </Row>
     </Row>
   );
 };

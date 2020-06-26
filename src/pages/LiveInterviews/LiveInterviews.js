@@ -276,7 +276,6 @@ const LiveInterviews = () => {
           title="Live Interviews"
           subTitle="Schedule and view live two-way interviews"
           onBack={null}
-          extra={<InviteDrawer execute={execute} />}
           footer={
             <Tabs
               onChange={tabKey => {
@@ -285,8 +284,8 @@ const LiveInterviews = () => {
               }}
               defaultActiveKey={activeTab}
             >
-              <Tabs.TabPane tab="Upcoming Live Interviews" key="1" />
-              <Tabs.TabPane tab="Completed Live Interviews" key="2" />
+              <Tabs.TabPane tab="Upcoming" key="1" />
+              <Tabs.TabPane tab="Completed" key="2" />
             </Tabs>
           }
         />
@@ -301,7 +300,10 @@ const LiveInterviews = () => {
           }
         >
           <Card>
-            <TableToolbar reload={() => setReload(flag => !flag)} />
+            <TableToolbar
+              extra={<InviteDrawer execute={execute} />}
+              reload={() => setReload(flag => !flag)}
+            />
             <Spin spinning={false}>
               {/* <Table columns={columns} dataSource={upcomingInterviews} pagination={false} /> */}
               <StandardTable

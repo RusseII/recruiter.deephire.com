@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import router from 'umi/router';
 import { ShareAltOutlined, PieChartOutlined } from '@ant-design/icons';
-import { Card, Tooltip, ConfigProvider, Tag, Typography, Popover, Tabs } from 'antd';
+import { Card, Tooltip, ConfigProvider, Tag, Typography, Popover, Tabs, Space } from 'antd';
 import React, { useState, useEffect, useContext } from 'react';
 import readableTime from 'readable-timestamp';
 import styles from './ShortLists.less';
@@ -152,7 +152,7 @@ const ShortLists = () => {
   const Actions = ({ data }) => {
     const [visibility, setVisibility] = useState({ hovered: false, clicked: false });
     return (
-      <>
+      <Space>
         <Tooltip
           title="View share link"
           trigger="hover"
@@ -170,12 +170,9 @@ const ShortLists = () => {
           </Popover>
         </Tooltip>
         <Tooltip title="View share link analytics">
-          <PieChartOutlined
-            style={{ marginLeft: 8 }}
-            onClick={() => openShortListAnalytics(data)}
-          />
+          <PieChartOutlined onClick={() => openShortListAnalytics(data)} />
         </Tooltip>
-      </>
+      </Space>
     );
   };
 
@@ -229,8 +226,8 @@ const ShortLists = () => {
               setSelectedRows([]);
             }}
           >
-            <Tabs.TabPane tab="All Share Links" key="1" />
-            <Tabs.TabPane tab="Hidden Share Links" key="2" />
+            <Tabs.TabPane tab="All" key="1" />
+            <Tabs.TabPane tab="Hidden" key="2" />
           </Tabs>
         }
       />

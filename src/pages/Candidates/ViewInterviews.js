@@ -8,8 +8,19 @@ import {
 } from '@ant-design/icons';
 import router from 'umi/router';
 
-import { message, Card, Tooltip, ConfigProvider, Alert, Button, Drawer, Tag, Tabs } from 'antd';
-import React, { Fragment, useEffect, useState, useContext } from 'react';
+import {
+  message,
+  Card,
+  Tooltip,
+  ConfigProvider,
+  Alert,
+  Button,
+  Drawer,
+  Tag,
+  Tabs,
+  Space,
+} from 'antd';
+import React, { useEffect, useState, useContext } from 'react';
 import readableTime from 'readable-timestamp';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
@@ -85,7 +96,7 @@ const TableList = () => {
 
     {
       title: 'Job Questions',
-      width: '40%',
+      // width: '40%',
       render(x, data) {
         try {
           const listItems = data.interviewQuestions.map(d => (
@@ -106,14 +117,9 @@ const TableList = () => {
       title: 'Created By',
       key: 'createdBy',
       sorter: (a, b) => a.createdBy.localeCompare(b.createdBy),
-      filters: [
-        ...new Set(
-          filteredData.map(shareLink => shareLink?.createdBy).filter(value => value !== undefined)
-        ),
-      ].map(createdBy => ({ text: createdBy, value: createdBy })),
+      ...handleFilter(filteredData, 'createdBy'),
       filteredValue: filteredInfo?.createdBy || null,
 
-      onFilter: (value, record) => record.createdBy.indexOf(value) === 0,
       render(test, data) {
         const { createdBy } = data;
         try {
@@ -156,33 +162,27 @@ const TableList = () => {
     {
       title: '',
       fixed: 'right',
-      // calculdate width by (icons (4) * 14) + ( margin (16) * 2) + (marginBetweenIcons (8) * 3 )
-      width: 112,
+      key: 'action',
+
       render: data => {
         return (
-          <Fragment>
+          <Space>
             <Tooltip title="Invite candidates">
               <UserAddOutlined onClick={() => setInviteCandidates({ activeTab: '1', ...data })} />
             </Tooltip>
 
             <Tooltip title="View direct interview link">
-              <ShareAltOutlined
-                onClick={() => setInviteCandidates({ activeTab: '2', ...data })}
-                style={{ marginLeft: 8 }}
-              />
+              <ShareAltOutlined onClick={() => setInviteCandidates({ activeTab: '2', ...data })} />
             </Tooltip>
 
             <Tooltip title="Edit interview">
-              <EditOutlined onClick={() => setEditInterview(data)} style={{ marginLeft: 8 }} />
+              <EditOutlined onClick={() => setEditInterview(data)} />
             </Tooltip>
 
             <Tooltip title="View Analytics">
-              <PieChartOutlined
-                onClick={() => openShortListAnalytics(data)}
-                style={{ marginLeft: 8 }}
-              />
+              <PieChartOutlined onClick={() => openShortListAnalytics(data)} />
             </Tooltip>
-          </Fragment>
+          </Space>
         );
       },
     },
@@ -255,16 +255,6 @@ const TableList = () => {
             </Tooltip>
           ) : null
         }
-        extra={
-          <Button
-            type="primary"
-            onClick={() => router.push('/one-way/jobs/create/info')}
-            ghost
-            icon={<PlusOutlined />}
-          >
-            Create Job
-          </Button>
-        }
         footer={
           <Tabs
             defaultActiveKey="1"
@@ -273,8 +263,8 @@ const TableList = () => {
               setSelectedRows([]);
             }}
           >
-            <Tabs.TabPane tab="Active Jobs" key="1" />
-            <Tabs.TabPane tab="Hidden Jobs" key="2" />
+            <Tabs.TabPane tab="Active" key="1" />
+            <Tabs.TabPane tab="Hidden" key="2" />
           </Tabs>
         }
       />
@@ -328,13 +318,19 @@ const TableList = () => {
           selectedInfo={{ type: 'Jobs', count: selectedRows.length }}
           reload={getData}
           extra={
-            <>
+            <Space>
+              <Button
+                type="primary"
+                onClick={() => router.push('/one-way/jobs/create/info')}
+                icon={<PlusOutlined />}
+              >
+                Create Job
+              </Button>
               <CloneButton
                 onClick={() => setSelectedRows([])}
                 reload={getData}
                 cloneData={selectedRows}
                 disabled={selectedRows.length === 0}
-                style={{ marginRight: 8 }}
               />
               <ArchiveButton
                 onClick={() => setSelectedRows([])}
@@ -344,7 +340,7 @@ const TableList = () => {
                 archiveData={selectedRows}
                 disabled={selectedRows.length === 0}
               />
-            </>
+            </Space>
           }
         />
 
