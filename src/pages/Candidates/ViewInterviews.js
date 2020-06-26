@@ -101,29 +101,7 @@ const TableList = () => {
       },
     },
     // TODO - make this only visable if there are teamas
-    {
-      title: 'Team',
-      key: 'createdByTeam',
-      // className: styles.hidden,
-      dataIndex: 'createdByTeam',
-      ...handleFilter(filteredData, 'createdByTeam'),
-      filteredValue: filteredInfo?.createdByTeam || null,
 
-      // record.createdByTeam ? record.createdByTeam.indexOf(value) === 0 : false,
-      // }
-      render: createdByTeam => {
-        if (createdByTeam) {
-          return Array.isArray(createdByTeam) ? (
-            createdByTeam.map(team => <Tag>{team}</Tag>)
-          ) : (
-            <Tag>{createdByTeam}</Tag>
-          );
-        }
-        return null;
-      },
-      // defaultFilteredValue: [''],
-      // defaultFilteredValue: [recruiterProfile?.app_metadata?.team || ''],
-    },
     {
       title: 'Created By',
       key: 'createdBy',
@@ -152,7 +130,29 @@ const TableList = () => {
         }
       },
     },
+    {
+      title: 'Team',
+      key: 'createdByTeam',
+      // className: styles.hidden,
+      dataIndex: 'createdByTeam',
+      ...handleFilter(filteredData, 'createdByTeam'),
+      filteredValue: filteredInfo?.createdByTeam || null,
 
+      // record.createdByTeam ? record.createdByTeam.indexOf(value) === 0 : false,
+      // }
+      render: createdByTeam => {
+        if (createdByTeam) {
+          return Array.isArray(createdByTeam) ? (
+            createdByTeam.map(team => <Tag>{team}</Tag>)
+          ) : (
+            <Tag>{createdByTeam}</Tag>
+          );
+        }
+        return null;
+      },
+      // defaultFilteredValue: [''],
+      // defaultFilteredValue: [recruiterProfile?.app_metadata?.team || ''],
+    },
     {
       title: '',
       fixed: 'right',

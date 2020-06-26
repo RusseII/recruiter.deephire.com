@@ -13,6 +13,7 @@ import {
   Row,
   Tooltip,
   Divider,
+  BackTop,
 } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import { ReloadOutlined } from '@ant-design/icons';
@@ -107,6 +108,7 @@ const Candidates = () => {
   };
   return (
     <>
+      <BackTop />
       <AntPageHeader
         title="Candidates"
         subTitle="View completed one way video interviews"
