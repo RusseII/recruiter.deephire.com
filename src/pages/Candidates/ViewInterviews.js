@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   EditOutlined,
   ShareAltOutlined,
@@ -7,21 +8,12 @@ import {
 } from '@ant-design/icons';
 import router from 'umi/router';
 
-import {
-  message,
-  Row,
-  Card,
-  Tooltip,
-  ConfigProvider,
-  Alert,
-  Button,
-  Drawer,
-  Tag,
-  Tabs,
-} from 'antd';
+import { message, Card, Tooltip, ConfigProvider, Alert, Button, Drawer, Tag, Tabs } from 'antd';
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import readableTime from 'readable-timestamp';
 import StandardTable from '@/components/StandardTable';
+import TableToolbar from '@/components/StandardTable/TableToolbar';
+
 import { getInterviews, getArchivedInterviews, updateInterviews } from '@/services/api';
 import ArchiveButton from '@/components/ArchiveButton';
 import customEmpty from '@/components/CustomEmpty';
@@ -31,11 +23,10 @@ import CloneButton from '@/components/CloneButton';
 import Step1 from '@/pages/Interviews/CreateInterviewForm/Step1';
 import GlobalContext from '@/layouts/MenuContext';
 import InviteCandidates from '@/components/InviteCandidates';
-import { getAuthority } from '@/utils/authority';
 import UpgradeButton from '@/components/Upgrade/UpgradeButton';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
-const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
+// const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const TableList = () => {
   const globalData = useContext(GlobalContext);
@@ -46,7 +37,11 @@ const TableList = () => {
   const [editInterview, setEditInterview] = useState(null);
   const [inviteCandidates, setInviteCandidates] = useState(null);
   const [reload, setReload] = useState(false);
+  const [filteredInfo, setFilteredInfo] = useState(null);
 
+  const handleChange = (pagination, filters) => {
+    setFilteredInfo(filters);
+  };
   const { interviews, setInterviews, stripeProduct, recruiterProfile } = globalData;
 
   // const [dataSource, setDataSource] = useState([]);
@@ -63,7 +58,7 @@ const TableList = () => {
   //   setDataSource(unique);
   // };
   // eslint-disable-next-line camelcase
-  const team = recruiterProfile?.app_metadata?.team;
+  // const team = recruiterProfile?.app_metadata?.team;
   // if (interviews) {
   //   interviews = interviews.map((interview, i) => ({ key: `interview-${i}`, ...interview }));
   // }
@@ -76,13 +71,14 @@ const TableList = () => {
 
   const openShortListAnalytics = data => {
     const { _id } = data;
-    router.push(`/interviews/analytics/?id=${_id}`);
+    router.push(`/one-way/jobs/analytics/?id=${_id}`);
   };
 
   const columns = [
     {
       title: 'Job Name',
       dataIndex: 'interviewName',
+      sorter: (a, b) => a.interviewName.localeCompare(b.interviewName),
     },
 
     {
@@ -103,24 +99,47 @@ const TableList = () => {
       },
     },
     // TODO - make this only visable if there are teamas
-    isAdmin()
-      ? {
-          title: 'Team',
-          render(test, data) {
-            const { createdByTeam } = data;
-            if (createdByTeam) {
-              return Array.isArray(createdByTeam) ? (
-                createdByTeam.map(team => <Tag>{team}</Tag>)
-              ) : (
-                <Tag>{createdByTeam}</Tag>
-              );
-            }
-            return null;
-          },
+    {
+      title: 'Team',
+      key: 'createdByTeam',
+      // className: styles.hidden,
+      dataIndex: 'createdByTeam',
+      filters: [
+        ...new Set(
+          filteredData
+            .map(shareLink => shareLink?.createdByTeam)
+            .filter(value => value !== undefined)
+        ),
+      ].map(createdByTeam => ({ text: createdByTeam, value: createdByTeam })),
+      filteredValue: filteredInfo?.createdByTeam || null,
+
+      onFilter: (value, record) =>
+        record.createdByTeam ? record.createdByTeam.indexOf(value) === 0 : false,
+      render: createdByTeam => {
+        if (createdByTeam) {
+          return Array.isArray(createdByTeam) ? (
+            createdByTeam.map(team => <Tag>{team}</Tag>)
+          ) : (
+            <Tag>{createdByTeam}</Tag>
+          );
         }
-      : {},
+        return null;
+      },
+      // defaultFilteredValue: [''],
+      // defaultFilteredValue: [recruiterProfile?.app_metadata?.team || ''],
+    },
     {
       title: 'Created By',
+      key: 'createdBy',
+      sorter: (a, b) => a.createdBy.localeCompare(b.createdBy),
+      filters: [
+        ...new Set(
+          filteredData.map(shareLink => shareLink?.createdBy).filter(value => value !== undefined)
+        ),
+      ].map(createdBy => ({ text: createdBy, value: createdBy })),
+      filteredValue: filteredInfo?.createdBy || null,
+
+      onFilter: (value, record) => record.createdBy.indexOf(value) === 0,
       render(test, data) {
         const { createdBy } = data;
         try {
@@ -141,42 +160,30 @@ const TableList = () => {
     {
       title: '',
       fixed: 'right',
+      // calculdate width by (icons (4) * 14) + ( margin (16) * 2) + (marginBetweenIcons (8) * 3 )
+      width: 112,
       render: data => {
         return (
           <Fragment>
             <Tooltip title="Invite candidates">
-              <Button
-                onClick={() => setInviteCandidates({ activeTab: '1', ...data })}
-                style={{ marginLeft: 8 }}
-                shape="circle"
-                icon={<UserAddOutlined />}
-              />
+              <UserAddOutlined onClick={() => setInviteCandidates({ activeTab: '1', ...data })} />
             </Tooltip>
 
             <Tooltip title="View direct interview link">
-              <Button
+              <ShareAltOutlined
                 onClick={() => setInviteCandidates({ activeTab: '2', ...data })}
                 style={{ marginLeft: 8 }}
-                shape="circle"
-                icon={<ShareAltOutlined />}
               />
             </Tooltip>
 
             <Tooltip title="Edit interview">
-              <Button
-                onClick={() => setEditInterview(data)}
-                style={{ marginLeft: 8 }}
-                shape="circle"
-                icon={<EditOutlined />}
-              />
+              <EditOutlined onClick={() => setEditInterview(data)} style={{ marginLeft: 8 }} />
             </Tooltip>
 
             <Tooltip title="View Analytics">
-              <Button
+              <PieChartOutlined
                 onClick={() => openShortListAnalytics(data)}
                 style={{ marginLeft: 8 }}
-                shape="circle"
-                icon={<PieChartOutlined />}
               />
             </Tooltip>
           </Fragment>
@@ -196,12 +203,12 @@ const TableList = () => {
       data = await getInterviews();
       setUnArchivedInterviewCount(data.length || 0);
     }
-    if (team) {
-      data = data.filter(interview => {
-        if (!interview.createdByTeam) return null;
-        return interview.createdByTeam.includes(team);
-      });
-    }
+    // if (team) {
+    //   data = data.filter(interview => {
+    //     if (!interview.createdByTeam) return null;
+    //     return interview.createdByTeam.includes(team);
+    //   });
+    // }
     // createDataSource(data || []);
     setInterviews(data || []);
     setFilteredData(data || []);
@@ -214,6 +221,16 @@ const TableList = () => {
     }
   }, [archives, reload, recruiterProfile]);
 
+  useEffect(() => {
+    if (recruiterProfile) {
+      setFilteredInfo(values => ({
+        ...values,
+        createdByTeam: recruiterProfile?.app_metadata?.team
+          ? [recruiterProfile?.app_metadata?.team]
+          : null,
+      }));
+    }
+  }, [recruiterProfile?.app_metadata?.team]);
   // const shouldClear = value => {
   //   if (!value) {
   //     setFilteredData(interviews);
@@ -235,7 +252,7 @@ const TableList = () => {
         onBack={null}
         tags={
           unArchivedInterviewCount && allowedInterviews ? (
-            <Tooltip title="Total interviews used">
+            <Tooltip title="Number of job slots used">
               <Tag color={unArchivedInterviewCount / allowedInterviews >= 1 ? 'red' : 'blue'}>
                 {`${unArchivedInterviewCount}/${allowedInterviews}`}
               </Tag>
@@ -253,7 +270,13 @@ const TableList = () => {
           </Button>
         }
         footer={
-          <Tabs defaultActiveKey="1" onChange={() => setArchives(flag => !flag)}>
+          <Tabs
+            defaultActiveKey="1"
+            onChange={() => {
+              setArchives(flag => !flag);
+              setSelectedRows([]);
+            }}
+          >
             <Tabs.TabPane tab="Active Jobs" key="1" />
             <Tabs.TabPane tab="Hidden Jobs" key="2" />
           </Tabs>
@@ -305,34 +328,35 @@ const TableList = () => {
               /> */}
 
       <Card bordered={false}>
-        <Row style={{ marginBottom: 16 }} justify="space-between">
-          {/* <AllowedInterviews
-          allowedInterviews={allowedInterviews}
-          totalInterviews={unArchivedInterviewCount}
-        /> */}
-          <div />
-          <span>
-            <ArchiveButton
-              onClick={() => setSelectedRows([])}
-              reload={getData}
-              archives={archives}
-              route="interviews"
-              archiveData={selectedRows}
-              disabled={selectedRows.length === 0}
-              style={{ marginRight: 8 }}
-            />
-            <CloneButton
-              onClick={() => setSelectedRows([])}
-              reload={getData}
-              cloneData={selectedRows}
-              disabled={selectedRows.length === 0}
-            />
-          </span>
-        </Row>
+        <TableToolbar
+          selectedInfo={{ type: 'Jobs', count: selectedRows.length }}
+          reload={getData}
+          extra={
+            <>
+              <CloneButton
+                onClick={() => setSelectedRows([])}
+                reload={getData}
+                cloneData={selectedRows}
+                disabled={selectedRows.length === 0}
+                style={{ marginRight: 8 }}
+              />
+              <ArchiveButton
+                onClick={() => setSelectedRows([])}
+                reload={getData}
+                archives={archives}
+                route="interviews"
+                archiveData={selectedRows}
+                disabled={selectedRows.length === 0}
+              />
+            </>
+          }
+        />
+
         <ConfigProvider
           renderEmpty={() => customEmpty('No Jobs', '/one-way/jobs/create/info', 'Create Job')}
         >
           <StandardTable
+            onChange={handleChange}
             selectedRows={selectedRows}
             loading={loading}
             data={{ list: filteredData }}

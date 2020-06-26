@@ -37,6 +37,12 @@ export default [
                 component: './Candidates/ViewInterviews',
               },
               {
+                path: '/one-way/jobs/analytics/',
+                name: 'Interview Analytics',
+                authority: ['admin', 'user'],
+                component: './Candidates/CandidateAnalytics',
+              },
+              {
                 path: '/one-way/jobs/create/',
                 name: 'Create New Interview',
                 component: './Interviews/CreateInterviewForm',
@@ -78,14 +84,6 @@ export default [
             ],
           },
         ],
-      },
-
-      {
-        path: 'analytics/',
-        name: 'Interview Analytics',
-        authority: ['admin', 'user'],
-        component: './Candidates/CandidateAnalytics',
-        hideInMenu: true,
       },
 
       {

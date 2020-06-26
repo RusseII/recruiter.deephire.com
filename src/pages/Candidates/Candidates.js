@@ -11,8 +11,11 @@ import {
   Skeleton,
   Tabs,
   Row,
+  Tooltip,
+  Divider,
 } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
+import { ReloadOutlined } from '@ant-design/icons';
 import CandidateCard from '@/components/CandidateCard';
 // import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
@@ -34,6 +37,7 @@ const Candidates = () => {
   const [loading, setLoading] = useState(true);
   const [dataSource, setDataSource] = useState([]);
   const [archives, setArchives] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const globalData = useContext(GlobalContext);
   const { videos, setVideos, recruiterProfile } = globalData;
@@ -77,7 +81,7 @@ const Candidates = () => {
     if (recruiterProfile) {
       getData();
     }
-  }, [archives, recruiterProfile]);
+  }, [archives, recruiterProfile, reload]);
 
   const shouldClear = value => {
     if (!value) {
@@ -108,7 +112,12 @@ const Candidates = () => {
         subTitle="View completed one way video interviews"
         onBack={null}
         footer={
-          <Tabs onChange={() => setArchives(flag => !flag)}>
+          <Tabs
+            onChange={() => {
+              setArchives(flag => !flag);
+              setSelectedCards([]);
+            }}
+          >
             <Tabs.TabPane tab="All Candidates" key="true" />
             <Tabs.TabPane tab="Hidden Candidates" key="false" />
           </Tabs>
@@ -204,6 +213,15 @@ const Candidates = () => {
             isDisabled={selectedCards.length === 0}
             candidateData={selectedCards}
           />
+          <>
+            <Divider type="vertical" />
+            <Tooltip title="Reload">
+              <ReloadOutlined
+                style={{ fontSize: 16, marginTop: 8 }}
+                onClick={() => setReload(flag => !flag)}
+              />
+            </Tooltip>
+          </>
         </Col>
       </Row>
       <Checkbox.Group

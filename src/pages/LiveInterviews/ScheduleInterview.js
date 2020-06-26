@@ -64,13 +64,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   return (
     <div>
       {(customButton && customButton(() => setVisible(true))) || (
-        <Button
-          type="primary"
-          ghost
-          onClick={() => setVisible(true)}
-          style={{ marginBottom: 12 }}
-          icon={<ScheduleOutlined />}
-        >
+        <Button type="primary" ghost onClick={() => setVisible(true)} icon={<ScheduleOutlined />}>
           Schedule Interview
         </Button>
       )}

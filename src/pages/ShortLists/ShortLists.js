@@ -1,13 +1,15 @@
 /* eslint-disable camelcase */
 import router from 'umi/router';
 import { ShareAltOutlined, PieChartOutlined } from '@ant-design/icons';
-import { Card, Tooltip, ConfigProvider, Button, Typography, Popover, Tabs } from 'antd';
+import { Card, Tooltip, ConfigProvider, Tag, Typography, Popover, Tabs } from 'antd';
 import React, { useState, useEffect, useContext } from 'react';
 import readableTime from 'readable-timestamp';
 import styles from './ShortLists.less';
 import ArchiveButton from '@/components/ArchiveButton';
 import { getHttpUrl } from '@/utils/utils';
 import StandardTable from '@/components/StandardTable';
+import TableToolbar from '@/components/StandardTable/TableToolbar';
+
 import { getArchivedShortlists, getShortLists } from '@/services/api';
 import customEmpty from '@/components/CustomEmpty';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
@@ -55,6 +57,7 @@ const ShortLists = () => {
     {
       title: 'Last Viewed',
       key: 'lastViewed',
+      sortDirections: ['descend', 'ascend'],
       sorter: (a, b) => {
         const { clicks: clicksA } = a;
         const { clicks: clicksB } = b;
@@ -77,6 +80,7 @@ const ShortLists = () => {
     {
       title: 'View Count',
       key: 'views',
+      sortDirections: ['descend', 'ascend'],
       sorter: (a, b) => {
         const { clicks: clicksA } = a;
         const { clicks: clicksB } = b;
@@ -94,6 +98,7 @@ const ShortLists = () => {
     {
       title: 'Created By',
       key: 'createdBy',
+      sorter: (a, b) => a.createdBy.localeCompare(b.createdBy),
       filters: [
         ...new Set(
           filteredData.map(shareLink => shareLink?.createdBy).filter(value => value !== undefined)
@@ -135,6 +140,16 @@ const ShortLists = () => {
 
       onFilter: (value, record) =>
         record.createdByTeam ? record.createdByTeam.indexOf(value) === 0 : false,
+      render: createdByTeam => {
+        if (createdByTeam) {
+          return Array.isArray(createdByTeam) ? (
+            createdByTeam.map(team => <Tag>{team}</Tag>)
+          ) : (
+            <Tag>{createdByTeam}</Tag>
+          );
+        }
+        return null;
+      },
       // defaultFilteredValue: [''],
       // defaultFilteredValue: [recruiterProfile?.app_metadata?.team || ''],
     },
@@ -143,6 +158,8 @@ const ShortLists = () => {
       title: '',
       key: 'actions',
       fixed: 'right',
+      // calculdate width by (icons (2) * 14) + ( margin (16) * 2) + (marginBetweenIcons (8))
+      width: 68,
       render: data => <Actions data={data} />,
     },
   ];
@@ -164,15 +181,13 @@ const ShortLists = () => {
             visible={visibility.clicked}
             onVisibleChange={visible => setVisibility({ hovered: false, clicked: visible })}
           >
-            <Button style={{ marginLeft: 8 }} shape="circle" icon={<ShareAltOutlined />} />
+            <ShareAltOutlined />
           </Popover>
         </Tooltip>
         <Tooltip title="View share link analytics">
-          <Button
-            onClick={() => openShortListAnalytics(data)}
+          <PieChartOutlined
             style={{ marginLeft: 8 }}
-            shape="circle"
-            icon={<PieChartOutlined />}
+            onClick={() => openShortListAnalytics(data)}
           />
         </Tooltip>
       </>
@@ -222,7 +237,13 @@ const ShortLists = () => {
         subTitle="Public links that let people outside of your team view candidates"
         onBack={null}
         footer={
-          <Tabs defaultActiveKey="1" onChange={() => setArchives(flag => !flag)}>
+          <Tabs
+            defaultActiveKey="1"
+            onChange={() => {
+              setArchives(flag => !flag);
+              setSelectedRows([]);
+            }}
+          >
             <Tabs.TabPane tab="All Share Links" key="1" />
             <Tabs.TabPane tab="Hidden Share Links" key="2" />
           </Tabs>
@@ -231,19 +252,27 @@ const ShortLists = () => {
       {/* <div style={{ marginBottom: 16 }} /> */}
 
       <Card bordered={false}>
-        <div style={{ marginBottom: 16 }}>
-          <ArchiveButton
-            onClick={() => setSelectedRows([])}
-            reload={getData}
-            archives={archives}
-            route="shortlists"
-            archiveData={selectedRows}
-            disabled={selectedRows.length === 0}
-          />
-          <span style={{ marginLeft: 8 }}>
-            {selectedRows.length !== 0 ? `Selected ${selectedRows.length} Share Links` : ''}
+        <TableToolbar
+          selectedInfo={{ type: 'Share Links', count: selectedRows.length }}
+          reload={getData}
+          extra={
+            <ArchiveButton
+              onClick={() => setSelectedRows([])}
+              reload={getData}
+              archives={archives}
+              route="shortlists"
+              archiveData={selectedRows}
+              disabled={selectedRows.length === 0}
+            />
+          }
+        />
+        {/* <Row style={{ marginTop: -8, marginBottom: 16 }} justify="space-between">
+          <span style={{ marginTop: 8 }}>{`Selected ${selectedRows.length} Share Links`}</span>
+          <span>
+           
+            <Reload onClick={getData} />
           </span>
-        </div>
+        </Row> */}
         <ConfigProvider
           renderEmpty={() =>
             customEmpty('No Share Links', 'one-way/candidates/', 'View Candidates')
