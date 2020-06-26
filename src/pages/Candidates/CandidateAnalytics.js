@@ -8,7 +8,7 @@ import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 import StandardTable from '@/components/StandardTable';
 import customEmpty from '@/components/CustomEmpty';
 
-import { useAsync } from '@/services/hooks';
+import { useAsync, useSearch } from '@/services/hooks';
 import { lowerCaseQueryParams, handleFilter } from '@/utils/utils';
 
 import { getEventbyId } from '@/services/api';
@@ -18,6 +18,8 @@ import 'ant-design-pro/dist/ant-design-pro.css';
 // const getWidth = () => Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
 const CandidateAnalytics = () => {
+  const getColumnSearchProps = useSearch();
+
   const { id: interviewId } = lowerCaseQueryParams(window.location.search);
 
   const [analytics, setAnalytics] = useState({ invited: 0, clicked: 0, started: 0, completed: 0 });
@@ -63,12 +65,14 @@ const CandidateAnalytics = () => {
       dataIndex: 'userName',
       key: 'name',
       sorter: (a, b) => a.userName.localeCompare(b.userName),
+      ...getColumnSearchProps('userName', 'Name'),
     },
     {
       title: 'Candidate Email',
       key: 'candidateEmail',
       dataIndex: 'candidateEmail',
       sorter: (a, b) => a.candidateEmail.localeCompare(b.candidateEmail),
+      ...getColumnSearchProps('candidateEmail', 'Candidate Email'),
     },
     {
       title: 'Candidate Status',

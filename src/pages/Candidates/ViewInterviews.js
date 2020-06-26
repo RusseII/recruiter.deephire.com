@@ -38,11 +38,14 @@ import UpgradeButton from '@/components/Upgrade/UpgradeButton';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
 import { handleFilter } from '@/utils/utils';
+import { useSearch } from '@/services/hooks';
 
 // const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const TableList = () => {
   const globalData = useContext(GlobalContext);
+
+  const getColumnSearchProps = useSearch();
 
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,25 +94,31 @@ const TableList = () => {
     {
       title: 'Job Name',
       dataIndex: 'interviewName',
+      key: 'interviewName',
       sorter: (a, b) => a.interviewName.localeCompare(b.interviewName),
+      filteredValue: filteredInfo?.interviewName || null,
+      ...getColumnSearchProps('interviewName', 'Job Name'),
     },
 
     {
       title: 'Job Questions',
+      dataIndex: 'interviewQuestions',
+      filteredValue: filteredInfo?.interviewQuestions || null,
+      ...getColumnSearchProps('interviewQuestions', 'Job Questions', 'question'),
       // width: '40%',
-      render(x, data) {
-        try {
-          const listItems = data.interviewQuestions.map(d => (
-            <div>
-              <li key={d.question}>{d.question}</li>
-              <br />
-            </div>
-          ));
-          return <div>{listItems} </div>;
-        } catch {
-          return null;
-        }
-      },
+      // render(x, data) {
+      //   try {
+      //     const listItems = data.interviewQuestions.map(d => (
+      //       <div>
+      //         <li key={d.question}>{d.question}</li>
+      //         <br />
+      //       </div>
+      //     ));
+      //     return <div>{listItems} </div>;
+      //   } catch {
+      //     return null;
+      //   }
+      // },
     },
     // TODO - make this only visable if there are teamas
 

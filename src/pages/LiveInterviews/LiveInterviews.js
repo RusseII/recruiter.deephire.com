@@ -21,8 +21,8 @@ import GlobalContext from '@/layouts/MenuContext';
 import { lowerCaseQueryParams, handleFilter } from '@/utils/utils';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
+import { useSearch, useAsync } from '@/services/hooks';
 
-import { useAsync } from '@/services/hooks';
 import customEmpty from '@/components/CustomEmpty';
 
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
@@ -73,6 +73,8 @@ const Actions = ({ data }) => {
 };
 
 const LiveInterviews = () => {
+  const getColumnSearchProps = useSearch();
+
   const [filteredInfo, setFilteredInfo] = useState(null);
 
   const handleChange = (pagination, filters) => {
@@ -164,6 +166,7 @@ const LiveInterviews = () => {
     {
       title: 'Interviewer',
       key: 'createdBy',
+      // ...getColumnSearchProps(,'Interviewer')
       sorter: (a, b) => {
         const compareA = a.clientName || a.recruiterName || a.createdBy;
         const compareB = b.clientName || b.recruiterName || b.createdBy;
@@ -182,12 +185,16 @@ const LiveInterviews = () => {
       dataIndex: 'candidateName',
       key: 'candidateName',
       sorter: (a, b) => a.candidateName.localeCompare(b.candidateName),
+      ...getColumnSearchProps('candidateName', 'Candidate Name'),
+      filteredValue: filteredInfo?.candidateName || null,
     },
     {
       title: 'Candidate Email',
       dataIndex: 'candidateEmail',
       key: 'candidateEmail',
       sorter: (a, b) => a.candidateEmail.localeCompare(b.candidateEmail),
+      ...getColumnSearchProps('candidateEmail', 'Candidate Email'),
+      filteredValue: filteredInfo?.candidateEmail || null,
     },
     {
       title: 'Team',
@@ -213,18 +220,18 @@ const LiveInterviews = () => {
           title: 'Recording',
           key: 'recording',
           fixed: 'right',
-          width: 50,
+          // width: 50,
 
           render: (text, data) => {
             const { recordingStatus, _id } = data;
             if (recordingStatus === 'composition-available') {
               return (
-                <Button
+                <a
                   type="link"
                   onClick={() => router.push(`/one-way/candidates/candidate/?liveid=${_id}`)}
                 >
                   View Recording
-                </Button>
+                </a>
               );
             }
             if (recordingStatus === 'composition-progress') {
