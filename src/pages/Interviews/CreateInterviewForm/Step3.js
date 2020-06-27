@@ -18,7 +18,7 @@ class Step3 extends React.PureComponent {
     const { shortLink } = this.props;
     const { link } = shortLink;
     const onFinish = () => {
-      router.push('/interview/create-interview/info');
+      router.push('/one-way/jobs/create/info');
     };
     const information = (
       <div className={styles.information}>

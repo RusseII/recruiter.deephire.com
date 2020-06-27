@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Result, Drawer, Form, Button, Col, Row, Input, Select } from 'antd';
-import { ScheduleOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import DirectLink from '@/components/InviteCandidates/DirectLink';
 import { scheduleInterview } from '@/services/api';
 import CandidateDataCard from '@/components/Candidate/CandidateDataCard';
@@ -64,13 +64,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   return (
     <div>
       {(customButton && customButton(() => setVisible(true))) || (
-        <Button
-          type="primary"
-          ghost
-          onClick={() => setVisible(true)}
-          style={{ marginBottom: 12 }}
-          icon={<ScheduleOutlined />}
-        >
+        <Button type="primary" onClick={() => setVisible(true)} icon={<PlusOutlined />}>
           Schedule Interview
         </Button>
       )}

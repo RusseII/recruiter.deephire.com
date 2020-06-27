@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Card, Steps } from 'antd';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from '../style.less';
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
 const { Step } = Steps;
 
@@ -21,23 +21,24 @@ export default class CreateInterviewForm extends PureComponent {
   }
 
   render() {
-    const { location, children } = this.props;
+    const { children } = this.props;
     return (
-      <PageHeaderWrapper
-        title="Create Interview"
-        tabActiveKey={location.pathname}
-        // content="Create a new interview here!"
-      >
+      <>
+        <AntPageHeader
+          title="Create Job"
+          subTitle="A job is a set of interview questions that you can have your candidates answer"
+        />
+
         <Card bordered={false}>
           <Fragment>
             <Steps current={this.getCurrentStep()} className={styles.steps}>
-              <Step title="Create the Interview" />
+              <Step title="Create the Job" />
               <Step title="Complete" />
             </Steps>
             {children}
           </Fragment>
         </Card>
-      </PageHeaderWrapper>
+      </>
     );
   }
 }

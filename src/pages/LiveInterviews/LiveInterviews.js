@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { useState, useContext, useEffect } from 'react';
 import {
   Card,
@@ -8,26 +9,28 @@ import {
   Popover,
   Tooltip,
   Empty,
-  Row,
-  Col,
+  Tag,
   Space,
   ConfigProvider,
 } from 'antd';
 import router from 'umi/router';
-import { ShareAltOutlined, FileAddOutlined } from '@ant-design/icons';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import { ShareAltOutlined, FileAddOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import InviteDrawer from './ScheduleInterview';
 import { getLiveInterviews } from '@/services/api';
 import GlobalContext from '@/layouts/MenuContext';
-import { lowerCaseQueryParams } from '@/utils/utils';
+import { lowerCaseQueryParams, handleFilter } from '@/utils/utils';
 import StandardTable from '@/components/StandardTable';
-import { useAsync } from '@/services/hooks';
+import TableToolbar from '@/components/StandardTable/TableToolbar';
+import { useSearch, useAsync } from '@/services/hooks';
+
 import customEmpty from '@/components/CustomEmpty';
 
-const { TabPane } = Tabs;
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
+
 const { Text } = Typography;
 
 const Actions = ({ data }) => {
+  const { interviewLink } = data;
   const [visibility, setVisibility] = useState({ hovered: false, clicked: false });
 
   // const { recordings } = data;
@@ -38,6 +41,9 @@ const Actions = ({ data }) => {
 
   return (
     <Space>
+      <Tooltip title="Join the interview">
+        <VideoCameraOutlined onClick={() => window.open(interviewLink, '_blank')} />
+      </Tooltip>
       <Tooltip
         title="Share with candidate"
         trigger="hover"
@@ -51,14 +57,14 @@ const Actions = ({ data }) => {
           visible={visibility.clicked}
           onVisibleChange={visible => setVisibility({ hovered: false, clicked: visible })}
         >
-          <Button shape="circle" icon={<ShareAltOutlined />} />
+          <ShareAltOutlined />
         </Popover>
       </Tooltip>
       <InviteDrawer
         data={data}
         customButton={onClick => (
           <Tooltip title="Add candidate documents that will be visible during the interview">
-            <Button onClick={onClick} shape="circle" icon={<FileAddOutlined />} />
+            <FileAddOutlined onClick={onClick} />
           </Tooltip>
         )}
       />
@@ -67,9 +73,18 @@ const Actions = ({ data }) => {
 };
 
 const LiveInterviews = () => {
-  const { tab } = lowerCaseQueryParams(window.location.search);
+  const getColumnSearchProps = useSearch();
 
-  const [activeTab, setActiveTab] = useState(tab || '1');
+  const [filteredInfo, setFilteredInfo] = useState(null);
+
+  const handleChange = (pagination, filters) => {
+    setFilteredInfo(filters);
+  };
+
+  const { tab = '1', page = '1' } = lowerCaseQueryParams(window.location.search);
+
+  const [activeTab, setActiveTab] = useState(tab);
+  const [reload, setReload] = useState(false);
 
   const globalData = useContext(GlobalContext);
 
@@ -85,22 +100,36 @@ const LiveInterviews = () => {
   };
 
   const { execute, pending, value } = useAsync(fetchLiveInterviews, false);
-  let liveInterviews = value || [];
 
-  const { recruiterProfile } = globalData;
+  const { recruiterProfile, liveInterviews, setLiveInterviews } = globalData;
   // eslint-disable-next-line camelcase
-  const team = recruiterProfile?.app_metadata?.team;
 
-  if (team) {
-    liveInterviews = liveInterviews.filter(liveInterview => {
-      if (!liveInterview.createdByTeam) return null;
-      return liveInterview.createdByTeam.includes(team);
-    });
-  }
+  // let liveInterViewTeamFilter = liveInterviews;
+
+  // if (team) {
+  //   liveInterViewTeamFilter = liveInterviews.filter(liveInterview => {
+  //     if (!liveInterview.createdByTeam) return null;
+  //     return liveInterview.createdByTeam.includes(team);
+  //   });
+  // }
 
   useEffect(() => {
     execute();
-  }, []);
+  }, [reload]);
+
+  useEffect(() => {
+    if (recruiterProfile) {
+      setFilteredInfo(values => ({
+        ...values,
+        createdByTeam: recruiterProfile?.app_metadata?.team
+          ? [recruiterProfile?.app_metadata?.team]
+          : null,
+      }));
+    }
+  }, [recruiterProfile?.app_metadata?.team]);
+  useEffect(() => {
+    if (value) setLiveInterviews(value);
+  }, [value]);
 
   const columns = [
     {
@@ -137,6 +166,12 @@ const LiveInterviews = () => {
     {
       title: 'Interviewer',
       key: 'createdBy',
+      // ...getColumnSearchProps(,'Interviewer')
+      sorter: (a, b) => {
+        const compareA = a.clientName || a.recruiterName || a.createdBy;
+        const compareB = b.clientName || b.recruiterName || b.createdBy;
+        return compareA.localeCompare(compareB);
+      },
       render: data => {
         const { createdBy, recruiterName, clientName, interviewType } = data;
         if (interviewType === 'client') {
@@ -149,29 +184,54 @@ const LiveInterviews = () => {
       title: 'Candidate Name',
       dataIndex: 'candidateName',
       key: 'candidateName',
+      sorter: (a, b) => a.candidateName.localeCompare(b.candidateName),
+      ...getColumnSearchProps('candidateName', 'Candidate Name'),
+      filteredValue: filteredInfo?.candidateName || null,
     },
     {
       title: 'Candidate Email',
       dataIndex: 'candidateEmail',
       key: 'candidateEmail',
+      sorter: (a, b) => a.candidateEmail.localeCompare(b.candidateEmail),
+      ...getColumnSearchProps('candidateEmail', 'Candidate Email'),
+      filteredValue: filteredInfo?.candidateEmail || null,
+    },
+    {
+      title: 'Team',
+      key: 'createdByTeam',
+      // className: styles.hidden,
+      dataIndex: 'createdByTeam',
+      ...handleFilter(liveInterviews, 'createdByTeam'),
+      filteredValue: filteredInfo?.createdByTeam || null,
+
+      render: createdByTeam => {
+        if (createdByTeam) {
+          return Array.isArray(createdByTeam) ? (
+            createdByTeam.map(team => <Tag>{team}</Tag>)
+          ) : (
+            <Tag>{createdByTeam}</Tag>
+          );
+        }
+        return null;
+      },
     },
     activeTab !== '1'
       ? {
           title: 'Recording',
           key: 'recording',
           fixed: 'right',
+          // width: 50,
 
-          width: 0,
           render: (text, data) => {
             const { recordingStatus, _id } = data;
             if (recordingStatus === 'composition-available') {
               return (
-                <Button
+                <a
                   type="link"
-                  onClick={() => router.push(`/candidates/view-candidate/?liveid=${_id}`)}
+                  onClick={() => router.push(`/one-way/candidates/candidate/?liveid=${_id}`)}
                 >
                   View Recording
-                </Button>
+                </a>
               );
             }
             if (recordingStatus === 'composition-progress') {
@@ -185,23 +245,11 @@ const LiveInterviews = () => {
       ? {
           title: '',
           key: 'action',
-          fixed: activeTab === '1' ? 'right' : false,
+          fixed: 'right',
+          // setting width here does NOTHINg and i have no idea why
+          width: 64,
           render: (text, data) => {
-            const { interviewTime, interviewLink } = data;
-            const [, end] = interviewTime;
-
-            return new Date(end) > new Date() ? (
-              <Row gutter={[8, 8]}>
-                <Col>
-                  <Button type="primary" ghost href={interviewLink} target="_blank">
-                    Join
-                  </Button>
-                </Col>
-                <Col>
-                  <Actions data={data} />
-                </Col>
-              </Row>
-            ) : null;
+            return <Actions data={data} />;
           },
         }
       : null,
@@ -230,7 +278,24 @@ const LiveInterviews = () => {
     });
 
     return (
-      <PageHeaderWrapper title="Live Interview">
+      <>
+        <AntPageHeader
+          title="Live Interviews"
+          subTitle="Schedule and view live two-way interviews"
+          onBack={null}
+          footer={
+            <Tabs
+              onChange={tabKey => {
+                router.push(`/live-interviews/?tab=${tabKey}&page=${page}`);
+                setActiveTab(tabKey);
+              }}
+              defaultActiveKey={activeTab}
+            >
+              <Tabs.TabPane tab="Upcoming" key="1" />
+              <Tabs.TabPane tab="Completed" key="2" />
+            </Tabs>
+          }
+        />
         <ConfigProvider
           renderEmpty={() =>
             customEmpty(
@@ -242,40 +307,41 @@ const LiveInterviews = () => {
           }
         >
           <Card>
-            <Tabs
-              tabBarExtraContent={<InviteDrawer execute={execute} />}
-              activeKey={activeTab}
-              onChange={tabKey => setActiveTab(tabKey)}
-            >
-              <TabPane tab="Upcoming Live Interviews" key="1">
+            <TableToolbar
+              extra={<InviteDrawer execute={execute} />}
+              reload={() => setReload(flag => !flag)}
+            />
+            <Spin spinning={false}>
+              {/* <Table columns={columns} dataSource={upcomingInterviews} pagination={false} /> */}
+              <StandardTable
+                onChange={handleChange}
+                selectedRows={null}
+                loading={pending}
+                data={{ list: activeTab === '1' ? upcomingInterviews : pastInterviews }}
+                // size="small"
+                columns={columns}
+                pagination={{
+                  defaultCurrent: Number(page),
+                  // current: page,
+                  onChange: page => {
+                    router.push(`/live-interviews/?tab=${tab}&page=${page}`);
+                  },
+                }}
+              />
+            </Spin>
+            {/* <TabPane tab="Completed Live Interviews" key="2">
                 <Spin spinning={false}>
-                  {/* <Table columns={columns} dataSource={upcomingInterviews} pagination={false} /> */}
-                  <StandardTable
-                    selectedRows={null}
-                    loading={pending}
-                    data={{ list: upcomingInterviews }}
-                    // size="small"
-                    columns={columns}
-                    pagination={false}
-                  />
-                </Spin>
-              </TabPane>
-              <TabPane tab="Completed Live Interviews" key="2">
-                <Spin spinning={false}>
-                  {/* <Table columns={columns} dataSource={pastInterviews} /> */}
                   <StandardTable
                     selectedRows={null}
                     loading={pending}
                     data={{ list: pastInterviews }}
-                    // size="small"
                     columns={columns}
                   />
                 </Spin>
-              </TabPane>
-            </Tabs>
+              </TabPane> */}
           </Card>
         </ConfigProvider>
-      </PageHeaderWrapper>
+      </>
     );
   }
 

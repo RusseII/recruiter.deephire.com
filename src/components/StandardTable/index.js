@@ -139,7 +139,7 @@ class StandardTable extends PureComponent {
           />
         </div> */}
         <Table
-          scroll={{ x: width < 1100 }}
+          scroll={{ x: true }}
           loading={loading}
           rowKey={rowKey || '_id'}
           rowSelection={selectedRows ? rowSelection : null}

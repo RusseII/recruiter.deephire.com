@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { WaterWave } from 'ant-design-pro/lib/Charts';
-import { Card, Row, Col, Statistic, Tag, ConfigProvider, PageHeader, Tooltip } from 'antd';
+import { Card, Row, Col, Statistic, Tag, ConfigProvider, Tooltip } from 'antd';
 
 import readableTime from 'readable-timestamp';
-import router from 'umi/router';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 import StandardTable from '@/components/StandardTable';
 import customEmpty from '@/components/CustomEmpty';
 
-import { useAsync } from '@/services/hooks';
-import { lowerCaseQueryParams } from '@/utils/utils';
+import { useAsync, useSearch } from '@/services/hooks';
+import { lowerCaseQueryParams, handleFilter } from '@/utils/utils';
 
 import { getEventbyId } from '@/services/api';
 import 'antd/dist/antd.css';
@@ -18,6 +18,8 @@ import 'ant-design-pro/dist/ant-design-pro.css';
 // const getWidth = () => Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
 const CandidateAnalytics = () => {
+  const getColumnSearchProps = useSearch();
+
   const { id: interviewId } = lowerCaseQueryParams(window.location.search);
 
   const [analytics, setAnalytics] = useState({ invited: 0, clicked: 0, started: 0, completed: 0 });
@@ -62,16 +64,22 @@ const CandidateAnalytics = () => {
       title: 'Name',
       dataIndex: 'userName',
       key: 'name',
+      sorter: (a, b) => a.userName.localeCompare(b.userName),
+      ...getColumnSearchProps('userName', 'Name'),
     },
     {
       title: 'Candidate Email',
       key: 'candidateEmail',
       dataIndex: 'candidateEmail',
+      sorter: (a, b) => a.candidateEmail.localeCompare(b.candidateEmail),
+      ...getColumnSearchProps('candidateEmail', 'Candidate Email'),
     },
     {
       title: 'Candidate Status',
       dataIndex: 'event',
       key: 'event',
+      ...handleFilter(events, 'event'),
+      sorter: (a, b) => a.event.localeCompare(b.event),
       render: event => {
         let color;
         if (event === 'invited') color = 'purple';
@@ -85,6 +93,7 @@ const CandidateAnalytics = () => {
     {
       title: 'Last Event Time',
       dataIndex: 'timestamp',
+      sorter: (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
       render: timestamp => {
         const dateObj = new Date(timestamp);
         const displayTime = readableTime(dateObj);
@@ -97,11 +106,8 @@ const CandidateAnalytics = () => {
   const percent = Math.floor((analytics.completed / length) * 100);
   return (
     <>
-      <PageHeader
-        style={{ width: 'calc(100% + 100px)', marginTop: -22, marginBottom: 24, marginLeft: -24 }}
-        onBack={() => router.goBack()}
+      <AntPageHeader
         title="Interview Analytics"
-        ghost={false}
         subTitle="View completion rates & invited candidates"
       />
       {/* <Row> </Row> */}

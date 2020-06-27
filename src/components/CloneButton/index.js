@@ -3,7 +3,8 @@ import React from 'react';
 import { message, Button } from 'antd';
 import { cloneInterview } from '@/services/api';
 
-const CloneButton = ({ onClick, cloneData, reload }) => {
+const CloneButton = props => {
+  const { onClick, cloneData, reload } = props;
   const clone = async () => {
     const data = cloneData.map(data => data._id);
     await cloneInterview(data);
@@ -12,7 +13,7 @@ const CloneButton = ({ onClick, cloneData, reload }) => {
     message.success('Clone Successful');
   };
   return (
-    <Button style={{ marginRight: 16 }} onClick={clone}>
+    <Button {...props} onClick={clone}>
       Clone
     </Button>
   );
