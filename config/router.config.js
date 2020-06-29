@@ -11,6 +11,8 @@ export default [
     ],
   },
 
+  { path: '/shortlists/shortlistanalytics', redirect: 'sharelinks/analytics/' },
+
   {
     path: '/',
     component: '../layouts/BasicLayout',
@@ -38,7 +40,7 @@ export default [
               },
               {
                 path: '/one-way/jobs/analytics/',
-                name: 'Interview Analytics',
+                name: 'Job Analytics',
                 authority: ['admin', 'user'],
                 component: './Candidates/CandidateAnalytics',
               },

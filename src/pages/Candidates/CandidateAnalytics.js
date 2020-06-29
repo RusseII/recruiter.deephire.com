@@ -106,10 +106,7 @@ const CandidateAnalytics = () => {
   const percent = Math.floor((analytics.completed / length) * 100);
   return (
     <>
-      <AntPageHeader
-        title="Interview Analytics"
-        subTitle="View completion rates & invited candidates"
-      />
+      <AntPageHeader title="Job Analytics" subTitle="View completion rates & invited candidates" />
       {/* <Row> </Row> */}
       {!pending && (
         <Row gutter={[24, 24]}>
