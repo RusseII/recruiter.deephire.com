@@ -54,3 +54,5 @@ callbackUrl: 'http://localhost:8000/user/callback',
 ```
 
 Go to http://localhost:8000
+
+Check out roadmap at https://github.com/RusseII/recruiter.deephire.com/wiki
