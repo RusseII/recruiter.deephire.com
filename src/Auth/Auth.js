@@ -134,6 +134,7 @@ export default class Auth {
         window.setFullstoryIdentity(sub, name, email);
         $crisp.push(['set', 'user:email', [email]]);
         $crisp.push(['set', 'user:nickname', [name]]);
+        $crisp.push(['set', 'session:segments', [['recruiter']]]);
         localStorage.setItem('profile', JSON.stringify(profile));
       } else {
         return this.logout();
