@@ -550,4 +550,18 @@ export async function queryRule(params) {
   return request(`/api/rule?${stringify(params)}`);
 }
 
+export async function getEvents() {
+  return request(`${newApi}/events`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
+export async function getEventbyId(interviewId) {
+  return request(`${newApi}/events/${interviewId}`, {
+    method: 'GET',
+    headers: setHeaders(),
+  });
+}
+
 export { newApi };

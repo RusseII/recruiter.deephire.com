@@ -13,6 +13,7 @@ import GlobalContext from '@/layouts/MenuContext';
 import styles from './index.less';
 
 const cancelSubscription = () => {
+  $crisp.push(['do', 'chat:show']);
   $crisp.push(['do', 'chat:open']);
   $crisp.push(['do', 'message:send', ['text', "Hi, I'm interested in canceling my subscription."]]);
 };
@@ -34,16 +35,23 @@ const CurrentPaymentMethod = () => {
     const getData = async () => {
       const subscriptions = await getSubscriptions();
       const paymentMethods = await getPaymentMethods();
-      const singleSubscription = subscriptions?.data?.[0] || {};
-      setSubscription(singleSubscription);
-      const { default_payment_method: defaultPaymentMethod } = singleSubscription;
-      let currentMethod = paymentMethods?.data;
-      if (currentMethod) {
-        if (defaultPaymentMethod) {
-          currentMethod = currentMethod.find(method => method.id === defaultPaymentMethod);
-          setPaymentMethod(currentMethod);
-        } else {
-          setPaymentMethod(currentMethod[0]);
+      const subscription = subscriptions?.data[0];
+
+      const subscriptionItems = subscription?.items?.data;
+
+      if (subscriptionItems) {
+        // eslint-disable-next-line camelcase
+        const licenseSi = subscriptionItems.find(si => si?.plan?.usage_type === 'licensed');
+        setSubscription({ ...licenseSi, periodEnds: subscription.current_period_end });
+        const { default_payment_method: defaultPaymentMethod } = licenseSi;
+        let currentMethod = paymentMethods?.data;
+        if (currentMethod) {
+          if (defaultPaymentMethod) {
+            currentMethod = currentMethod.find(method => method.id === defaultPaymentMethod);
+            setPaymentMethod(currentMethod);
+          } else {
+            setPaymentMethod(currentMethod[0]);
+          }
         }
       }
     };
@@ -51,7 +59,7 @@ const CurrentPaymentMethod = () => {
     getData();
   }, [reload]);
 
-  const { current_period_end: periodEnds, plan } = subscription || {};
+  const { periodEnds, plan } = subscription || {};
   const { amount, interval } = plan || {};
 
   let renewsOn = '';

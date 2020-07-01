@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
-import { LeftOutlined } from '@ant-design/icons';
+import { Col, Row, Tooltip, Typography } from 'antd';
 
-import { Col, Row, Button } from 'antd';
-import router from 'umi/router';
+import CandidateDataCard from '@/components/Candidate/CandidateDataCard';
+// import CandidateNotes from '@/components/Candidate/CandidateNotes';
 
-import InfoCardEditable from '@/components/Candidate/CandidateDataCard';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 
 import { getVideo, getLiveInterview } from '@/services/api';
 import { lowerCaseQueryParams } from '@/utils/utils';
 import QuestionsCard from '../../components/Candidate/CandidateQuestions';
 import CandidateVideo from '../../components/Candidate/CandidateVideo';
-
-const getWidth = () => Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
 const ViewCandidate = ({ location }) => {
   const { id, liveid: liveId } = lowerCaseQueryParams(location.search);
@@ -43,7 +41,7 @@ const ViewCandidate = ({ location }) => {
     setLiveInterviewData(liveData);
     setVideoData({
       videoUrl: lastRecording,
-      currentQuestionText: 'Live Interview Recording',
+      currentQuestionText: `Live Interview Recording `,
     });
   };
 
@@ -63,7 +61,27 @@ const ViewCandidate = ({ location }) => {
 
   return (
     <div>
-      <Button
+      <AntPageHeader
+        title={userName || candidateName}
+        subTitle={
+          <Row>
+            <Typography.Text copyable={{ text: candidateEmail }}>
+              <Tooltip title="Click to email">
+                <a target="_blank" rel="noopener noreferrer" href={`mailto:${candidateEmail}`}>
+                  {candidateEmail}
+                </a>
+              </Tooltip>
+            </Typography.Text>
+          </Row>
+        }
+        extra={
+          <ShareCandidateButton
+            buttonText="Share Candidate"
+            candidateData={[{ ...candidateData, liveInterviewData }]}
+          />
+        }
+      />
+      {/* <Button
         style={{ marginBottom: '20px' }}
         onClick={
           liveId
@@ -73,17 +91,16 @@ const ViewCandidate = ({ location }) => {
         type="secondary"
       >
         <LeftOutlined />
-        {/* eslint-disable-next-line no-nested-ternary */}
         {getWidth() < 400 ? 'Back' : liveId ? 'Back to Live Interviews' : 'Back to Candidates'}
       </Button>
       <div style={{ float: 'right', marginBottom: '20px' }}>
         <ShareCandidateButton candidateData={[{ ...candidateData, liveInterviewData }]} />
-      </div>
+      </div> */}
 
       <Row type="flex" gutter={24}>
         <Col xs={{ span: 24, order: 2 }} sm={24} md={10} lg={12} xl={10} xxl={10}>
           {/* <Space size="large" direction="vertical"> */}
-          <InfoCardEditable
+          {/* <CandidateDataCard
             style={{ marginBottom: 24 }}
             userId={userId}
             userName={userName || candidateName}
@@ -91,15 +108,26 @@ const ViewCandidate = ({ location }) => {
             email={candidateEmail}
             editable
             setVideoData={setVideoData}
-          />
+          /> */}
+
           {id && (
             <QuestionsCard
               setCandidateData={setCandidateData}
               candidateData={candidateData}
               setVideoData={setVideoData}
               id={id}
+              style={{ marginBottom: 24 }}
             />
           )}
+          <CandidateDataCard
+            userId={userId}
+            userName="Documents"
+            interviewName={interviewName}
+            email={candidateEmail}
+            editable
+            setVideoData={setVideoData}
+          />
+
           {/* </Space> */}
         </Col>
         <Col

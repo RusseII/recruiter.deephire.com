@@ -8,7 +8,7 @@ const readableTime = require('readable-timestamp');
 
 const openInterview = item => {
   const { _id } = item;
-  router.push(`/candidates/view-candidate/?id=${_id}`);
+  router.push(`candidate/?id=${_id}`);
 };
 
 const friendlyDate = rawDate => {

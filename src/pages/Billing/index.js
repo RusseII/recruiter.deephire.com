@@ -98,7 +98,7 @@ const Billing = () => {
           <Stripey />
           <Spin spinning={!invoices}>
             <ConfigProvider
-              renderEmpty={() => customEmpty('No Invoices', '/interview/create-interview/info')}
+              renderEmpty={() => customEmpty('No Invoices', '/one-way/jobs/create/info')}
             >
               <Table size="small" dataSource={invoices} pagination={false} columns={columnsTeam} />
             </ConfigProvider>

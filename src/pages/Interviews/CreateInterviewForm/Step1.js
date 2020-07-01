@@ -5,10 +5,10 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 
-import { Input, Button, Divider, InputNumber, Result, Select } from 'antd';
+import { Input, Button, InputNumber, Result, Select } from 'antd';
 import router from 'umi/router';
 import { connect } from 'dva';
-import styles from './style.less';
+// import styles from './style.less';
 import GlobalContext from '@/layouts/MenuContext';
 import { getInterviews, getCompany } from '@/services/api';
 import { getAuthority } from '@/utils/authority';
@@ -56,7 +56,7 @@ const drawerLayout = {
   wrapperCol: 24,
 };
 
-let uuid = 1;
+let uuid = 100;
 
 const remove = (form, k) => {
   const keys = form.getFieldValue('keys');
@@ -107,7 +107,7 @@ const createFormItems = props => {
       })(
         <Input
           style={{ width: '90%', marginRight: 8 }}
-          placeholder={`Interview Question ${index + 1}`}
+          placeholder={`Interview question ${index + 1}`}
         />
       )}
       {keys.length > 1 ? (
@@ -198,7 +198,7 @@ class Step1 extends React.PureComponent {
     const { allowedInterviews } = stripeProduct.metadata || {};
 
     // TODO fix bug where the "cant create interview" is shown for a second in edit interview
-    if (interviews.length >= allowedInterviews && !data) {
+    if (allowedInterviews && interviews.length >= allowedInterviews && !data) {
       return <CantCreateInterview />;
     }
     return (
@@ -241,7 +241,7 @@ class Step1 extends React.PureComponent {
               ],
             })(
               <Input
-                placeholder="What job is this interview for?"
+                placeholder="What is the job you are hiring for?"
                 style={{ width: '90%', marginRight: 8 }}
               />
             )}
@@ -274,27 +274,10 @@ class Step1 extends React.PureComponent {
           </FormItem>
           <FormItem {...(data ? drawerLayout : formItemLayoutWithOutLabel)}>
             <Button loading={loading} type="primary" htmlType="submit">
-              {data ? 'Save & Close' : 'Create Interview'}
+              {data ? 'Save & Close' : 'Create Job'}
             </Button>
           </FormItem>
         </Form>
-        {!data && (
-          <Fragment>
-            <Divider style={{ margin: '24px 0 24px' }} />
-
-            <div className={styles.desc}>
-              <h3>Next Steps</h3>
-              <h4>Receive Link</h4>
-              <p>Once you click Create Interview, you will receive a link.</p>
-              <h4>Send to Candidates</h4>
-              <p>Put the link you receive in your job posting, or send it to candidates.</p>
-              {/* <h4>Need Help Crafting the Emails?</h4>
-              <p>
-                <a>See example emails</a>
-              </p> */}
-            </div>
-          </Fragment>
-        )}
       </Fragment>
     );
   }
@@ -307,7 +290,7 @@ const CantCreateInterview = () => (
     subTitle="You have used all of your alloted interview slots. To get more interview slots either upgrade, or archive some of your active interviews."
     extra={[
       <UpgradeButton text="Upgrade Plan" />,
-      <Button onClick={() => router.push('/interview/view')}>Remove Interviews</Button>,
+      <Button onClick={() => router.push('/one-way/jobs')}>Remove Interviews</Button>,
     ]}
   />
 );

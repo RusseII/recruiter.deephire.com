@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import { InsuranceOutlined, MailOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 
-import { Upload, Button, Card, Row, Tooltip, Skeleton } from 'antd';
+import { Upload, Button, Card, Skeleton } from 'antd';
 
 import PropTypes from 'prop-types';
 
@@ -10,16 +10,10 @@ import { getCandidateProfile, removeCandidateDocument } from '@/services/api';
 
 const url = 'https://a.deephire.com/v1/candidates';
 
-const EditableCard = ({ interviewName, email, key, documentProps }) => (
+const EditableCard = ({ key, documentProps }) => (
   <>
-    {interviewName && (
-      <Row>
-        <InsuranceOutlined style={{ padding: 4 }} /> {interviewName}
-      </Row>
-    )}
-
-    {email && (
-      <Row>
+    {/* {email && (
+      <Row style={{ marginBottom: 24 }}>
         <MailOutlined style={{ padding: 4 }} />
         <Tooltip title="Click to email">
           <a target="_blank" rel="noopener noreferrer" href={`mailto:${email}`}>
@@ -27,10 +21,11 @@ const EditableCard = ({ interviewName, email, key, documentProps }) => (
           </a>
         </Tooltip>
       </Row>
-    )}
+    )} */}
+    {/* <TextArea placeholder="Add notes about this candidate. All notes added here will be visible when this candidate is shared." /> */}
 
     <Upload key={key} {...documentProps}>
-      <Button style={{ marginTop: 24 }}>
+      <Button>
         <UploadOutlined /> Add Document
       </Button>
     </Upload>
@@ -97,8 +92,9 @@ const InfoCardEditable = props => {
 
   const editProps = { interviewName, email, key, documentProps: documentUploadProps };
   const viewProps = { key, documentProps: documentViewProps };
+
   return (
-    <Card hoverable title={userName} {...props}>
+    <Card title={userName} extra={interviewName} {...props}>
       <Skeleton loading={loading} active>
         {editable ? <EditableCard {...editProps} /> : <ViewCard {...viewProps} />}
       </Skeleton>
@@ -111,12 +107,14 @@ InfoCardEditable.propTypes = {
   interviewName: PropTypes.string,
   email: PropTypes.string.isRequired,
   editable: PropTypes.bool,
+  noStyles: PropTypes.bool,
 };
 
 InfoCardEditable.defaultProps = {
   userName: '',
   interviewName: '',
   editable: false,
+  noStyles: false,
 };
 
 export default InfoCardEditable;

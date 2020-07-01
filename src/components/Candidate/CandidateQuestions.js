@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
 
-import { Card, Table, Skeleton } from 'antd';
+import { Card, Table, Skeleton, Tooltip } from 'antd';
 
 import styles from './index.less';
 import { getVideo } from '@/services/api';
 import ArchiveButton from '@/components/ArchiveButton';
 
-const columns = [
-  {
-    title: 'Questions',
-    dataIndex: 'question',
-    key: 'question',
-  },
-];
-
-const titleData = () => <span>Questions</span>;
+// const titleData = () => <span>Questions</span>;
 
 const buttonEnabled = (archives, candidateData, responses, archivedResponses) => {
   if (candidateData) {
@@ -26,7 +18,8 @@ const buttonEnabled = (archives, candidateData, responses, archivedResponses) =>
   return null;
 };
 
-const QuestionCard = ({ candidateData, setVideoData, id, setCandidateData }) => {
+const QuestionCard = props => {
+  const { candidateData, setVideoData, id, setCandidateData } = props;
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [archives, setArchives] = useState(false);
 
@@ -54,29 +47,73 @@ const QuestionCard = ({ candidateData, setVideoData, id, setCandidateData }) => 
 
   const { responses, archivedResponses } = candidateData || {};
 
-  const extraData = () => (
-    <>
-      <ArchiveButton
-        style={{ marginRight: 20 }}
-        reload={getArchiveData}
-        archives={archives}
-        route={`videos/${candidateData?._id}`}
-        archiveData={[{ _id: activeQuestion }]}
-        onClick={() => null}
-        active={buttonEnabled(archives, candidateData, responses, archivedResponses)}
-      />
-      <a onClick={() => setArchives(archives => !archives)}>
-        {archives
-          ? `View All (${responses ? candidateData.responses.length : 0})`
-          : `View Archived (${archivedResponses ? candidateData.archivedResponses.length : 0})`}
-      </a>
-    </>
-  );
+  const columns = [
+    {
+      title: 'Questions',
+      dataIndex: 'question',
+      key: 'question',
+    },
+    {
+      // title: 'Actions',
+      dataIndex: '_id',
+      key: '_id',
+      render: () => (
+        <Tooltip title="Hide question when sharing this candidate">
+          <ArchiveButton
+            style={{ marginRight: 20 }}
+            reload={getArchiveData}
+            archives={archives}
+            route={`videos/${candidateData?._id}`}
+            archiveData={[{ _id: activeQuestion }]}
+            onClick={() => null}
+            active={buttonEnabled(archives, candidateData, responses, archivedResponses)}
+          />
+        </Tooltip>
+      ),
+    },
+  ];
+  // const extraData = () => (
+  //   <>
+  //     <ArchiveButton
+  //       style={{ marginRight: 20 }}
+  //       reload={getArchiveData}
+  //       archives={archives}
+  //       route={`videos/${candidateData?._id}`}
+  //       archiveData={[{ _id: activeQuestion }]}
+  //       onClick={() => null}
+  //       active={buttonEnabled(archives, candidateData, responses, archivedResponses)}
+  //     />
+  //     {/* <a onClick={() => setArchives(archives => !archives)}>
+  //       {archives
+  //         ? `View All (${responses ? candidateData.responses.length : 0})`
+  //         : `View Hidden (${archivedResponses ? candidateData.archivedResponses.length : 0})`}
+  //     </a> */}
+  //   </>
+  // );
 
   return (
-    <Card hoverable title={titleData()} extra={extraData()}>
+    <Card
+      tabList={[
+        {
+          key: '1',
+          tab: `Visible Questions`,
+        },
+        {
+          key: '2',
+          tab: `Hidden Questions ${
+            archivedResponses && archivedResponses.length
+              ? `(${candidateData.archivedResponses.length})`
+              : ''
+          }`,
+        },
+      ]}
+      // extra="More"
+      onTabChange={() => setArchives(archives => !archives)}
+      {...props}
+    >
       <Skeleton loading={!candidateData} active>
         <Table
+          size="middle"
           showHeader={false}
           onRow={(record, index) => ({
             onClick: () => {
@@ -95,7 +132,7 @@ const QuestionCard = ({ candidateData, setVideoData, id, setCandidateData }) => 
           })}
           rowClassName={(record, index) => (index === activeQuestion ? styles.selected : '')}
           pagination={false}
-          bordered
+          // bordered
           dataSource={!archives ? responses : archivedResponses}
           columns={columns}
         />

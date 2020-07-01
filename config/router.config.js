@@ -11,73 +11,83 @@ export default [
     ],
   },
 
+  { path: '/shortlists/shortlistanalytics', redirect: 'sharelinks/analytics/' },
+
   {
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
-      { path: '/', redirect: 'candidates/candidates' },
+      { path: '/', redirect: 'one-way/candidates' },
 
       {
-        icon: 'form',
-
-        path: '/interview/create-interview',
-        name: 'Create New Interview',
-        component: './Interviews/CreateInterviewForm',
-        hideChildrenInMenu: true,
+        icon: 'laptop',
+        path: '/one-way/',
+        name: 'One-Way Interviews',
         routes: [
           {
-            path: '/interview/create-interview',
-            name: 'createinterview',
-            redirect: '/interview/create-interview/info',
-          },
-          {
-            path: '/interview/create-interview/info',
-            name: 'Create',
-            component: './Interviews/CreateInterviewForm/Step1',
-          },
+            path: '/one-way/jobs/',
+            icon: 'coffee',
+            name: 'Jobs',
+            authority: ['admin', 'user'],
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/one-way/jobs/',
+                name: 'Create New Interview',
+                component: './Candidates/ViewInterviews',
+              },
+              {
+                path: '/one-way/jobs/analytics/',
+                name: 'Job Analytics',
+                authority: ['admin', 'user'],
+                component: './Candidates/CandidateAnalytics',
+              },
+              {
+                path: '/one-way/jobs/create/',
+                name: 'Create New Interview',
+                component: './Interviews/CreateInterviewForm',
 
+                routes: [
+                  {
+                    path: '/one-way/jobs/create/info/',
+                    name: 'Create',
+                    component: './Interviews/CreateInterviewForm/Step1',
+                  },
+
+                  {
+                    path: '/one-way/jobs/create/result/',
+                    name: 'Success',
+                    component: './Interviews/CreateInterviewForm/Step3',
+                  },
+                ],
+              },
+            ],
+          },
           {
-            path: '/interview/create-interview/result',
-            name: 'Success',
-            component: './Interviews/CreateInterviewForm/Step3',
+            path: '/one-way/candidates/',
+            icon: 'team',
+            name: 'Candidates',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/one-way/candidates/',
+                icon: 'team',
+                name: 'Candidates',
+                component: './Candidates/Candidates',
+              },
+              {
+                path: '/one-way/candidates/candidate/',
+                name: 'Candidate',
+                authority: ['admin', 'user'],
+                component: './Candidates/ViewCandidate',
+              },
+            ],
           },
         ],
       },
-      {
-        path: '/interview/view',
-        icon: 'read',
-        name: 'View Created Interviews',
-        authority: ['admin', 'user'],
-        component: './Candidates/ViewInterviews',
-      },
-      {
-        path: '/candidates/candidates',
-        icon: 'team',
-        name: 'Candidate Videos',
-        component: './Candidates/Candidates',
-      },
-      {
-        path: '/candidates/view-candidate',
-        name: 'viewCandidate',
-        authority: ['admin', 'user'],
-        component: './Candidates/ViewCandidate',
-        hideInMenu: true,
-      },
-      {
-        path: '/shortlists',
-        icon: 'link',
-        name: 'Share Links',
-        component: './ShortLists/ShortLists',
-      },
-      {
-        path: '/shortlists/shortlistanalytics',
-        name: 'shortListAnalytics',
-        authority: ['admin', 'user'],
-        component: './ShortLists/ShortListAnalytics',
-        hideInMenu: true,
-      },
+
       {
         path: '/live-interviews',
         name: 'Live Interviews',
@@ -85,6 +95,28 @@ export default [
         icon: 'video-camera',
         component: './LiveInterviews/LiveInterviews',
       },
+
+      {
+        path: '/sharelinks',
+        icon: 'link',
+        name: 'Share Links',
+        authority: ['admin', 'user'],
+        hideChildrenInMenu: true,
+
+        routes: [
+          {
+            path: '/sharelinks',
+            name: 'Share Links',
+            component: './ShortLists/ShortLists',
+          },
+          {
+            path: '/sharelinks/analytics',
+            name: 'Share Link Analytics',
+            component: './ShortLists/ShortListAnalytics',
+          },
+        ],
+      },
+
       {
         path: '/billing/',
         icon: 'credit-card',

@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+/* global $crisp */
 import React from 'react';
 import { Layout, Alert, Modal } from 'antd';
 import DocumentTitle from 'react-document-title';
@@ -95,13 +96,15 @@ class BasicLayout extends React.PureComponent {
     rendering: true,
     isMobile: false,
     interviews: [],
+    liveInterviews: [],
     videos: [],
     shareLinks: [],
-    stripeProduct: { metadata: { allowedInterviews: '200' } },
-    recruiterProfile: undefined,
+    stripeProduct: { metadata: { allowedInterviews: null } },
+    recruiterProfile: null,
   };
 
   async componentDidMount() {
+    $crisp.push(['do', 'chat:hide']);
     const recruiterProfile = await getRecruiterProfile();
     this.setState({ recruiterProfile });
 
@@ -160,6 +163,7 @@ class BasicLayout extends React.PureComponent {
     const { location } = this.props;
     const {
       interviews,
+      liveInterviews,
       videos,
       shareLinks,
       stripeProduct,
@@ -168,6 +172,10 @@ class BasicLayout extends React.PureComponent {
     } = this.state;
     const setInterviews = interviews => {
       this.setState({ interviews });
+    };
+
+    const setLiveInterviews = liveInterviews => {
+      this.setState({ liveInterviews });
     };
 
     const setVideos = videos => {
@@ -188,6 +196,8 @@ class BasicLayout extends React.PureComponent {
       breadcrumbNameMap: this.breadcrumbNameMap,
       interviews,
       setInterviews,
+      liveInterviews,
+      setLiveInterviews,
       videos,
       setVideos,
       shareLinks,

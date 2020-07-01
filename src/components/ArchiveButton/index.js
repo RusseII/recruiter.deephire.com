@@ -3,7 +3,8 @@ import React from 'react';
 import { message, Button } from 'antd';
 import { arch } from '@/services/api';
 
-const Archive = ({ onClick, archiveData, route, archives, reload, active = true }) => {
+const Archive = props => {
+  const { onClick, archiveData, route, archives, reload, active = true } = props;
   const shouldArch = async () => {
     const data = archiveData.map(data => data._id);
     await arch(data, route, archives);
@@ -12,11 +13,11 @@ const Archive = ({ onClick, archiveData, route, archives, reload, active = true 
     await new Promise(resolve => setTimeout(resolve, 300));
     await reload();
     onClick();
-    message.success(archives ? 'Succesfully unarchived' : 'Successfully archived');
+    message.success(archives ? 'Succesfully unhidden' : 'Successfully hidden');
   };
   return (
-    <Button disabled={!active} style={{ marginRight: '16px' }} onClick={shouldArch}>
-      {archives ? 'Unarchive' : 'Archive'}
+    <Button disabled={!active} {...props} onClick={shouldArch}>
+      {archives ? 'Unhide' : 'Hide'}
     </Button>
   );
 };

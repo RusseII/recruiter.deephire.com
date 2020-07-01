@@ -162,17 +162,18 @@ class ShareCandidateButton extends React.Component {
 
   render() {
     const { currentStep } = this.state;
-    const { isDisabled, marginRight } = this.props;
+    const { isDisabled, buttonText } = this.props;
     return (
       <>
-        {this.renderCorrectModal(currentStep)}{' '}
+        {this.renderCorrectModal(currentStep)}
         <Button
-          style={{ marginRight: marginRight ? '16px' : '0px' }}
           disabled={isDisabled}
           onClick={this.handleModalVisible}
           type="primary"
+          {...this.props}
         >
-          Share Candidates
+          {buttonText || 'Share Candidates'}
+
           <ShareAltOutlined />
         </Button>
       </>
