@@ -63,7 +63,7 @@ const cachedSave = (response, hashcode) => {
  * @param  {object} [option] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, option, successMessage = null) {
+export default function request(url, option, successMessage = null, duration = 1.5) {
   const options = {
     expirys: isAntdPro(),
     ...option,
@@ -123,7 +123,7 @@ export default function request(url, option, successMessage = null) {
     .then(response => cachedSave(response, hashcode))
     .then(response => {
       if (successMessage) {
-        message.success(successMessage);
+        message.success(successMessage, duration);
       }
       // DELETE and 204 do not return data by default
       // using .json will report an error.

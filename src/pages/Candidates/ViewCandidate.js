@@ -11,6 +11,8 @@ import { getVideo, getLiveInterview } from '@/services/api';
 import { lowerCaseQueryParams } from '@/utils/utils';
 import QuestionsCard from '../../components/Candidate/CandidateQuestions';
 import CandidateVideo from '../../components/Candidate/CandidateVideo';
+import CommentsCard from '../../components/Candidate/CommentsCard';
+import { useVideo } from '@/services/hooks';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
 const ViewCandidate = ({ location }) => {
@@ -19,7 +21,7 @@ const ViewCandidate = ({ location }) => {
   const [liveInterviewData, setLiveInterviewData] = useState(null);
 
   const [videoData, setVideoData] = useState({ videoUrl: null, currentQuestionText: null });
-
+  const videoPlayerData = useVideo();
   const getData = async () => {
     getVideo(id).then(data => {
       const [first] = data;
@@ -110,12 +112,18 @@ const ViewCandidate = ({ location }) => {
             setVideoData={setVideoData}
           /> */}
 
-          {id && (
+          {id ? (
             <QuestionsCard
               setCandidateData={setCandidateData}
               candidateData={candidateData}
               setVideoData={setVideoData}
               id={id}
+              style={{ marginBottom: 24 }}
+            />
+          ) : (
+            <CommentsCard
+              liveInterviewData={liveInterviewData}
+              {...videoPlayerData}
               style={{ marginBottom: 24 }}
             />
           )}
@@ -138,7 +146,7 @@ const ViewCandidate = ({ location }) => {
           xl={{ span: 14, order: 2 }}
           xxl={{ span: 14, order: 2 }}
         >
-          <CandidateVideo {...videoData} />
+          <CandidateVideo {...videoData} {...videoPlayerData} />
         </Col>
       </Row>
     </div>

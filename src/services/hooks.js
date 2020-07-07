@@ -169,3 +169,11 @@ export const useSearch = () => {
 
   return getColumnSearchProps;
 };
+
+export const useVideo = () => {
+  const [duration, setDuration] = useState(0);
+  const [progress, setProgress] = useState({ playedSeconds: 0 });
+  const videoRef = useRef(null);
+
+  return { duration, setDuration, progress, setProgress, videoRef };
+};

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import {
   NotificationOutlined,
@@ -6,31 +6,37 @@ import {
   PauseOutlined,
   CaretRightOutlined,
 } from '@ant-design/icons';
-import moment from 'moment';
 
 import { Card, Spin, Slider, Space } from 'antd';
+import { formatTime } from '@/utils/utils';
 
 import styles from './index.less';
 
-// const marks = { 66: '', 120: '' };
-const formatTime = time => {
-  const currentTime = moment()
-    .startOf('day')
-    .seconds(time)
-    .format('HH:mm:ss');
-  if (currentTime[0] === '0' && currentTime[1] === '0') return currentTime.slice(3);
-  return currentTime;
-};
+const interval = 1000000;
+const msFor60Fps = 16.6;
+// const msFor60Fps = 2000;
 
-const CandidateVideo = ({ currentQuestionText, videoUrl }) => {
+// const marks = { 66: '', 120: '' };
+
+const CandidateVideo = ({
+  currentQuestionText,
+  videoUrl,
+  duration,
+  setDuration,
+  progress,
+  setProgress,
+  videoRef,
+}) => {
   const [playing, setPlaying] = useState(true);
   const [muted, setMuted] = useState(false);
-  const [hover, setHover] = useState(false);
+  const [hover, setHover] = useState(true);
 
-  const [duration, setDuration] = useState(0);
-  const [progress, setProgress] = useState({ playedSeconds: 0 });
-  const refContainer = useRef(null);
+  const comments = [{ id: 123, comment: 'Why do you like this position?', time: 5 }];
 
+  const marks = {};
+  comments.forEach(comment => {
+    marks[comment.time * interval] = '';
+  });
   const handleEnter = event => {
     const { code } = event;
     if (code === 'Space') {
@@ -43,23 +49,24 @@ const CandidateVideo = ({ currentQuestionText, videoUrl }) => {
     window.addEventListener('keydown', handleEnter);
     return () => window.removeEventListener('keydown', handleEnter);
   }, []);
+
   return (
     <Spin spinning={!videoUrl}>
       <Card title={currentQuestionText}>
         <div
           onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
+          onMouseLeave={() => setHover(true)}
           className={styles.playerWrapper}
         >
           <ReactPlayer
             className={styles.reactPlayer}
-            ref={refContainer}
+            ref={videoRef}
             height="100%"
             width="100%"
             playing={playing}
             muted={muted}
-            youtubeConfig={{ playerVars: { rel: false, modestbranding: true } }}
-            preload
+            progressInterval={msFor60Fps}
+            config={{ youtube: { playerVars: { rel: false, modestbranding: true } } }}
             onDuration={duration => setDuration(duration)}
             onProgress={progress => setProgress(progress)}
             url={videoUrl}
@@ -83,24 +90,31 @@ const CandidateVideo = ({ currentQuestionText, videoUrl }) => {
             }}
           >
             <Slider
-              style={{ marginLeft: 8, marginRight: 8, marginBottom: 0 }}
-              max={duration}
-              // dots
-              // marks={marks}
-              value={progress.playedSeconds}
+              style={{
+                marginLeft: 8,
+                marginRight: 8,
+                marginBottom: 0,
+                paddingTop: 4,
+                paddingBottom: 4,
+              }}
+              max={duration * interval}
+              marks={marks}
+              value={progress.playedSeconds * interval}
               onChange={playedSeconds => {
-                setPlaying(false);
+                if (playing) {
+                  setPlaying(false);
+                }
+                videoRef.current.seekTo(playedSeconds / interval, 'seconds');
                 setProgress(progress => ({
                   ...progress,
-                  playedSeconds,
+                  playedSeconds: playedSeconds / interval,
                 }));
               }}
-              onAfterChange={playedSeconds => {
-                refContainer.current.seekTo(playedSeconds);
-                setPlaying(true);
+              onAfterChange={() => {
+                // setTimeout makes sure that this is called after onChange
+                setTimeout(() => setPlaying(true), 200);
               }}
-              // step={1}
-              tipFormatter={tip => formatTime(tip)}
+              tipFormatter={tip => formatTime(tip / interval)}
             />
 
             <Space style={{ marginLeft: 16, marginBottom: 8 }} size="middle">

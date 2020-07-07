@@ -130,6 +130,45 @@ export async function removeCandidateDocument(email, id) {
     headers: setHeaders(),
   });
 }
+
+export async function addComment(liveId, data, successMessage) {
+  // return request(
+  //   `${newApi}/live/${liveId}/comments`,
+  //   {
+  //     method: 'POST',
+  //     body: data,
+  //     headers: setHeaders(),
+  //   },
+  //   successMessage
+  // );
+  return request(
+    `${newApi}/shortlists`,
+    {
+      method: 'GET',
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+}
+
+export async function removeComment(liveId, commentId, successMessage) {
+  // return request(
+  //   `${newApi}/live/${liveId}/comments/${commentId}`,
+  //   {
+  //     method: 'DELETE',
+  //     headers: setHeaders(),
+  //   },
+  return request(
+    `${newApi}/shortlists`,
+    {
+      method: 'GET',
+      headers: setHeaders(),
+    },
+    successMessage,
+    60
+  );
+}
+
 // take json and create or update
 export async function updateCandidateProfile(email, data) {
   const sendData = data;
