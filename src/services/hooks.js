@@ -174,6 +174,21 @@ export const useVideo = () => {
   const [duration, setDuration] = useState(0);
   const [progress, setProgress] = useState({ playedSeconds: 0 });
   const videoRef = useRef(null);
+  const [reload, setReload] = useState(false);
+  const [controlKeys, setControlKeys] = useState(true);
+  const [playing, setPlaying] = useState(true);
 
-  return { duration, setDuration, progress, setProgress, videoRef };
+  return {
+    duration,
+    setDuration,
+    progress,
+    setProgress,
+    videoRef,
+    reload,
+    setReload,
+    controlKeys,
+    setControlKeys,
+    playing,
+    setPlaying,
+  };
 };

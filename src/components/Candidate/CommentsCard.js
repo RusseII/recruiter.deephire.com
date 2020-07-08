@@ -12,15 +12,17 @@ import { useAsync } from '@/services/hooks';
 // const titleData = () => <span>Questions</span>;
 
 const QuestionCard = props => {
-  const { liveInterviewData, duration, progress, videoRef } = props;
-
+  const {
+    liveInterviewData,
+    duration,
+    progress,
+    videoRef,
+    setReload,
+    setControlKeys,
+    setPlaying,
+  } = props;
+  const [form] = Form.useForm();
   const { pending, execute } = useAsync(addComment, false);
-  if (liveInterviewData) {
-    liveInterviewData.comments = [
-      { _id: 123, comment: 'Why do you like this position?', time: 5 },
-      { _id: 1234, comment: 'Tell me about yourself', time: 15 },
-    ];
-  }
 
   const SuccessDelete = ({ deleteData }) => {
     return (
@@ -31,6 +33,7 @@ const QuestionCard = props => {
           onClick={() => {
             addComment(liveInterviewData._id, deleteData, 'Undo Delete Succesful');
             message.destroy();
+            setReload(flag => !flag);
           }}
         >
           Undo
@@ -39,9 +42,15 @@ const QuestionCard = props => {
     );
   };
 
-  const onFinish = values => {
+  const onFinish = async values => {
     const { comment } = values;
-    execute(liveInterviewData._id, comment, 'Succesfully Saved Bookmark');
+    await execute(
+      liveInterviewData._id,
+      { comment, time: progress.playedSeconds },
+      'Succesfully Saved Bookmark'
+    );
+    setReload(flag => !flag);
+    form.resetFields();
   };
 
   //   const [activeQuestion, setActiveQuestion] = useState(0);
@@ -68,9 +77,14 @@ const QuestionCard = props => {
       render: (_id, deleteData) => (
         <Tooltip title="Delete this bookmark">
           <CloseCircleOutlined
-            onClick={() =>
-              removeComment(liveInterviewData._id, _id, <SuccessDelete deleteData={deleteData} />)
-            }
+            onClick={async () => {
+              await removeComment(
+                liveInterviewData._id,
+                _id,
+                <SuccessDelete deleteData={deleteData} />
+              );
+              setReload(flag => !flag);
+            }}
           />
         </Tooltip>
       ),
@@ -98,7 +112,7 @@ const QuestionCard = props => {
   return (
     <Card title="Bookmarks" {...props}>
       <Skeleton loading={!liveInterviewData} active>
-        {liveInterviewData?.comments && (
+        {liveInterviewData?.comments && liveInterviewData?.comments.length !== 0 && (
           <Table
             rowKey="_id"
             style={{ marginBottom: 24 }}
@@ -108,19 +122,26 @@ const QuestionCard = props => {
               onClick: () => {
                 const { time } = record;
                 videoRef.current.seekTo(time, 'seconds');
+                setPlaying(true);
               },
             })}
             // rowClassName={(record, index) => (record.time < progress.playedSeconds ? styles.selected : '')}
             pagination={false}
-            dataSource={liveInterviewData?.comments}
+            dataSource={liveInterviewData?.comments.sort((a, b) => a.time - b.time)}
             columns={columns}
           />
         )}
 
-        <Form onFinish={onFinish}>
+        <Form form={form} onFinish={onFinish}>
           <div style={{ position: 'relative' }}>
-            <Form.Item style={{ marginBottom: 8 }} name="comment">
+            <Form.Item
+              rules={[{ required: true, message: 'Please enter bookmark message' }]}
+              style={{ marginBottom: 8 }}
+              name="comment"
+            >
               <Input.TextArea
+                onFocus={() => setControlKeys(false)}
+                onBlur={() => setControlKeys(true)}
                 autoSize={{ minRows: 1 }}
                 placeholder="Add description for bookmark"
               />

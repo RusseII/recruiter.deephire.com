@@ -15,11 +15,18 @@ import CommentsCard from '../../components/Candidate/CommentsCard';
 import { useVideo } from '@/services/hooks';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
+const interval = 1000000;
+
 const ViewCandidate = ({ location }) => {
   const { id, liveid: liveId } = lowerCaseQueryParams(location.search);
   const [candidateData, setCandidateData] = useState(null);
   const [liveInterviewData, setLiveInterviewData] = useState(null);
 
+  const comments = liveInterviewData?.comments || [];
+  const marks = {};
+  comments.forEach(comment => {
+    marks[comment.time * interval] = '';
+  });
   const [videoData, setVideoData] = useState({ videoUrl: null, currentQuestionText: null });
   const videoPlayerData = useVideo();
   const getData = async () => {
@@ -54,7 +61,7 @@ const ViewCandidate = ({ location }) => {
     if (liveId) {
       liveInterviews();
     }
-  }, []);
+  }, [videoPlayerData.reload]);
 
   const { candidateEmail, interviewName, userName, userId, candidateName } = {
     ...liveInterviewData,
@@ -79,6 +86,7 @@ const ViewCandidate = ({ location }) => {
         extra={
           <ShareCandidateButton
             buttonText="Share Candidate"
+            setControlKeys={videoPlayerData.setControlKeys}
             candidateData={[{ ...candidateData, liveInterviewData }]}
           />
         }
@@ -146,7 +154,7 @@ const ViewCandidate = ({ location }) => {
           xl={{ span: 14, order: 2 }}
           xxl={{ span: 14, order: 2 }}
         >
-          <CandidateVideo {...videoData} {...videoPlayerData} />
+          <CandidateVideo marks={marks} {...videoData} {...videoPlayerData} interval={interval} />
         </Col>
       </Row>
     </div>

@@ -132,19 +132,11 @@ export async function removeCandidateDocument(email, id) {
 }
 
 export async function addComment(liveId, data, successMessage) {
-  // return request(
-  //   `${newApi}/live/${liveId}/comments`,
-  //   {
-  //     method: 'POST',
-  //     body: data,
-  //     headers: setHeaders(),
-  //   },
-  //   successMessage
-  // );
   return request(
-    `${newApi}/shortlists`,
+    `${newApi}/live/${liveId}/comments`,
     {
-      method: 'GET',
+      method: 'POST',
+      body: data,
       headers: setHeaders(),
     },
     successMessage
@@ -152,20 +144,14 @@ export async function addComment(liveId, data, successMessage) {
 }
 
 export async function removeComment(liveId, commentId, successMessage) {
-  // return request(
-  //   `${newApi}/live/${liveId}/comments/${commentId}`,
-  //   {
-  //     method: 'DELETE',
-  //     headers: setHeaders(),
-  //   },
   return request(
-    `${newApi}/shortlists`,
+    `${newApi}/live/${liveId}/comments/${commentId}`,
     {
-      method: 'GET',
+      method: 'DELETE',
       headers: setHeaders(),
     },
     successMessage,
-    60
+    20
   );
 }
 

@@ -12,7 +12,6 @@ import { formatTime } from '@/utils/utils';
 
 import styles from './index.less';
 
-const interval = 1000000;
 const msFor60Fps = 16.6;
 // const msFor60Fps = 2000;
 
@@ -26,20 +25,20 @@ const CandidateVideo = ({
   progress,
   setProgress,
   videoRef,
+  controlKeys,
+  playing,
+  setPlaying,
+  marks,
+  interval,
 }) => {
-  const [playing, setPlaying] = useState(true);
   const [muted, setMuted] = useState(false);
   const [hover, setHover] = useState(true);
 
-  const comments = [{ id: 123, comment: 'Why do you like this position?', time: 5 }];
+  // const comments = [{ id: 123, comment: 'Why do you like this position?', time: 5 }];
 
-  const marks = {};
-  comments.forEach(comment => {
-    marks[comment.time * interval] = '';
-  });
   const handleEnter = event => {
     const { code } = event;
-    if (code === 'Space') {
+    if (code === 'Space' && controlKeys) {
       event.preventDefault();
       setPlaying(playing => !playing);
     }
@@ -48,7 +47,7 @@ const CandidateVideo = ({
   useEffect(() => {
     window.addEventListener('keydown', handleEnter);
     return () => window.removeEventListener('keydown', handleEnter);
-  }, []);
+  }, [controlKeys]);
 
   return (
     <Spin spinning={!videoUrl}>

@@ -291,6 +291,7 @@ const Candidates = () => {
       </Row>
       <Checkbox.Group
         className={styles.filterCardList}
+        style={{ width: '100%' }}
         onChange={checked => setSelectedCards(checked)}
         value={selectedCards}
       >
@@ -304,7 +305,7 @@ const Candidates = () => {
               dataSource={countOfCandidates}
               renderItem={item => (
                 <List.Item key={item.id}>
-                  <Card style={{ height: 227 }}>
+                  <Card style={{ height: 230 }}>
                     <Skeleton avatar paragraph={{ rows: 4 }} loading active />
                   </Card>
                 </List.Item>
