@@ -1,4 +1,4 @@
-import React, { Component, Suspense } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Row, Col, List, Typography } from 'antd';
 import qs from 'qs';
@@ -13,7 +13,7 @@ import { getShortListData } from '@/services/api';
 import styles from './ShortListAnalytics.less';
 import ShortListStatsCard from '@/components/ShortListStatsCard';
 
-const ProportionSales = React.lazy(() => import('./ProportionSales'));
+// const ProportionSales = React.lazy(() => import('./ProportionSales'));
 
 const readableTime = require('readable-timestamp');
 
@@ -82,66 +82,66 @@ class ShortListAnalytics extends Component {
 
     const views = clicks ? clicks.length : 0;
 
-    let reviewedCandidates = 0;
-    let notReviewedCandidates = 0;
-    let notSeenCandidates = 0;
+    // let reviewedCandidates = 0;
+    // let notReviewedCandidates = 0;
+    // let notSeenCandidates = 0;
 
-    let acceptedCandidates = 0;
-    let maybeCandidates = 0;
-    let declinedCandidates = 0;
+    // let acceptedCandidates = 0;
+    // let maybeCandidates = 0;
+    // let declinedCandidates = 0;
 
     if (!interviews) {
       return null;
     }
 
-    interviews.forEach(candidate => {
-      if (candidate.interest || candidate.rating) reviewedCandidates += 1;
-      else if (candidate.clicks) notReviewedCandidates += 1;
-      else notSeenCandidates += 1;
-    });
+    // interviews.forEach(candidate => {
+    //   if (candidate.interest || candidate.rating) reviewedCandidates += 1;
+    //   else if (candidate.clicks) notReviewedCandidates += 1;
+    //   else notSeenCandidates += 1;
+    // });
 
-    interviews.forEach(candidate => {
-      if (candidate.interest ? candidate.interest === 1 : candidate.rating > 3)
-        acceptedCandidates += 1;
-      else if (
-        candidate.interest ? candidate.interest === 2 : candidate.rating < 4 && candidate.rating > 1
-      )
-        maybeCandidates += 1;
-      else if (
-        candidate.interest
-          ? candidate.interest === 3
-          : candidate.rating < 2 && candidate.rating > -1
-      )
-        declinedCandidates += 1;
-    });
+    // interviews.forEach(candidate => {
+    //   if (candidate.interest ? candidate.interest === 1 : candidate.rating > 3)
+    //     acceptedCandidates += 1;
+    //   else if (
+    //     candidate.interest ? candidate.interest === 2 : candidate.rating < 4 && candidate.rating > 1
+    //   )
+    //     maybeCandidates += 1;
+    //   else if (
+    //     candidate.interest
+    //       ? candidate.interest === 3
+    //       : candidate.rating < 2 && candidate.rating > -1
+    //   )
+    //     declinedCandidates += 1;
+    // });
 
-    const overviewCandidateStatus = [
-      { x: 'Accepted', y: acceptedCandidates },
-      { x: 'Undecided', y: maybeCandidates },
-      { x: 'Declined', y: declinedCandidates },
-      { x: 'Not Reviewed', y: notReviewedCandidates },
-      { x: 'Not Seen', y: notSeenCandidates },
-    ];
+    // const overviewCandidateStatus = [
+    //   { x: 'Accepted', y: acceptedCandidates },
+    //   { x: 'Undecided', y: maybeCandidates },
+    //   { x: 'Declined', y: declinedCandidates },
+    //   { x: 'Not Reviewed', y: notReviewedCandidates },
+    //   { x: 'Not Seen', y: notSeenCandidates },
+    // ];
 
-    const reviewedCandidateStatus = [
-      { x: 'Accepted', y: acceptedCandidates },
-      { x: 'Undecided', y: maybeCandidates },
-      { x: 'Declined', y: declinedCandidates },
-    ];
+    // const reviewedCandidateStatus = [
+    //   { x: 'Accepted', y: acceptedCandidates },
+    //   { x: 'Undecided', y: maybeCandidates },
+    //   { x: 'Declined', y: declinedCandidates },
+    // ];
 
-    const unReviewedCandidates = [
-      { x: 'Reviewed', y: reviewedCandidates },
-      { x: 'Not Reviewed', y: notReviewedCandidates },
-      { x: 'Not Seen', y: notSeenCandidates },
-    ];
+    // const unReviewedCandidates = [
+    //   { x: 'Reviewed', y: reviewedCandidates },
+    //   { x: 'Not Reviewed', y: notReviewedCandidates },
+    //   { x: 'Not Seen', y: notSeenCandidates },
+    // ];
 
-    let salesPieData;
-    if (candidateStatus === 'overview') {
-      salesPieData = overviewCandidateStatus;
-    } else {
-      salesPieData =
-        candidateStatus === 'reviewed' ? reviewedCandidateStatus : unReviewedCandidates;
-    }
+    // let salesPieData;
+    // if (candidateStatus === 'overview') {
+    //   salesPieData = overviewCandidateStatus;
+    // } else {
+    //   salesPieData =
+    //     candidateStatus === 'reviewed' ? reviewedCandidateStatus : unReviewedCandidates;
+    // }
 
     return (
       <GridContent>
@@ -151,7 +151,7 @@ class ShortListAnalytics extends Component {
         />
         <Row gutter={16}>
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Suspense fallback={null}>
+            {/* <Suspense fallback={null}>
               <ProportionSales
                 title="Candidate Status"
                 candidateStatus={candidateStatus}
@@ -159,13 +159,13 @@ class ShortListAnalytics extends Component {
                 salesPieData={salesPieData}
                 handleChangeSalesType={this.handleChangeCandidateStatusPie}
               />
-            </Suspense>
+            </Suspense> */}
           </Col>
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
             <ShortListStatsCard
               views={views}
               lastViewed={lastViewed}
-              acceptedCandidates={acceptedCandidates}
+              // acceptedCandidates={acceptedCandidates}
               totalCandidates={totalCandidates}
             />
           </Col>
