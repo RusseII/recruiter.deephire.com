@@ -4,7 +4,6 @@ import { ShareAltOutlined, PieChartOutlined } from '@ant-design/icons';
 import { Card, Tooltip, ConfigProvider, Tag, Typography, Popover, Tabs, Space } from 'antd';
 import React, { useState, useEffect, useContext } from 'react';
 import readableTime from 'readable-timestamp';
-import styles from './ShortLists.less';
 import ArchiveButton from '@/components/ArchiveButton';
 import { getHttpUrl, handleFilter } from '@/utils/utils';
 import StandardTable from '@/components/StandardTable';
@@ -80,6 +79,7 @@ const ShortLists = () => {
     {
       title: 'View Count',
       key: 'views',
+      dataIndex: 'clicks',
       sortDirections: ['descend', 'ascend'],
       sorter: (a, b) => {
         const { clicks: clicksA } = a;
@@ -89,10 +89,8 @@ const ShortLists = () => {
         return clickCountA - clickCountB;
       },
 
-      render: data => {
-        const { clicks } = data;
-        const clickCount = clicks ? clicks.length : 0;
-        return <div className={styles.clickCount}>{clickCount || '-'}</div>;
+      render: clicks => {
+        return <>{clicks ? clicks.length : '-'}</>;
       },
     },
     {

@@ -8,7 +8,7 @@ const readableTime = require('readable-timestamp');
 
 const openInterview = item => {
   const { _id } = item;
-  router.push(`candidate/?id=${_id}`);
+  router.push(`/one-way/candidates/candidate/?id=${_id}`);
 };
 
 const friendlyDate = rawDate => {
@@ -21,19 +21,19 @@ const CardInfo = ({ item }) => (
   <div className={styles.cardInfo}>
     <p className={styles.email}>{item.candidateEmail || '-'}</p>
     <p className={styles.body}>{item.interviewName || '-'}</p>
-    <p className={styles.body}>{friendlyDate(item.timestamp) || '-'}</p>
+    <span className={styles.body}>{friendlyDate(item.timestamp) || '-'}</span>
   </div>
 );
 
 const CandidateCard = ({ item }) => (
   <Card
     hoverable
-    bodyStyle={{ paddingBottom: 20 }}
+    onClick={() => openInterview(item)}
     actions={[
-      <Checkbox style={{ paddingLeft: 50, paddingRight: 50 }} value={item} />,
-      <a style={{ paddingLeft: 50, paddingRight: 50 }} onClick={() => openInterview(item)}>
-        View
-      </a>,
+      <div style={{ margin: '-12px 0px', padding: '12px 0px' }} onClick={e => e.stopPropagation()}>
+        <Checkbox style={{ width: '100%', height: '100%' }} value={item} />
+      </div>,
+      <a style={{ width: '100%', height: '100%' }}>View</a>,
     ]}
   >
     <Card.Meta

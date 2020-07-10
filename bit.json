@@ -4,5 +4,10 @@
     },
     "dependencies": {},
     "componentsDefaultDirectory": "components/{namespace}/{name}",
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "resolveModules": {
+        "aliases": {
+            "@": "src"
+        }
+    }
 }

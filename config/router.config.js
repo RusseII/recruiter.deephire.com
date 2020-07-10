@@ -11,7 +11,7 @@ export default [
     ],
   },
 
-  { path: '/shortlists/shortlistanalytics', redirect: 'sharelinks/analytics/' },
+  { path: '/shortlists/shortlistanalytics', redirect: '/sharelinks' },
 
   {
     path: '/',

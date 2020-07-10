@@ -4,7 +4,7 @@ import React from 'react';
 import { CheckCircleTwoTone, QuestionCircleFilled } from '@ant-design/icons';
 
 import { Card, Button, Typography, List, Row, Col, Tooltip } from 'antd';
-import { StartButton } from '@bit/russeii.deephire.index';
+// import { StartButton } from '@bit/russeii.deephire.index';
 
 const { Title } = Typography;
 
@@ -52,7 +52,7 @@ const renderButton = (startTrial, plan, onClick) => {
         </Button>
       );
     }
-    return <StartButton {...buttonProps} />;
+    // return <StartButton {...buttonProps} />;
   }
   if (type === 'contact') {
     return (

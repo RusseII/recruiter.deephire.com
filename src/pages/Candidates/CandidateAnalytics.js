@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { WaterWave } from 'ant-design-pro/lib/Charts';
-import { Card, Row, Col, Statistic, Tag, ConfigProvider, Tooltip } from 'antd';
+import { Card, Row, Col, Statistic, ConfigProvider, Tooltip, Badge } from 'antd';
 
 import readableTime from 'readable-timestamp';
 import { InfoCircleOutlined } from '@ant-design/icons';
@@ -14,6 +14,10 @@ import { lowerCaseQueryParams, handleFilter } from '@/utils/utils';
 import { getEventbyId } from '@/services/api';
 import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 // const getWidth = () => Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
@@ -81,13 +85,17 @@ const CandidateAnalytics = () => {
       ...handleFilter(events, 'event'),
       sorter: (a, b) => a.event.localeCompare(b.event),
       render: event => {
-        let color;
-        if (event === 'invited') color = 'purple';
-        if (event === 'clicked') color = 'yellow';
-        if (event === 'started') color = 'orange';
-        if (event === 'completed') color = 'green';
+        let status;
+        if (event === 'invited') status = 'default';
+        if (event === 'clicked') status = 'warning';
+        if (event === 'started') status = 'processing';
+        if (event === 'completed') status = 'success';
 
-        return <Tag color={color}>{event}</Tag>;
+        return (
+          <>
+            <Badge status={status} text={capitalizeFirstLetter(event)} />
+          </>
+        );
       },
     },
     {

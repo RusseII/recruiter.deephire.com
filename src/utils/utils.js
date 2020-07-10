@@ -286,3 +286,12 @@ export const handleFilter = (data, field) => {
   };
   return { filters, onFilter };
 };
+
+export const formatTime = time => {
+  const currentTime = moment()
+    .startOf('day')
+    .seconds(time)
+    .format('HH:mm:ss');
+  if (currentTime[0] === '0' && currentTime[1] === '0') return currentTime.slice(3);
+  return currentTime;
+};

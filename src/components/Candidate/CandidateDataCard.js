@@ -25,7 +25,7 @@ const EditableCard = ({ key, documentProps }) => (
     {/* <TextArea placeholder="Add notes about this candidate. All notes added here will be visible when this candidate is shared." /> */}
 
     <Upload key={key} {...documentProps}>
-      <Button>
+      <Button type="dashed">
         <UploadOutlined /> Add Document
       </Button>
     </Upload>
