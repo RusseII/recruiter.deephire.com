@@ -65,7 +65,6 @@ const ShortListAnalytics = () => {
   const { id } = lowerCaseQueryParams(window.location.search);
   const { value: analyticsData, pending, execute } = useAsync(getShortListData, false);
 
-  // const [analyticsData, setAnalyticsData] = useState(null);
   useEffect(() => {
     execute(id);
   }, [id]);
@@ -77,7 +76,7 @@ const ShortListAnalytics = () => {
     <>
       <AntPageHeader
         title={analyticsData?.[0]?.name}
-        subTitle={<Typography.Text copyable>{analyticsData?.shortUrl}</Typography.Text>}
+        subTitle={<Typography.Text copyable>{analyticsData?.[0]?.shortUrl}</Typography.Text>}
       />
       <CandidateAnalyticsTable
         pending={pending}
