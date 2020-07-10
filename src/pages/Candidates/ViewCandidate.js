@@ -108,7 +108,7 @@ const ViewCandidate = ({ location }) => {
       </div> */}
 
       <Row type="flex" gutter={24}>
-        <Col xs={{ span: 24, order: 2 }} sm={24} md={10} lg={12} xl={10} xxl={10}>
+        <Col xs={{ span: 24, order: 2 }} sm={24} md={12} lg={12} xl={12} xxl={12}>
           {/* <Space size="large" direction="vertical"> */}
           {/* <CandidateDataCard
             style={{ marginBottom: 24 }}
@@ -149,10 +149,10 @@ const ViewCandidate = ({ location }) => {
         <Col
           xs={{ span: 24, order: 1 }}
           sm={{ span: 24, order: 1 }}
-          md={{ span: 14, order: 2 }}
+          md={{ span: 12, order: 2 }}
           lg={{ span: 12, order: 2 }}
-          xl={{ span: 14, order: 2 }}
-          xxl={{ span: 14, order: 2 }}
+          xl={{ span: 12, order: 2 }}
+          xxl={{ span: 12, order: 2 }}
         >
           <CandidateVideo marks={marks} {...videoData} {...videoPlayerData} interval={interval} />
         </Col>

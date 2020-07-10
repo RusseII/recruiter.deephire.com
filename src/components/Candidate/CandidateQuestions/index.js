@@ -57,6 +57,7 @@ const QuestionCard = props => {
       // title: 'Actions',
       dataIndex: '_id',
       key: '_id',
+      width: 100,
       render: () => (
         <Tooltip title="Hide question when sharing this candidate">
           <ArchiveButton
