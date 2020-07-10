@@ -12,22 +12,6 @@ function initTotalList(columns) {
   return totalList;
 }
 
-function debounce(fn, ms) {
-  let timer;
-  return () => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      timer = null;
-      // eslint-disable-next-line prefer-rest-params
-      fn.apply(this, arguments);
-    }, ms);
-  };
-}
-
-const getWidth = () => {
-  return Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-};
-
 class StandardTable extends PureComponent {
   constructor(props) {
     super(props);
@@ -37,16 +21,7 @@ class StandardTable extends PureComponent {
     this.state = {
       selectedRowKeys: selectedRows,
       needTotalList,
-      width: getWidth(),
     };
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', debounce(() => this.handleResize(), 500));
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', debounce(() => this.handleResize(), 500));
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -86,10 +61,6 @@ class StandardTable extends PureComponent {
     this.handleRowSelectChange([], []);
   };
 
-  handleResize() {
-    this.setState({ width: getWidth() });
-  }
-
   render() {
     // eslint-disable-next-line no-unused-vars
     const { selectedRowKeys, needTotalList, width } = this.state;
@@ -117,27 +88,6 @@ class StandardTable extends PureComponent {
 
     return (
       <div className={styles.standardTable}>
-        {/* <div className={styles.tableAlert}>
-          <Alert
-            message={
-              <Fragment>
-                Selected <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> &nbsp;&nbsp;
-                {needTotalList.map(item => (
-                  <span style={{ marginLeft: 8 }} key={item.dataIndex}>
-                    {item.title}
-                    总计&nbsp;
-                    <span style={{ fontWeight: 600 }}>
-                      {item.render ? item.render(item.total) : item.total}
-                    </span>
-                  </span>
-                ))}
-            
-              </Fragment>
-            }
-            type="info"
-            showIcon
-          />
-        </div> */}
         <Table
           scroll={{ x: true }}
           loading={loading}
