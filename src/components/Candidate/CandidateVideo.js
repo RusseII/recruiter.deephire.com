@@ -8,7 +8,13 @@ import {
 } from '@ant-design/icons';
 
 import { Spin, Slider, Space } from 'antd';
-import { formatTime } from '@/utils/utils';
+import { formatTime } from '@bit/russeii.deephire.utils.utils';
+
+const proxyUrl = videoUrl => {
+  const uuid = `v-${/((\w{4,12}-?)){5}/.exec(videoUrl)[0]}`;
+  const url = `https://a.deephire.com/v1/videos/proxy/${uuid}`;
+  return url;
+};
 
 const msFor60Fps = 16.6;
 // const msFor60Fps = 2000;
@@ -50,6 +56,7 @@ const CandidateVideo = ({
   const [ready, setReady] = useState(false);
 
   const [hover, setHover] = useState(true);
+  const [error, setError] = useState(false);
 
   // const comments = [{ id: 123, comment: 'Why do you like this position?', time: 5 }];
 
@@ -66,6 +73,10 @@ const CandidateVideo = ({
     return () => window.removeEventListener('keydown', handleEnter);
   }, [controlKeys]);
 
+  useEffect(() => {
+    setReady(false);
+  }, [videoUrl]);
+
   return (
     <Spin spinning={!ready}>
       {/* <Card title={currentQuestionText}> */}
@@ -76,6 +87,7 @@ const CandidateVideo = ({
       >
         <ReactPlayer
           onReady={() => setReady(true)}
+          onError={() => setError(true)}
           style={styles.reactPlayer}
           ref={videoRef}
           height="100%"
@@ -86,7 +98,7 @@ const CandidateVideo = ({
           config={{ youtube: { playerVars: { rel: false, modestbranding: true } } }}
           onDuration={duration => setDuration(duration)}
           onProgress={progress => setProgress(progress)}
-          url={videoUrl}
+          url={error ? proxyUrl(videoUrl) : videoUrl}
         />
         <div
           onClick={() => setPlaying(playing => !playing)}
