@@ -3,7 +3,7 @@ import { Result, Drawer, Form, Button, Col, Row, Input, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import DirectLink from '@/components/InviteCandidates/DirectLink';
 import { scheduleInterview } from '@/services/api';
-import CandidateDataCard from '@/components/Candidate/CandidateDataCard';
+import CandidateDataCard from '@/components/Candidate/DataCard';
 import GlobalContext from '@/layouts/MenuContext';
 import SchedulePicker from './SchedulePicker';
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Col, Row, Tooltip, Typography } from 'antd';
 
 import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
-import CandidateDataCard from '@/components/Candidate/CandidateDataCard';
+import CandidateDataCard from '@/components/Candidate/DataCard';
 // import CandidateNotes from '@/components/Candidate/CandidateNotes';
 
 import ShareCandidateButton from '@/components/ShareCandidateButton';
@@ -17,8 +17,8 @@ import {
   removeCandidateDocument,
 } from '@/services/api';
 
-import QuestionsCard from '../../components/Candidate/CandidateQuestions';
-import CandidateVideo from '../../components/Candidate/CandidateVideo';
+import QuestionsCard from '../../components/Candidate/Questions';
+import CandidateVideo from '../../components/Candidate/Video';
 import CommentsCard from '../../components/Candidate/CommentsCard';
 import { useVideo } from '@/services/hooks';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
