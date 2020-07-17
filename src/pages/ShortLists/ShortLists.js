@@ -4,8 +4,8 @@ import { ShareAltOutlined, PieChartOutlined } from '@ant-design/icons';
 import { Card, Tooltip, ConfigProvider, Tag, Typography, Popover, Tabs, Space } from 'antd';
 import React, { useState, useEffect, useContext } from 'react';
 import readableTime from 'readable-timestamp';
+import { getHttpUrl, handleFilter } from '@bit/russeii.deephire.utils.utils';
 import ArchiveButton from '@/components/ArchiveButton';
-import { getHttpUrl, handleFilter } from '@/utils/utils';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
 

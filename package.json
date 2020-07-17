@@ -27,6 +27,8 @@
     "@ant-design/icons": "^4.0.3",
     "@antv/data-set": "^0.10.1",
     "@babel/runtime": "^7.0.0",
+    "@bit/russeii.deephire.hooks": "^0.0.2",
+    "@bit/russeii.deephire.utils.utils": "^0.0.1",
     "@sentry/browser": "^5.15.4",
     "ant-design-pro": "^2.3.2",
     "antd": "4.4.1",

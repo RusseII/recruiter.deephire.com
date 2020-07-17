@@ -21,12 +21,12 @@ import {
 import React, { useEffect, useState, useContext } from 'react';
 import { ReloadOutlined } from '@ant-design/icons';
 import router from 'umi/router';
+import { handleFilter, lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import CandidateCard from '@/components/CandidateCard';
 // import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 import ArchiveButton from '@/components/ArchiveButton';
 
-import { handleFilter, lowerCaseQueryParams } from '@/utils/utils';
 import { getArchivedVideos, getVideos, removeCandidates } from '@/services/api';
 import styles from './Candidates.less';
 import customEmpty from '@/components/CustomEmpty';

@@ -7,9 +7,9 @@ import { LinkedInLoginButton } from 'react-social-login-buttons';
 import { connect } from 'dva';
 import React, { Component, useState } from 'react';
 
+import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import Login from '@/components/Login';
 import { resetPassword, createCompany, getInviteById } from '@/services/api';
-import { lowerCaseQueryParams } from '@/utils/utils';
 import Auth from '../../Auth/Auth';
 import styles from './Login.less';
 

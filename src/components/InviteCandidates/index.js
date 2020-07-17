@@ -22,7 +22,7 @@ import {
   message,
 } from 'antd';
 
-// import { getHttpUrl } from '@/utils/utils';
+// import { getHttpUrl } from '@bit/russeii.deephire.utils.utils';
 import { inviteCandidatesToInterview } from '@/services/api';
 
 import DirectLink from './DirectLink';

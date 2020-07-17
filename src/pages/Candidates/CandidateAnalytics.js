@@ -4,12 +4,13 @@ import { Card, Row, Col, Statistic, ConfigProvider, Tooltip, Badge } from 'antd'
 
 import readableTime from 'readable-timestamp';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { lowerCaseQueryParams, handleFilter } from '@bit/russeii.deephire.utils.utils';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 import StandardTable from '@/components/StandardTable';
 import customEmpty from '@/components/CustomEmpty';
 
-import { useAsync, useSearch } from '@/services/hooks';
-import { lowerCaseQueryParams, handleFilter } from '@/utils/utils';
+import { useSearch } from '@/services/complexHooks';
+import { useAsync } from '@/services/hooks';
 
 import { getEventbyId } from '@/services/api';
 import 'antd/dist/antd.css';

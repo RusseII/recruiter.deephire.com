@@ -1434,6 +1434,25 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@bit/russeii.deephire.hooks@^0.0.2":
+  version "0.0.2"
+  resolved "https://node.bit.dev/russeii.deephire.hooks/-/russeii.deephire.hooks-0.0.2.tgz#004800cd54cc77817ca7f80d553552ab387f7eda"
+  integrity sha1-AEgAzVTMd4F8p/gNVTVSqzh/fto=
+  dependencies:
+    react "^16.5.1"
+
+"@bit/russeii.deephire.utils.utils@^0.0.1":
+  version "0.0.1"
+  resolved "https://node.bit.dev/russeii.deephire.utils.utils/-/russeii.deephire.utils.utils-0.0.1.tgz#fd91704e6698eaf32786e5adaf2cbd0263a0a03a"
+  integrity sha1-/ZFwTmaY6vMnhuWtryy9AmOgoDo=
+  dependencies:
+    antd "4.4.1"
+    lodash.get "^4.4.2"
+    moment "^2.22.2"
+    nzh "^1.0.3"
+    qs "^6.6.0"
+    react "^16.5.1"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"

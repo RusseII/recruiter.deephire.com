@@ -3,9 +3,9 @@ import classNames from 'classnames';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Menu } from 'antd';
 import Link from 'umi/link';
+import { isUrl } from '@bit/russeii.deephire.utils.utils';
 import { urlToList } from '../_utils/pathTools';
 import { getMenuMatches } from './SiderMenuUtils';
-import { isUrl } from '@/utils/utils';
 import styles from './index.less';
 
 const { SubMenu } = Menu;

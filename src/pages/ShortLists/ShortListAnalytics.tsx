@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { Typography } from 'antd';
 import ClickHistory from './ClickHistory';
 import CandidateAnalyticsTable from './CandidateAnalyticsTable';
-import { lowerCaseQueryParams } from '@/utils/utils';
+import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 import { useAsync } from '@/services/hooks';
+
 
 import { getShortListData } from '@/services/api';
 

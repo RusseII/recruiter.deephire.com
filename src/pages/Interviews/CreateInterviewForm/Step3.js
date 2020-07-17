@@ -5,9 +5,9 @@ import { Tooltip, message, Button, Row, Col } from 'antd';
 import router from 'umi/router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { getHttpUrl } from '@bit/russeii.deephire.utils.utils';
 import Result from '@/components/Result';
 import styles from './style.less';
-import { getHttpUrl } from '@/utils/utils';
 
 @connect(({ form, user }) => ({
   currentUser: user.currentUser,

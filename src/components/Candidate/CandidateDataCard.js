@@ -6,8 +6,6 @@ import { Upload, Button, Card, Skeleton } from 'antd';
 
 import PropTypes from 'prop-types';
 
-import { getCandidateProfile, removeCandidateDocument } from '@/services/api';
-
 const url = 'https://a.deephire.com/v1/candidates';
 
 const EditableCard = ({ key, documentProps }) => (
@@ -35,7 +33,14 @@ const EditableCard = ({ key, documentProps }) => (
 const ViewCard = ({ key, documentProps }) => <Upload key={key} {...documentProps} />;
 
 const InfoCardEditable = props => {
-  const { userName, interviewName, editable, email } = props;
+  const {
+    userName,
+    interviewName,
+    editable,
+    email,
+    removeCandidateDocument,
+    getCandidateProfile,
+  } = props;
   const [candidateProfileData, setCandidateProfileData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [key, setKey] = useState(1);

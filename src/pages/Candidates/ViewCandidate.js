@@ -2,18 +2,27 @@ import React, { useState, useEffect } from 'react';
 
 import { Col, Row, Tooltip, Typography } from 'antd';
 
+import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import CandidateDataCard from '@/components/Candidate/CandidateDataCard';
 // import CandidateNotes from '@/components/Candidate/CandidateNotes';
 
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 
-import { getVideo, getLiveInterview } from '@/services/api';
-import { lowerCaseQueryParams } from '@/utils/utils';
+import {
+  addComment,
+  removeComment,
+  getVideo,
+  getLiveInterview,
+  getCandidateProfile,
+  removeCandidateDocument,
+} from '@/services/api';
+
 import QuestionsCard from '../../components/Candidate/CandidateQuestions';
 import CandidateVideo from '../../components/Candidate/CandidateVideo';
 import CommentsCard from '../../components/Candidate/CommentsCard';
 import { useVideo } from '@/services/hooks';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
+import ArchiveButton from '@/components/ArchiveButton';
 
 const interval = 1000000;
 
@@ -21,25 +30,27 @@ const ViewCandidate = ({ location }) => {
   const { id, liveid: liveId } = lowerCaseQueryParams(location.search);
   const [candidateData, setCandidateData] = useState(null);
   const [liveInterviewData, setLiveInterviewData] = useState(null);
+  const [archives, setArchives] = useState(false);
 
   const comments = liveInterviewData?.comments || [];
   const marks = {};
   comments.forEach(comment => {
     marks[comment.time * interval] = '';
   });
-  const [videoData, setVideoData] = useState({ videoUrl: null, currentQuestionText: null });
   const videoPlayerData = useVideo();
-  const getData = async () => {
-    getVideo(id).then(data => {
+
+  const getArchiveData = async () => {
+    await getVideo(id).then(data => {
       const [first] = data;
       setCandidateData(first);
-
+      //   return first;
       const [response] = first.responses;
 
-      setVideoData({
-        videoUrl: response ? response.response : null,
-        currentQuestionText: response ? response.question : null,
-      });
+      if (!archives) videoPlayerData.setVideoUrl(response ? response.response : null);
+      else if (first.archivedResponses) {
+        const [archivedResponse] = first.archivedResponses;
+        videoPlayerData.setVideoUrl(archivedResponse ? archivedResponse.response : null);
+      }
     });
   };
 
@@ -48,20 +59,17 @@ const ViewCandidate = ({ location }) => {
     const { recordingUrl } = liveData;
     const lastRecording = recordingUrl.slice(-1)[0];
     setLiveInterviewData(liveData);
-    setVideoData({
-      videoUrl: lastRecording,
-      currentQuestionText: `Live Interview Recording `,
-    });
+    videoPlayerData.setVideoUrl(lastRecording);
   };
 
   useEffect(() => {
     if (id) {
-      getData();
+      getArchiveData();
     }
     if (liveId) {
       liveInterviews();
     }
-  }, [videoPlayerData.reload]);
+  }, [videoPlayerData.reload, archives]);
 
   const { candidateEmail, interviewName, userName, userId, candidateName } = {
     ...liveInterviewData,
@@ -117,21 +125,22 @@ const ViewCandidate = ({ location }) => {
             interviewName={interviewName}
             email={candidateEmail}
             editable
-            setVideoData={setVideoData}
+            videoPlayerData.setVideoUrl={videoPlayerData.setVideoUrl}
           /> */}
 
           {id ? (
             <QuestionsCard
-              setCandidateData={setCandidateData}
               candidateData={candidateData}
-              setVideoData={setVideoData}
-              id={id}
+              {...videoPlayerData}
+              editable={{ archives, setArchives }}
               style={{ marginBottom: 24 }}
+              ArchiveButton={ArchiveButton}
             />
           ) : (
             <CommentsCard
               liveInterviewData={liveInterviewData}
               {...videoPlayerData}
+              editable={{ addComment, removeComment }}
               style={{ marginBottom: 24 }}
             />
           )}
@@ -141,7 +150,8 @@ const ViewCandidate = ({ location }) => {
             interviewName={interviewName}
             email={candidateEmail}
             editable
-            setVideoData={setVideoData}
+            getCandidateProfile={getCandidateProfile}
+            removeCandidateDocument={removeCandidateDocument}
           />
 
           {/* </Space> */}
@@ -154,7 +164,7 @@ const ViewCandidate = ({ location }) => {
           xl={{ span: 12, order: 2 }}
           xxl={{ span: 12, order: 2 }}
         >
-          <CandidateVideo marks={marks} {...videoData} {...videoPlayerData} interval={interval} />
+          <CandidateVideo marks={marks} {...videoPlayerData} interval={interval} />
         </Col>
       </Row>
     </div>
