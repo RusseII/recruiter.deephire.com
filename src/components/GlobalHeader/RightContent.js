@@ -1,6 +1,6 @@
 /* global $crisp */
 import React, { PureComponent } from 'react';
-import { FormattedMessage, setLocale, getLocale } from 'umi/locale';
+import { FormattedMessage, setLocale, getLocale, Badge } from 'umi/locale';
 import {
   BugOutlined,
   LogoutOutlined,
@@ -33,9 +33,9 @@ const ReportBug = () => (
 const ContactSupport = () => (
   <span style={{ marginRight: 16 }}>
     <Tooltip title="Chat with DeepHire support">
-      {/* <Badge dot> */}
-      <QuestionCircleOutlined onClick={chatEvent} />
-      {/* </Badge> */}
+      <Badge dot>
+        <QuestionCircleOutlined onClick={chatEvent} />
+      </Badge>
     </Tooltip>
   </span>
 );
