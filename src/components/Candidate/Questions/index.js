@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Card, Table, Skeleton, Tooltip } from 'antd';
 
-import styles from './index.less';
+import './index.css';
 
 const buttonEnabled = (archives, candidateData, responses, archivedResponses) => {
   if (candidateData) {
@@ -93,7 +93,7 @@ const QuestionCard = props => {
               },
             };
           }}
-          rowClassName={(record, index) => (index === activeQuestion ? styles.selected : '')}
+          rowClassName={(record, index) => (index === activeQuestion ? 'question-selected' : '')}
           pagination={false}
           dataSource={!archives ? responses : archivedResponses}
           columns={columns}
