@@ -25,7 +25,7 @@ const chatEvent = () => {
 };
 
 const ReportBug = () => (
-  <Tooltip title="Report a bug or issue">
+  <Tooltip title="Report a bug">
     <BugOutlined onClick={bugEvent} style={{ marginRight: 24 }} />
   </Tooltip>
 );
