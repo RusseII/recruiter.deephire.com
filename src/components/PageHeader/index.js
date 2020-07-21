@@ -3,9 +3,9 @@ import { message, Tabs, Skeleton, Row, Col, Tooltip } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import classNames from 'classnames';
+import { getHttpUrl } from '@bit/russeii.deephire.utils.utils';
 import styles from './index.less';
 import BreadcrumbView from './breadcrumb';
-import { getHttpUrl } from '@/utils/utils';
 
 const { TabPane } = Tabs;
 export default class PageHeader extends PureComponent {

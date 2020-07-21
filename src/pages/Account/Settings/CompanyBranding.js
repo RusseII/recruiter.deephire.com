@@ -4,7 +4,7 @@ import '@ant-design/compatible/assets/index.css';
 import { Input, Spin } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
-import { useCompanyInfo } from '@/services/hooks';
+import { useCompanyInfo } from '@/services/complexHooks';
 import CompanyUpload from '@/components/Upload';
 
 const FormItem = Form.Item;

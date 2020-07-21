@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
 import React from 'react';
 
-import { getHttpUrl } from '@/utils/utils';
+import { getHttpUrl } from '@bit/russeii.deephire.utils.utils';
 
 const { Paragraph } = Typography;
 

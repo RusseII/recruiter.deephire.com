@@ -4,10 +4,9 @@ import { Card, Table, Skeleton, Tooltip, Button, Input, Typography, Form, messag
 
 import { CloseCircleOutlined } from '@ant-design/icons';
 
-import { formatTime } from '@/utils/utils';
+import { formatTime } from '@bit/russeii.deephire.utils.utils';
 
-import { addComment, removeComment } from '@/services/api';
-import { useAsync } from '@/services/hooks';
+import { useAsync } from '@bit/russeii.deephire.hooks';
 
 // const titleData = () => <span>Questions</span>;
 
@@ -20,7 +19,10 @@ const QuestionCard = props => {
     setReload,
     setControlKeys,
     setPlaying,
+    editable,
   } = props;
+
+  const { addComment, removeComment } = editable || {};
   const [form] = Form.useForm();
   const { pending, execute } = useAsync(addComment, false);
 
@@ -74,20 +76,21 @@ const QuestionCard = props => {
       key: '_id',
       fixed: 'right',
       width: 30,
-      render: (_id, deleteData) => (
-        <Tooltip title="Delete this bookmark">
-          <CloseCircleOutlined
-            onClick={async () => {
-              await removeComment(
-                liveInterviewData._id,
-                _id,
-                <SuccessDelete deleteData={deleteData} />
-              );
-              setReload(flag => !flag);
-            }}
-          />
-        </Tooltip>
-      ),
+      render: (_id, deleteData) =>
+        editable && (
+          <Tooltip title="Delete this bookmark">
+            <CloseCircleOutlined
+              onClick={async () => {
+                await removeComment(
+                  liveInterviewData._id,
+                  _id,
+                  <SuccessDelete deleteData={deleteData} />
+                );
+                setReload(flag => !flag);
+              }}
+            />
+          </Tooltip>
+        ),
     },
   ];
   // const extraData = () => (
@@ -132,32 +135,35 @@ const QuestionCard = props => {
           />
         )}
 
-        <Form form={form} onFinish={onFinish}>
-          <div style={{ position: 'relative' }}>
-            <Form.Item
-              rules={[{ required: true, message: 'Please enter bookmark message' }]}
-              style={{ marginBottom: 8 }}
-              name="comment"
-            >
-              <Input.TextArea
-                onFocus={() => setControlKeys(false)}
-                onBlur={() => setControlKeys(true)}
-                autoSize={{ minRows: 1 }}
-                placeholder="Add description for bookmark"
-              />
+        {editable && (
+          <Form form={form} onFinish={onFinish}>
+            <div style={{ position: 'relative' }}>
+              <Form.Item
+                rules={[{ required: true, message: 'Please enter bookmark message' }]}
+                style={{ marginBottom: 8 }}
+                name="comment"
+              >
+                <Input.TextArea
+                  onFocus={() => setControlKeys(false)}
+                  onBlur={() => setControlKeys(true)}
+                  autoSize={{ minRows: 1 }}
+                  placeholder="Add description for bookmark"
+                />
+              </Form.Item>
+
+              <span style={{ position: 'absolute', right: 16, bottom: 8 }}>
+                <Typography.Text type="secondary">
+                  {`${formatTime(progress.playedSeconds)} / ${formatTime(duration)}`}
+                </Typography.Text>
+              </span>
+            </div>
+            <Form.Item style={{ marginBottom: 0 }}>
+              <Button htmlType="submit" loading={pending}>
+                Save Bookmark
+              </Button>
             </Form.Item>
-            <span style={{ position: 'absolute', right: 16, bottom: 8 }}>
-              <Typography.Text type="secondary">
-                {`${formatTime(progress.playedSeconds)} / ${formatTime(duration)}`}
-              </Typography.Text>
-            </span>
-          </div>
-          <Form.Item style={{ marginBottom: 0 }}>
-            <Button htmlType="submit" loading={pending}>
-              Save Bookmark
-            </Button>
-          </Form.Item>
-        </Form>
+          </Form>
+        )}
       </Skeleton>
     </Card>
   );

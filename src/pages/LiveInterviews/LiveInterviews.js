@@ -15,13 +15,14 @@ import {
 } from 'antd';
 import router from 'umi/router';
 import { ShareAltOutlined, FileAddOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { lowerCaseQueryParams, handleFilter } from '@bit/russeii.deephire.utils.utils';
 import InviteDrawer from './ScheduleInterview';
 import { getLiveInterviews } from '@/services/api';
 import GlobalContext from '@/layouts/MenuContext';
-import { lowerCaseQueryParams, handleFilter } from '@/utils/utils';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
-import { useSearch, useAsync } from '@/services/hooks';
+import { useSearch } from '@/services/complexHooks';
+import { useAsync } from '@/services/hooks';
 
 import customEmpty from '@/components/CustomEmpty';
 

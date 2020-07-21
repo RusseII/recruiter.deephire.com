@@ -9,8 +9,8 @@ import { Tooltip, Button, Row, Modal, Input, Col, Checkbox, message } from 'antd
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { connect } from 'dva';
+import { getHttpUrl } from '@bit/russeii.deephire.utils.utils';
 import Result from '@/components/Result';
-import { getHttpUrl } from '@/utils/utils';
 import GlobalContext from '@/layouts/MenuContext';
 
 const FormItem = Form.Item;

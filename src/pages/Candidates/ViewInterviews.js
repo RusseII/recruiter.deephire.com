@@ -22,6 +22,7 @@ import {
 } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import readableTime from 'readable-timestamp';
+import { handleFilter } from '@bit/russeii.deephire.utils.utils';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
 
@@ -37,8 +38,7 @@ import InviteCandidates from '@/components/InviteCandidates';
 import UpgradeButton from '@/components/Upgrade/UpgradeButton';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
-import { handleFilter } from '@/utils/utils';
-import { useSearch } from '@/services/hooks';
+import { useSearch } from '@/services/complexHooks';
 
 // const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
@@ -65,19 +65,6 @@ const TableList = () => {
 
   const [unArchivedInterviewCount, setUnArchivedInterviewCount] = useState(null);
 
-  // const createDataSource = data => {
-  //   const searchDataSource = [];
-  //   data.forEach(interview => {
-  //     if (interview.interviewName) searchDataSource.push(interview.interviewName);
-  //   });
-  //   const unique = [...new Set(searchDataSource)];
-  //   setDataSource(unique);
-  // };
-  // eslint-disable-next-line camelcase
-  // const team = recruiterProfile?.app_metadata?.team;
-  // if (interviews) {
-  //   interviews = interviews.map((interview, i) => ({ key: `interview-${i}`, ...interview }));
-  // }
   const { allowedInterviews } = stripeProduct.metadata;
   const updateInterview = async cleanedValueData => {
     await updateInterviews(editInterview._id, cleanedValueData);

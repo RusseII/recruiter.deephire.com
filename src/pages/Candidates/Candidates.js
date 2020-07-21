@@ -20,12 +20,13 @@ import {
 } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import { ReloadOutlined } from '@ant-design/icons';
+import router from 'umi/router';
+import { handleFilter, lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import CandidateCard from '@/components/CandidateCard';
 // import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 import ArchiveButton from '@/components/ArchiveButton';
 
-import { handleFilter } from '@/utils/utils';
 import { getArchivedVideos, getVideos, removeCandidates } from '@/services/api';
 import styles from './Candidates.less';
 import customEmpty from '@/components/CustomEmpty';
@@ -38,10 +39,13 @@ import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const Candidates = () => {
+  const { tab = '1' } = lowerCaseQueryParams(window.location.search);
+  const [activeTab, setActiveTab] = useState(tab);
+
   const [selectedCards, setSelectedCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dataSource, setDataSource] = useState([]);
-  const [archives, setArchives] = useState(false);
+  const [archives, setArchives] = useState(tab === '2');
   const [selectFilter, setSelectFilter] = useState([]);
   const [reload, setReload] = useState(false);
 
@@ -165,13 +169,16 @@ const Candidates = () => {
         onBack={null}
         footer={
           <Tabs
-            onChange={() => {
+            onChange={tabKey => {
               setArchives(flag => !flag);
               setSelectedCards([]);
+              router.push(`/one-way/candidates/?tab=${tabKey}`);
+              setActiveTab(tabKey);
             }}
+            defaultActiveKey={activeTab}
           >
-            <Tabs.TabPane tab="All" key="true" />
-            <Tabs.TabPane tab="Hidden" key="false" />
+            <Tabs.TabPane tab="All" key="1" />
+            <Tabs.TabPane tab="Hidden" key="2" />
           </Tabs>
         }
       >

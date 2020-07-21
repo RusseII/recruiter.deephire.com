@@ -1,8 +1,8 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
+import { getPageQuery } from '@bit/russeii.deephire.utils.utils';
 import { getFakeCaptcha } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
 
 export default {
