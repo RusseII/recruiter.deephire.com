@@ -1,13 +1,13 @@
 /* global $crisp */
 import React, { PureComponent } from 'react';
-import { FormattedMessage, setLocale, getLocale, Badge } from 'umi/locale';
+import { FormattedMessage, setLocale, getLocale } from 'umi/locale';
 import {
   BugOutlined,
   LogoutOutlined,
   SettingOutlined,
   QuestionCircleOutlined,
 } from '@ant-design/icons';
-import { Spin, Tag, Menu, Dropdown, Avatar, Tooltip } from 'antd';
+import { Spin, Tag, Menu, Dropdown, Avatar, Tooltip, Badge } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import styles from './index.less';
@@ -25,17 +25,19 @@ const chatEvent = () => {
 };
 
 const ReportBug = () => (
-  <Tooltip title="Report a bug">
-    <BugOutlined onClick={bugEvent} style={{ marginRight: 24 }} />
+  <Tooltip title="Report a bug here">
+    <Badge dot>
+      <BugOutlined onClick={bugEvent} style={{ marginRight: 24 }} />
+    </Badge>
   </Tooltip>
 );
 
 const ContactSupport = () => (
   <span style={{ marginRight: 16 }}>
     <Tooltip title="Chat with DeepHire support">
-      <Badge dot>
-        <QuestionCircleOutlined onClick={chatEvent} />
-      </Badge>
+      {/* <Badge dot> */}
+      <QuestionCircleOutlined onClick={chatEvent} />
+      {/* </Badge> */}
     </Tooltip>
   </span>
 );
