@@ -2,21 +2,22 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage, setLocale, getLocale } from 'umi/locale';
 import {
-  BugOutlined,
   LogoutOutlined,
   SettingOutlined,
   QuestionCircleOutlined,
+  BookOutlined,
+  MessageOutlined,
 } from '@ant-design/icons';
-import { Spin, Tag, Menu, Dropdown, Avatar, Tooltip } from 'antd';
+import { Spin, Tag, Menu, Dropdown, Avatar } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import styles from './index.less';
 
-const bugEvent = () => {
-  $crisp.push(['do', 'chat:show']);
-  $crisp.push(['do', 'chat:open']);
-  $crisp.push(['do', 'message:send', ['text', "I'd like to report a bug."]]);
-};
+// const bugEvent = () => {
+//   $crisp.push(['do', 'chat:show']);
+//   $crisp.push(['do', 'chat:open']);
+//   $crisp.push(['do', 'message:send', ['text', "I'd like to report a bug."]]);
+// };
 
 const chatEvent = () => {
   $crisp.push(['do', 'chat:show']);
@@ -24,19 +25,7 @@ const chatEvent = () => {
   // $crisp.push(['do', 'message:send', ['text', "I'd like to report a bug."]]);
 };
 
-const ReportBug = () => (
-  <Tooltip title="Report a bug">
-    <BugOutlined onClick={bugEvent} style={{ marginRight: 24 }} />
-  </Tooltip>
-);
-
-const ContactSupport = () => (
-  <span style={{ marginRight: 16 }}>
-    <Tooltip title="Chat with DeepHire support">
-      <QuestionCircleOutlined onClick={chatEvent} />
-    </Tooltip>
-  </span>
-);
+const ContactSupport = () => <QuestionCircleOutlined />;
 export default class GlobalHeaderRight extends PureComponent {
   getNoticeData() {
     const { notices = [] } = this.props;
@@ -99,14 +88,34 @@ export default class GlobalHeaderRight extends PureComponent {
         </Menu.Item>
       </Menu>
     );
+
+    const support = (
+      <Menu>
+        <Menu.Item onClick={chatEvent} key="liveChat">
+          <MessageOutlined />
+          Live Chat
+        </Menu.Item>
+
+        <Menu.Divider />
+        <Menu.Item onClick={() => window.open('https://help.deephire.com', '_blank')} key="support">
+          <BookOutlined />
+          Help Center
+        </Menu.Item>
+      </Menu>
+    );
     let className = styles.right;
     if (theme === 'dark') {
       className = `${styles.right}  ${styles.dark}`;
     }
     return (
       <div className={className}>
-        <ReportBug />
-        <ContactSupport />
+        <Dropdown overlay={support}>
+          <span className={`${styles.action} ${styles.account}`}>
+            <span>
+              <ContactSupport />
+            </span>
+          </span>
+        </Dropdown>
         {currentUser.name ? (
           <Dropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
