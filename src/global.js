@@ -31,24 +31,26 @@ window.addEventListener('sw.updated', e => {
     window.location.reload(true);
     return true;
   };
-  const key = `open${Date.now()}`;
-  const btn = (
-    <Button
-      type="primary"
-      onClick={() => {
-        notification.close(key);
-        reloadSW();
-      }}
-    >
-      Refresh
-    </Button>
-  );
-  notification.open({
-    message: 'New Update',
-    description: 'A new version of DeepHire is avaliable.',
-    btn,
-    key,
-    duration: null,
-    onClose: async () => {},
-  });
+  // const key = `open${Date.now()}`;
+  // const btn = (
+  //   <Button
+  //     type="primary"
+  //     onClick={() => {
+  //       notification.close(key);
+  //       reloadSW();
+  //     }}
+  //   >
+  //     Refresh
+  //   </Button>
+  // );
+
+  reloadSW();
+  // notification.open({
+  //   message: 'New Update',
+  //   description: 'A new version of DeepHire is avaliable.',
+  //   btn,
+  //   key,
+  //   duration: null,
+  //   onClose: reloadSW,
+  // });
 });
