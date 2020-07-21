@@ -7,7 +7,7 @@ import {
   SettingOutlined,
   QuestionCircleOutlined,
 } from '@ant-design/icons';
-import { Spin, Tag, Menu, Dropdown, Avatar, Tooltip, Badge } from 'antd';
+import { Spin, Tag, Menu, Dropdown, Avatar, Tooltip } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import styles from './index.less';
@@ -25,19 +25,15 @@ const chatEvent = () => {
 };
 
 const ReportBug = () => (
-  <Tooltip title="Report a bug here">
-    <Badge dot>
-      <BugOutlined onClick={bugEvent} style={{ marginRight: 24 }} />
-    </Badge>
+  <Tooltip title="Report a bug or issue">
+    <BugOutlined onClick={bugEvent} style={{ marginRight: 24 }} />
   </Tooltip>
 );
 
 const ContactSupport = () => (
   <span style={{ marginRight: 16 }}>
     <Tooltip title="Chat with DeepHire support">
-      {/* <Badge dot> */}
       <QuestionCircleOutlined onClick={chatEvent} />
-      {/* </Badge> */}
     </Tooltip>
   </span>
 );
