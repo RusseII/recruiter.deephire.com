@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Result, Drawer, Form, Button, Col, Row, Input, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import DirectLink from '@/components/InviteCandidates/DirectLink';
-import { scheduleInterview } from '@/services/api';
+import { scheduleInterview, getCandidateProfile, removeCandidateDocument } from '@/services/api';
 import CandidateDataCard from '@/components/Candidate/DataCard';
 import GlobalContext from '@/layouts/MenuContext';
 import SchedulePicker from './SchedulePicker';
@@ -49,7 +49,11 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   const Documents = props => (
     <>
       <div style={{ marginBottom: 8 }}>Add Candidate Documents</div>
-      <CandidateDataCard {...props} />
+      <CandidateDataCard
+        getCandidateProfile={getCandidateProfile}
+        removeCandidateDocument={removeCandidateDocument}
+        {...props}
+      />
 
       <Button
         type="primary"
