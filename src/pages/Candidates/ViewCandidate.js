@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Col, Row, Tooltip, Typography } from 'antd';
 
 import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
+import CandidateVideo from '@bit/russeii.deephire.candidate.video';
 import CandidateDataCard from '@/components/Candidate/DataCard';
 // import CandidateNotes from '@/components/Candidate/CandidateNotes';
 
@@ -18,7 +19,6 @@ import {
 } from '@/services/api';
 
 import QuestionsCard from '../../components/Candidate/Questions';
-import CandidateVideo from '../../components/Candidate/Video';
 import CommentsCard from '../../components/Candidate/CommentsCard';
 import { useVideo } from '@/services/hooks';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
