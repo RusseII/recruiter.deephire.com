@@ -258,14 +258,15 @@ const LiveInterviews = () => {
 
   const { email } = recruiterProfile || {};
   if (
-    email &&
-    (email === 'demo@deephire.com' ||
-      email.includes('deephire.com') ||
-      email.includes('assistinghands') ||
-      email.includes('russell') ||
-      email.includes('apple') ||
-      email.includes('rratcliffe57@gmail.com') ||
-      email.includes('klingcare'))
+    (email &&
+      (email === 'demo@deephire.com' ||
+        email.includes('deephire.com') ||
+        email.includes('assistinghands') ||
+        email.includes('russell') ||
+        email.includes('apple') ||
+        email.includes('rratcliffe57@gmail.com') ||
+        email.includes('klingcare'))) ||
+    email.includes('clockworkrecruiting.com')
   ) {
     const upcomingInterviewsFiltered = liveInterviews.filter(liveInterview => {
       return new Date(liveInterview.interviewTime[1]) > new Date();
