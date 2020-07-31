@@ -4,8 +4,9 @@ import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
-
 import AUTH_CONFIG from './auth0-variables';
+
+import { sendTgMsg } from '@/services/api';
 
 export default class Auth {
   tokenRenewalTimeout;
@@ -63,6 +64,9 @@ export default class Auth {
       'session:event',
       [[['user-signup', { time: new Date().toString() }, 'green']]],
     ]);
+
+    sendTgMsg({ event: 'signup', email, name, userMetadata });
+
     this.auth0.signup(
       {
         connection: AUTH_CONFIG.dbConnectionName,
