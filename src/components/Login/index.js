@@ -105,7 +105,7 @@ class Login extends Component {
           <Form onSubmit={this.handleSubmit}>
             {tabs.length ? (
               <React.Fragment>
-                <Tabs animated={false} activeKey={type} onChange={this.onSwitch}>
+                <Tabs centered animated={false} activeKey={type} onChange={this.onSwitch}>
                   {TabChildren}
                 </Tabs>
                 {otherChildren}

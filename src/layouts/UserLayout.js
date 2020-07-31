@@ -54,7 +54,7 @@ class UserLayout extends React.PureComponent {
                 <span className={styles.title}>DeepHire</span>
               </Link>
             </div>
-            <div className={styles.desc}>Find your Fit</div>
+            <div className={styles.desc}>Simple Video Interviews built for recruiting</div>
           </div>
           {children}
         </div>
