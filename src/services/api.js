@@ -589,4 +589,12 @@ export async function getEventbyId(interviewId) {
   });
 }
 
+export async function sendTgMsg(data) {
+  return request(`https://deephire.com/api/tg/`, {
+    method: 'POST',
+    headers: setHeaders(),
+    body: data,
+  });
+}
+
 export { newApi };
