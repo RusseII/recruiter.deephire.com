@@ -4,10 +4,11 @@ import '@ant-design/compatible/assets/index.css';
 import { Alert, Button, Input, Typography } from 'antd';
 import { connect } from 'dva';
 import React, { Component, useState } from 'react';
-
 import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
+import { sendTgMsg, resetPassword, createCompany, getInviteById } from '@/services/api';
+
 import Login from '@/components/Login';
-import { resetPassword, createCompany, getInviteById } from '@/services/api';
+
 import Auth from '../../Auth/Auth';
 import styles from './Login.less';
 
@@ -130,6 +131,7 @@ class LoginPage extends Component {
             _id = ObjectID();
             const companyData = { _id, owner: values.email, companyName: values.company };
             createCompany(companyData);
+            sendTgMsg({ event: 'signup', email: values.email, companyName: values.company });
           }
 
           $crisp.push([
