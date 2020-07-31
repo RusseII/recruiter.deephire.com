@@ -590,11 +590,7 @@ export async function getEventbyId(interviewId) {
 }
 
 export async function sendTgMsg(data) {
-  return request(`https://deephire.com/api/tg/`, {
-    method: 'POST',
-    headers: setHeaders(),
-    body: data,
-  });
+  navigator.sendBeacon('https://deephire.com/api/tg', JSON.stringify(data));
 }
 
 export { newApi };
