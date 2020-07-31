@@ -1,9 +1,7 @@
 /* global $crisp */
-import { FacebookOutlined, GoogleOutlined } from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Alert, Button, Input, Divider, Typography } from 'antd';
-import { LinkedInLoginButton } from 'react-social-login-buttons';
+import { Alert, Button, Input, Typography } from 'antd';
 import { connect } from 'dva';
 import React, { Component, useState } from 'react';
 
@@ -171,10 +169,10 @@ class LoginPage extends Component {
             }}
           >
             <Tab key="account" tab="Login">
-              <LinkedInLoginButton align="center" size={40} onClick={auth.loginWithLinkedin}>
+              {/* <LinkedInLoginButton align="center" size={40} onClick={auth.loginWithLinkedin}>
                 <span style={{ marginLeft: -18 }}>Login with Linkedin</span>
               </LinkedInLoginButton>
-              <Divider>or</Divider>
+              <Divider>or</Divider> */}
 
               <Email name="email" placeholder="company email" defaultValue={signupEmail} />
               <Password
@@ -184,7 +182,7 @@ class LoginPage extends Component {
               />
             </Tab>
 
-            <Tab key="signUp" tab="Sign up">
+            <Tab key="signUp" tab="Sign Up">
               {invited ? (
                 <InvitedText createdByName={createdByName} companyName={companyName} />
               ) : (
@@ -209,37 +207,13 @@ class LoginPage extends Component {
               />
             </Tab>
 
-            <Submit style={{ marginTop: -24 }} loading={submitting}>
+            <Submit style={{ marginTop: -24, marginBottom: 0 }} loading={submitting}>
               {type === 'account' ? 'Login' : 'Sign up'}
             </Submit>
-            <div className={styles.other}>
-              {type === 'account' && (
-                <>
-                  Or Login With
-                  <Button
-                    onClick={auth.loginWithGoogle}
-                    shape="circle"
-                    size="medium"
-                    icon={<GoogleOutlined />}
-                    style={{ marginLeft: 16 }}
-                  />
-                  <Button
-                    onClick={auth.loginWithFacebook}
-                    shape="circle"
-                    size="medium"
-                    icon={<FacebookOutlined />}
-                    style={{ marginLeft: 16 }}
-                  />
-                </>
-              )}
-              <Button
-                style={{ float: 'right' }}
-                onClick={() => this.setForgotPass(true)}
-                type="link"
-              >
-                Forgot Password
-              </Button>
-            </div>
+            <Button style={{ float: 'right' }} onClick={() => this.setForgotPass(true)} type="link">
+              Forgot Password
+            </Button>
+            {/* </div> */}
           </Login>
         ) : (
           <ForgotPassScreen setForgotPass={() => this.setForgotPass()} />
