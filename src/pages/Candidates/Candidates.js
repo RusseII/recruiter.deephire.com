@@ -17,6 +17,7 @@ import {
   BackTop,
   Select,
   Space,
+  Pagination,
 } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import { ReloadOutlined } from '@ant-design/icons';
@@ -48,6 +49,7 @@ const Candidates = () => {
   const [archives, setArchives] = useState(tab === '2');
   const [selectFilter, setSelectFilter] = useState([]);
   const [reload, setReload] = useState(false);
+  const [pageInfo, setPageInfo] = useState({ page: 1, pageSize: 9 });
 
   const [filterByTeam, setFilterByTeam] = useState([]);
 
@@ -160,6 +162,8 @@ const Candidates = () => {
     getData();
   };
 
+  const startPage = pageInfo.page * pageInfo.pageSize;
+  const pageData = filteredData.slice(startPage - pageInfo.pageSize, startPage);
   return (
     <>
       <BackTop />
@@ -323,7 +327,7 @@ const Candidates = () => {
               rowKey="id"
               grid={{ gutter: 24, xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }}
               loading={loading}
-              dataSource={filteredData}
+              dataSource={pageData}
               renderItem={item => (
                 <List.Item key={item.id}>
                   <CandidateCard item={item} />
@@ -333,6 +337,14 @@ const Candidates = () => {
           )}
         </ConfigProvider>
       </Checkbox.Group>
+      <Pagination
+        style={{ float: 'right' }}
+        defaultPageSize={pageInfo.pageSize}
+        defaultCurrent={1}
+        hideOnSinglePage
+        total={filteredData.length || 1}
+        onChange={(page, pageSize) => setPageInfo({ page, pageSize })}
+      />
     </>
   );
 };
