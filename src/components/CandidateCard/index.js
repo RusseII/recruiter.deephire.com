@@ -2,6 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Card, Checkbox } from 'antd';
 import React from 'react';
 import router from 'umi/router';
+import Link from 'umi/link';
 import styles from './index.less';
 
 const readableTime = require('readable-timestamp');
@@ -33,7 +34,13 @@ const CandidateCard = ({ item }) => (
       <div style={{ margin: '-12px 0px', padding: '12px 0px' }} onClick={e => e.stopPropagation()}>
         <Checkbox style={{ width: '100%', height: '100%' }} value={item} />
       </div>,
-      <a style={{ width: '100%', height: '100%' }}>View</a>,
+      <Link
+        to={`/one-way/candidates/candidate/?id=${item._id}`}
+        onClick={e => e.stopPropagation()}
+        style={{ width: '100%', height: '100%' }}
+      >
+        View
+      </Link>,
     ]}
   >
     <Card.Meta
