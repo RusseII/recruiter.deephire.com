@@ -40,7 +40,9 @@ import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const Candidates = () => {
-  const { tab = '1' } = lowerCaseQueryParams(window.location.search);
+  const { tab = '1', page = '1', pagesize: pageSize = '9' } = lowerCaseQueryParams(
+    window.location.search
+  );
   const [activeTab, setActiveTab] = useState(tab);
 
   const [selectedCards, setSelectedCards] = useState([]);
@@ -49,7 +51,11 @@ const Candidates = () => {
   const [archives, setArchives] = useState(tab === '2');
   const [selectFilter, setSelectFilter] = useState([]);
   const [reload, setReload] = useState(false);
-  const [pageInfo, setPageInfo] = useState({ page: 1, pageSize: 9 });
+  // const [pageInfo, setPageInfo] = useState({ page, pageSize });
+
+  const setPageData = (page, pageSize) => {
+    router.push(`/one-way/candidates/?tab=${tab}&page=${page}&pageSize=${pageSize}`);
+  };
 
   const [filterByTeam, setFilterByTeam] = useState([]);
 
@@ -162,8 +168,8 @@ const Candidates = () => {
     getData();
   };
 
-  const startPage = pageInfo.page * pageInfo.pageSize;
-  const pageData = filteredData.slice(startPage - pageInfo.pageSize, startPage);
+  const startPage = page * pageSize;
+  const pageData = filteredData.slice(startPage - pageSize, startPage);
   return (
     <>
       <BackTop />
@@ -339,11 +345,11 @@ const Candidates = () => {
       </Checkbox.Group>
       <Pagination
         style={{ float: 'right' }}
-        defaultPageSize={pageInfo.pageSize}
-        defaultCurrent={1}
+        defaultPageSize={pageSize}
+        defaultCurrent={Number(page)}
         hideOnSinglePage
         total={filteredData.length || 1}
-        onChange={(page, pageSize) => setPageInfo({ page, pageSize })}
+        onChange={(page, pageSize) => setPageData(page, pageSize)}
       />
     </>
   );
