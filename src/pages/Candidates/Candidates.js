@@ -169,7 +169,7 @@ const Candidates = () => {
       <BackTop />
       <AntPageHeader
         title="Candidates"
-        subTitle="View completed one way video interviews"
+        subTitle="View completed one-way video interviews"
         onBack={null}
         footer={
           <Tabs
