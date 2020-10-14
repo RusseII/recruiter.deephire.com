@@ -1,13 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Result, Drawer, Form, Button, Col, Row, Input, Select } from 'antd';
+import { Result, Drawer, Form, Button, Col, Row, Input, Select, Switch, Collapse } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import ReactQuill from 'react-quill';
 import DirectLink from '@/components/InviteCandidates/DirectLink';
 import { scheduleInterview, getCandidateProfile, removeCandidateDocument } from '@/services/api';
 import CandidateDataCard from '@/components/Candidate/DataCard';
 import GlobalContext from '@/layouts/MenuContext';
 import SchedulePicker from './SchedulePicker';
+import 'react-quill/dist/quill.snow.css';
+
+const { Panel } = Collapse;
 
 const { Option } = Select;
+
+const customPanelStyle = {
+  backgroundColor: '#f0f2f5',
+  border: 'none',
+};
 
 const ScheduleButton = ({ execute, data, customButton }) => {
   const globalData = useContext(GlobalContext);
@@ -73,10 +82,9 @@ const ScheduleButton = ({ execute, data, customButton }) => {
         </Button>
       )}
       <Drawer
-        width={window.innerWidth > 720 ? 378 : null}
+        width={window.innerWidth > 720 ? 420 : null}
         title="Schedule Interview"
         drawerStyle={{ backgroundColor: '#f0f2f5', overflowY: 'scroll' }}
-        // width={600}
         onClose={() => {
           setVisible(false);
           setScheduleProgress('started');
@@ -118,7 +126,6 @@ const ScheduleButton = ({ execute, data, customButton }) => {
                 <Option value="client">Client + Candidate (Send Out)</Option>
               </Select>
             </Form.Item>
-            {type === 'client' && <JobName />}
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
@@ -155,6 +162,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
             </Row>
             {type === 'client' && <ClientInfo />}
 
+            <AdvancedSettings type={type} />
             <Button
               loading={loading}
               htmlType="submit"
@@ -175,11 +183,74 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   );
 };
 
+const AdvancedSettings = ({ type }) => (
+  <>
+    <Collapse className="collapse" bordered={false}>
+      <Panel
+        style={customPanelStyle}
+        className="removeCollapsePadding"
+        header="Advanced Configuration"
+        key="1"
+      >
+        <Form.Item label="Record Interview" name="shouldRecord">
+          <Switch checkedChildren="Yes" unCheckedChildren="No" defaultChecked />
+        </Form.Item>
+        <JobName />
+        {/* > */}
+        {type === 'client' && (
+          <>
+            <ExtraClientInfo />
+            <ClientContact />
+            <PrepRoom />
+            <SendOutTemplates />
+          </>
+        )}
+        {type === 'recruiter' && (
+          <>
+            <Branch />
+            <BranchTemplate />
+          </>
+        )}
+      </Panel>
+    </Collapse>
+  </>
+);
+
+const Branch = () => (
+  <Row gutter={16}>
+    <Col span={24}>
+      <Form.Item name="phone" label="Phone Number">
+        <Input placeholder="Your phone number" />
+      </Form.Item>
+    </Col>
+  </Row>
+);
+
 const JobName = () => (
   <Row gutter={16}>
     <Col span={24}>
       <Form.Item name="jobName" label="Job Title">
         <Input placeholder="Name of the Role" />
+      </Form.Item>
+    </Col>
+  </Row>
+);
+
+const ClientContact = () => (
+  <Row gutter={16}>
+    <span style={{ marginLeft: 8 }}>Who should the client reach out to after the interview?</span>
+    <Col span={12}>
+      <Form.Item name="clientContactName" label="Contact">
+        <Input placeholder="Contact name" />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item
+        name="clientContactEmail"
+        label="Client Contact Email"
+        rules={[{ type: 'email', message: 'The input is not valid E-mail!' }]}
+      >
+        <Input placeholder="Contact email" />
       </Form.Item>
     </Col>
   </Row>
@@ -205,6 +276,59 @@ const ClientInfo = () => (
         ]}
       >
         <Input placeholder="Client email" />
+      </Form.Item>
+    </Col>
+  </Row>
+);
+
+const ExtraClientInfo = () => (
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item name="clientTitle" label="Client Title">
+        <Input placeholder="Client's job position" />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item name="clientCompany" label="Client Company">
+        <Input placeholder="Client's company" />
+      </Form.Item>
+    </Col>
+  </Row>
+);
+
+const BranchTemplate = () => (
+  <Row gutter={16}>
+    <Col span={24}>
+      {/* application crashes without the initialValue='' seems to be a bug with quil in form.  */}
+      <Form.Item name="recruiterTemplate" label="Recruiter Template" initialValue="">
+        <ReactQuill placeholder="Add template for the recruiter" />
+      </Form.Item>
+    </Col>
+  </Row>
+);
+
+const SendOutTemplates = () => (
+  <Row gutter={16}>
+    <Col span={24}>
+      {/* application crashes without the initialValue='' seems to be a bug with quil in form.  */}
+      <Form.Item name="candidateTemplate" label="Candidate Prep Template" initialValue="">
+        <ReactQuill placeholder="Add template for the candidate" />
+      </Form.Item>
+    </Col>
+    <Col span={24}>
+      {/* application crashes without the initialValue='' seems to be a bug with quil in form.  */}
+      <Form.Item name="clientTemplate" label="Client Template" initialValue="">
+        <ReactQuill placeholder="Add template for the client" />
+      </Form.Item>
+    </Col>
+  </Row>
+);
+
+const PrepRoom = () => (
+  <Row gutter={16}>
+    <Col span={24}>
+      <Form.Item label="Prep Room Times" name="prepRoomTime">
+        <SchedulePicker />
       </Form.Item>
     </Col>
   </Row>
