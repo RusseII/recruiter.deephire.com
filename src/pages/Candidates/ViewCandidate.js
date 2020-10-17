@@ -5,8 +5,6 @@ import { Col, Row, Tooltip, Typography } from 'antd';
 import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import CandidateVideo from '@bit/russeii.deephire.candidate.video';
 import CandidateDataCard from '@/components/Candidate/DataCard';
-// import CandidateNotes from '@/components/Candidate/CandidateNotes';
-
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 
 import {
@@ -63,21 +61,10 @@ const ViewCandidate = ({ location }) => {
     });
   };
 
-  // const liveInterviews = async () => {
-  //   const liveData = await getLiveInterview(liveId);
-  //   const { recordingUrl } = liveData;
-  //   const lastRecording = recordingUrl.slice(-1)[0];
-  //   setLiveInterviewData(liveData);
-  //   videoPlayerData.setVideoUrl(lastRecording);
-  // };
-
   useEffect(() => {
     if (id) {
       getArchiveData();
     }
-    // if (liveId) {
-    //   liveInterviews();
-    // }
   }, [videoPlayerData.reload, archives]);
 
   const { candidateEmail, interviewName, userName, userId, candidateName } = {
@@ -108,35 +95,9 @@ const ViewCandidate = ({ location }) => {
           />
         }
       />
-      {/* <Button
-        style={{ marginBottom: '20px' }}
-        onClick={
-          liveId
-            ? () => router.push(`/live-interviews?tab=2`)
-            : () => router.push(`/candidates/candidates`)
-        }
-        type="secondary"
-      >
-        <LeftOutlined />
-        {getWidth() < 400 ? 'Back' : liveId ? 'Back to Live Interviews' : 'Back to Candidates'}
-      </Button>
-      <div style={{ float: 'right', marginBottom: '20px' }}>
-        <ShareCandidateButton candidateData={[{ ...candidateData, liveData }]} />
-      </div> */}
 
       <Row type="flex" gutter={24}>
         <Col xs={{ span: 24, order: 2 }} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          {/* <Space size="large" direction="vertical"> */}
-          {/* <CandidateDataCard
-            style={{ marginBottom: 24 }}
-            userId={userId}
-            userName={userName || candidateName}
-            interviewName={interviewName}
-            email={candidateEmail}
-            editable
-            videoPlayerData.setVideoUrl={videoPlayerData.setVideoUrl}
-          /> */}
-
           {id ? (
             <QuestionsCard
               candidateData={candidateData}
@@ -163,8 +124,6 @@ const ViewCandidate = ({ location }) => {
             getCandidateProfile={getCandidateProfile}
             removeCandidateDocument={removeCandidateDocument}
           />
-
-          {/* </Space> */}
         </Col>
         <Col
           xs={{ span: 24, order: 1 }}
