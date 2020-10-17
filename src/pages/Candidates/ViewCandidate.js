@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-import { Col, Row, Tooltip, Typography } from 'antd';
+import { Col, Row, Tooltip, Typography, Collapse, Card } from 'antd';
 
 import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import CandidateVideo from '@bit/russeii.deephire.candidate.video';
+import ReactQuill from 'react-quill';
 import CandidateDataCard from '@/components/Candidate/DataCard';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
+import 'react-quill/dist/quill.snow.css';
 
 import {
   addComment,
@@ -23,6 +25,8 @@ import { useVideo } from '@/services/hooks';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 import ArchiveButton from '@/components/ArchiveButton';
 
+const { Panel } = Collapse;
+
 const interval = 1000000;
 
 const ViewCandidate = ({ location }) => {
@@ -30,6 +34,8 @@ const ViewCandidate = ({ location }) => {
   const [candidateData, setCandidateData] = useState(null);
   const [archives, setArchives] = useState(false);
   const { mutate, data: liveData } = useLive(liveId);
+
+  // const renderNotes = useMemo(() => notesCard(liveData), [liveData]);
 
   const videoPlayerData = useVideo();
 
@@ -123,7 +129,9 @@ const ViewCandidate = ({ location }) => {
             editable
             getCandidateProfile={getCandidateProfile}
             removeCandidateDocument={removeCandidateDocument}
+            style={{ marginBottom: 24 }}
           />
+          <NotesCard data={liveData} />
         </Col>
         <Col
           xs={{ span: 24, order: 1 }}
@@ -140,4 +148,22 @@ const ViewCandidate = ({ location }) => {
   );
 };
 
+const NotesCard = React.memo(({ data }) => {
+  const participants = Object.keys(data?.participants || {});
+  return (
+    <Card title="Live Interview Notes">
+      <Collapse accordion>
+        {participants?.map(name => (
+          <Panel header={name} key={name}>
+            <ReactQuill
+              readOnly
+              modules={{ toolbar: false }}
+              value={data?.participants?.[name]?.notes}
+            />
+          </Panel>
+        ))}
+      </Collapse>
+    </Card>
+  );
+});
 export default ViewCandidate;
