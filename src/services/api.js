@@ -244,6 +244,7 @@ export async function getLiveInterviews() {
   });
 }
 
+// use hook instead
 export async function getLiveInterview(id) {
   return request(`${newApi}/live/${id}`, {
     method: 'GET',

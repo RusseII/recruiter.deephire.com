@@ -13,10 +13,11 @@ import {
   addComment,
   removeComment,
   getVideo,
-  getLiveInterview,
   getCandidateProfile,
   removeCandidateDocument,
 } from '@/services/api';
+
+import { useLive } from '@/services/apiHooks';
 
 import QuestionsCard from '../../components/Candidate/Questions';
 import CommentsCard from '../../components/Candidate/CommentsCard';
@@ -29,15 +30,23 @@ const interval = 1000000;
 const ViewCandidate = ({ location }) => {
   const { id, liveid: liveId } = lowerCaseQueryParams(location.search);
   const [candidateData, setCandidateData] = useState(null);
-  const [liveInterviewData, setLiveInterviewData] = useState(null);
   const [archives, setArchives] = useState(false);
+  const { mutate, data: liveData } = useLive(liveId);
 
-  const comments = liveInterviewData?.comments || [];
+  const videoPlayerData = useVideo();
+
+  useEffect(() => {
+    if (liveData) {
+      const lastRecording = liveData?.recordingUrl?.slice(-1)[0];
+      videoPlayerData.setVideoUrl(lastRecording);
+    }
+  }, [liveData]);
+
+  const comments = liveData?.comments || [];
   const marks = {};
   comments.forEach(comment => {
     marks[comment.time * interval] = '';
   });
-  const videoPlayerData = useVideo();
 
   const getArchiveData = async () => {
     await getVideo(id).then(data => {
@@ -54,25 +63,25 @@ const ViewCandidate = ({ location }) => {
     });
   };
 
-  const liveInterviews = async () => {
-    const liveData = await getLiveInterview(liveId);
-    const { recordingUrl } = liveData;
-    const lastRecording = recordingUrl.slice(-1)[0];
-    setLiveInterviewData(liveData);
-    videoPlayerData.setVideoUrl(lastRecording);
-  };
+  // const liveInterviews = async () => {
+  //   const liveData = await getLiveInterview(liveId);
+  //   const { recordingUrl } = liveData;
+  //   const lastRecording = recordingUrl.slice(-1)[0];
+  //   setLiveInterviewData(liveData);
+  //   videoPlayerData.setVideoUrl(lastRecording);
+  // };
 
   useEffect(() => {
     if (id) {
       getArchiveData();
     }
-    if (liveId) {
-      liveInterviews();
-    }
+    // if (liveId) {
+    //   liveInterviews();
+    // }
   }, [videoPlayerData.reload, archives]);
 
   const { candidateEmail, interviewName, userName, userId, candidateName } = {
-    ...liveInterviewData,
+    ...liveData,
     ...candidateData,
   };
 
@@ -95,7 +104,7 @@ const ViewCandidate = ({ location }) => {
           <ShareCandidateButton
             buttonText="Share Candidate"
             setControlKeys={videoPlayerData.setControlKeys}
-            candidateData={[{ ...candidateData, liveInterviewData }]}
+            candidateData={[{ ...candidateData, liveData }]}
           />
         }
       />
@@ -112,7 +121,7 @@ const ViewCandidate = ({ location }) => {
         {getWidth() < 400 ? 'Back' : liveId ? 'Back to Live Interviews' : 'Back to Candidates'}
       </Button>
       <div style={{ float: 'right', marginBottom: '20px' }}>
-        <ShareCandidateButton candidateData={[{ ...candidateData, liveInterviewData }]} />
+        <ShareCandidateButton candidateData={[{ ...candidateData, liveData }]} />
       </div> */}
 
       <Row type="flex" gutter={24}>
@@ -138,7 +147,8 @@ const ViewCandidate = ({ location }) => {
             />
           ) : (
             <CommentsCard
-              liveInterviewData={liveInterviewData}
+              liveInterviewData={liveData}
+              mutate={mutate}
               {...videoPlayerData}
               editable={{ addComment, removeComment }}
               style={{ marginBottom: 24 }}
