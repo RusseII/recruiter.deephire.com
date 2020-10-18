@@ -6,7 +6,7 @@ import DirectLink from '@/components/InviteCandidates/DirectLink';
 import { scheduleInterview, getCandidateProfile, removeCandidateDocument } from '@/services/api';
 import CandidateDataCard from '@/components/Candidate/DataCard';
 import GlobalContext from '@/layouts/MenuContext';
-import SchedulePicker from './SchedulePicker';
+import SchedulePicker, { SingleDate } from './SchedulePicker';
 import 'react-quill/dist/quill.snow.css';
 
 const { Panel } = Collapse;
@@ -202,6 +202,7 @@ const AdvancedSettings = ({ type }) => (
             <ExtraClientInfo />
             <ClientContact />
             <PrepRoom />
+            <FollowUpTime />
             <SendOutTemplates />
           </>
         )}
@@ -237,24 +238,52 @@ const JobName = () => (
 );
 
 const ClientContact = () => (
+  <>
+    <Row gutter={16}>
+      <span style={{ marginLeft: 8 }}>Who should the client reach out to after the interview?</span>
+      <Col span={12}>
+        <Form.Item name="clientContactName" label="Contact">
+          <Input placeholder="Contact name" />
+        </Form.Item>
+      </Col>
+      <Col span={12}>
+        <Form.Item
+          name="clientContactEmail"
+          label="Client Contact Email"
+          rules={[{ type: 'email', message: 'The input is not valid E-mail!' }]}
+        >
+          <Input placeholder="Contact email" />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row>
+      <Col span={24}>
+        <Form.Item name="phone" label="Contact Phone Number">
+          <Input placeholder="Contact phone number" />
+        </Form.Item>
+      </Col>
+    </Row>
+  </>
+);
+
+const FollowUpTime = () => (
   <Row gutter={16}>
-    <span style={{ marginLeft: 8 }}>Who should the client reach out to after the interview?</span>
+    <span style={{ marginLeft: 8 }}>
+      After the interview - when are you meeting with the candidate/client?
+    </span>
     <Col span={12}>
-      <Form.Item name="clientContactName" label="Contact">
-        <Input placeholder="Contact name" />
+      <Form.Item name="candidateDebriefTime" label="Candidate Debrief Time">
+        <SingleDate />
       </Form.Item>
     </Col>
     <Col span={12}>
-      <Form.Item
-        name="clientContactEmail"
-        label="Client Contact Email"
-        rules={[{ type: 'email', message: 'The input is not valid E-mail!' }]}
-      >
-        <Input placeholder="Contact email" />
+      <Form.Item name="clientDebriefTime" label="Client Debrief Time">
+        <SingleDate />
       </Form.Item>
     </Col>
   </Row>
 );
+
 const ClientInfo = () => (
   <Row gutter={16}>
     <Col span={12}>
