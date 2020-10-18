@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Col, Row, Tooltip, Typography, Collapse, Card } from 'antd';
+import { Col, Row, Tooltip, Typography, Collapse, Card, Rate } from 'antd';
 
 import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import CandidateVideo from '@bit/russeii.deephire.candidate.video';
@@ -151,10 +151,13 @@ const ViewCandidate = ({ location }) => {
 const NotesCard = React.memo(({ data }) => {
   const participants = Object.keys(data?.participants || {});
   return (
-    <Card title="Live Interview Notes">
+    <Card title="Live Interview Notes & Feedback">
       <Collapse accordion>
         {participants?.map(name => (
           <Panel header={name} key={name}>
+            <div style={{ marginBottom: 8 }}>
+              Interview Rating: <Rate value={data?.participants?.[name]?.feedback} disabled />
+            </div>
             <ReactQuill
               readOnly
               modules={{ toolbar: false }}
