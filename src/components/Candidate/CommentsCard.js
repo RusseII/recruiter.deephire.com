@@ -90,7 +90,7 @@ const QuestionCard = props => {
                 const simplifiedComments = liveInterviewData.comments.filter(
                   comment => comment._id !== _id
                 );
-                mutate({ ...liveInterviewData, comments: simplifiedComments });
+                mutate({ ...liveInterviewData, comments: simplifiedComments }, false);
                 await removeComment(
                   liveInterviewData._id,
                   _id,
