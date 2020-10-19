@@ -13,9 +13,8 @@ const ShareInterview = ({ url }) => {
       >
         <Popover
           title="Share link to the Interview"
-          // content={<Text copyable>{url}</Text>}
           placement='left'
-          content={<Content url={url}/>}
+          content={<ShareInterviewContent url={url}/>}
           trigger="click"
           visible={visibility.clicked}
           onVisibleChange={visible => setVisibility({ hovered: false, clicked: visible })}
@@ -27,13 +26,14 @@ const ShareInterview = ({ url }) => {
   };
 
 
-  const Content = ({url}) => {
+  export const ShareInterviewContent = ({url}) => {
     const [role, setRole] = useState<'candidate' | 'recruiter' | 'client' | null>(null)
   
 
     return (
-      <Space size='middle' direction="vertical">
+      <Space size='middle' style={{width: '100%'}} direction="vertical">
      <div>This link is unique for the role of the person you would like to share with.</div>
+     <span>Do not share it with anyone except for the selected role.</span>
      <Space>Share with a
       <Radio.Group onChange={(e) => setRole(e.target.value)}>
       <Radio.Button value="candidate">Candidate</Radio.Button>
