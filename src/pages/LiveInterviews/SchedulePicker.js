@@ -58,13 +58,14 @@ const Range = ({ onChange }) => {
   );
 };
 
-export const SingleDate = () => {
-  function disabledDate(current) {
-    const tooEarly = current && current < moment().startOf('day');
+// why doesnt this work in a form??
+// export const SingleDate = () => {
+//   function disabledDate(current) {
+//     const tooEarly = current && current < moment().startOf('day');
 
-    return tooEarly;
-  }
-  return <DatePicker disabledDate={disabledDate} {...calendarProps} />;
-};
+//     return tooEarly;
+//   }
+//   return <DatePicker disabledDate={disabledDate} {...calendarProps} />;
+// };
 
 export default Range;

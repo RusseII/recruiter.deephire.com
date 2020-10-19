@@ -1,12 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Result, Drawer, Form, Button, Col, Row, Input, Select, Switch, Collapse } from 'antd';
+import {
+  Result,
+  Drawer,
+  Form,
+  Button,
+  Col,
+  Row,
+  Input,
+  Select,
+  Switch,
+  Collapse,
+  DatePicker,
+} from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ReactQuill from 'react-quill';
-import DirectLink from '@/components/InviteCandidates/DirectLink';
+import moment from 'moment';
+import { ShareInterviewContent } from '@/components/ShareInterview';
 import { scheduleInterview, getCandidateProfile, removeCandidateDocument } from '@/services/api';
 import CandidateDataCard from '@/components/Candidate/DataCard';
 import GlobalContext from '@/layouts/MenuContext';
-import SchedulePicker, { SingleDate } from './SchedulePicker';
+import SchedulePicker from './SchedulePicker';
 import 'react-quill/dist/quill.snow.css';
 
 const { Panel } = Collapse;
@@ -18,6 +31,21 @@ const customPanelStyle = {
   border: 'none',
 };
 
+function disabledDate(current) {
+  const tooEarly = current && current < moment().startOf('day');
+
+  return tooEarly;
+}
+
+const calendarProps = {
+  showTime: {
+    minuteStep: 15,
+    hideDisabledOptions: true,
+    use12Hours: true,
+    format: 'h:mm a',
+  },
+  format: 'MM-DD h:mm a',
+};
 const ScheduleButton = ({ execute, data, customButton }) => {
   const globalData = useContext(GlobalContext);
   const { recruiterProfile } = globalData;
@@ -33,6 +61,11 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   const [linkToInterview, setLinkToInterview] = useState('loading...');
 
   const onFinish = async values => {
+    // eslint-disable-next-line no-param-reassign
+    // values.candidateDebriefTime = values.candidateDebriefTime?.toString();
+    // eslint-disable-next-line no-param-reassign
+    // values.clientDebriefTime = values.clientDebriefTime?.toString();
+    // console.log({ values });
     setLoading(true);
     const interviewData = await scheduleInterview(
       { ...values, createdByTeam },
@@ -92,16 +125,14 @@ const ScheduleButton = ({ execute, data, customButton }) => {
         visible={visible}
       >
         {scheduleProgress === 'finished' && (
-          <Result
-            style={{ padding: 0 }}
-            status="success"
-            title={data ? 'Successfully Updated' : 'Successfully Scheduled'}
-            subTitle="Please share the below link with the candidate, and use that link to join the interview when it is your interview time."
-            extra={[
-              <DirectLink link={linkToInterview} />,
-              // <Button>Schedule another</Button>,
-            ]}
-          />
+          <>
+            <Result
+              style={{ padding: 0, marginBottom: 24 }}
+              status="success"
+              title={data ? 'Successfully Updated' : 'Successfully Scheduled'}
+            />
+            <ShareInterviewContent url={linkToInterview} />
+          </>
         )}
 
         {scheduleProgress === 'documents' && (
@@ -273,12 +304,12 @@ const FollowUpTime = () => (
     </span>
     <Col span={12}>
       <Form.Item name="candidateDebriefTime" label="Candidate Debrief Time">
-        <SingleDate />
+        <DatePicker disabledDate={disabledDate} {...calendarProps} />
       </Form.Item>
     </Col>
     <Col span={12}>
       <Form.Item name="clientDebriefTime" label="Client Debrief Time">
-        <SingleDate />
+        <DatePicker disabledDate={disabledDate} {...calendarProps} />
       </Form.Item>
     </Col>
   </Row>
