@@ -82,7 +82,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
         </Button>
       )}
       <Drawer
-        width={window.innerWidth > 720 ? 420 : null}
+        width={window.innerWidth > 720 ? 430 : null}
         title="Schedule Interview"
         drawerStyle={{ backgroundColor: '#f0f2f5', overflowY: 'scroll' }}
         onClose={() => {
