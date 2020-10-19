@@ -131,7 +131,7 @@ const ViewCandidate = ({ location }) => {
             removeCandidateDocument={removeCandidateDocument}
             style={{ marginBottom: 24 }}
           />
-          <NotesCard data={liveData} />
+          {liveId && <NotesCard data={liveData} />}
         </Col>
         <Col
           xs={{ span: 24, order: 1 }}
