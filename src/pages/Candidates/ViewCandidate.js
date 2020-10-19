@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
-import { Col, Row, Tooltip, Typography } from 'antd';
+import { Col, Row, Tooltip, Typography, Collapse, Card, Rate } from 'antd';
 
 import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import CandidateVideo from '@bit/russeii.deephire.candidate.video';
+import ReactQuill from 'react-quill';
 import CandidateDataCard from '@/components/Candidate/DataCard';
-// import CandidateNotes from '@/components/Candidate/CandidateNotes';
-
 import ShareCandidateButton from '@/components/ShareCandidateButton';
+import 'react-quill/dist/quill.snow.css';
 
 import {
   addComment,
   removeComment,
   getVideo,
-  getLiveInterview,
   getCandidateProfile,
   removeCandidateDocument,
 } from '@/services/api';
+
+import { useLive } from '@/services/apiHooks';
 
 import QuestionsCard from '../../components/Candidate/Questions';
 import CommentsCard from '../../components/Candidate/CommentsCard';
@@ -24,20 +25,32 @@ import { useVideo } from '@/services/hooks';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 import ArchiveButton from '@/components/ArchiveButton';
 
+const { Panel } = Collapse;
+
 const interval = 1000000;
 
 const ViewCandidate = ({ location }) => {
   const { id, liveid: liveId } = lowerCaseQueryParams(location.search);
   const [candidateData, setCandidateData] = useState(null);
-  const [liveInterviewData, setLiveInterviewData] = useState(null);
   const [archives, setArchives] = useState(false);
+  const { mutate, data: liveData } = useLive(liveId);
 
-  const comments = liveInterviewData?.comments || [];
+  // const renderNotes = useMemo(() => notesCard(liveData), [liveData]);
+
+  const videoPlayerData = useVideo();
+
+  useEffect(() => {
+    if (liveData) {
+      const lastRecording = liveData?.recordingUrl?.slice(-1)[0];
+      videoPlayerData.setVideoUrl(lastRecording);
+    }
+  }, [liveData]);
+
+  const comments = liveData?.comments || [];
   const marks = {};
   comments.forEach(comment => {
     marks[comment.time * interval] = '';
   });
-  const videoPlayerData = useVideo();
 
   const getArchiveData = async () => {
     await getVideo(id).then(data => {
@@ -54,25 +67,14 @@ const ViewCandidate = ({ location }) => {
     });
   };
 
-  const liveInterviews = async () => {
-    const liveData = await getLiveInterview(liveId);
-    const { recordingUrl } = liveData;
-    const lastRecording = recordingUrl.slice(-1)[0];
-    setLiveInterviewData(liveData);
-    videoPlayerData.setVideoUrl(lastRecording);
-  };
-
   useEffect(() => {
     if (id) {
       getArchiveData();
     }
-    if (liveId) {
-      liveInterviews();
-    }
   }, [videoPlayerData.reload, archives]);
 
   const { candidateEmail, interviewName, userName, userId, candidateName } = {
-    ...liveInterviewData,
+    ...liveData,
     ...candidateData,
   };
 
@@ -95,39 +97,13 @@ const ViewCandidate = ({ location }) => {
           <ShareCandidateButton
             buttonText="Share Candidate"
             setControlKeys={videoPlayerData.setControlKeys}
-            candidateData={[{ ...candidateData, liveInterviewData }]}
+            candidateData={[{ ...candidateData, liveInterviewData: liveData }]}
           />
         }
       />
-      {/* <Button
-        style={{ marginBottom: '20px' }}
-        onClick={
-          liveId
-            ? () => router.push(`/live-interviews?tab=2`)
-            : () => router.push(`/candidates/candidates`)
-        }
-        type="secondary"
-      >
-        <LeftOutlined />
-        {getWidth() < 400 ? 'Back' : liveId ? 'Back to Live Interviews' : 'Back to Candidates'}
-      </Button>
-      <div style={{ float: 'right', marginBottom: '20px' }}>
-        <ShareCandidateButton candidateData={[{ ...candidateData, liveInterviewData }]} />
-      </div> */}
 
       <Row type="flex" gutter={24}>
         <Col xs={{ span: 24, order: 2 }} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          {/* <Space size="large" direction="vertical"> */}
-          {/* <CandidateDataCard
-            style={{ marginBottom: 24 }}
-            userId={userId}
-            userName={userName || candidateName}
-            interviewName={interviewName}
-            email={candidateEmail}
-            editable
-            videoPlayerData.setVideoUrl={videoPlayerData.setVideoUrl}
-          /> */}
-
           {id ? (
             <QuestionsCard
               candidateData={candidateData}
@@ -138,7 +114,8 @@ const ViewCandidate = ({ location }) => {
             />
           ) : (
             <CommentsCard
-              liveInterviewData={liveInterviewData}
+              liveInterviewData={liveData}
+              mutate={mutate}
               {...videoPlayerData}
               editable={{ addComment, removeComment }}
               style={{ marginBottom: 24 }}
@@ -152,9 +129,9 @@ const ViewCandidate = ({ location }) => {
             editable
             getCandidateProfile={getCandidateProfile}
             removeCandidateDocument={removeCandidateDocument}
+            style={{ marginBottom: 24 }}
           />
-
-          {/* </Space> */}
+          {liveId && <NotesCard data={liveData} />}
         </Col>
         <Col
           xs={{ span: 24, order: 1 }}
@@ -171,4 +148,25 @@ const ViewCandidate = ({ location }) => {
   );
 };
 
+const NotesCard = React.memo(({ data }) => {
+  const participants = Object.keys(data?.participants || {});
+  return (
+    <Card title="Live Interview Notes & Feedback">
+      <Collapse accordion>
+        {participants?.map(name => (
+          <Panel header={name} key={name}>
+            <div style={{ marginBottom: 8 }}>
+              Interview Rating: <Rate value={data?.participants?.[name]?.feedback} disabled />
+            </div>
+            <ReactQuill
+              readOnly
+              modules={{ toolbar: false }}
+              value={data?.participants?.[name]?.notes}
+            />
+          </Panel>
+        ))}
+      </Collapse>
+    </Card>
+  );
+});
 export default ViewCandidate;

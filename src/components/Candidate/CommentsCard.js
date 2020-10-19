@@ -12,11 +12,11 @@ import { useAsync } from '@bit/russeii.deephire.hooks';
 
 const QuestionCard = props => {
   const {
+    mutate,
     liveInterviewData,
     duration,
     progress,
     videoRef,
-    setReload,
     setControlKeys,
     setPlaying,
     editable,
@@ -32,10 +32,10 @@ const QuestionCard = props => {
         Deleted Bookmark
         <Button
           type="link"
-          onClick={() => {
-            addComment(liveInterviewData._id, deleteData, 'Undo Delete Succesful');
+          onClick={async () => {
+            await addComment(liveInterviewData._id, deleteData, 'Undo Delete Succesful');
             message.destroy();
-            setReload(flag => !flag);
+            mutate();
           }}
         >
           Undo
@@ -46,13 +46,19 @@ const QuestionCard = props => {
 
   const onFinish = async values => {
     const { comment } = values;
-    await execute(
-      liveInterviewData._id,
-      { comment, time: progress.playedSeconds },
-      'Succesfully Saved Bookmark'
-    );
-    setReload(flag => !flag);
+
+    const commentData = { comment, time: progress.playedSeconds };
+
+    const mutableInterviewData = { ...liveInterviewData };
+
+    mutableInterviewData.comments = [...(mutableInterviewData.comments || []), commentData];
+    mutate(mutableInterviewData, false);
     form.resetFields();
+
+    await execute(liveInterviewData._id, commentData, 'Succesfully Saved Bookmark');
+    mutate();
+
+    // setReload(flag => !flag);
   };
 
   //   const [activeQuestion, setActiveQuestion] = useState(0);
@@ -81,12 +87,16 @@ const QuestionCard = props => {
           <Tooltip title="Delete this bookmark">
             <CloseCircleOutlined
               onClick={async () => {
+                const simplifiedComments = liveInterviewData.comments.filter(
+                  comment => comment._id !== _id
+                );
+                mutate({ ...liveInterviewData, comments: simplifiedComments }, false);
                 await removeComment(
                   liveInterviewData._id,
                   _id,
                   <SuccessDelete deleteData={deleteData} />
                 );
-                setReload(flag => !flag);
+                mutate();
               }}
             />
           </Tooltip>
@@ -158,7 +168,7 @@ const QuestionCard = props => {
               </span>
             </div>
             <Form.Item style={{ marginBottom: 0 }}>
-              <Button htmlType="submit" loading={pending}>
+              <Button loading={pending} htmlType="submit">
                 Save Bookmark
               </Button>
             </Form.Item>

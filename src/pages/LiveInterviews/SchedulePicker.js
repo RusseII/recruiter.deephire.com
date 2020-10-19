@@ -5,6 +5,16 @@ import { DatePicker } from 'antd';
 
 const { RangePicker } = DatePicker;
 
+const calendarProps = {
+  showTime: {
+    minuteStep: 15,
+    hideDisabledOptions: true,
+    use12Hours: true,
+    format: 'h:mm a',
+  },
+  format: 'MM-DD h:mm a',
+};
+
 const Range = ({ onChange }) => {
   const [dates, setDates] = useState([null, null]);
   function disabledDate(current) {
@@ -41,17 +51,20 @@ const Range = ({ onChange }) => {
     <RangePicker
       style={{ width: '100%' }}
       disabledDate={disabledDate}
-      showTime={{
-        minuteStep: 15,
-        hideDisabledOptions: true,
-        use12Hours: true,
-        format: 'h:mm a',
-      }}
       value={dates}
-      format="MM-DD h:mm a"
       onCalendarChange={setSecondValue}
+      {...calendarProps}
     />
   );
+};
+
+export const SingleDate = () => {
+  function disabledDate(current) {
+    const tooEarly = current && current < moment().startOf('day');
+
+    return tooEarly;
+  }
+  return <DatePicker disabledDate={disabledDate} {...calendarProps} />;
 };
 
 export default Range;

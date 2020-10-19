@@ -102,6 +102,7 @@ export async function createCompany(data) {
   });
 }
 
+// use hook
 export async function getCompany() {
   return request(`${newApi}/companies`, {
     method: 'GET',
@@ -172,6 +173,7 @@ export async function updateCandidateProfile(email, data) {
   });
 }
 
+// use hook
 export async function getVideos() {
   // return request(`${hostedURL}/v1.0/get_candidates/${params}`);
   const videos = await request(`${newApi}/videos`, {
@@ -244,6 +246,7 @@ export async function getLiveInterviews() {
   });
 }
 
+// use hook instead
 export async function getLiveInterview(id) {
   return request(`${newApi}/live/${id}`, {
     method: 'GET',

@@ -1,54 +1,29 @@
 /* eslint-disable camelcase */
-import React, { useState, useContext, useEffect } from 'react';
-import { Card, Typography, Tabs, Spin, Popover, Tooltip, Tag, Space, ConfigProvider } from 'antd';
+import { FileAddOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { handleFilter, lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
+import { Card, ConfigProvider, Space, Spin, Tabs, Tag, Tooltip } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
 import router from 'umi/router';
-import { ShareAltOutlined, FileAddOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { lowerCaseQueryParams, handleFilter } from '@bit/russeii.deephire.utils.utils';
-import InviteDrawer from './ScheduleInterview';
-import { getLiveInterviews } from '@/services/api';
-import GlobalContext from '@/layouts/MenuContext';
+import customEmpty from '@/components/CustomEmpty';
+import AntPageHeader from '@/components/PageHeader/AntPageHeader';
+import ShareInterview from '@/components/ShareInterview';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
+import GlobalContext from '@/layouts/MenuContext';
+import { getLiveInterviews } from '@/services/api';
 import { useSearch } from '@/services/complexHooks';
 import { useAsync } from '@/services/hooks';
-
-import customEmpty from '@/components/CustomEmpty';
-
-import AntPageHeader from '@/components/PageHeader/AntPageHeader';
-
-const { Text } = Typography;
+import InviteDrawer from './ScheduleInterview';
 
 const Actions = ({ data }) => {
   const { interviewLink } = data;
-  const [visibility, setVisibility] = useState({ hovered: false, clicked: false });
-
-  // const { recordings } = data;
-  // let lastestRecording;
-  // if (recordings) {
-  //   [lastestRecording] = recordings.slice(-1);
-  // }
 
   return (
     <Space>
       <Tooltip title="Join the interview">
         <VideoCameraOutlined onClick={() => window.open(interviewLink, '_blank')} />
       </Tooltip>
-      <Tooltip
-        title="Share with candidate"
-        trigger="hover"
-        visible={visibility.hovered}
-        onVisibleChange={visible => setVisibility({ hovered: visible, clicked: false })}
-      >
-        <Popover
-          title="Share this link with your candidate"
-          content={<Text copyable>{data.interviewLink}</Text>}
-          trigger="click"
-          visible={visibility.clicked}
-          onVisibleChange={visible => setVisibility({ hovered: false, clicked: visible })}
-        >
-          <ShareAltOutlined />
-        </Popover>
-      </Tooltip>
+      <ShareInterview url={data.interviewLink} />
       <InviteDrawer
         data={data}
         customButton={onClick => (
