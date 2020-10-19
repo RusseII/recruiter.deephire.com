@@ -97,7 +97,7 @@ const ViewCandidate = ({ location }) => {
           <ShareCandidateButton
             buttonText="Share Candidate"
             setControlKeys={videoPlayerData.setControlKeys}
-            candidateData={[{ ...candidateData, liveData }]}
+            candidateData={[{ ...candidateData, liveInterviewData: liveData }]}
           />
         }
       />
