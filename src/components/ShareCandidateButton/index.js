@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CopyOutlined, ShareAltOutlined } from '@ant-design/icons';
+import { CopyOutlined, ShareAltOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
@@ -21,7 +21,7 @@ const FormItem = Form.Item;
 }))
 @Form.create()
 class ShareCandidateButton extends React.Component {
-  state = { currentStep: 1, hideInfo: false, modalVisible: false };
+  state = { currentStep: 1, hideInfo: false, modalVisible: false, requireName: true };
 
   information = shareLink => (
     <div>
@@ -66,9 +66,13 @@ class ShareCandidateButton extends React.Component {
     this.setState({ hideInfo: e.target.checked });
   };
 
+  onCheckRequireName = e => {
+    this.setState({ requireName: e.target.checked });
+  };
+
   createLinkButton = () => {
     const { candidateData, form } = this.props;
-    const { currentStep, hideInfo } = this.state;
+    const { currentStep, hideInfo, requireName } = this.state;
     const {
       recruiterProfile: {
         app_metadata: { team },
@@ -82,6 +86,7 @@ class ShareCandidateButton extends React.Component {
         description,
         name,
         hideInfo,
+        requireName,
         interviews: candidateData,
         createdByTeam: team,
       };
@@ -115,11 +120,11 @@ class ShareCandidateButton extends React.Component {
           onCancel={() => this.handleModalVisible()}
         >
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Name">
-            {form.getFieldDecorator('name', {})(<Input placeholder="Client Name" />)}
+            {form.getFieldDecorator('name', {})(<Input placeholder="Share Link Name" />)}
           </FormItem>
           <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Description">
             {form.getFieldDecorator('description', {})(
-              <Input placeholder="Descriptive Share Link Name" />
+              <Input placeholder="Description of what the sharelink is for" />
             )}
           </FormItem>
 
@@ -131,8 +136,21 @@ class ShareCandidateButton extends React.Component {
           <Row gutter={0}>
             <Col span={5} />
             <Col span={15}>
-              {' '}
-              <Checkbox onChange={this.onCheckHideInfo}>Hide Candidate Info</Checkbox>
+              <div>
+                <Checkbox
+                  defaultChecked
+                  style={{ marginBottom: 8 }}
+                  onChange={this.onCheckRequireName}
+                >
+                  Require name
+                </Checkbox>
+                <Tooltip title="Requires anyone viewing the share link to enter their name. This allows you to share the link with multiple people, and get individual feedback and analytics for each person.">
+                  <InfoCircleOutlined />
+                </Tooltip>
+              </div>
+              <div>
+                <Checkbox onChange={this.onCheckHideInfo}>Hide candidate info</Checkbox>
+              </div>
             </Col>
           </Row>
         </Modal>
