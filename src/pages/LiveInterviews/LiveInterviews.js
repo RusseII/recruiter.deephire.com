@@ -21,7 +21,9 @@ const Actions = ({ data }) => {
   return (
     <Space>
       <Tooltip title="Join the interview">
-        <VideoCameraOutlined onClick={() => window.open(interviewLink, '_blank')} />
+        <VideoCameraOutlined
+          onClick={() => window.open(`${interviewLink}?role=recruiter`, '_blank')}
+        />
       </Tooltip>
       <ShareInterview url={data.interviewLink} />
       <InviteDrawer
