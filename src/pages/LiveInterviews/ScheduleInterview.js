@@ -61,11 +61,14 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   const [linkToInterview, setLinkToInterview] = useState('loading...');
 
   const onFinish = async values => {
-    // eslint-disable-next-line no-param-reassign
-    // values.candidateDebriefTime = values.candidateDebriefTime?.toString();
-    // eslint-disable-next-line no-param-reassign
-    // values.clientDebriefTime = values.clientDebriefTime?.toString();
-    // console.log({ values });
+    console.log(values);
+    if (values.recording === undefined) {
+      // since the recording button it only rendered when expanded
+      // this makes the default value recording = true
+      // eslint-disable-next-line no-param-reassign
+      values.recording = true;
+    }
+
     setLoading(true);
     const interviewData = await scheduleInterview(
       { ...values, createdByTeam },
@@ -148,7 +151,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
           <Form
             layout="vertical"
             onFinish={onFinish}
-            initialValues={{ interviewType: 'recruiter' }}
+            initialValues={{ interviewType: 'recruiter', recording: true }}
             hideRequiredMark
           >
             <Form.Item name="interviewType" label="Interview Type" rules={[{ required: true }]}>
@@ -223,7 +226,7 @@ const AdvancedSettings = ({ type }) => (
         header="Advanced Configuration"
         key="1"
       >
-        <Form.Item label="Record Interview" name="shouldRecord">
+        <Form.Item label="Record Interview" name="recording" valuePropName="checked">
           <Switch checkedChildren="Yes" unCheckedChildren="No" defaultChecked />
         </Form.Item>
         <JobName />
