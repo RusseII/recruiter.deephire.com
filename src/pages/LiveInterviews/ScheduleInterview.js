@@ -17,6 +17,8 @@ import ReactQuill from 'react-quill';
 import moment from 'moment';
 import { ShareInterviewContent } from '@/components/ShareInterview';
 import { scheduleInterview, getCandidateProfile, removeCandidateDocument } from '@/services/api';
+import { useLiveTemplates } from '@/services/apiHooks';
+
 import CandidateDataCard from '@/components/Candidate/DataCard';
 import GlobalContext from '@/layouts/MenuContext';
 import SchedulePicker from './SchedulePicker';
@@ -61,7 +63,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   const [linkToInterview, setLinkToInterview] = useState('loading...');
 
   const onFinish = async values => {
-    console.log(values);
+    // TODO auto load the tempaltes here?
     if (values.recording === undefined) {
       // since the recording button it only rendered when expanded
       // this makes the default value recording = true
@@ -197,6 +199,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
             {type === 'client' && <ClientInfo />}
 
             <AdvancedSettings type={type} />
+
             <Button
               loading={loading}
               htmlType="submit"
@@ -217,39 +220,41 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   );
 };
 
-const AdvancedSettings = ({ type }) => (
-  <>
-    <Collapse className="collapse" bordered={false}>
-      <Panel
-        style={customPanelStyle}
-        className="removeCollapsePadding"
-        header="Advanced Configuration"
-        key="1"
-      >
-        <Form.Item label="Record Interview" name="recording" valuePropName="checked">
-          <Switch checkedChildren="Yes" unCheckedChildren="No" defaultChecked />
-        </Form.Item>
-        <JobName />
-        {/* > */}
-        {type === 'client' && (
-          <>
-            <ExtraClientInfo />
-            <ClientContact />
-            <PrepRoom />
-            <FollowUpTime />
-            <SendOutTemplates />
-          </>
-        )}
-        {type === 'recruiter' && (
-          <>
-            <Branch />
-            <BranchTemplate />
-          </>
-        )}
-      </Panel>
-    </Collapse>
-  </>
-);
+const AdvancedSettings = ({ type }) => {
+  return (
+    <>
+      <Collapse className="collapse" bordered={false}>
+        <Panel
+          style={customPanelStyle}
+          className="removeCollapsePadding"
+          header="Advanced Configuration"
+          key="1"
+        >
+          <Form.Item label="Record Interview" name="recording" valuePropName="checked">
+            <Switch checkedChildren="Yes" unCheckedChildren="No" defaultChecked />
+          </Form.Item>
+          <JobName />
+          {/* > */}
+          {type === 'client' && (
+            <>
+              <ExtraClientInfo />
+              <ClientContact />
+              <PrepRoom />
+              <FollowUpTime />
+              <SendOutTemplates />
+            </>
+          )}
+          {type === 'recruiter' && (
+            <>
+              <Branch />
+              <BranchTemplate />
+            </>
+          )}
+        </Panel>
+      </Collapse>
+    </>
+  );
+};
 
 const Branch = () => (
   <Row gutter={16}>
@@ -359,33 +364,64 @@ const ExtraClientInfo = () => (
   </Row>
 );
 
-const BranchTemplate = () => (
-  <Row gutter={16}>
-    <Col span={24}>
-      {/* application crashes without the initialValue='' seems to be a bug with quil in form.  */}
-      <Form.Item name="recruiterTemplate" label="Recruiter Template" initialValue="">
-        <ReactQuill placeholder="Add template for the recruiter" />
-      </Form.Item>
-    </Col>
-  </Row>
-);
+const BranchTemplate = () => {
+  const { data: liveTemplate, isLoading } = useLiveTemplates();
+  const recruiterTemplate = liveTemplate?.recruiterTemplates?.template1?.html || '';
+  return (
+    <Row gutter={16}>
+      <Col span={24}>
+        {/* application crashes without the initialValue='' seems to be a bug with quil in form.  */}
+        {/* {console.log({ candidateTemplate })} */}
 
-const SendOutTemplates = () => (
-  <Row gutter={16}>
-    <Col span={24}>
-      {/* application crashes without the initialValue='' seems to be a bug with quil in form.  */}
-      <Form.Item name="candidateTemplate" label="Candidate Prep Template" initialValue="">
-        <ReactQuill placeholder="Add template for the candidate" />
-      </Form.Item>
-    </Col>
-    <Col span={24}>
-      {/* application crashes without the initialValue='' seems to be a bug with quil in form.  */}
-      <Form.Item name="clientTemplate" label="Client Template" initialValue="">
-        <ReactQuill placeholder="Add template for the client" />
-      </Form.Item>
-    </Col>
-  </Row>
-);
+        {!isLoading && (
+          <Form.Item
+            name="recruiterTemplate"
+            label="Recruiter Template"
+            initialValue={recruiterTemplate}
+          >
+            <ReactQuill
+              className="quill-height"
+              // defaultValue={recruiterTemplate}
+              placeholder="Add template for the recruiter"
+            />
+          </Form.Item>
+        )}
+      </Col>
+    </Row>
+  );
+};
+
+const SendOutTemplates = () => {
+  const { data: liveTemplate, isLoading } = useLiveTemplates();
+
+  const candidateTemplate = liveTemplate?.candidateTemplates?.template1?.html || '';
+  const clientTemplate = liveTemplate?.clientTemplates?.template1?.html || '';
+
+  return (
+    <>
+      {!isLoading && (
+        <Row gutter={16}>
+          <Col span={24}>
+            {/* application crashes without the initialValue='' seems to be a bug with quil in form.  */}
+            <Form.Item
+              name="candidateTemplate"
+              label="Candidate Prep Template"
+              initialValue={candidateTemplate}
+            >
+              <ReactQuill className="quill-height" placeholder="Add template for the candidate" />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            {/* application crashes without the initialValue='' seems to be a bug with quil in form.  */}
+            <Form.Item name="clientTemplate" label="Client Template" initialValue={clientTemplate}>
+              <ReactQuill className="quill-height" placeholder="Add template for the client" />
+            </Form.Item>
+          </Col>
+        </Row>
+      )}
+    </>
+  );
+};
 
 const PrepRoom = () => (
   <Row gutter={16}>

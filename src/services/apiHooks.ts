@@ -146,3 +146,13 @@ export const useVideo = (id: string): LiveTypes => {
     };
   };
   
+
+
+  export const useLiveTemplates = (): LiveTypes => {
+    const { data, error } = useSWR([`/v1/live/templates`], fetcher, {shouldRetryOnError: false});
+    return {
+      data,
+      isLoading: !error && !data,
+      isError: error,
+    };
+  };
