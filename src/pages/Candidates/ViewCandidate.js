@@ -152,14 +152,16 @@ const ViewCandidate = ({ location }) => {
           {recordingAvaliable ? (
             <CandidateVideo marks={marks} {...videoPlayerData} interval={interval} />
           ) : (
-            <Result
-              title="Video not avaliable"
-              extra={
-                liveData?.recordingStatus === 'composition-available'
-                  ? 'Recording was deleted'
-                  : liveData?.recordingStatus
-              }
-            />
+            <Card>
+              <Result
+                title="Video not avaliable"
+                extra={
+                  liveData?.recordingStatus === 'composition-available'
+                    ? 'Recording was deleted'
+                    : liveData?.recordingStatus
+                }
+              />
+            </Card>
           )}
         </Col>
       </Row>
