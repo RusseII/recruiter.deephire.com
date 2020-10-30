@@ -183,27 +183,39 @@ const LiveInterviews = () => {
     },
     activeTab !== '1'
       ? {
-          title: 'Recording',
+          title: 'Recording Status',
           key: 'recording',
-          fixed: 'right',
           // width: 50,
 
           render: (text, data) => {
-            const { recordingStatus, _id } = data;
+            const { recordingStatus } = data;
             if (recordingStatus === 'composition-available') {
-              return (
-                <a
-                  type="link"
-                  onClick={() => router.push(`/one-way/candidates/candidate/?liveid=${_id}`)}
-                >
-                  View Recording
-                </a>
-              );
+              return 'Finished';
             }
             if (recordingStatus === 'composition-progress') {
               return 'Proccessing...';
             }
             return null;
+          },
+        }
+      : null,
+    activeTab !== '1'
+      ? {
+          title: 'View',
+          key: 'view',
+          fixed: 'right',
+          // width: 50,
+
+          render: (text, data) => {
+            const { _id } = data;
+            return (
+              <a
+                type="link"
+                onClick={() => router.push(`/one-way/candidates/candidate/?liveid=${_id}`)}
+              >
+                View
+              </a>
+            );
           },
         }
       : null,
