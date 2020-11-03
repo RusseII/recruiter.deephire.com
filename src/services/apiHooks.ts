@@ -120,24 +120,26 @@ export const useVideo = (id: string): LiveTypes => {
 
 
   export const useJobs = (): LiveTypes => {
-    const { data, error } = useSWR([`/v1/interviews`], fetcher);
+    const { data, error, mutate } = useSWR([`/v1/interviews`], fetcher);
     return {
       data,
       isLoading: !error && !data,
       isError: error,
+      mutate,
     };
   };
 
   export const useJobsArchives = (): LiveTypes => {
-    const { data, error } = useSWR([`/v1/interviews/archives`], fetcher);
+    const { data, error, mutate } = useSWR([`/v1/interviews/archives`], fetcher);
     return {
       data,
       isLoading: !error && !data,
       isError: error,
+      mutate
     };
   };
   export const useJob = (id: string): LiveTypes => {
-    const { data, error, mutate } = useSWR(id ? [`/v1/interviews/${id}`] : null, fetcher);
+    const { data, error, mutate } = useSWR(id ? [`/v1/interviews/${id}`] : null, fetcher, {refreshInterval: 5000});
     return {
       data,
       isLoading: !error && !data && id != null,

@@ -23,10 +23,11 @@ import {
 import React, { useEffect, useState, useContext } from 'react';
 import readableTime from 'readable-timestamp';
 import { handleFilter } from '@bit/russeii.deephire.utils.utils';
+import { useJobs, useJobsArchives } from '@/services/apiHooks';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
 
-import { getInterviews, getArchivedInterviews, updateInterviews } from '@/services/api';
+import { updateInterviews } from '@/services/api';
 import ArchiveButton from '@/components/ArchiveButton';
 import customEmpty from '@/components/CustomEmpty';
 
@@ -48,22 +49,21 @@ const TableList = () => {
   const getColumnSearchProps = useSearch();
 
   const [selectedRows, setSelectedRows] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [archives, setArchives] = useState(false);
   const [editInterview, setEditInterview] = useState(null);
   const [inviteCandidates, setInviteCandidates] = useState(null);
-  const [reload, setReload] = useState(false);
+  // const [reload, setReload] = useState(false);
   const [filteredInfo, setFilteredInfo] = useState(null);
 
   const handleChange = (pagination, filters) => {
     setFilteredInfo(filters);
   };
-  const { interviews, setInterviews, stripeProduct, recruiterProfile } = globalData;
+  const { stripeProduct, recruiterProfile } = globalData;
+  const { data: jobs, isLoading, mutate: mutateJobs } = useJobs();
 
-  // const [dataSource, setDataSource] = useState([]);
-  const [filteredData, setFilteredData] = useState(interviews);
+  const { data: jobsArchives, mutate: mutateJobsArchives } = useJobsArchives();
 
-  const [unArchivedInterviewCount, setUnArchivedInterviewCount] = useState(null);
+  const correctData = archives ? jobsArchives : jobs;
 
   const { allowedInterviews } = stripeProduct.metadata;
   const updateInterview = async cleanedValueData => {
@@ -113,7 +113,7 @@ const TableList = () => {
       title: 'Created By',
       key: 'createdBy',
       sorter: (a, b) => a.createdBy.localeCompare(b.createdBy),
-      ...handleFilter(filteredData, 'createdBy'),
+      ...handleFilter(correctData || [], 'createdBy'),
       filteredValue: filteredInfo?.createdBy || null,
 
       render(test, data) {
@@ -137,7 +137,7 @@ const TableList = () => {
       key: 'createdByTeam',
       // className: styles.hidden,
       dataIndex: 'createdByTeam',
-      ...handleFilter(filteredData, 'createdByTeam'),
+      ...handleFilter(correctData || [], 'createdByTeam'),
       filteredValue: filteredInfo?.createdByTeam || null,
 
       // record.createdByTeam ? record.createdByTeam.indexOf(value) === 0 : false,
@@ -184,34 +184,29 @@ const TableList = () => {
     },
   ];
 
-  const getData = async () => {
-    setLoading(true);
-    let data;
-    if (archives) {
-      data = await getArchivedInterviews();
-      const interviewDataForLength = await getInterviews();
-      setUnArchivedInterviewCount(interviewDataForLength.length || 0);
-    } else {
-      data = await getInterviews();
-      setUnArchivedInterviewCount(data.length || 0);
-    }
-    // if (team) {
-    //   data = data.filter(interview => {
-    //     if (!interview.createdByTeam) return null;
-    //     return interview.createdByTeam.includes(team);
-    //   });
-    // }
-    // createDataSource(data || []);
-    setInterviews(data || []);
-    setFilteredData(data || []);
+  // const getData = async () => {
+  //   setLoading(true);
+  //   let data;
+  //   if (archives) {
+  //     data = await getArchivedInterviews();
+  //     const interviewDataForLength = await getInterviews();
+  //     setUnArchivedInterviewCount(interviewDataForLength.length || 0);
+  //   } else {
+  //     data = await getInterviews();
+  //     setUnArchivedInterviewCount(data.length || 0);
+  //   }
+  //   // if (team) {
+  //   //   data = data.filter(interview => {
+  //   //     if (!interview.createdByTeam) return null;
+  //   //     return interview.createdByTeam.includes(team);
+  //   //   });
+  //   // }
+  //   // createDataSource(data || []);
+  //   setInterviews(data || []);
+  //   setFilteredData(data || []);
 
-    setLoading(false);
-  };
-  useEffect(() => {
-    if (recruiterProfile) {
-      getData();
-    }
-  }, [archives, reload, recruiterProfile]);
+  //   setLoading(false);
+  // };
 
   useEffect(() => {
     if (recruiterProfile) {
@@ -223,18 +218,18 @@ const TableList = () => {
       }));
     }
   }, [recruiterProfile?.app_metadata?.team]);
-  // const shouldClear = value => {
-  //   if (!value) {
-  //     setFilteredData(interviews);
-  //   }
-  // };
 
-  // const filter = searchTerm => {
-  //   const filteredData = globalData.interviews.filter(
-  //     interview => interview.interviewName === searchTerm
-  //   );
-  //   setFilteredData(filteredData);
-  // };
+  const reload = () => {
+    if (archives) {
+      mutateJobsArchives();
+    } else {
+      mutateJobs();
+    }
+  };
+
+  useEffect(() => {
+    reload();
+  }, [archives]);
 
   return (
     <>
@@ -243,10 +238,10 @@ const TableList = () => {
         subTitle="Invite candidates to a job to have them complete a one-way interview "
         onBack={null}
         tags={
-          unArchivedInterviewCount && allowedInterviews ? (
+          jobs?.length && allowedInterviews ? (
             <Tooltip title="Number of job slots used">
-              <Tag color={unArchivedInterviewCount / allowedInterviews >= 1 ? 'red' : 'blue'}>
-                {`${unArchivedInterviewCount}/${allowedInterviews}`}
+              <Tag color={jobs.length / allowedInterviews >= 1 ? 'red' : 'blue'}>
+                {`${jobs.length}/${allowedInterviews}`}
               </Tag>
             </Tooltip>
           ) : null
@@ -267,7 +262,7 @@ const TableList = () => {
       <InviteCandidates
         setInviteCandidates={setInviteCandidates}
         inviteCandidates={inviteCandidates}
-        setReload={setReload}
+        setReload={reload}
       />
 
       <Drawer
@@ -278,10 +273,10 @@ const TableList = () => {
         width={window.innerWidth > 720 ? 378 : null}
         drawerStyle={{ backgroundColor: '#f0f2f5' }}
       >
-        <Step1 setReload={setReload} onClick={updateInterview} data={editInterview} />
+        <Step1 setReload={reload} onClick={updateInterview} data={editInterview} />
       </Drawer>
 
-      {allowedInterviews && unArchivedInterviewCount > allowedInterviews && (
+      {allowedInterviews && jobs?.length > allowedInterviews && (
         <Alert
           style={{ marginBottom: 20 }}
           message="Interview Cap Exceeded"
@@ -312,7 +307,7 @@ const TableList = () => {
       <Card bordered={false}>
         <TableToolbar
           selectedInfo={{ type: 'Jobs', count: selectedRows.length }}
-          reload={getData}
+          reload={reload}
           extra={
             <Space>
               <Button
@@ -324,13 +319,13 @@ const TableList = () => {
               </Button>
               <CloneButton
                 onClick={() => setSelectedRows([])}
-                reload={getData}
+                reload={reload}
                 cloneData={selectedRows}
                 disabled={selectedRows.length === 0}
               />
               <ArchiveButton
                 onClick={() => setSelectedRows([])}
-                reload={getData}
+                reload={reload}
                 archives={archives}
                 route="interviews"
                 archiveData={selectedRows}
@@ -346,8 +341,8 @@ const TableList = () => {
           <StandardTable
             onChange={handleChange}
             selectedRows={selectedRows}
-            loading={loading}
-            data={{ list: filteredData }}
+            loading={isLoading}
+            data={{ list: correctData }}
             // size="small"
             columns={columns}
             onSelectRow={rows => setSelectedRows(rows)}
