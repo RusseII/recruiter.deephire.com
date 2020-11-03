@@ -173,7 +173,7 @@ class Step1 extends React.PureComponent {
         if (data && onClick) {
           await onClick(cleanedValueData);
           this.setState({ loading: false });
-          setReload(flag => !flag);
+          setReload();
         }
         if (!data) {
           dispatch({

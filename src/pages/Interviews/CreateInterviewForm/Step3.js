@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'dva';
 import { CopyOutlined } from '@ant-design/icons';
-import { Tooltip, message, Button, Row, Col } from 'antd';
-import router from 'umi/router';
+import { Tooltip, message, Button, Row, Col, Space } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { getHttpUrl } from '@bit/russeii.deephire.utils.utils';
+import Link from 'umi/link';
 import Result from '@/components/Result';
 import styles from './style.less';
 
@@ -17,9 +17,7 @@ class Step3 extends React.PureComponent {
   render() {
     const { shortLink } = this.props;
     const { link } = shortLink;
-    const onFinish = () => {
-      router.push('/one-way/jobs/create/info');
-    };
+
     const information = (
       <div className={styles.information}>
         <Row>
@@ -54,11 +52,15 @@ class Step3 extends React.PureComponent {
       </div>
     );
     const actions = (
-      <Fragment>
-        <Button type="primary" onClick={onFinish}>
-          Create another
-        </Button>
-      </Fragment>
+      <Space>
+        <Link to="/one-way/jobs/create/info">
+          <Button>Create another</Button>
+        </Link>
+
+        <Link to="/one-way/jobs">
+          <Button type="primary">View Jobs</Button>
+        </Link>
+      </Space>
     );
     return (
       <Result

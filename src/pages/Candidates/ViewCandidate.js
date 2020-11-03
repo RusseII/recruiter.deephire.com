@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Col, Row, Tooltip, Typography, Collapse, Card, Rate } from 'antd';
+import { Col, Row, Tooltip, Typography, Collapse, Card, Rate, Result } from 'antd';
 
 import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import CandidateVideo from '@bit/russeii.deephire.candidate.video';
@@ -34,6 +34,10 @@ const ViewCandidate = ({ location }) => {
   const [candidateData, setCandidateData] = useState(null);
   const [archives, setArchives] = useState(false);
   const { mutate, data: liveData } = useLive(liveId);
+
+  const recordingAvaliable =
+    id ||
+    (liveData?.recordingStatus === 'composition-available' && liveData?.recordingUrl?.length !== 0);
 
   // const renderNotes = useMemo(() => notesCard(liveData), [liveData]);
 
@@ -113,13 +117,17 @@ const ViewCandidate = ({ location }) => {
               ArchiveButton={ArchiveButton}
             />
           ) : (
-            <CommentsCard
-              liveInterviewData={liveData}
-              mutate={mutate}
-              {...videoPlayerData}
-              editable={{ addComment, removeComment }}
-              style={{ marginBottom: 24 }}
-            />
+            <>
+              {recordingAvaliable && (
+                <CommentsCard
+                  liveInterviewData={liveData}
+                  mutate={mutate}
+                  {...videoPlayerData}
+                  editable={{ addComment, removeComment }}
+                  style={{ marginBottom: 24 }}
+                />
+              )}
+            </>
           )}
           <CandidateDataCard
             userId={userId}
@@ -141,7 +149,20 @@ const ViewCandidate = ({ location }) => {
           xl={{ span: 12, order: 2 }}
           xxl={{ span: 12, order: 2 }}
         >
-          <CandidateVideo marks={marks} {...videoPlayerData} interval={interval} />
+          {recordingAvaliable ? (
+            <CandidateVideo marks={marks} {...videoPlayerData} interval={interval} />
+          ) : (
+            <Card>
+              <Result
+                title="Video not avaliable"
+                extra={
+                  liveData?.recordingStatus === 'composition-available'
+                    ? 'Recording was deleted'
+                    : liveData?.recordingStatus
+                }
+              />
+            </Card>
+          )}
         </Col>
       </Row>
     </div>
