@@ -21,7 +21,7 @@ const FormItem = Form.Item;
 }))
 @Form.create()
 class ShareCandidateButton extends React.Component {
-  state = { currentStep: 1, hideInfo: false, modalVisible: false, requireName: true };
+  state = { currentStep: 1, hideInfo: true, modalVisible: false, requireName: true };
 
   information = shareLink => (
     <div>
