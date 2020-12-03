@@ -59,7 +59,7 @@ class ShareCandidateButton extends React.Component {
     if (setControlKeys) {
       setControlKeys(modalVisible);
     }
-    this.setState({ modalVisible: !modalVisible, hideInfo: false });
+    this.setState({ modalVisible: !modalVisible, hideInfo: true });
   };
 
   onCheckHideInfo = e => {
