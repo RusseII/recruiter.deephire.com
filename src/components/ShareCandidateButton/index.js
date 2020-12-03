@@ -149,7 +149,9 @@ class ShareCandidateButton extends React.Component {
                 </Tooltip>
               </div>
               <div>
-                <Checkbox onChange={this.onCheckHideInfo}>Hide candidate info</Checkbox>
+                <Checkbox defaultChecked onChange={this.onCheckHideInfo}>
+                  Hide candidate info
+                </Checkbox>
               </div>
             </Col>
           </Row>
