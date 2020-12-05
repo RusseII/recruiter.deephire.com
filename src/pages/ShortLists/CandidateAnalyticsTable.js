@@ -34,20 +34,26 @@ const columns = [
     dataIndex: 'rating',
     render: rating => <Rate disabled defaultValue={rating} />,
   },
-  {
-    title: 'Views',
-    dataIndex: 'clicks',
-    render: clicks => <>{clicks ? clicks.length : '-'}</>,
-  },
-  {
-    title: 'Feedback',
-    dataIndex: 'feedback',
-  },
+  // {
+  //   title: 'Views',
+  //   dataIndex: 'clicks',
+  //   render: clicks => <>{clicks ? clicks.length : '-'}</>,
+  // },
+  // {
+  //   title: 'Feedback',
+  //   dataIndex: 'feedback',
+  // },
 ];
 const CandidateAnalyticsTable = props => {
   const { analyticsData, pending } = props;
   return (
     <StandardTable
+      expandable={{
+        defaultExpandAllRows: true,
+        // eslint-disable-next-line no-unused-vars
+        expandedRowRender: record => <div>Test</div>,
+        rowExpandable: record => record.name !== 'Not Expandable',
+      }}
       loading={pending}
       data={{ list: analyticsData?.interviews }}
       columns={columns}

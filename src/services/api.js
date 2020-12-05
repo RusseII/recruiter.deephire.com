@@ -3,8 +3,8 @@ import auth0 from 'auth0-js';
 import request from '@/utils/request';
 import AUTH_CONFIG from '@/Auth/auth0-variables';
 
-// const newApi = 'http://localhost:3000/v1';
-const newApi = 'https://a.deephire.com/v1';
+const newApi = 'http://localhost:3000/v1';
+// const newApi = 'https://a.deephire.com/v1';
 
 // const newApi = 'http://localhost:3001';
 // const newApi = 'http://localhost:3000/v1';

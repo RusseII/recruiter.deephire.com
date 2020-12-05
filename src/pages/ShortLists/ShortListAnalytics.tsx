@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Typography } from 'antd';
 import ClickHistory from './ClickHistory';
 import CandidateAnalyticsTable from './CandidateAnalyticsTable';
 import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
-import { useAsync } from '@/services/hooks';
+import {useShortlist} from '@/services/apiHooks'
 
 
-import { getShortListData } from '@/services/api';
 
 interface Click {
   clickTime: string,
@@ -64,11 +63,9 @@ const getClickData = (data: any) => {
 }
 const ShortListAnalytics = () => {
   const { id } = lowerCaseQueryParams(window.location.search);
-  const { value: analyticsData, pending, execute } = useAsync(getShortListData, false);
 
-  useEffect(() => {
-    execute(id);
-  }, [id]);
+  const {data: analyticsData, isLoading } = useShortlist(id)
+
 
   const clickData = getClickData(analyticsData?.[0])
 
@@ -80,12 +77,12 @@ const ShortListAnalytics = () => {
         subTitle={<Typography.Text copyable>{analyticsData?.[0]?.shortUrl}</Typography.Text>}
       />
       <CandidateAnalyticsTable
-        pending={pending}
+        pending={isLoading}
         analyticsData={analyticsData?.[0]}
         style={{ marginBottom: 24 }}
       />
       <ClickHistory
-        pending={pending}
+        pending={isLoading}
         clicks={clickData}
       />
     </>
