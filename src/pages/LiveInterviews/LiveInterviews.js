@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { FileAddOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { FileAddOutlined, VideoCameraOutlined, EditOutlined } from '@ant-design/icons';
 import { handleFilter, lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import { Card, ConfigProvider, Space, Spin, Tabs, Tag, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
@@ -15,7 +15,7 @@ import { useSearch } from '@/services/complexHooks';
 import { useAsync } from '@/services/hooks';
 import InviteDrawer from './ScheduleInterview';
 
-const Actions = ({ data }) => {
+const Actions = ({ data, execute }) => {
   const { interviewLink } = data;
 
   return (
@@ -26,6 +26,15 @@ const Actions = ({ data }) => {
         />
       </Tooltip>
       <ShareInterview url={data.interviewLink} />
+      <InviteDrawer
+        edit={data}
+        execute={execute}
+        customButton={onClick => (
+          <Tooltip title="Edit Live Interview">
+            <EditOutlined onClick={onClick} />
+          </Tooltip>
+        )}
+      />
       <InviteDrawer
         data={data}
         customButton={onClick => (
@@ -227,7 +236,7 @@ const LiveInterviews = () => {
           // setting width here does NOTHINg and i have no idea why
           width: 64,
           render: (text, data) => {
-            return <Actions data={data} />;
+            return <Actions data={data} execute={execute} />;
           },
         }
       : null,
