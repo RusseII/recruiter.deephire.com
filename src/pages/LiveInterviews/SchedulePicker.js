@@ -15,8 +15,10 @@ const calendarProps = {
   format: 'MM-DD h:mm a',
 };
 
-const Range = ({ onChange }) => {
-  const [dates, setDates] = useState([null, null]);
+const Range = ({ onChange, interviewTime, disabled }) => {
+  const [dates, setDates] = useState(
+    interviewTime ? [moment(interviewTime[0]), moment(interviewTime[1])] : [null, null]
+  );
   function disabledDate(current) {
     const tooEarly = current && current < moment().startOf('day');
     const tooLate = dates[0] && current.diff(dates[0], 'days') > 1;
@@ -49,6 +51,7 @@ const Range = ({ onChange }) => {
   };
   return (
     <RangePicker
+      disabled={disabled}
       style={{ width: '100%' }}
       disabledDate={disabledDate}
       value={dates}
