@@ -113,8 +113,8 @@ const ScheduleButton = ({ execute, data, customButton, edit }) => {
   }, [visible]);
 
   const debreifTimes = {
-    candidateDebriefTime: edit?.candidateDebriefTime ? moment(edit.candidateDebriefTime) : null,
-    clientDebriefTime: edit?.clientDebriefTime ? moment(edit.clientDebriefTime) : null,
+    candidateDebriefTime: edit?.candidateDebriefTime ? moment(edit.candidateDebriefTime) : '',
+    clientDebriefTime: edit?.clientDebriefTime ? moment(edit.clientDebriefTime) : '',
   };
   const Documents = props => (
     <>
