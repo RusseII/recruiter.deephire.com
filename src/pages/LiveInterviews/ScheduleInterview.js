@@ -91,7 +91,7 @@ const ScheduleButton = ({ execute, data, customButton, edit }) => {
       return;
     }
     const interviewData = await scheduleInterview(
-      { ...values, createdByTeam },
+      { ...values, createdByTeam, sendCalendarInvites: true },
       'Interview succesfully scheduled'
     );
 
