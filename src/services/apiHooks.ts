@@ -1,13 +1,6 @@
 import useSWR from 'swr';
 import fetcher from '../fetcher';
 
-interface LiveTypes {
-  data: Data;
-  isLoading: boolean;
-  isError: boolean;
-  mutate?: any;
-}
-
 interface Data {
   _id: string;
   interviewType: 'recruiter' | 'client';
@@ -27,7 +20,14 @@ interface Data {
   clientTemplate?: string;
   recording: boolean;
   participants: any;
+}interface LiveTypes {
+  data: Data;
+  isLoading: boolean;
+  isError: boolean;
+  mutate?: any;
 }
+
+
 
 export const useLive = (id: string): LiveTypes => {
   const { data, error, mutate } = useSWR(id ? [`/v1/live/${id}`] : null, fetcher);

@@ -128,6 +128,15 @@ export default [
         path: '/billing/plans',
         component: './Billing/BillingCards',
       },
+
+      {
+        path: '/analytics',
+        icon: 'fund',
+        name: 'Analytics',
+        authority: ['admin', 'user'],
+        component: './Analytics',
+      },
+
       {
         name: 'Account',
         icon: 'user',
