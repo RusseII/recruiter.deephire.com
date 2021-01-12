@@ -65,6 +65,24 @@ const LiveInterviews = () => {
 
   const fetchLiveInterviews = async () => {
     const live = await getLiveInterviews();
+    const today = new Date();
+    const yesterday = new Date(today.getTime() - 1000 * 60 * 60 * 38);
+    const hourago = new Date(today.getTime() - 1000 * 60 * 60 * 14);
+    const f = live.filter(l => l.createdByTeam === 'Raleigh' || l.createdByTeam === 'SA');
+    const fl = f.filter(
+      l => new Date(l.interviewTime[0]) >= yesterday && new Date(l.interviewTime[0]) <= hourago
+    );
+    const clean = fl.map(r => {
+      delete r.recruiterTemplate;
+      delete r.clientTemplate;
+      delete r.candidateTemplate;
+      delete r.attendees;
+      delete r.participants;
+      delete r.compositionSid;
+      delete r.roomSid;
+      return r;
+    });
+    console.log(clean);
     if (live) {
       const liveOrdered = live.sort((a, b) => {
         return new Date(b.interviewTime[0]) - new Date(a.interviewTime[0]);
