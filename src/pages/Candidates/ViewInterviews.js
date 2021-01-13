@@ -31,7 +31,7 @@ import { updateInterviews } from '@/services/api';
 import ArchiveButton from '@/components/ArchiveButton';
 import customEmpty from '@/components/CustomEmpty';
 
-import CloneButton from '@/components/CloneButton';
+// import CloneButton from '@/components/CloneButton';
 
 import Step1 from '@/pages/Interviews/CreateInterviewForm/Step1';
 import GlobalContext from '@/layouts/MenuContext';
@@ -317,12 +317,12 @@ const TableList = () => {
               >
                 Create Job
               </Button>
-              <CloneButton
+              {/* <CloneButton
                 onClick={() => setSelectedRows([])}
                 reload={reload}
                 cloneData={selectedRows}
                 disabled={selectedRows.length === 0}
-              />
+              /> */}
               <ArchiveButton
                 onClick={() => setSelectedRows([])}
                 reload={reload}

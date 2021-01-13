@@ -239,6 +239,18 @@ export async function scheduleInterview(data, successMessage) {
   );
 }
 
+export async function updateInterview(data, id, successMessage) {
+  return request(
+    `${newApi}/live/${id}`,
+    {
+      method: 'PUT',
+      body: data,
+      headers: setHeaders(),
+    },
+    successMessage
+  );
+}
+
 export async function getLiveInterviews() {
   return request(`${newApi}/live`, {
     method: 'GET',

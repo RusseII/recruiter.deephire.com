@@ -16,7 +16,12 @@ import { PlusOutlined } from '@ant-design/icons';
 import ReactQuill from 'react-quill';
 import moment from 'moment';
 import { ShareInterviewContent } from '@/components/ShareInterview';
-import { scheduleInterview, getCandidateProfile, removeCandidateDocument } from '@/services/api';
+import {
+  scheduleInterview,
+  getCandidateProfile,
+  removeCandidateDocument,
+  updateInterview,
+} from '@/services/api';
 import { useLiveTemplates } from '@/services/apiHooks';
 
 import CandidateDataCard from '@/components/Candidate/DataCard';
@@ -48,7 +53,7 @@ const calendarProps = {
   },
   format: 'MM-DD h:mm a',
 };
-const ScheduleButton = ({ execute, data, customButton }) => {
+const ScheduleButton = ({ execute, data, customButton, edit }) => {
   const globalData = useContext(GlobalContext);
   const { recruiterProfile } = globalData;
   // eslint-disable-next-line camelcase
@@ -58,7 +63,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   const [values, setValues] = useState({});
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [type, setType] = useState('recruiter');
+  const [type, setType] = useState(edit?.interviewType || 'recruiter');
   const [scheduleProgress, setScheduleProgress] = useState('started');
   const [linkToInterview, setLinkToInterview] = useState('loading...');
 
@@ -72,10 +77,24 @@ const ScheduleButton = ({ execute, data, customButton }) => {
     }
 
     setLoading(true);
+
+    if (edit) {
+      await updateInterview(
+        { ...values, createdByTeam },
+        edit._id,
+        'Interview succesfully updated'
+      );
+      setVisible(false);
+      setLoading(false);
+      setValues(values);
+      await execute();
+      return;
+    }
     const interviewData = await scheduleInterview(
-      { ...values, createdByTeam },
+      { ...values, createdByTeam, sendCalendarInvites: true },
       'Interview succesfully scheduled'
     );
+
     setLoading(false);
     const { interviewLink } = interviewData;
     setLinkToInterview(interviewLink);
@@ -93,6 +112,10 @@ const ScheduleButton = ({ execute, data, customButton }) => {
     }
   }, [visible]);
 
+  const debreifTimes = {
+    candidateDebriefTime: edit?.candidateDebriefTime ? moment(edit.candidateDebriefTime) : '',
+    clientDebriefTime: edit?.clientDebriefTime ? moment(edit.clientDebriefTime) : '',
+  };
   const Documents = props => (
     <>
       <div style={{ marginBottom: 8 }}>Add Candidate Documents</div>
@@ -153,7 +176,13 @@ const ScheduleButton = ({ execute, data, customButton }) => {
           <Form
             layout="vertical"
             onFinish={onFinish}
-            initialValues={{ interviewType: 'recruiter', recording: true }}
+            initialValues={{
+              interviewType: type,
+              recording: true,
+              ...edit,
+              // interviewTime: [moment(edit?.interviewTime?.[0]), moment(edit?.interviewTime?.[1])],
+              ...debreifTimes,
+            }}
             hideRequiredMark
           >
             <Form.Item name="interviewType" label="Interview Type" rules={[{ required: true }]}>
@@ -181,7 +210,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
                     { type: 'email', message: 'The input is not valid E-mail!' },
                   ]}
                 >
-                  <Input placeholder="Candidate email" />
+                  <Input disabled={edit} placeholder="Candidate email" />
                 </Form.Item>
               </Col>
             </Row>
@@ -192,13 +221,13 @@ const ScheduleButton = ({ execute, data, customButton }) => {
                   name="interviewTime"
                   rules={[{ required: true, message: 'Please choose the Interview Time' }]}
                 >
-                  <SchedulePicker />
+                  <SchedulePicker interviewTime={edit?.interviewTime} />
                 </Form.Item>
               </Col>
             </Row>
-            {type === 'client' && <ClientInfo />}
+            {type === 'client' && <ClientInfo edit={edit} />}
 
-            <AdvancedSettings type={type} />
+            <AdvancedSettings edit={edit} type={type} />
 
             <Button
               loading={loading}
@@ -206,7 +235,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
               type="primary"
               style={{ marginTop: 8, width: '100%' }}
             >
-              Schedule Interview
+              {edit ? 'Update Interview' : 'Schedule Interview'}
             </Button>
             <div style={{ marginTop: 8 }}>
               {`A calendar invite will be sent to ${
@@ -220,7 +249,7 @@ const ScheduleButton = ({ execute, data, customButton }) => {
   );
 };
 
-const AdvancedSettings = ({ type }) => {
+const AdvancedSettings = ({ type, edit }) => {
   return (
     <>
       <Collapse className="collapse" bordered={false}>
@@ -239,8 +268,8 @@ const AdvancedSettings = ({ type }) => {
             <>
               <ExtraClientInfo />
               <ClientContact />
-              <PrepRoom />
-              <FollowUpTime />
+              <PrepRoom edit={edit} />
+              <FollowUpTime edit={edit} />
               <SendOutTemplates />
             </>
           )}
@@ -323,7 +352,7 @@ const FollowUpTime = () => (
   </Row>
 );
 
-const ClientInfo = () => (
+const ClientInfo = ({ edit }) => (
   <Row gutter={16}>
     <Col span={12}>
       <Form.Item
@@ -343,7 +372,7 @@ const ClientInfo = () => (
           { type: 'email', message: 'The input is not valid E-mail!' },
         ]}
       >
-        <Input placeholder="Client email" />
+        <Input disabled={edit} placeholder="Client email" />
       </Form.Item>
     </Col>
   </Row>
@@ -423,11 +452,11 @@ const SendOutTemplates = () => {
   );
 };
 
-const PrepRoom = () => (
+const PrepRoom = ({ edit }) => (
   <Row gutter={16}>
     <Col span={24}>
       <Form.Item label="Prep Room Times" name="prepRoomTime">
-        <SchedulePicker />
+        <SchedulePicker interviewTime={edit?.prepRoomTime} disabled={!!edit} />
       </Form.Item>
     </Col>
   </Row>
