@@ -1,12 +1,7 @@
 import useSWR from 'swr';
 import fetcher from '../fetcher';
 
-interface LiveTypes {
-  data: Data;
-  isLoading: boolean;
-  isError: boolean;
-  mutate?: any;
-}
+
 
 interface Data {
   _id: string;
@@ -28,6 +23,15 @@ interface Data {
   recording: boolean;
   participants: any;
 }
+
+
+interface LiveTypes {
+  data: Data;
+  isLoading: boolean;
+  isError: boolean;
+  mutate?: any;
+}
+
 
 export const useLive = (id: string): LiveTypes => {
   const { data, error, mutate } = useSWR(id ? [`/v1/live/${id}`] : null, fetcher);
@@ -65,6 +69,7 @@ export const useVideo = (id: string): LiveTypes => {
 
   export const useVideos = (): LiveTypes => {
     const { data, error } = useSWR([`/v1/videos`], fetcher);
+    // eslint-disable-next-line prettier/prettier
     const sortedData = data?.sort((a: any, b: any) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1));
     return {
       data: sortedData,

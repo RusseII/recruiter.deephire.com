@@ -1,31 +1,30 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Typography } from 'antd';
+import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
+// eslint-disable-next-line import/no-unresolved
 import ClickHistory from './ClickHistory';
 import CandidateAnalyticsTable from './CandidateAnalyticsTable';
-import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
-import { useAsync } from '@/services/hooks';
+import {useShortlist} from '@/services/apiHooks'
 
 
-import { getShortListData } from '@/services/api';
 
 interface Click {
-  clickTime: string,
-  color: string,
-  message: string
+  clickTime: string;
+  color: string;
+  message: string;
+  name?: string;
 }
 
-interface Interview {
-
-  clicks: [string];
-  liveInterviewData: { candidateName?: string; }
-  userName?: string;
+interface TrackedClick {
+  name: string;
+  timestamp: string
 }
 
 const getClickData = (data: any) => {
   if (!data) return null
 
-  const { clicks, interviews, timestamp } = data
+  const { trackedClicks, timestamp } = data
 
 
   const clickData: Click[] = [];
@@ -36,40 +35,29 @@ const getClickData = (data: any) => {
     message: 'Created',
   });
 
-  if (interviews) {
-    interviews.forEach((interview: Interview) => {
-      if (interview.clicks) {
-        interview.clicks.forEach((clickTime: string) => {
-          clickData.push({
-            clickTime,
-            color: 'green',
-            message: `Viewed ${interview.userName || interview.liveInterviewData.candidateName}`,
-          });
-        })
-      }
-    })
-  }
-  if (clicks) {
-    clicks.forEach((clickTime: string) => {
+
+  if (trackedClicks) {
+    trackedClicks.forEach((click: TrackedClick) => {
       clickData.push({
-        clickTime,
+        name: click.name,
+        clickTime: click.timestamp,
         color: 'blue',
-        message: 'Viewed link',
+        message: `${click.name} viewed link`,
       });
     });
   }
+
 
   return clickData
 
 }
 const ShortListAnalytics = () => {
   const { id } = lowerCaseQueryParams(window.location.search);
-  const { value: analyticsData, pending, execute } = useAsync(getShortListData, false);
 
-  useEffect(() => {
-    execute(id);
-  }, [id]);
+  const {data: analyticsData, isLoading } = useShortlist(id)
 
+
+  // eslint-disable-next-line prettier/prettier
   const clickData = getClickData(analyticsData?.[0])
 
 
@@ -80,12 +68,12 @@ const ShortListAnalytics = () => {
         subTitle={<Typography.Text copyable>{analyticsData?.[0]?.shortUrl}</Typography.Text>}
       />
       <CandidateAnalyticsTable
-        pending={pending}
+        pending={isLoading}
         analyticsData={analyticsData?.[0]}
         style={{ marginBottom: 24 }}
       />
       <ClickHistory
-        pending={pending}
+        pending={isLoading}
         clicks={clickData}
       />
     </>

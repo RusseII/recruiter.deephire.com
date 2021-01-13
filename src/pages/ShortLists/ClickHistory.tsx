@@ -19,9 +19,9 @@ const friendlyDate = rawDate => {
   return displayTime;
 };
 const ClickHistory = ({ clicks, pending }: ClickHistoryProps) => {
-  let sortedClicks = []
+  let sortedClicks = [];
   if (clicks) {
-  sortedClicks = clicks.sort((a,b) => +new Date(b.clickTime) - +new Date(a.clickTime))
+    sortedClicks = clicks.sort((a, b) => +new Date(b.clickTime) - +new Date(a.clickTime));
   }
   return (
     <Card title="Link Click History">
@@ -34,7 +34,9 @@ const ClickHistory = ({ clicks, pending }: ClickHistoryProps) => {
         {clicks && (
           <Timeline style={{ marginBottom: -48 }}>
             {sortedClicks.map(click => (
-              <Timeline.Item color={click.color}> { click.message + " " + friendlyDate(click.clickTime)}</Timeline.Item>
+              <Timeline.Item color={click.color}>
+                {`${click.message} ${friendlyDate(click.clickTime)}`}
+              </Timeline.Item>
             ))}
           </Timeline>
         )}
