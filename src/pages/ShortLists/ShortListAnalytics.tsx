@@ -1,30 +1,30 @@
 import React from 'react';
 import { Typography } from 'antd';
+import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
+// eslint-disable-next-line import/no-unresolved
 import ClickHistory from './ClickHistory';
 import CandidateAnalyticsTable from './CandidateAnalyticsTable';
-import { lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 import {useShortlist} from '@/services/apiHooks'
 
 
 
 interface Click {
-  clickTime: string,
-  color: string,
-  message: string
+  clickTime: string;
+  color: string;
+  message: string;
+  name?: string;
 }
 
-interface Interview {
-
-  clicks: [string];
-  liveInterviewData: { candidateName?: string; }
-  userName?: string;
+interface TrackedClick {
+  name: string;
+  timestamp: string
 }
 
 const getClickData = (data: any) => {
   if (!data) return null
 
-  const { clicks, interviews, timestamp } = data
+  const { trackedClicks, timestamp } = data
 
 
   const clickData: Click[] = [];
@@ -35,28 +35,18 @@ const getClickData = (data: any) => {
     message: 'Created',
   });
 
-  if (interviews) {
-    interviews.forEach((interview: Interview) => {
-      if (interview.clicks) {
-        interview.clicks.forEach((clickTime: string) => {
-          clickData.push({
-            clickTime,
-            color: 'green',
-            message: `Viewed ${interview.userName || interview.liveInterviewData.candidateName}`,
-          });
-        })
-      }
-    })
-  }
-  if (clicks) {
-    clicks.forEach((clickTime: string) => {
+
+  if (trackedClicks) {
+    trackedClicks.forEach((click: TrackedClick) => {
       clickData.push({
-        clickTime,
+        name: click.name,
+        clickTime: click.timestamp,
         color: 'blue',
-        message: 'Viewed link',
+        message: `${click.name} viewed link`,
       });
     });
   }
+
 
   return clickData
 
@@ -67,6 +57,7 @@ const ShortListAnalytics = () => {
   const {data: analyticsData, isLoading } = useShortlist(id)
 
 
+  // eslint-disable-next-line prettier/prettier
   const clickData = getClickData(analyticsData?.[0])
 
 

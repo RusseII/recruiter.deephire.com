@@ -21,7 +21,7 @@ module.exports = {
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
     'no-alert': 0,
     'prettier/prettier': ['error'],
-    'react/jsx-filename-extension': [1, { extensions: ['.js'] }],
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.tsx'] }],
     'react/jsx-wrap-multilines': 0,
     'react/prop-types': 0,
     'react/forbid-prop-types': 0,
