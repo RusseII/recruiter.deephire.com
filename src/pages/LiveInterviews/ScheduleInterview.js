@@ -22,7 +22,7 @@ import {
   removeCandidateDocument,
   updateInterview,
 } from '@/services/api';
-import { useLiveTemplates } from '@/services/apiHooks';
+import { useLiveTemplates, useLive } from '@/services/apiHooks';
 
 import CandidateDataCard from '@/components/Candidate/DataCard';
 import GlobalContext from '@/layouts/MenuContext';
@@ -53,19 +53,28 @@ const calendarProps = {
   },
   format: 'MM-DD h:mm a',
 };
-const ScheduleButton = ({ execute, data, customButton, edit }) => {
+const ScheduleButton = ({ execute, data, customButton, editMode }) => {
+  // set this in this component on a click event if passing in an id
+  const [selectedId, setSelectedId] = useState(null);
+  const { data: edit, isLoading, mutate } = useLive(selectedId);
   const globalData = useContext(GlobalContext);
   const { recruiterProfile } = globalData;
   // eslint-disable-next-line camelcase
   const createdByTeam = recruiterProfile?.app_metadata?.team;
-
+  const isShown = editMode ? edit && !isLoading : true;
   const { candidateEmail, candidateName, jobName } = data || {};
   const [values, setValues] = useState({});
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [type, setType] = useState(edit?.interviewType || 'recruiter');
+  const [type, setType] = useState('recruiter');
   const [scheduleProgress, setScheduleProgress] = useState('started');
   const [linkToInterview, setLinkToInterview] = useState('loading...');
+
+  useEffect(() => {
+    if (edit) {
+      setType(edit.interviewType);
+    }
+  }, [edit]);
 
   const onFinish = async values => {
     // TODO auto load the tempaltes here?
@@ -78,7 +87,7 @@ const ScheduleButton = ({ execute, data, customButton, edit }) => {
 
     setLoading(true);
 
-    if (edit) {
+    if (editMode) {
       await updateInterview(
         { ...values, createdByTeam },
         edit._id,
@@ -87,7 +96,8 @@ const ScheduleButton = ({ execute, data, customButton, edit }) => {
       setVisible(false);
       setLoading(false);
       setValues(values);
-      await execute();
+      execute();
+      mutate();
       return;
     }
     const interviewData = await scheduleInterview(
@@ -135,9 +145,13 @@ const ScheduleButton = ({ execute, data, customButton, edit }) => {
     </>
   );
 
+  const customButtonClick = id => {
+    setVisible(true);
+    setSelectedId(id);
+  };
   return (
     <div>
-      {(customButton && customButton(() => setVisible(true))) || (
+      {(customButton && customButton(customButtonClick)) || (
         <Button type="primary" onClick={() => setVisible(true)} icon={<PlusOutlined />}>
           Schedule Interview
         </Button>
@@ -172,7 +186,7 @@ const ScheduleButton = ({ execute, data, customButton, edit }) => {
           />
         )}
 
-        {scheduleProgress === 'started' && (
+        {scheduleProgress === 'started' && isShown && (
           <Form
             layout="vertical"
             onFinish={onFinish}
