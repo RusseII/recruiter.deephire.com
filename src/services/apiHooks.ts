@@ -45,38 +45,23 @@ export const useLive = (id: string): LiveTypes => {
 };
 
 export const useLives = (): LiveTypes => {
-  const { data, error } = useSWR([`/v1/live`], fetcher);
+  const { data, error, mutate } = useSWR([`/v1/live`], fetcher);
+  const sortedData = data?.sort((a: any, b: any) => 
+  { 
+    return new Date(b.interviewTime[0]).getTime() - new Date(a.interviewTime[0]).getTime()
+  });
 
   return {
-    data,
+    data: sortedData,
     isLoading: !error && !data,
     isError: error,
+    mutate
   };
 };
 
 
 
-export const useVideo = (id: string): LiveTypes => {
-    const { data, error, mutate } = useSWR(id ? [`/v1/videos/${id}`] : null, fetcher);
-  
-    return {
-      data,
-      isLoading: !error && !data && id != null,
-      isError: error,
-      mutate,
-    };
-  };
 
-  export const useVideos = (): LiveTypes => {
-    const { data, error } = useSWR([`/v1/videos`], fetcher);
-    // eslint-disable-next-line prettier/prettier
-    const sortedData = data?.sort((a: any, b: any) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1));
-    return {
-      data: sortedData,
-      isLoading: !error && !data,
-      isError: error,
-    };
-  };
   export const useVideosArchives = (): LiveTypes => {
     const { data, error } = useSWR([`/v1/videos/arhives`], fetcher);
     const sortedData = data?.sort((a: any, b: any) => (new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1));

@@ -10,42 +10,11 @@ import ShareInterview from '@/components/ShareInterview';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
 import GlobalContext from '@/layouts/MenuContext';
-import { getLiveInterviews } from '@/services/api';
+// import { getLiveInterviews } from '@/services/api';
+import { useLives } from '@/services/apiHooks';
 import { useSearch } from '@/services/complexHooks';
-import { useAsync } from '@/services/hooks';
+// import { useAsync } from '@/services/hooks';
 import InviteDrawer from './ScheduleInterview';
-
-const Actions = ({ data, execute }) => {
-  const { interviewLink } = data;
-
-  return (
-    <Space>
-      <Tooltip title="Join the interview">
-        <VideoCameraOutlined
-          onClick={() => window.open(`${interviewLink}?role=recruiter`, '_blank')}
-        />
-      </Tooltip>
-      <ShareInterview url={data.interviewLink} />
-      <InviteDrawer
-        edit={data}
-        execute={execute}
-        customButton={onClick => (
-          <Tooltip title="Edit Live Interview">
-            <EditOutlined onClick={onClick} />
-          </Tooltip>
-        )}
-      />
-      <InviteDrawer
-        data={data}
-        customButton={onClick => (
-          <Tooltip title="Add candidate documents that will be visible during the interview">
-            <FileAddOutlined onClick={onClick} />
-          </Tooltip>
-        )}
-      />
-    </Space>
-  );
-};
 
 const LiveInterviews = () => {
   const getColumnSearchProps = useSearch();
@@ -63,20 +32,11 @@ const LiveInterviews = () => {
 
   const globalData = useContext(GlobalContext);
 
-  const fetchLiveInterviews = async () => {
-    const live = await getLiveInterviews();
-    if (live) {
-      const liveOrdered = live.sort((a, b) => {
-        return new Date(b.interviewTime[0]) - new Date(a.interviewTime[0]);
-      });
-      return liveOrdered;
-    }
-    return live;
-  };
-
-  const { execute, pending, value } = useAsync(fetchLiveInterviews, false);
+  // const { execute, pending, value } = useAsync(fetchLiveInterviews, false);
+  const { data: value, isLoading: pending, mutate: execute } = useLives();
 
   const { recruiterProfile, liveInterviews, setLiveInterviews } = globalData;
+
   // eslint-disable-next-line camelcase
 
   // let liveInterViewTeamFilter = liveInterviews;
@@ -89,7 +49,9 @@ const LiveInterviews = () => {
   // }
 
   useEffect(() => {
-    execute();
+    if (execute) {
+      execute();
+    }
   }, [reload]);
 
   useEffect(() => {
@@ -236,7 +198,7 @@ const LiveInterviews = () => {
           // setting width here does NOTHINg and i have no idea why
           width: 64,
           render: (text, data) => {
-            return <Actions data={data} execute={execute} />;
+            return <Actions data={data} execute={() => execute(data.id)} />;
           },
         }
       : null,
@@ -264,6 +226,43 @@ const LiveInterviews = () => {
   const pastInterviews = liveInterviews.filter(liveInterview => {
     return new Date(liveInterview.interviewTime[1]) < new Date();
   });
+
+  const Actions = ({ data, execute }) => {
+    const { interviewLink } = data;
+
+    // const update = () => {
+    //   onClick()
+    //   set
+    // }
+
+    return (
+      <Space>
+        <Tooltip title="Join the interview">
+          <VideoCameraOutlined
+            onClick={() => window.open(`${interviewLink}?role=recruiter`, '_blank')}
+          />
+        </Tooltip>
+        <ShareInterview url={data.interviewLink} />
+        <InviteDrawer
+          editMode
+          execute={execute}
+          customButton={onClick => (
+            <Tooltip title="Edit Live Interview">
+              <EditOutlined onClick={() => onClick(data._id)} />
+            </Tooltip>
+          )}
+        />
+        <InviteDrawer
+          data={data}
+          customButton={onClick => (
+            <Tooltip title="Add candidate documents that will be visible during the interview">
+              <FileAddOutlined onClick={onClick} />
+            </Tooltip>
+          )}
+        />
+      </Space>
+    );
+  };
 
   return (
     <>
