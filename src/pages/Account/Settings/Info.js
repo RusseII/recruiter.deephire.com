@@ -22,7 +22,9 @@ class Info extends Component {
       base: (
         <FormattedMessage id="app.settings.menuMap.binding" defaultMessage="Company Branding" />
       ),
-      team: 'Team',
+      users: 'Users',
+      teams: 'Teams',
+
       // notification: (
       //   <FormattedMessage
       //     id="app.settings.menuMap.notification"
