@@ -59,8 +59,12 @@ export async function updateInterviews(id, params) {
   return request(`${newApi}/interviews/${id}`, { method: 'PUT', body, headers: setHeaders() });
 }
 
-export async function updateCompany(body) {
-  return request(`${newApi}/companies`, { method: 'PUT', body, headers: setHeaders() });
+export async function updateCompany(body, successMessage) {
+  return request(
+    `${newApi}/companies`,
+    { method: 'PUT', body, headers: setHeaders() },
+    successMessage
+  );
 }
 
 export async function getShortLists() {

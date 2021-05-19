@@ -145,7 +145,11 @@ export default [
             component: './Account/Settings/CompanyBranding',
           },
           {
-            path: '/account/settings/team',
+            path: '/account/settings/users',
+            component: './Account/Settings/UserSettings',
+          },
+          {
+            path: '/account/settings/teams',
             component: './Account/Settings/TeamSettings',
           },
           {

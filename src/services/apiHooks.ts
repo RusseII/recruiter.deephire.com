@@ -46,6 +46,7 @@ export const useLive = (id: string): LiveTypes => {
 
 export const useLives = (): LiveTypes => {
   const { data, error, mutate } = useSWR([`/v1/live`], fetcher);
+  // eslint-disable-next-line prettier/prettier
   const sortedData = data?.sort((a: any, b: any) => 
   { 
     return new Date(b.interviewTime[0]).getTime() - new Date(a.interviewTime[0]).getTime()
@@ -73,11 +74,12 @@ export const useLives = (): LiveTypes => {
   };
 
   export const useCompany = (): LiveTypes => {
-    const { data, error } = useSWR([`/v1/companies`], fetcher);
+    const { data, error, mutate } = useSWR([`/v1/companies`], fetcher);
     return {
       data,
       isLoading: !error && !data,
       isError: error,
+      mutate,
     };
   };
 
