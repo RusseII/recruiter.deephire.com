@@ -1,7 +1,18 @@
-import React from 'react';
-import { DeleteOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import '@ant-design/compatible/assets/index.css';
-import { Table, Button, Spin, Tooltip, Popconfirm } from 'antd';
+import {
+  Table,
+  Button,
+  Spin,
+  Tooltip,
+  Popconfirm,
+  PageHeader,
+  Drawer,
+  Space,
+  Form,
+  Input,
+} from 'antd';
 import { connect } from 'dva';
 import { useCompany } from '@/services/apiHooks';
 import { updateCompany } from '@/services/api';
@@ -12,43 +23,99 @@ const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin'
 const deleteTeam = async (team, companyData, mutateCompanyData) => {
   if (!companyData) return null;
   const teams = companyData.teams.filter(teamDetails => teamDetails.team !== team);
+  mutateCompanyData({ ...companyData, teams }, false);
+  const companyUpdate = await updateCompany({ teams }, 'Team deleted');
+  mutateCompanyData();
+
+  return companyUpdate;
+};
+
+const editTeam = async (teamData, companyData, mutateCompanyData) => {
+  if (!companyData) return null;
+  const index = companyData.teams.findIndex(teamDetails => teamDetails.team === teamData.team);
+  // eslint-disable-next-line no-param-reassign
+  companyData.teams[index] = teamData;
+  const { teams } = companyData;
+  mutateCompanyData({ ...companyData, teams });
   const companyUpdate = await updateCompany({ teams }, 'Team deleted');
   mutateCompanyData();
   return companyUpdate;
 };
 
+const addTeam = async (companyData, newTeam, mutateCompanyData) => {
+  if (!companyData) return null;
+  if (!companyData.teams) {
+    // eslint-disable-next-line no-param-reassign
+    companyData.teams = [];
+  }
+  companyData.teams.unshift(newTeam);
+  const { teams } = companyData;
+  console.log({ mutateCompanyData });
+  mutateCompanyData({ ...companyData, teams }, false);
+  const companyUpdate = await updateCompany({ teams }, 'Team Added');
+  mutateCompanyData();
+  return companyUpdate;
+};
+
+const onFinishFailed = () => {};
 const Team = () => {
   const { data: companyData, isLoading, mutate: mutateCompanyData } = useCompany();
-
-  const columnsTeam = [
-    {
-      title: 'Logo',
-      dataIndex: 'logo',
+  const [isEditing, setIsEditing] = useState(false);
+  console.log(companyData?.teams);
+  const onFinish = newTeam => {
+    addTeam(companyData, newTeam, mutateCompanyData);
+    setIsEditing(false);
+  };
+  const checkExistingTeam = () => ({
+    validator(_, value) {
+      const isTeamAlreadyCreated = companyData?.teams?.find(
+        singleTeamData => singleTeamData.team === value
+      );
+      if (isTeamAlreadyCreated) {
+        return Promise.reject(new Error('This team already exists'));
+      }
+      return Promise.resolve();
     },
+  });
+
+  const CreateTeamButton = () => {
+    if (!isAdmin) return null;
+
+    return (
+      <Button type="primary" ghost onClick={() => setIsEditing(true)} icon={<PlusOutlined />}>
+        Create Team
+      </Button>
+    );
+  };
+  const columnsTeam = [
+    // {
+    //   title: 'Logo',
+    //   dataIndex: 'logo',
+    // },
     {
       title: 'Team',
       dataIndex: 'team',
     },
-    {
-      title: 'Brand',
-      dataIndex: 'Brand',
-    },
+    // {
+    //   title: 'Brand',
+    //   dataIndex: 'Brand',
+    // },
     isAdmin()
       ? {
           title: 'Actions',
           render(test, data) {
             const { team } = data;
             return (
-              <>
+              <Space>
                 {/* <Tooltip placement="left" title="Edit team">
-                  <Button shape="circle">
+                  <Button shape="circle" onClick={() => setIsEditing(true)}>
                     <EditOutlined />
                   </Button>
                 </Tooltip> */}
                 <Popconfirm
                   title={`Are you sure you want to delete ${team}?`}
                   onConfirm={() => deleteTeam(team, companyData, mutateCompanyData)}
-                  okText="Delete User"
+                  okText="Delete Team"
                   okType="danger"
                   cancelText="Cancel"
                 >
@@ -58,7 +125,7 @@ const Team = () => {
                     </Button>
                   </Tooltip>
                 </Popconfirm>
-              </>
+              </Space>
             );
           },
         }
@@ -67,7 +134,41 @@ const Team = () => {
 
   return (
     <Spin spinning={isLoading}>
-      <Table dataSource={companyData?.teams} pagination={false} columns={columnsTeam} />{' '}
+      <PageHeader extra={<CreateTeamButton />} />
+      <Table
+        key={JSON.stringify(companyData)}
+        dataSource={companyData?.teams}
+        pagination={false}
+        columns={columnsTeam}
+      />
+      <Drawer
+        title="Team"
+        placement="right"
+        onClose={() => setIsEditing(false)}
+        visible={isEditing}
+      >
+        <Form
+          // {...layout}
+          name="basic"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          hideRequiredMark
+        >
+          <Form.Item
+            label="Team Name"
+            name="team"
+            rules={[{ required: true, message: 'Please enter a team name' }, checkExistingTeam]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item>
+            <Button block type="primary" htmlType="submit">
+              Create Team
+            </Button>
+          </Form.Item>
+        </Form>
+      </Drawer>
     </Spin>
   );
 };
