@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DeleteOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, PlusOutlined, ReloadOutlined, EditOutlined } from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import {
@@ -14,6 +14,9 @@ import {
   Popconfirm,
   Select,
   Tag,
+  Space,
+  Drawer,
+  Radio,
 } from 'antd';
 import readableTime from 'readable-timestamp';
 import { connect } from 'dva';
@@ -55,6 +58,9 @@ const Team = () => {
     await deleteUsers(userId, `${name} deleted`);
     setReload(flag => !flag);
   };
+  const [isEditing, setIsEditing] = useState(false);
+
+  const onFinish = () => {};
 
   const columnsTeam = [
     {
@@ -110,19 +116,26 @@ const Team = () => {
           render(test, data) {
             const { name, user_id: userId } = data;
             return (
-              <Popconfirm
-                title={`Are you sure you want to delete ${name}?`}
-                onConfirm={() => deleteUser(userId, name)}
-                okText="Delete User"
-                okType="danger"
-                cancelText="Cancel"
-              >
-                <Tooltip placement="left" title="Delete User">
-                  <Button shape="circle">
-                    <DeleteOutlined />
+              <Space>
+                <Tooltip placement="left" title="Edit team">
+                  <Button shape="circle" onClick={() => setIsEditing(true)}>
+                    <EditOutlined />
                   </Button>
                 </Tooltip>
-              </Popconfirm>
+                <Popconfirm
+                  title={`Are you sure you want to delete ${name}?`}
+                  onConfirm={() => deleteUser(userId, name)}
+                  okText="Delete User"
+                  okType="danger"
+                  cancelText="Cancel"
+                >
+                  <Tooltip placement="left" title="Delete User">
+                    <Button shape="circle">
+                      <DeleteOutlined />
+                    </Button>
+                  </Tooltip>
+                </Popconfirm>
+              </Space>
             );
           },
         }
@@ -217,6 +230,45 @@ const Team = () => {
 
   return (
     <div style={{ paddingTop: 12 }}>
+      <Drawer
+        title="Edit User"
+        placement="right"
+        onClose={() => setIsEditing(false)}
+        visible={isEditing}
+      >
+        <Form name="basic" onFinish={onFinish} hideRequiredMark>
+          <Form.Item
+            label="Role"
+            name="role"
+            rules={[{ required: true, message: 'Please select a role' }]}
+          >
+            <Radio.Group>
+              <Radio.Button value="user">User</Radio.Button>
+              <Radio.Button value="admin">Admin</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item
+            label="Teams"
+            name="teams"
+            rules={[{ required: true, message: 'Please select teams' }]}
+          >
+            <Select
+              mode="multiple"
+              allowClear
+              style={{ width: '100%' }}
+              placeholder="Please select"
+              // onChange={handleChange}
+            >
+              {companyTeams?.map(({ team }) => <Option key={team}>{team}</Option>)}
+            </Select>
+          </Form.Item>
+          <Form.Item>
+            <Button block type="primary" htmlType="submit">
+              Update User
+            </Button>
+          </Form.Item>
+        </Form>
+      </Drawer>
       <InviteForm
         companyTeams={companyTeams}
         reload={setReload}
