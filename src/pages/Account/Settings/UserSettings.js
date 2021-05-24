@@ -100,12 +100,21 @@ const Team = () => {
       },
     },
     {
-      title: 'Team',
+      title: 'Teams',
       // dataIndex: 'app_metadata.role',
       render(test, data) {
         const {
           app_metadata: { team },
         } = data;
+        if (Array.isArray(team)) {
+          return (
+            <>
+              {team.map(singleTeam => (
+                <Tag>{singleTeam}</Tag>
+              ))}
+            </>
+          );
+        }
         return <Tag>{team}</Tag>;
       },
     },

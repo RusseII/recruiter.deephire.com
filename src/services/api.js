@@ -123,6 +123,16 @@ export async function getCandidateProfile(id) {
 }
 
 export async function getRecruiterProfile() {
+  // return {
+  //   email: 'apple@deephire.com',
+  //   name: 'apple@deephire.com',
+  //   user_id: 'auth0|5fc900265bddd2006e2f37d1',
+  //   app_metadata: {
+  //     companyId: '5e95d7d3aed1120001480d69',
+  //     role: 'admin',
+  //     team: 'Raleigh',
+  //   },
+  // };
   return request(`${newApi}/profiles`, {
     method: 'GET',
     headers: setHeaders(),

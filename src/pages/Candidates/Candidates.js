@@ -116,11 +116,10 @@ const Candidates = () => {
   }, [archives, recruiterProfile, reload]);
 
   useEffect(() => {
-    if (recruiterProfile) {
-      setSelectFilter(
-        recruiterProfile?.app_metadata?.team ? [recruiterProfile?.app_metadata?.team] : []
-      );
-    }
+    const team = recruiterProfile?.app_metadata?.team;
+    if (!team) return;
+
+    setSelectFilter(Array.isArray(team) ? team : [team]);
   }, [recruiterProfile?.app_metadata?.team]);
 
   const { filters: createdByTeamFilters, onFilter } = handleFilter(
