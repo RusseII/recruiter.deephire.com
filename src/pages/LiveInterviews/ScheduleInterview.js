@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Result,
   Drawer,
@@ -22,10 +22,9 @@ import {
   removeCandidateDocument,
   updateInterview,
 } from '@/services/api';
-import { useLiveTemplates, useLive } from '@/services/apiHooks';
+import { useLiveTemplates, useLive, useRecruiter } from '@/services/apiHooks';
 
 import CandidateDataCard from '@/components/Candidate/DataCard';
-import GlobalContext from '@/layouts/MenuContext';
 import SchedulePicker from './SchedulePicker';
 import 'react-quill/dist/quill.snow.css';
 
@@ -57,10 +56,11 @@ const ScheduleButton = ({ execute, data, customButton, editMode }) => {
   // set this in this component on a click event if passing in an id
   const [selectedId, setSelectedId] = useState(null);
   const { data: edit, isLoading, mutate } = useLive(selectedId);
-  const globalData = useContext(GlobalContext);
-  const { recruiterProfile } = globalData;
+  const { data: recruiterProfile } = useRecruiter();
   // eslint-disable-next-line camelcase
-  const createdByTeam = recruiterProfile?.app_metadata?.team;
+  const teamsData = recruiterProfile?.app_metadata?.team;
+  const recruiterTeams =
+    Array.isArray(teamsData) && teamsData?.length === 1 ? teamsData[0] : teamsData;
   const isShown = editMode ? edit && !isLoading : true;
   const { candidateEmail, candidateName, jobName } = data || {};
   const [values, setValues] = useState({});
@@ -89,7 +89,7 @@ const ScheduleButton = ({ execute, data, customButton, editMode }) => {
 
     if (editMode) {
       await updateInterview(
-        { ...values, createdByTeam },
+        { createdByTeam: recruiterTeams, ...values },
         edit._id,
         'Interview succesfully updated'
       );
@@ -101,7 +101,7 @@ const ScheduleButton = ({ execute, data, customButton, editMode }) => {
       return;
     }
     const interviewData = await scheduleInterview(
-      { ...values, createdByTeam, sendCalendarInvites: true },
+      { createdByTeam: recruiterTeams, ...values, sendCalendarInvites: true },
       'Interview succesfully scheduled'
     );
 
@@ -199,6 +199,8 @@ const ScheduleButton = ({ execute, data, customButton, editMode }) => {
             }}
             hideRequiredMark
           >
+            <SelectTeam teams={recruiterTeams} />
+
             <Form.Item name="interviewType" label="Interview Type" rules={[{ required: true }]}>
               <Select onChange={type => setType(type)}>
                 <Option value="recruiter">You + Candidate</Option>
@@ -261,6 +263,25 @@ const ScheduleButton = ({ execute, data, customButton, editMode }) => {
       </Drawer>
     </div>
   );
+};
+
+const SelectTeam = ({ teams }) => {
+  if (Array.isArray(teams) && teams.length > 1) {
+    return (
+      <Form.Item
+        label="Recruiting Team"
+        name="createdByTeam"
+        rules={[{ required: true, message: 'Please choose a recruiting team' }]}
+      >
+        <Select placeholder="Please select">
+          {teams.map(team => (
+            <Option value={team}>{team}</Option>
+          ))}
+        </Select>
+      </Form.Item>
+    );
+  }
+  return null;
 };
 
 const AdvancedSettings = ({ type, edit }) => {

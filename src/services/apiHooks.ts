@@ -150,3 +150,24 @@ export const useLives = (): LiveTypes => {
       isError: error,
     };
   };
+
+  
+  // const initialData = {
+  //   email: 'apple@deephire.com',
+  //   name: 'apple@deephire.com',
+  //   user_id: 'auth0|5fc900265bddd2006e2f37d1',
+  //   app_metadata: {
+  //     companyId: '5e95d7d3aed1120001480d69',
+  //     role: 'admin',
+  //     team: ['Raleigh'],
+  //   },
+  // }
+
+  export const useRecruiter = (): LiveTypes => {
+    const { data, error } = useSWR(['/v1/profiles'], fetcher);
+    return {
+      data,
+      isLoading: !error && !data,
+      isError: error,
+    };
+  };
