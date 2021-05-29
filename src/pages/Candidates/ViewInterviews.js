@@ -209,14 +209,13 @@ const TableList = () => {
   // };
 
   useEffect(() => {
-    if (recruiterProfile) {
-      setFilteredInfo(values => ({
-        ...values,
-        createdByTeam: recruiterProfile?.app_metadata?.team
-          ? [recruiterProfile?.app_metadata?.team]
-          : null,
-      }));
-    }
+    const team = recruiterProfile?.app_metadata?.team;
+    if (!team) return;
+
+    setFilteredInfo(values => ({
+      ...values,
+      createdByTeam: Array.isArray(team) ? team : [team],
+    }));
   }, [recruiterProfile?.app_metadata?.team]);
 
   const reload = () => {
