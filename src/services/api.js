@@ -510,6 +510,18 @@ export async function updateRule(params = {}) {
   });
 }
 
+export async function updateRecruiterAppData(id, body, successMessage) {
+  return request(
+    `${newApi}/profiles/${id}`,
+    {
+      method: 'PUT',
+      headers: setHeaders(),
+      body,
+    },
+    successMessage
+  );
+}
+
 export async function fakeSubmitForm(params) {
   return request('/api/forms', {
     method: 'POST',

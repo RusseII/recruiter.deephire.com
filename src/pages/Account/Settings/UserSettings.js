@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DeleteOutlined, PlusOutlined, ReloadOutlined, EditOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
 import {
-  Input,
   Table,
   Button,
-  Modal,
   Tabs,
   Avatar,
   Spin,
@@ -17,24 +13,25 @@ import {
   Space,
   Drawer,
   Radio,
+  Form,
 } from 'antd';
 import readableTime from 'readable-timestamp';
 import { connect } from 'dva';
 import {
   getInvites,
   getTeam,
-  sendInvites,
   deleteInvites,
   putInvites,
   deleteUsers,
   getCompany,
+  updateRecruiterAppData,
 } from '@/services/api';
 import { getAuthority } from '@/utils/authority';
+import InviteForm from '@/components/InviteForm';
 
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 const { Option } = Select;
 
-const FormItem = Form.Item;
 const { TabPane } = Tabs;
 
 const Team = () => {
@@ -58,9 +55,14 @@ const Team = () => {
     await deleteUsers(userId, `${name} deleted`);
     setReload(flag => !flag);
   };
-  const [isEditing, setIsEditing] = useState(false);
+  const [selectedRecruiter, setSelectedRecruiter] = useState(false);
 
-  const onFinish = () => {};
+  const onFinish = async values => {
+    const { user_id: id } = selectedRecruiter;
+    await updateRecruiterAppData(id, values, 'User data succesfully updated!');
+    setSelectedRecruiter(false);
+    setReload(flag => !flag);
+  };
 
   const columnsTeam = [
     {
@@ -126,8 +128,8 @@ const Team = () => {
             const { name, user_id: userId } = data;
             return (
               <Space>
-                <Tooltip placement="left" title="Edit team">
-                  <Button shape="circle" onClick={() => setIsEditing(true)}>
+                <Tooltip placement="left" title="Edit User">
+                  <Button shape="circle" onClick={() => setSelectedRecruiter(data)}>
                     <EditOutlined />
                   </Button>
                 </Tooltip>
@@ -242,23 +244,36 @@ const Team = () => {
       <Drawer
         title="Edit User"
         placement="right"
-        onClose={() => setIsEditing(false)}
-        visible={isEditing}
+        onClose={() => setSelectedRecruiter(false)}
+        visible={!!selectedRecruiter}
       >
-        <Form name="basic" onFinish={onFinish} hideRequiredMark>
+        <Form
+          key={selectedRecruiter.user_id}
+          name="basic"
+          onFinish={onFinish}
+          initialValues={{
+            role: selectedRecruiter.app_metadata?.role,
+            team: selectedRecruiter.app_metadata?.team,
+          }}
+          hideRequiredMark
+        >
           <Form.Item
             label="Role"
             name="role"
             rules={[{ required: true, message: 'Please select a role' }]}
           >
             <Radio.Group>
-              <Radio.Button value="user">User</Radio.Button>
-              <Radio.Button value="admin">Admin</Radio.Button>
+              <Radio.Button key="user" value="user">
+                User
+              </Radio.Button>
+              <Radio.Button key="admin" value="admin">
+                Admin
+              </Radio.Button>
             </Radio.Group>
           </Form.Item>
           <Form.Item
             label="Teams"
-            name="teams"
+            name="team"
             rules={[{ required: true, message: 'Please select teams' }]}
           >
             <Select
@@ -315,68 +330,6 @@ const Team = () => {
     </div>
   );
 };
-
-const InviteForm = Form.create()(props => {
-  const { visible, form, toggleVisible, reload, companyTeams } = props;
-
-  const okHandle = async e => {
-    e.preventDefault();
-
-    form.validateFields(async (err, fieldsValue) => {
-      if (err) return;
-      form.resetFields();
-      const { invitedEmail, role, team } = fieldsValue;
-      const successMessage = `Invited ${invitedEmail}`;
-      sendInvites(invitedEmail, role, team, successMessage);
-
-      toggleVisible(false);
-      reload(flag => !flag);
-    });
-  };
-
-  return (
-    <Modal
-      title="Invite New Users"
-      visible={visible}
-      onOk={okHandle}
-      okText="Invite"
-      onCancel={() => toggleVisible(false)}
-    >
-      <Form onSubmit={okHandle}>
-        <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 15 }} label="Invitation Email">
-          {form.getFieldDecorator('invitedEmail', {
-            rules: [
-              { type: 'email', message: 'The input is not valid E-mail!' },
-              {
-                required: true,
-                message: 'Please input the email address to invite',
-              },
-            ],
-          })(<Input placeholder="email" />)}
-        </FormItem>
-        <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 15 }} label="Role">
-          {form.getFieldDecorator('role', { initialValue: 'user' })(
-            <Select style={{ width: 120 }}>
-              <Option value="user">user</Option>
-              <Option value="admin">admin</Option>
-            </Select>
-          )}
-        </FormItem>
-        {companyTeams && (
-          <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 15 }} label="Team">
-            {form.getFieldDecorator('team')(
-              <Select placeholder="Please select" style={{ maxWidth: 250 }}>
-                {companyTeams.map(team => (
-                  <Option value={team.team}>{team.team}</Option>
-                ))}
-              </Select>
-            )}
-          </FormItem>
-        )}
-      </Form>
-    </Modal>
-  );
-});
 
 export default connect(({ user }) => ({
   currentUser: user.currentUser,
