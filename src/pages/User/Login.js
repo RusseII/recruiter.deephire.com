@@ -126,7 +126,7 @@ class LoginPage extends Component {
             // eslint-disable-next-line prefer-destructuring
             role = inviteData.role;
             // eslint-disable-next-line prefer-destructuring
-            team = inviteData.team;
+            team = inviteData.team?.toString();
           } else {
             _id = ObjectID();
             const companyData = { _id, owner: values.email, companyName: values.company };

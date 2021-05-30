@@ -63,7 +63,7 @@ const InviteForm = Form.create()(props => {
         {companyTeams && (
           <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 15 }} label="Team">
             {form.getFieldDecorator('team')(
-              <Select placeholder="Please select" style={{ maxWidth: 250 }}>
+              <Select mode="multiple" placeholder="Please select" style={{ maxWidth: 250 }}>
                 {companyTeams.map(team => (
                   <Option value={team.team}>{team.team}</Option>
                 ))}
