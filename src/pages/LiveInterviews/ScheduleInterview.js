@@ -23,7 +23,7 @@ import {
   updateInterview,
 } from '@/services/api';
 import { useLiveTemplates, useLive, useRecruiter } from '@/services/apiHooks';
-
+import BrandSelect from '@/components/BrandSelect';
 import CandidateDataCard from '@/components/Candidate/DataCard';
 import SchedulePicker from './SchedulePicker';
 import 'react-quill/dist/quill.snow.css';
@@ -91,7 +91,7 @@ const ScheduleButton = ({ execute, data, customButton, editMode }) => {
       await updateInterview(
         { createdByTeam: recruiterTeams, ...values },
         edit._id,
-        'Interview succesfully updated'
+        'Interview successfully updated'
       );
       setVisible(false);
       setLoading(false);
@@ -102,7 +102,7 @@ const ScheduleButton = ({ execute, data, customButton, editMode }) => {
     }
     const interviewData = await scheduleInterview(
       { createdByTeam: recruiterTeams, ...values, sendCalendarInvites: true },
-      'Interview succesfully scheduled'
+      'Interview successfully scheduled'
     );
 
     setLoading(false);
@@ -200,6 +200,8 @@ const ScheduleButton = ({ execute, data, customButton, editMode }) => {
             hideRequiredMark
           >
             <SelectTeam teams={recruiterTeams} />
+
+            <BrandSelect />
 
             <Form.Item name="interviewType" label="Interview Type" rules={[{ required: true }]}>
               <Select onChange={type => setType(type)}>
