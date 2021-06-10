@@ -170,6 +170,10 @@ class Step1 extends React.PureComponent {
           value => value != null
         );
 
+        // console.log(values);
+
+        // console.log(cleanedValueData);
+
         this.enterLoading();
         if (data && onClick) {
           await onClick(cleanedValueData);
@@ -230,9 +234,13 @@ class Step1 extends React.PureComponent {
             </FormItem>
           )}
 
-          <FormItem {...(data ? drawerLayout : formItemLayout)} label="Brand">
+          <Form.Item
+            name="recruiterCompany"
+            {...(data ? drawerLayout : formItemLayout)}
+            label="Brand"
+          >
             <RawBrandSelect style={{ maxWidth: 250 }} />
-          </FormItem>
+          </Form.Item>
 
           <FormItem {...(data ? drawerLayout : formItemLayout)} label="Name">
             {getFieldDecorator('interviewName', {
