@@ -13,6 +13,7 @@ import GlobalContext from '@/layouts/MenuContext';
 import { getInterviews, getCompany } from '@/services/api';
 import { getAuthority } from '@/utils/authority';
 import UpgradeButton from '@/components/Upgrade/UpgradeButton';
+import { RawBrandSelect } from '@/components/BrandSelect';
 
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
@@ -228,6 +229,10 @@ class Step1 extends React.PureComponent {
               )}
             </FormItem>
           )}
+
+          <FormItem {...(data ? drawerLayout : formItemLayout)} label="Brand">
+            <RawBrandSelect style={{ maxWidth: 250 }} />
+          </FormItem>
 
           <FormItem {...(data ? drawerLayout : formItemLayout)} label="Name">
             {getFieldDecorator('interviewName', {
