@@ -13,7 +13,6 @@ import GlobalContext from '@/layouts/MenuContext';
 import { getInterviews, getCompany } from '@/services/api';
 import { getAuthority } from '@/utils/authority';
 import UpgradeButton from '@/components/Upgrade/UpgradeButton';
-import { RawBrandSelect } from '@/components/BrandSelect';
 
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
@@ -131,7 +130,7 @@ class Step1 extends React.PureComponent {
   async componentDidMount() {
     const { data } = this.props;
     const companyData = await getCompany();
-    this.setState({ companyTeams: companyData?.teams });
+    this.setState({ companyTeams: companyData?.teams, brands: companyData?.brands });
     if (!data) {
       const { setInterviews } = this.context;
       setInterviews(await getInterviews());
@@ -170,10 +169,6 @@ class Step1 extends React.PureComponent {
           value => value != null
         );
 
-        // console.log(values);
-
-        // console.log(cleanedValueData);
-
         this.enterLoading();
         if (data && onClick) {
           await onClick(cleanedValueData);
@@ -192,11 +187,56 @@ class Step1 extends React.PureComponent {
     });
   };
 
+  // I know its bad to have copied code,
+  // but because this is using the classes
+  // this was the simplest solution - Chandler
+  brandOptions = () => {
+    const { brands } = this.state;
+
+    if (!brands) {
+      return null;
+    }
+
+    const brandOptions = Object.keys(brands).map(brand => {
+      const brandData = brands[brand];
+      return <Option value={brand}>{brandData.name}</Option>;
+    });
+
+    return brandOptions;
+  };
+
+  selectBrand = (data, getFieldDecorator, recruiterCompany) => {
+    const options = this.brandOptions();
+
+    if (!options) {
+      return null;
+    }
+
+    return (
+      <Form.Item {...(data ? drawerLayout : formItemLayout)} label="Brand">
+        {getFieldDecorator('recruiterCompany', {
+          initialValue: recruiterCompany,
+          rules: [
+            {
+              required: false,
+              message: 'Branding used for the interview.',
+              whitespace: true,
+            },
+          ],
+        })(
+          <Select style={{ maxWidth: 250 }} placeholder="Select a brand." showSearch>
+            {options}
+          </Select>
+        )}
+      </Form.Item>
+    );
+  };
+
   static contextType = GlobalContext;
 
   render() {
     const { form, data } = this.props;
-    const { interviewConfig = {}, interviewName, createdByTeam } = data || {};
+    const { interviewConfig = {}, interviewName, createdByTeam, recruiterCompany } = data || {};
     const { loading, companyTeams } = this.state;
     const { getFieldDecorator } = form;
     const { interviews, stripeProduct } = this.context;
@@ -234,13 +274,7 @@ class Step1 extends React.PureComponent {
             </FormItem>
           )}
 
-          <Form.Item
-            name="recruiterCompany"
-            {...(data ? drawerLayout : formItemLayout)}
-            label="Brand"
-          >
-            <RawBrandSelect style={{ maxWidth: 250 }} />
-          </Form.Item>
+          {this.selectBrand(data, getFieldDecorator, recruiterCompany)}
 
           <FormItem {...(data ? drawerLayout : formItemLayout)} label="Name">
             {getFieldDecorator('interviewName', {
