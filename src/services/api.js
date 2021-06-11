@@ -21,6 +21,7 @@ export async function createInterview(params) {
     interviewName,
     interviewQuestions,
     createdByTeam,
+    recruiterCompany,
   } = params;
   const questions = interviewQuestions.map(a => ({
     question: a,
@@ -29,6 +30,7 @@ export async function createInterview(params) {
   const body = {
     createdByTeam,
     interviewName,
+    recruiterCompany,
     interviewQuestions: questions,
     interviewConfig: { retakesAllowed, prepTime, answerTime },
   };

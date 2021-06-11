@@ -4,7 +4,7 @@ import { useCompany } from '@/services/apiHooks';
 
 const { Option } = Select;
 
-function BrandSelect() {
+export function RawBrandSelect({ style }) {
   const { data: companyData } = useCompany();
 
   if (!companyData?.brands) {
@@ -23,10 +23,22 @@ function BrandSelect() {
   };
 
   return (
-    <Form.Item name="recruiterCompany" label="Brand">
-      <Select placeholder="Select a brand." showSearch>
-        {Options()}
-      </Select>
+    <Select style={style} placeholder="Select a brand." showSearch>
+      {Options()}
+    </Select>
+  );
+}
+
+function BrandSelect({ layout, style }) {
+  const SelectBox = RawBrandSelect({ style });
+
+  if (!SelectBox) {
+    return null;
+  }
+
+  return (
+    <Form.Item {...layout} name="recruiterCompany" label="Brand">
+      {SelectBox}
     </Form.Item>
   );
 }
