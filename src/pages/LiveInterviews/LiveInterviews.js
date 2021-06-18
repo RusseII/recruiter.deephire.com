@@ -256,7 +256,7 @@ const LiveInterviews = () => {
           data={data}
           customButton={onClick => (
             <Tooltip title="Add candidate documents that will be visible during the interview">
-              <FileAddOutlined onClick={onClick} />
+              <FileAddOutlined onClick={() => onClick(data._id)} />
             </Tooltip>
           )}
         />
