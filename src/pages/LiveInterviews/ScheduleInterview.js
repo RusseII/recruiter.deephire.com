@@ -147,6 +147,7 @@ const ScheduleButton = ({ execute, data, customButton, editMode }) => {
 
   const customButtonClick = id => {
     setVisible(true);
+    // console.log(id);
     setSelectedId(id);
   };
   return (
