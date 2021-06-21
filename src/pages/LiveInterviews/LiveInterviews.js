@@ -73,6 +73,17 @@ const LiveInterviews = () => {
       title: 'Interview Time',
       dataIndex: 'interviewTime',
       key: 'interviewTime',
+      sorter: {
+        compare: (a, b) => {
+          const timeA = a.interviewTime[0];
+          const timeB = b.interviewTime[0];
+
+          const dateA = new Date(timeA).getTime();
+          const dateB = new Date(timeB).getTime();
+
+          return dateB - dateA;
+        },
+      },
       render: startEndTime => {
         const [start, end] = startEndTime;
         const startDateObj = new Date(start);
