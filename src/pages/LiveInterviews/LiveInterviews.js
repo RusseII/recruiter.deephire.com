@@ -68,26 +68,27 @@ const LiveInterviews = () => {
     if (value) setLiveInterviews(value);
   }, [value]);
 
+  const timeCompare = (a, b) => {
+    const timeA = a.interviewTime[0];
+    const timeB = b.interviewTime[0];
+
+    const dateA = new Date(timeA).getTime();
+    const dateB = new Date(timeB).getTime();
+
+    return dateB - dateA;
+  };
+
   const columns = [
     {
-      title: 'Interview Time',
+      title: 'Interview Start Time',
       dataIndex: 'interviewTime',
       key: 'interviewTime',
       sorter: {
-        compare: (a, b) => {
-          const timeA = a.interviewTime[0];
-          const timeB = b.interviewTime[0];
-
-          const dateA = new Date(timeA).getTime();
-          const dateB = new Date(timeB).getTime();
-
-          return dateB - dateA;
-        },
+        compare: timeCompare,
       },
       render: startEndTime => {
-        const [start, end] = startEndTime;
+        const start = startEndTime[0];
         const startDateObj = new Date(start);
-        const endDateObj = new Date(end);
 
         const startDate = startDateObj.toLocaleString('en-US', {
           month: 'long',
@@ -99,14 +100,40 @@ const LiveInterviews = () => {
           minute: 'numeric',
         });
 
+        return (
+          <div>
+            <div>{startDate}</div>
+            <div>{startTime}</div>
+          </div>
+        );
+      },
+    },
+    {
+      title: 'Interview End Time',
+      key: 'interviewTime',
+      dataIndex: 'interviewTime',
+      sorter: {
+        compare: timeCompare,
+      },
+      render: startEndTime => {
+        const end = startEndTime[1];
+        const endDateObj = new Date(end);
+
+        const endDate = endDateObj.toLocaleString('en-US', {
+          month: 'long',
+          weekday: 'long',
+          day: 'numeric',
+        });
+
         const endTime = endDateObj.toLocaleString('en-US', {
           hour: 'numeric',
           minute: 'numeric',
         });
+
         return (
           <div>
-            <div>{startDate}</div>
-            <div>{`${startTime}-${endTime}`}</div>
+            <div>{endDate}</div>
+            <div>{endTime}</div>
           </div>
         );
       },
@@ -175,7 +202,7 @@ const LiveInterviews = () => {
               return 'Finished';
             }
             if (recordingStatus === 'composition-progress') {
-              return 'Proccessing...';
+              return 'Processing...';
             }
             return null;
           },
