@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { FileAddOutlined, VideoCameraOutlined, EditOutlined } from '@ant-design/icons';
 import { handleFilter, lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
+// import { Card, ConfigProvider, Space, Spin, Tabs, Tag, Tooltip, Popconfirm, message } from 'antd';
 import { Card, ConfigProvider, Space, Spin, Tabs, Tag, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import router from 'umi/router';
@@ -47,6 +48,10 @@ const LiveInterviews = () => {
   //     return liveInterview.createdByTeam.includes(team);
   //   });
   // }
+
+  // const confirmDelete = () => {};
+
+  // const cancelDelete = () => {};
 
   useEffect(() => {
     if (execute) {
