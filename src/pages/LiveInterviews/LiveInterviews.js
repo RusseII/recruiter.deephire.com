@@ -241,6 +241,9 @@ const LiveInterviews = () => {
 
     const confirmDelete = async id => {
       await deleteLiveInterview(id);
+      // sloppy fix to get this working correctly
+      // this IS NOT permanent
+      window.location.reload();
     };
 
     return (
