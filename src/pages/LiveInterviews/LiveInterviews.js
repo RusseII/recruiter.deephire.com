@@ -1,7 +1,12 @@
 /* eslint-disable camelcase */
-import { FileAddOutlined, VideoCameraOutlined, EditOutlined } from '@ant-design/icons';
+import {
+  FileAddOutlined,
+  VideoCameraOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons';
 import { handleFilter, lowerCaseQueryParams } from '@bit/russeii.deephire.utils.utils';
-import { Card, ConfigProvider, Space, Spin, Tabs, Tag, Tooltip } from 'antd';
+import { Card, ConfigProvider, Space, Spin, Tabs, Tag, Tooltip, Popconfirm } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import router from 'umi/router';
 import customEmpty from '@/components/CustomEmpty';
@@ -10,7 +15,7 @@ import ShareInterview from '@/components/ShareInterview';
 import StandardTable from '@/components/StandardTable';
 import TableToolbar from '@/components/StandardTable/TableToolbar';
 import GlobalContext from '@/layouts/MenuContext';
-// import { getLiveInterviews } from '@/services/api';
+import { deleteLiveInterview } from '@/services/api';
 import { useLives } from '@/services/apiHooks';
 import { useSearch } from '@/services/complexHooks';
 // import { useAsync } from '@/services/hooks';
@@ -36,7 +41,6 @@ const LiveInterviews = () => {
   const { data: value, isLoading: pending, mutate: execute } = useLives();
 
   const { recruiterProfile, liveInterviews, setLiveInterviews } = globalData;
-
   // eslint-disable-next-line camelcase
 
   // let liveInterViewTeamFilter = liveInterviews;
@@ -235,6 +239,11 @@ const LiveInterviews = () => {
     //   set
     // }
 
+    const confirmDelete = async id => {
+      await deleteLiveInterview(id);
+      execute();
+    };
+
     return (
       <Space>
         <Tooltip title="Join the interview">
@@ -260,6 +269,17 @@ const LiveInterviews = () => {
             </Tooltip>
           )}
         />
+        <Popconfirm
+          title="Are you sure you want to delete this interview?"
+          onConfirm={() => confirmDelete(data._id)}
+          okText="Yes"
+          cancelText="No"
+          placement="topRight"
+        >
+          <Tooltip title="Delete Live Interview">
+            <DeleteOutlined />
+          </Tooltip>
+        </Popconfirm>
       </Space>
     );
   };
