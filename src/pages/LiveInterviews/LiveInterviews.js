@@ -241,9 +241,7 @@ const LiveInterviews = () => {
 
     const confirmDelete = async id => {
       await deleteLiveInterview(id);
-      // sloppy fix to get this working correctly
-      // this IS NOT permanent
-      window.location.reload();
+      execute();
     };
 
     return (
@@ -276,6 +274,7 @@ const LiveInterviews = () => {
           onConfirm={() => confirmDelete(data._id)}
           okText="Yes"
           cancelText="No"
+          placement="topRight"
         >
           <Tooltip title="Delete Live Interview">
             <DeleteOutlined />
