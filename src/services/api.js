@@ -267,7 +267,7 @@ export async function updateInterview(data, id, successMessage) {
   );
 }
 
-export async function deleteInterview(id) {
+export async function deleteLiveInterview(id) {
   return request(`${newApi}/live/${id}`, { method: 'DELETE', headers: setHeaders() });
 }
 
