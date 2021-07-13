@@ -171,3 +171,24 @@ export const useLives = (): LiveTypes => {
       isError: error,
     };
   };
+
+  export const useEventSummary = ( id: string, startDate: number = 0, endDate: number = Date.now()) : LiveTypes => {
+    const { data, error } = useSWR([`/v1/events/${id}/?startDate=${startDate}&endDate=${endDate}`], fetcher);
+    return {
+      data,
+      isLoading: !error && !data,
+      isError: error
+    }
+  }
+
+  export const useSortedEvents = ( id: string, page: number, 
+    limit: number = 100, startDate: number = 0, endDate: number = Date.now(), 
+    sortItem: string = 'timestamp', sortOrder: number = 1) : LiveTypes => {
+      const key = `/v1/events/${id}/sort?page=${page}&limit=${limit}&startDate=${startDate}&endDate=${endDate}&sortItem=${sortItem}&sortOrder=${sortOrder}`;
+      const { data, error } = useSWR([key], fetcher);
+      return {
+        data,
+        isLoading: !error && !data,
+        isError: error
+      }
+  }
