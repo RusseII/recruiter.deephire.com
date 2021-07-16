@@ -1,5 +1,5 @@
-const root = 'https://a.deephire.com';
-// const root = 'http://localhost:3000';
+// const root = 'https://a.deephire.com';
+const root = 'http://localhost:3000';
 
 const setHeaders = () => ({
   authorization: `Bearer ${localStorage.getItem('access_token')}`,

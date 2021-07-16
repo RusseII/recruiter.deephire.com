@@ -1,8 +1,6 @@
 import useSWR from 'swr';
 import fetcher from '../fetcher';
 
-
-
 interface Data {
   _id: string;
   interviewType: 'recruiter' | 'client';
@@ -192,3 +190,15 @@ export const useLives = (): LiveTypes => {
         isError: error
       }
   }
+
+  export const useSummary = (startDate: number, endDate: number) : LiveTypes => {
+
+ 
+    const { data, error, mutate } = useSWR([`/v1/events/summary?startDate=${startDate}&endDate=${endDate}`], fetcher);
+    return {
+      data,
+      isLoading: !error && !data,
+      isError: error,
+      mutate
+    }
+  };

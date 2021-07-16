@@ -66,6 +66,13 @@ export default [
             ],
           },
           {
+            path: '/one-way/analytics/',
+            name: 'Analytics',
+            component: './Candidates/Analytics',
+            authority: ['admin'],
+            icon: 'pieChart',
+          },
+          {
             path: '/one-way/candidates/',
             icon: 'team',
             name: 'Candidates',
