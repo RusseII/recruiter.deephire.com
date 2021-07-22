@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { WaterWave } from 'ant-design-pro/lib/Charts';
-import { Card, Row, Col, Statistic, Tooltip, DatePicker } from 'antd';
+import { Card, Row, Col, Statistic, Tooltip, DatePicker, Button } from 'antd';
 
 import { InfoCircleOutlined } from '@ant-design/icons';
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
@@ -9,7 +9,8 @@ import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
 
 // eslint-disable-next-line import/no-unresolved
-import { useSummary } from '../../services/apiHooks';
+import { useRecruiter, useSummary } from '../../services/apiHooks';
+import { downloadFile } from '../../services/api';
 
 const { RangePicker } = DatePicker;
 
@@ -22,6 +23,8 @@ const Analytics = () => {
 
   const { data: analytics } = useSummary(startDate, endDate);
 
+  const { data: profile } = useRecruiter();
+
   const percent = analytics?.completionRate ? Math.round(analytics.completionRate * 100) : 0;
 
   const onDateChange = dates => {
@@ -29,6 +32,41 @@ const Analytics = () => {
     const newEndTime = new Date(dates[1]);
     setStartDate(newStartTime.getTime());
     setEndDate(newEndTime.getTime());
+  };
+
+  const downloadUsers = () => {
+    // eslint-disable-next-line camelcase
+    if (profile?.app_metadata?.companyId) {
+      downloadFile(profile.app_metadata.companyId, 'users.csv', startDate, endDate);
+    }
+  };
+
+  const downloadJobs = () => {
+    // eslint-disable-next-line camelcase
+    if (profile?.app_metadata?.companyId) {
+      downloadFile(profile.app_metadata.companyId, 'jobs.csv', startDate, endDate);
+    }
+  };
+
+  const downloadCandidates = () => {
+    // eslint-disable-next-line camelcase
+    if (profile?.app_metadata?.companyId) {
+      downloadFile(profile.app_metadata.companyId, 'candidates.csv', startDate, endDate);
+    }
+  };
+
+  const downloadBranch = () => {
+    // eslint-disable-next-line camelcase
+    if (profile?.app_metadata?.companyId) {
+      downloadFile(profile.app_metadata.companyId, 'branch.csv', startDate, endDate);
+    }
+  };
+
+  const downloadClient = () => {
+    // eslint-disable-next-line camelcase
+    if (profile?.app_metadata?.companyId) {
+      downloadFile(profile.app_metadata.companyId, 'client.csv', startDate, endDate);
+    }
   };
 
   return (
@@ -105,6 +143,33 @@ const Analytics = () => {
             </Card>
           </Col>
         </>
+      </Row>
+      <Row>
+        <Col>
+          <Button style={{ marginRight: 8 }} onClick={() => downloadUsers()}>
+            Download User Worksheet
+          </Button>
+        </Col>
+        <Col>
+          <Button style={{ marginRight: 8 }} onClick={() => downloadJobs()}>
+            Download Jobs Worksheet
+          </Button>
+        </Col>
+        <Col>
+          <Button style={{ marginRight: 8 }} onClick={() => downloadCandidates()}>
+            Download Candidates Worksheet
+          </Button>
+        </Col>
+        <Col>
+          <Button style={{ marginRight: 8 }} onClick={() => downloadBranch()}>
+            Download Branch Worksheet
+          </Button>
+        </Col>
+        <Col>
+          <Button style={{ marginRight: 8 }} onClick={() => downloadClient()}>
+            Download Client Worksheet
+          </Button>
+        </Col>
       </Row>
     </>
   );
