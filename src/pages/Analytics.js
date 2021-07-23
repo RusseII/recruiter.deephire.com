@@ -9,8 +9,8 @@ import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
 
 // eslint-disable-next-line import/no-unresolved
-import { useRecruiter, useSummary } from '../../services/apiHooks';
-import { downloadFile } from '../../services/api';
+import { useRecruiter, useSummary } from '../services/apiHooks';
+import { downloadFile } from '../services/api';
 
 const { RangePicker } = DatePicker;
 
