@@ -77,6 +77,11 @@ const LiveInterviews = () => {
       title: 'Interview Time',
       dataIndex: 'interviewTime',
       key: 'interviewTime',
+      sorter: (a, b) => {
+        const [startA] = a.interviewTime;
+        const [startB] = b.interviewTime;
+        return startA > startB;
+      },
       render: startEndTime => {
         const [start, end] = startEndTime;
         const startDateObj = new Date(start);
@@ -154,6 +159,29 @@ const LiveInterviews = () => {
           );
         }
         return null;
+      },
+    },
+    {
+      title: 'Client',
+      key: 'clientName',
+      sorter: (a, b) => {
+        if (a?.clientName && b?.clientName) {
+          return a.clientName.localeCompare(b.clientName);
+        }
+        return false;
+      },
+      filteredValue: filteredInfo?.clientName || null,
+      render: data => {
+        const { clientName, clientEmail } = data;
+        if (!(clientName || clientEmail)) {
+          return null;
+        }
+        return (
+          <>
+            {' '}
+            {clientName} <br /> {clientEmail}{' '}
+          </>
+        );
       },
     },
     activeTab !== '1'
