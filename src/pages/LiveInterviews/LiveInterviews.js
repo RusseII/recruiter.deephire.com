@@ -105,7 +105,7 @@ const LiveInterviews = () => {
       },
     },
     {
-      title: 'Interviewer',
+      title: 'Recruiter',
       key: 'createdBy',
       // ...getColumnSearchProps(,'Interviewer')
       sorter: (a, b) => {
@@ -156,24 +156,6 @@ const LiveInterviews = () => {
         return null;
       },
     },
-    activeTab !== '1'
-      ? {
-          title: 'Recording Status',
-          key: 'recording',
-          // width: 50,
-
-          render: (text, data) => {
-            const { recordingStatus } = data;
-            if (recordingStatus === 'composition-available') {
-              return 'Finished';
-            }
-            if (recordingStatus === 'composition-progress') {
-              return 'Proccessing...';
-            }
-            return null;
-          },
-        }
-      : null,
     activeTab !== '1'
       ? {
           title: 'View',
