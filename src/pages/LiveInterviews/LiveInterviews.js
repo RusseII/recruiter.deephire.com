@@ -80,7 +80,9 @@ const LiveInterviews = () => {
       sorter: (a, b) => {
         const [startA] = a.interviewTime;
         const [startB] = b.interviewTime;
-        return startA > startB;
+        const startADate = startA ? new Date(startA) : new Date(Date.now());
+        const startBDate = startB ? new Date(startB) : new Date(0);
+        return startADate > startBDate;
       },
       render: startEndTime => {
         const [start, end] = startEndTime;
