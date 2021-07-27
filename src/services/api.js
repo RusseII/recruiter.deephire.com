@@ -639,4 +639,13 @@ export async function sendTgMsg(data) {
   navigator.sendBeacon('https://deephire.com/api/tg', JSON.stringify(data));
 }
 
+export function downloadFile(companyId, filename, startDate, endDate) {
+  const api = newApi;
+  // const api = 'http://localhost:3000/v1';
+  window.open(
+    `${api}/downloads/${filename}?id=${companyId}&startDate=${startDate}&endDate=${endDate}`,
+    '_blank'
+  );
+}
+
 export { newApi };

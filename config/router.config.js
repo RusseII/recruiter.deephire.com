@@ -20,7 +20,6 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       { path: '/', redirect: 'one-way/candidates' },
-
       {
         icon: 'laptop',
         path: '/one-way/',
@@ -131,7 +130,7 @@ export default [
       {
         name: 'Account',
         icon: 'user',
-        path: '/account/settings',
+        path: '/account/',
         component: './Account/Settings/Info',
         authority: ['admin'],
 
@@ -171,7 +170,13 @@ export default [
           },
         ],
       },
-
+      {
+        path: '/analytics/',
+        name: 'Analytics',
+        component: './Analytics',
+        authority: ['admin'],
+        icon: 'pieChart',
+      },
       {
         component: '404',
       },
