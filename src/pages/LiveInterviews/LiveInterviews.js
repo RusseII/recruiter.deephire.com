@@ -77,6 +77,13 @@ const LiveInterviews = () => {
       title: 'Interview Time',
       dataIndex: 'interviewTime',
       key: 'interviewTime',
+      sorter: (a, b) => {
+        const [startA] = a.interviewTime;
+        const [startB] = b.interviewTime;
+        const startADate = startA ? new Date(startA) : new Date(Date.now());
+        const startBDate = startB ? new Date(startB) : new Date(0);
+        return startADate > startBDate;
+      },
       render: startEndTime => {
         const [start, end] = startEndTime;
         const startDateObj = new Date(start);
@@ -105,7 +112,7 @@ const LiveInterviews = () => {
       },
     },
     {
-      title: 'Interviewer',
+      title: 'Recruiter',
       key: 'createdBy',
       // ...getColumnSearchProps(,'Interviewer')
       sorter: (a, b) => {
@@ -156,24 +163,29 @@ const LiveInterviews = () => {
         return null;
       },
     },
-    activeTab !== '1'
-      ? {
-          title: 'Recording Status',
-          key: 'recording',
-          // width: 50,
-
-          render: (text, data) => {
-            const { recordingStatus } = data;
-            if (recordingStatus === 'composition-available') {
-              return 'Finished';
-            }
-            if (recordingStatus === 'composition-progress') {
-              return 'Proccessing...';
-            }
-            return null;
-          },
+    {
+      title: 'Client',
+      key: 'clientName',
+      sorter: (a, b) => {
+        if (a?.clientName && b?.clientName) {
+          return a.clientName.localeCompare(b.clientName);
         }
-      : null,
+        return false;
+      },
+      filteredValue: filteredInfo?.clientName || null,
+      render: data => {
+        const { clientName, clientEmail } = data;
+        if (!(clientName || clientEmail)) {
+          return null;
+        }
+        return (
+          <>
+            {' '}
+            {clientName} <br /> {clientEmail}{' '}
+          </>
+        );
+      },
+    },
     activeTab !== '1'
       ? {
           title: 'View',
