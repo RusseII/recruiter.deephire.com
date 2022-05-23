@@ -6,9 +6,9 @@ import GlobalContext from '@/layouts/MenuContext';
 
 const data = [
   {
-    name: 'Starter',
+    name: 'Recorded',
     description: 'For recruiters that want to explore upgrading the client/candidate experience',
-    price: '$199/mo',
+    price: '$49/mo',
     priceLabel: 'Billed Monthly',
     type: 'purchase',
 
@@ -16,6 +16,15 @@ const data = [
     stripePlan: 'basic-monthly-v1',
 
     listItems: [
+      {
+        content: 'One Way Interviews',
+      },
+      {
+        content: 'Live Video Interviews',
+      },
+      {
+        content: 'Custom Branding',
+      },
       {
         content: '2 Jobs',
         tooltip: 'This is the number of positions you can actively interview for each month',
@@ -25,15 +34,6 @@ const data = [
       },
       {
         content: '500 Candidates',
-      },
-      {
-        content: 'Custom branding',
-      },
-      {
-        content: 'Onboarding session',
-      },
-      {
-        content: 'Chat and phone support',
       },
     ],
   },
