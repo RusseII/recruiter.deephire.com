@@ -47,12 +47,13 @@ yarn
 yarn start 
 ```
 
-In src/Auth/auth0-variables.js, change callbackUrl to use localhost 
-```
-callbackUrl: 'http://localhost:8000/user/callback',
-// callbackUrl: 'https://recruiter.deephire.com/user/callback',
-```
+### Common Issues
 
-Go to http://localhost:8000
+If running on Node 17, you will have issues with the build, run the following to fix.
+
+```
+export NODE_OPTIONS=--openssl-legacy-provider
+
+```
 
 Check out roadmap at https://github.com/RusseII/recruiter.deephire.com/wiki
