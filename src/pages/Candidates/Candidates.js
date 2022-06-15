@@ -37,10 +37,13 @@ import { getAuthority } from '@/utils/authority';
 
 import AntPageHeader from '@/components/PageHeader/AntPageHeader';
 
+const allTab = '1';
+const hidTab = '2';
+
 const isAdmin = () => JSON.stringify(getAuthority()) === JSON.stringify(['admin']);
 
 const Candidates = () => {
-  const { tab = '1', page = '1', pagesize: pageSize = '9' } = lowerCaseQueryParams(
+  const { tab = allTab, page = '1', pagesize: pageSize = '9' } = lowerCaseQueryParams(
     window.location.search
   );
   const [activeTab, setActiveTab] = useState(tab);
@@ -48,7 +51,7 @@ const Candidates = () => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dataSource, setDataSource] = useState([]);
-  const [archives, setArchives] = useState(tab === '2');
+  const [archives, setArchives] = useState(tab === hidTab);
   const [selectFilter, setSelectFilter] = useState([]);
   const [reload, setReload] = useState(false);
   // const [pageInfo, setPageInfo] = useState({ page, pageSize });
@@ -179,20 +182,19 @@ const Candidates = () => {
         footer={
           <Tabs
             onChange={tabKey => {
-              if (tabKey === '2') {
+              if (tabKey === hidTab) {
                 setArchives(true);
               } else {
                 setArchives(false);
               }
-              // setArchives(true);
               setSelectedCards([]);
               router.push(`/one-way/candidates/?tab=${tabKey}`);
               setActiveTab(tabKey);
             }}
             defaultActiveKey={activeTab}
           >
-            <Tabs.TabPane tab="All" key="1" />
-            <Tabs.TabPane tab="Hidden" key="2" />
+            <Tabs.TabPane tab="All" key={allTab} />
+            <Tabs.TabPane tab="Hidden" key={hidTab} />
           </Tabs>
         }
       >
