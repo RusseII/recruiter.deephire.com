@@ -179,7 +179,12 @@ const Candidates = () => {
         footer={
           <Tabs
             onChange={tabKey => {
-              setArchives(flag => !flag);
+              if (tabKey === '2') {
+                setArchives(true);
+              } else {
+                setArchives(false);
+              }
+              // setArchives(true);
               setSelectedCards([]);
               router.push(`/one-way/candidates/?tab=${tabKey}`);
               setActiveTab(tabKey);
