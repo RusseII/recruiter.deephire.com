@@ -56,4 +56,6 @@ export NODE_OPTIONS=--openssl-legacy-provider
 
 ```
 
+If running in Brave Browser, there are commonly issues with authentication and logging in. Try using Chrome instead.
+
 Check out roadmap at https://github.com/RusseII/recruiter.deephire.com/wiki
