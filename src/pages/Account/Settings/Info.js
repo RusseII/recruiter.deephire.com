@@ -111,7 +111,7 @@ class Info extends Component {
           }}
         >
           <div className={styles.leftmenu}>
-            <Menu mode={mode} selectedKeys={[selectKey]} onClick={this.selectKey}>
+            <Menu mode={mode} defaultSelectedKeys={[selectKey]} onClick={this.selectKey}>
               {this.getmenu()}
             </Menu>
           </div>
