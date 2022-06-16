@@ -21,13 +21,18 @@ const openShortListAnalytics = data => {
   router.push(`/sharelinks/analytics/?id=${_id}`);
 };
 
+const allTab = '1';
+const hidTab = '2';
+
+const tab = allTab;
+
 const ShortLists = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(true);
   // const [dataSource, setDataSource] = useState([]);
   const [filteredInfo, setFilteredInfo] = useState(null);
 
-  const [archives, setArchives] = useState(false);
+  const [archives, setArchives] = useState(tab === hidTab);
 
   const globalData = useContext(GlobalContext);
   const [filteredData, setFilteredData] = useState(globalData.shareLinks);
@@ -217,14 +222,18 @@ const ShortLists = () => {
         onBack={null}
         footer={
           <Tabs
-            defaultActiveKey="1"
-            onChange={() => {
-              setArchives(flag => !flag);
+            defaultActiveKey={allTab}
+            onChange={tabKey => {
+              if (tabKey === hidTab) {
+                setArchives(true);
+              } else {
+                setArchives(false);
+              }
               setSelectedRows([]);
             }}
           >
-            <Tabs.TabPane tab="All" key="1" />
-            <Tabs.TabPane tab="Hidden" key="2" />
+            <Tabs.TabPane tab="All" key={allTab} />
+            <Tabs.TabPane tab="Hidden" key={hidTab} />
           </Tabs>
         }
       />

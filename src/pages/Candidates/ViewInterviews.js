@@ -48,8 +48,13 @@ const TableList = () => {
 
   const getColumnSearchProps = useSearch();
 
+  const allTab = '1';
+  const hidTab = '2';
+
+  const tab = allTab;
+
   const [selectedRows, setSelectedRows] = useState([]);
-  const [archives, setArchives] = useState(false);
+  const [archives, setArchives] = useState(tab === hidTab);
   const [editInterview, setEditInterview] = useState(null);
   const [inviteCandidates, setInviteCandidates] = useState(null);
   // const [reload, setReload] = useState(false);
@@ -247,14 +252,18 @@ const TableList = () => {
         }
         footer={
           <Tabs
-            defaultActiveKey="1"
-            onChange={() => {
-              setArchives(flag => !flag);
+            defaultActiveKey={allTab}
+            onChange={tabKey => {
+              if (tabKey === hidTab) {
+                setArchives(true);
+              } else {
+                setArchives(false);
+              }
               setSelectedRows([]);
             }}
           >
-            <Tabs.TabPane tab="Active" key="1" />
-            <Tabs.TabPane tab="Hidden" key="2" />
+            <Tabs.TabPane tab="Active" key={allTab} />
+            <Tabs.TabPane tab="Hidden" key={hidTab} />
           </Tabs>
         }
       />
