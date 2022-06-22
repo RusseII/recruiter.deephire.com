@@ -130,7 +130,7 @@ export default [
       {
         name: 'Account',
         icon: 'user',
-        path: '/account/',
+        path: '/account/settings',
         component: './Account/Settings/Info',
         authority: ['admin'],
 
