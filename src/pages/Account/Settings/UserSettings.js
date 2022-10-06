@@ -193,7 +193,7 @@ const Team = () => {
           render(test, data) {
             const { invitedEmail, _id } = data;
             return (
-              <>
+              <Space>
                 <Popconfirm
                   title={`Resend an invite to ${invitedEmail}?`}
                   onConfirm={() => resendInvite(_id, invitedEmail)}
@@ -206,7 +206,6 @@ const Team = () => {
                     </Button>
                   </Tooltip>
                 </Popconfirm>
-
                 <Popconfirm
                   title={`Are you sure you want to delete ${invitedEmail}'s invite?`}
                   onConfirm={() => deleteInvite(_id, invitedEmail)}
@@ -215,12 +214,12 @@ const Team = () => {
                   cancelText="Cancel"
                 >
                   <Tooltip placement="left" title="Delete Invite">
-                    <Button style={{ marginLeft: 5 }} shape="circle">
+                    <Button shape="circle">
                       <DeleteOutlined />
                     </Button>
                   </Tooltip>
                 </Popconfirm>
-              </>
+              </Space>
             );
           },
         }
@@ -318,12 +317,17 @@ const Team = () => {
       >
         <TabPane tab="Current Users" key="1">
           <Spin spinning={!team}>
-            <Table dataSource={team} pagination={false} columns={columnsTeam} />{' '}
+            <Table dataSource={team} pagination={false} columns={columnsTeam} scroll={{ x: 400 }} />{' '}
           </Spin>
         </TabPane>
         <TabPane tab="Invited Users" key="2">
           <Spin spinning={!invites}>
-            <Table dataSource={invites} pagination={false} columns={columnsInvites} />{' '}
+            <Table
+              dataSource={invites}
+              pagination={false}
+              columns={columnsInvites}
+              scroll={{ x: 400 }}
+            />{' '}
           </Spin>
         </TabPane>
       </Tabs>
