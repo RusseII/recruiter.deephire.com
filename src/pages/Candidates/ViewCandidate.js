@@ -8,6 +8,7 @@ import ReactQuill from 'react-quill';
 import CandidateDataCard from '@/components/Candidate/DataCard';
 import ShareCandidateButton from '@/components/ShareCandidateButton';
 import 'react-quill/dist/quill.snow.css';
+import CommentCard from '@/components/CommentCard';
 
 import {
   addComment,
@@ -129,6 +130,7 @@ const ViewCandidate = ({ location }) => {
               )}
             </>
           )}
+
           <CandidateDataCard
             userId={userId}
             userName="Documents"
@@ -139,7 +141,11 @@ const ViewCandidate = ({ location }) => {
             removeCandidateDocument={removeCandidateDocument}
             style={{ marginBottom: 24 }}
           />
-          {liveId && <NotesCard data={liveData} />}
+          {liveId ? (
+            <NotesCard data={liveData} />
+          ) : (
+            <CommentCard email={candidateEmail} {...videoPlayerData} />
+          )}
         </Col>
         <Col
           xs={{ span: 24, order: 1 }}
