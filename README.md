@@ -6,8 +6,6 @@
 Automated Video Interviews Built for Recruiters
 
 
- 
- 
 [![recruiter.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fbadge%3Dhttps%3A%2F%2Frecruiter.deephire.com)](https://recruiter.deephire.com)
 [![recruiter.deephire.com](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.russell.work%2Fserver_status%3Fuptimes%3D1%26badge%3Dhttps%3A%2F%2Frecruiter.deephire.com)](https://recruiter.deephire.com)
 
